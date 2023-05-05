@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:async';
 
 import 'package:flutter/material.dart';
@@ -27,19 +29,13 @@ class _SplashScreenState extends State<SplashScreen> {
           if (hasBiometrics) {
             if (auth) {
               return Consts.fazerLogin(
-                context,
-                infos.values.first,
-                infos.values.last,
-              );
+                  context, infos.values.first, infos.values.last);
             } else {
               return false;
             }
           } else {
             return Consts.fazerLogin(
-              context,
-              infos.values.first,
-              infos.values.last,
-            );
+                context, infos.values.first, infos.values.last);
           }
         }
 

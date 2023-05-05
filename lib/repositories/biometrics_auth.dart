@@ -20,7 +20,7 @@ class LocalAuthApi {
           options: AuthenticationOptions(
               stickyAuth: true, sensitiveTransaction: false),
           localizedReason: 'Desbloqueie seu celular');
-    } on PlatformException catch (e) {
+    } on PlatformException {
       return false;
     }
   }
