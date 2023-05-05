@@ -1,0 +1,237 @@
+class Snackbars {
+
+public function login_erro() :array {
+    $dados = array(
+        'titulo' => "<strong>ERRO!</strong>",
+        'texto' => "Verifique os dados preenchidos e tente novamente"
+    );
+return($dados);
+}
+
+public function gravado_sucesso() :array {
+    $dados = array(
+        'titulo' => "<strong>SUCESSO!</strong>",
+        'texto' => "Suas informa&ccedil;&otilde;es foram guardadas no banco de dados. Relaxe :)"
+    
+return($dados);
+}
+
+public function login_expirado() :array {
+    $dados = array(
+        'titulo' => "<strong>LOGIN EXPIRADO!</strong>",
+        'texto' => "Refa&ccedil;a o login para continuar acessando"
+    );
+return($dados);
+}
+
+public function esqueci_senha() :array {
+    $dados = array(
+        'titulo' => "<strong>VERIFIQUE O SEU E-MAIL!</strong>",
+        'texto' => "Enviamos um e-mail para voc&ecirc;."
+    );
+return($dados);
+}
+
+public function token_expirado() :array {
+    $dados = array(
+        'titulo' => "<strong>LINK INV&Aacute;LIDO!</strong>",
+        'texto' => "Solicite novamente a recupera&ccedil;&atilde;o de senha."
+    );
+return($dados);
+}
+
+public function cnpj_cadastrado() :array {
+    $dados = array(
+        'titulo' => "<strong>CNPJ CADASTRADO!</strong>",
+        'texto' => "O CNPJ digitado j&aacute; est&aacute; cadastrado no sistema."
+    );
+return($dados);
+}
+
+public function email_cadastrado() :array {
+    $dados = array(
+        'titulo' => "<strong>E-MAIL CADASTRADO!</strong>",
+        'texto' => "O E-mail digitado j&aacute; est&aacute; cadastrado no sistema."
+    );
+return($dados);
+}
+
+public function corr_solicitada() :array {
+    $dados = array(
+        'titulo' => "<strong>CORRESPOND&Ecirc;NCIA SOLICITADA!</strong>",
+        'texto' => "Em breve voc&ecirc; receber&aacute; um e-mail."
+    );
+return($dados);
+}
+
+public function alteracao_solicitada() :array {
+    $dados = array(
+        'titulo' => "<strong>>ALTERA&Ccedil;&Atilde;O SOLICITADA!</strong>",
+        'texto' => "Nossa equipe ir&aacute; analisar os dados enviados e proceder com a edi&ccedil;&atilde;o"
+    );
+return($dados);
+}
+
+public function nova_senha() :array {
+    $dados = array(
+        'titulo' => "<strong>NOVA SENHA ENVIADA!</strong>",
+        'texto' => "Em breve voc&ecirc; receber&aacute; um e-mail"
+    );
+return($dados);
+}
+
+public function iugu_nao() :array {
+    $dados = array(
+        'titulo' => "<strong>CLIENTE N&Atilde;O LOCALIZADO NO IUGU!</strong>",
+        'texto' => "Verifique se o campo customizado <strong>APP</strong> foi criado corretamente no IUGU"
+    );
+return($dados);
+}
+
+public function ajuda_solicitada() :array {
+    $dados = array(
+        'titulo' => "<strong>AJUDA SOLICITADA!</strong>",
+        'texto' => "Em breve nossa equipe ir&aacute; te ajudar!"
+    );
+return($dados);
+}
+
+public function reserva_espaco() :array {
+    $dados = array(
+        'titulo' => "<strong>SOLICITA&Ccedil;&Atilde;O DE RESERVA EFETUADA COM SUCESSO!</strong>",
+        'texto' => "Enviamos um e-mail para voc&ecirc;! <br><strong>Observa&ccedil;&atilde;o</strong> A reserva ser&aacute; efetuada ap&oacute;s pagamento e confirma&ccedil;&atilde;o do valor correspondente no prazo m&aacute;ximo de 1 (uma) hora. Caso o pagamento n&atilde;o seja efetuado at&eacute; esse prazo a reserva <strong>n&atilde;o</strong> ser&aacute; efetuada e o hor&aacute;rio solicitado ficar&aacute; dispon&iacute;vel para outra solicita&ccedil;&atilde;o de reserva."
+    );
+return($dados);
+}
+
+public function err_carrinho() :array {
+    $dados = array(
+        'titulo' => "<strong>ERRO AO SOLICITAR AS CORRESPOND&Ecirc;NCIAS!</strong>",
+        'texto' => "Inclua no carrinho novamente as correspond&ecirc;ncias que deseja solicitar."
+    );
+return($dados);
+}
+
+public function sem_saldo() :array {
+    $dados = array(
+        'titulo' => "<strong>SALDO INSUFICIENTE!</strong>",
+        'texto' => "N&atilde;o h&aacute; saldo suficiente para realizar essa solicita&ccedil;&atilde;o"
+    );
+return($dados);
+}
+
+public function cliente_remetente() :array {
+    $dados = array(
+        'titulo' => "<strong>CLIENTE OU REMETENTE N&Atilde;O LOCALIZADO!</strong>",
+        'texto' => "Verifique os dados preenchidos e tente novamente"
+    );
+return($dados);
+}
+
+public function novasenha() :array {
+    $dados = array(
+        'titulo' => "<strong>NOVA SENHA ENVIADA!</strong>",
+        'texto' => "Uma nova senha foi enviada ao cliente"
+    );
+return($dados);
+}
+
+public function cliente_ja_cadastrado() :array {
+    $dados = array(
+        'titulo' => "<strong>CLIENTE J&Aacute; CADASTRADO!</strong>",
+        'texto' => "O cliente com esse c&oacute;digo j&aacute; est&aacute; cadastrado!"
+    );
+return($dados);
+}
+
+public function sem_ultima_fatura() :array {
+    $dados = array(
+        'titulo' => "<strong>&Uacute;LITMA FATURA!</strong>",
+        'texto' => "Verifique a <strong>&uacute;ltima fatura</strong> desse cliente no IUGU e se preciso preencha manualmente no APP"
+    );
+return($dados);
+}
+
+public function sem_proxima_fatura() :array {
+    $dados = array(
+        'titulo' => "<strong>&Uacute;LITMA FATURA!</strong>",
+        'texto' => "erifique a <strong>pr&oacute;xima fatura</strong> desse cliente no IUGU e se preciso preencha manualmente no APP"
+    );
+return($dados);
+}
+
+public function sem_assinatura() :array {
+    $dados = array(
+        'titulo' => "<strong>SEM ASSINATURA!</strong>",
+        'texto' => "Verifique a <strong>assinatura</strong> desse cliente no IUGU e se preciso preencha a data manualmente no APP"
+    );
+return($dados);
+}
+
+public function multiclientes() :array {
+    $dados = array(
+        'titulo' => "<strong>ATEN&Ccedil;&Atilde;O!</strong>",
+        'texto' => "Voc&ecirc; est&aacute; cadastrando correspond&ecirc;ncias no formato <b>m&uacute;ltiplos clientes</b>. N&atilde;o se esque&ccedil;a que o campo <b>cliente</b> deve ser preenchido com o <b>c&oacute;digo do cliente separados por v&iacute;rgula e sem espa&ccedil;os</b>"
+    );
+return($dados);
+}
+
+public function codigo_pix_copiado() :array {
+    $dados = array(
+        'titulo' => "<strong>'Código pix Copiado</strong>",
+        'texto' => "Cole na área de pagamento do seu banco"
+    );
+return($dados);
+}
+
+public function adiconado_carrinho() :array {
+    $dados = array(
+        'titulo' => "<strong>ADICIONADA COM SUCESSO!</strong>",
+        'texto' => "Correspondência adicionada ao carrinho com sucesso"
+    );
+return($dados);
+}
+
+public function avaliacao() :array {
+    $dados = array(
+        'titulo' => "<strong>OBRIGADO!</strong>",
+        'texto' => "Sua avaliação é muito importante para nós"
+    );
+return($dados);
+}
+
+public function email_vazio() :array {
+    $dados = array(
+        'titulo' => "<strong>PREENCHA O CAMPO E-MAIL!</strong>",
+        'texto' => "Preencha o campo com um email válido"
+    );
+return($dados);
+}
+
+public function trocar_login() :array {
+    $dados = array(
+        'titulo' => "<strong>TROCAR DE EMPRESA</strong>",
+        'texto' => "Toque duas vezes para trocar o perfil da empresa"
+    );
+return($dados);
+}
+
+public function correspondencia_solicitada() :array {
+    $dados = array(
+        'titulo' => "<strong>CORRESPONDÊNCIA SOLICITADA!</strong>",
+        'texto' => "Correspondência solicitada com sucesso"
+    );
+return($dados);
+}
+
+public function nova_alterada() :array {
+    $dados = array(
+        'titulo' => "<strong>NOVA SENHA ALTERADA!</strong>",
+        'texto' => "Sua senha foi alterada"
+    );
+return($dados);
+}
+
+
+}
+
