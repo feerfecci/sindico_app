@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
+import 'package:sindico_app/repositories/notification_widget.dart';
 import 'package:sindico_app/screens/carrinho/carrinho_screen.dart';
 import 'package:sindico_app/screens/duvidas/duvidas.dart';
 import 'consts.dart';
@@ -22,6 +23,7 @@ class _ItensBottomState extends State<ItensBottom> {
   void initState() {
     super.initState();
     initPlatformState();
+    // NotificationWidget.init();
     _pageController = PageController();
   }
 

@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sindico_app/repositories/shared_preferences.dart';
@@ -42,7 +43,7 @@ class _LoginScreenState extends State<LoginScreen> {
         autovalidateMode: AutovalidateMode.onUserInteraction,
         controller: userController,
         validator: Validatorless.multiple([
-          Validatorless.required('Email é obrigatório'),
+          Validatorless.required('Usuário é obrigatório'),
           // Validatorless.email('Preencha com um email Válido')
         ]),
         autofillHints: [AutofillHints.email],
@@ -50,7 +51,7 @@ class _LoginScreenState extends State<LoginScreen> {
           contentPadding: EdgeInsets.only(left: size.width * 0.04),
           filled: true,
           fillColor: Theme.of(context).canvasColor,
-          hintText: 'Digite seu Email',
+          hintText: 'Digite seu usuário',
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
             borderSide: BorderSide(
@@ -118,8 +119,13 @@ class _LoginScreenState extends State<LoginScreen> {
       });
     }
 
+    // var bytes = utf8.encode("01");
+    // var digest = md5.convert(bytes);
+    // print('${digest.bytes}');
+    // print('$digest');
+
     // var url = Uri.parse(
-    //     'https://a.portariaapp.com/api/login-responsavel/?fn=login&usuario=$usuario&senha=$senha');
+    //     'https://a.portariaapp.com/api/login-responsavel/?fn=login&usuario=$usuario&senha=${utf8.encode($senha)}');
     // var resposta = await http.get(
     //   url,
     //   // headers: <String, String>{

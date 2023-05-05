@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sindico_app/repositories/notification_widget.dart';
 import 'package:sindico_app/screens/home_page.dart/card_home.dart';
 import 'package:sindico_app/widgets/my_box_shadow.dart';
 import 'package:sindico_app/widgets/scaffold_all.dart';
@@ -6,8 +7,20 @@ import 'package:sindico_app/widgets/scaffold_all.dart';
 import '../add_funcionario/add_funcionario.dart';
 import '../../widgets/header.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    // NotificationWidget.init();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +44,12 @@ class HomePage extends StatelessWidget {
                 iconApi: 'perfil.png',
                 pageRoute: AddFuncionario(),
               ),
+              MyBoxShadow(
+                  child: ElevatedButton(
+                      onPressed: () {
+                        // NotificationWidget.showNotification();
+                      },
+                      child: Text('notificacao')))
             ],
           )
         ],

@@ -1,11 +1,15 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:sindico_app/main.dart';
 import 'package:sindico_app/widgets/header.dart';
 import 'package:sindico_app/widgets/my_box_shadow.dart';
 import 'package:sindico_app/widgets/my_text_form_field.dart';
 import 'package:sindico_app/widgets/scaffold_all.dart';
+import 'package:validatorless/validatorless.dart';
 
 import '../../consts.dart';
+import 'package:crypto/crypto.dart';
 
 class AddFuncionario extends StatelessWidget {
   const AddFuncionario({super.key});
@@ -41,12 +45,11 @@ class AddFuncionario extends StatelessWidget {
       return MyBoxShadow(
         child: Column(
           children: [
-            buildMyTextFormField(context, 'Nome Completo'),
+            buildMyTextFormField(context, 'Nome Completo',
+                validator:
+                    Validatorless.required('Nome Completo é obrigatório')),
             buildMyTextFormField(context, 'Usário de login'),
-            buildMyTextFormField(
-              context,
-              'Senha Login',
-            ),
+            buildMyTextFormField(context, 'Senha Login'),
             buildMyTextFormField(context, 'Função/Cargo',
                 hintText: 'Porteiro, Zelador, Administradora, Síndico'),
             buildTilePermicao('Avisos de Correspondências'),

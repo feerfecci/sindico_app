@@ -3,6 +3,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:sindico_app/repositories/notification_widget.dart';
 import 'package:sindico_app/repositories/shared_preferences.dart';
 import 'package:sindico_app/screens/login/login_screen.dart';
 
@@ -47,7 +48,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-
+    // NotificationWidget.init();
     Timer(Duration(seconds: 3), () {
       startLogin();
     });

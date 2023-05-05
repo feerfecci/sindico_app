@@ -1,8 +1,12 @@
+import 'dart:convert';
+
+import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:sindico_app/screens/login/login_screen.dart';
 
 import 'items_bottom.dart';
 import 'widgets/snackbar/snack.dart';
+import 'package:http/http.dart' as http;
 
 class Consts {
   static double fontTitulo = 16;
@@ -98,11 +102,43 @@ class Consts {
 
   static Future fazerLogin(
       BuildContext context, String usuario, String senha) async {
-    if (usuario == LoginAcess.usuario && senha == LoginAcess.senha) {
-      navigatorRoute(context, ItensBottom(currentTab: 0));
+    var senhaCripto = md5.convert(utf8.encode(senha)).toString();
+    var url = Uri.parse(
+        'https://a.portariaapp.com/api/login-responsavel/?fn=login&usuario=$usuario&senha=${senhaCripto}');
+    var resposta = await http.get(
+      url,
+    );
+    if (resposta.statusCode == 200) {
+      var apiBody = json.decode(resposta.body);
+      bool erro = apiBody['erro'];
+      var mesagemAPI = apiBody['mensagem'];
+      if (erro == true) {
+        return buildMinhaSnackBar(context, icon: Icons.warning_amber);
+      } else {
+        return navigatorRoute(context, ItensBottom(currentTab: 0));
+      }
     } else {
-      buildMinhaSnackBar(context, icon: Icons.warning_amber);
+      return buildMinhaSnackBar(context, icon: Icons.warning_amber);
     }
+
+    // FutureBuilder<dynamic>(
+    //   future: api(),
+    //   builder: (context, snapshot) {
+    //     if (snapshot.connectionState == ConnectionState.waiting) {
+    //       print('esperando api');
+    //     } else if (snapshot.hasError == true) {
+    //       return buildMinhaSnackBar(context, icon: Icons.warning_amber);
+    //     }
+    //     var usuarioAPI = snapshot.data['mensagem'];
+    //     navigatorRoute(context, ItensBottom(currentTab: 0));
+    //     return Text(usuarioAPI);
+    //   },
+    // );
+    // if (usuario == respost && senha == LoginAcess.senha) {
+    //   navigatorRoute(context, ItensBottom(currentTab: 0));
+    // } else {
+    //   buildMinhaSnackBar(context, icon: Icons.warning_amber);
+    // }
   }
 }
 
