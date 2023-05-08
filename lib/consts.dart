@@ -115,7 +115,12 @@ class Consts {
       if (erro == true) {
         return buildMinhaSnackBar(context, icon: Icons.warning_amber);
       } else {
-        return navigatorRoute(context, ItensBottom(currentTab: 0));
+        return Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ItensBottom(currentTab: 0),
+            ),
+            (route) => false);
       }
     } else {
       return buildMinhaSnackBar(context, icon: Icons.warning_amber);

@@ -22,7 +22,12 @@ class _SplashScreenState extends State<SplashScreen> {
     LocalInfos.readCache().then((value) {
       Map<String, dynamic> infos = value;
       if (infos.values.first == null || infos.values.last == null) {
-        Consts.navigatorPageRoute(context, LoginScreen());
+        Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+              builder: (context) => LoginScreen(),
+            ),
+            (route) => false);
       } else if (infos.values.first != null && infos.values.last != null) {
         Future authentic() async {
           final auth = await LocalAuthApi.authenticate();

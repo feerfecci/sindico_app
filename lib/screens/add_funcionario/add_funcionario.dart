@@ -11,9 +11,19 @@ import 'package:validatorless/validatorless.dart';
 import '../../consts.dart';
 import 'package:crypto/crypto.dart';
 
-class AddFuncionario extends StatelessWidget {
+class AddFuncionario extends StatefulWidget {
   const AddFuncionario({super.key});
 
+  @override
+  State<AddFuncionario> createState() => _AddFuncionarioState();
+}
+
+class _AddFuncionarioState extends State<AddFuncionario> {
+  static final formKey = GlobalKey<FormState>();
+  TextEditingController nomeFunc = TextEditingController();
+  TextEditingController userFunc = TextEditingController();
+  TextEditingController senhaFunc = TextEditingController();
+  TextEditingController cargoFunc = TextEditingController();
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -29,6 +39,7 @@ class AddFuncionario extends StatelessWidget {
                 children: [
                   Checkbox(
                     value: isChecked,
+                    activeColor: Consts.kColorApp,
                     onChanged: (bool? value) {
                       setState(() {
                         isChecked = value!;
@@ -42,33 +53,52 @@ class AddFuncionario extends StatelessWidget {
     }
 
     Widget buildEditarFunc() {
-      return MyBoxShadow(
-        child: Column(
-          children: [
-            buildMyTextFormField(context, 'Nome Completo',
-                validator:
-                    Validatorless.required('Nome Completo é obrigatório')),
-            buildMyTextFormField(context, 'Usário de login'),
-            buildMyTextFormField(context, 'Senha Login'),
-            buildMyTextFormField(context, 'Função/Cargo',
-                hintText: 'Porteiro, Zelador, Administradora, Síndico'),
-            buildTilePermicao('Avisos de Correspondências'),
-            buildTilePermicao('Avisos de Visitas'),
-            buildTilePermicao('Avisos de Delivery'),
-            buildTilePermicao('Avisos de Encomendas'),
-            Consts.buildCustomButton(
-              context,
-              'Salvar',
-              onPressed: () {},
-            )
-          ],
+      return Form(
+        key: formKey,
+        child: MyBoxShadow(
+          child: Column(
+            children: [
+              buildMyTextFormProibido(
+                context,
+                textController: nomeFunc,
+                'Nome Completo',
+              ),
+              buildMyTextFormProibido(
+                context,
+                textController: userFunc,
+                'Usário de login',
+              ),
+              buildMyTextFormProibido(
+                context,
+                textController: senhaFunc,
+                'Senha Login',
+              ),
+              buildMyTextFormProibido(
+                  context,
+                  textController: cargoFunc,
+                  'Função/Cargo',
+                  hintText: 'Porteiro, Zelador, Administradora, Síndico'),
+              buildTilePermicao('Avisos de Correspondências'),
+              buildTilePermicao('Avisos de Visitas'),
+              buildTilePermicao('Avisos de Delivery'),
+              buildTilePermicao('Avisos de Encomendas'),
+              Consts.buildCustomButton(
+                context,
+                'Salvar',
+                onPressed: () {
+                  var formValid = formKey.currentState?.validate() ?? false;
+                  if (formValid) {
+                    print(formValid.toString());
+                  } else {
+                    print(formValid.toString());
+                  }
+                },
+              )
+            ],
+          ),
         ),
       );
     }
-
-    // Widget buildFuncSalvo(){
-    //   return
-    // }
 
     return buildScaffoldAll(
       body: buildHeaderPage(
