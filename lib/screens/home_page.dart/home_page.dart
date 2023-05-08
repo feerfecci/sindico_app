@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:sindico_app/repositories/notification_widget.dart';
+import 'package:sindico_app/screens/add_morador/add_morador.dart';
+import 'package:sindico_app/screens/add_unidade/add_unidade.dart';
 import 'package:sindico_app/screens/home_page.dart/card_home.dart';
 import 'package:sindico_app/widgets/my_box_shadow.dart';
 import 'package:sindico_app/widgets/scaffold_all.dart';
 
+import '../../consts.dart';
 import '../add_funcionario/add_funcionario.dart';
 import '../../widgets/header.dart';
 
@@ -44,12 +47,14 @@ class _HomePageState extends State<HomePage> {
                 iconApi: 'perfil.png',
                 pageRoute: AddFuncionario(),
               ),
-              MyBoxShadow(
-                  child: ElevatedButton(
-                      onPressed: () {
-                        // NotificationWidget.showNotification();
-                      },
-                      child: Text('notificacao')))
+              buildCardHome(context,
+                  title: 'Moradores',
+                  pageRoute: AddMorador(),
+                  iconApi: 'perfil.png'),
+              buildCardHome(context,
+                  title: 'Unidades',
+                  pageRoute: AddUnidade(),
+                  iconApi: 'perfil.png'),
             ],
           )
         ],

@@ -1,24 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:sindico_app/consts.dart';
 import 'package:validatorless/validatorless.dart';
 
-Widget buildMyTextFormField(
-  BuildContext context,
-  String title, {
-  List<TextInputFormatter>? inputFormatters,
-  String? hintText,
-}) {
+Widget buildMyTextFormField(BuildContext context,
+    {required String title,
+    String? mask,
+    TextInputType? keyboardType,
+    List<TextInputFormatter>? inputFormatters,
+    String? hintText,
+    final void Function(String? text)? onSaved}) {
   var size = MediaQuery.of(context).size;
   return Padding(
     padding: EdgeInsets.symmetric(vertical: size.height * 0.01),
     child: TextFormField(
       autovalidateMode: AutovalidateMode.onUserInteraction,
+      inputFormatters: [MaskTextInputFormatter(mask: mask)],
+      initialValue: '',
+      onSaved: onSaved,
       textAlign: TextAlign.start,
       textInputAction: TextInputAction.next,
+      keyboardType: keyboardType,
       maxLines: 5,
       minLines: 1,
-      inputFormatters: inputFormatters,
       decoration: InputDecoration(
         contentPadding: EdgeInsets.only(left: size.width * 0.04),
         filled: true,
@@ -39,19 +44,19 @@ Widget buildMyTextFormField(
 
 Widget buildMyTextFormProibido(BuildContext context, String title,
     {String mensagem = 'Este campo é obrigatótio',
-    required TextEditingController? textController,
     List<TextInputFormatter>? inputFormatters,
     String? hintText,
-    String? Function(String?)? validator}) {
+    String? Function(String?)? validator,
+    final void Function(String? text)? onSaved}) {
   var size = MediaQuery.of(context).size;
   return Padding(
     padding: EdgeInsets.symmetric(vertical: size.height * 0.01),
     child: TextFormField(
-      controller: textController,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       textAlign: TextAlign.start,
       textInputAction: TextInputAction.next,
       maxLines: 5,
+      onSaved: onSaved,
       minLines: 1,
       inputFormatters: inputFormatters,
       validator: Validatorless.multiple([Validatorless.required(mensagem)]),

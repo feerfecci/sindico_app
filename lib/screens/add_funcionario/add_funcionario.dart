@@ -20,10 +20,6 @@ class AddFuncionario extends StatefulWidget {
 
 class _AddFuncionarioState extends State<AddFuncionario> {
   static final formKey = GlobalKey<FormState>();
-  TextEditingController nomeFunc = TextEditingController();
-  TextEditingController userFunc = TextEditingController();
-  TextEditingController senhaFunc = TextEditingController();
-  TextEditingController cargoFunc = TextEditingController();
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -60,23 +56,17 @@ class _AddFuncionarioState extends State<AddFuncionario> {
             children: [
               buildMyTextFormProibido(
                 context,
-                textController: nomeFunc,
                 'Nome Completo',
               ),
               buildMyTextFormProibido(
                 context,
-                textController: userFunc,
                 'Usário de login',
               ),
               buildMyTextFormProibido(
                 context,
-                textController: senhaFunc,
                 'Senha Login',
               ),
-              buildMyTextFormProibido(
-                  context,
-                  textController: cargoFunc,
-                  'Função/Cargo',
+              buildMyTextFormProibido(context, 'Função/Cargo',
                   hintText: 'Porteiro, Zelador, Administradora, Síndico'),
               buildTilePermicao('Avisos de Correspondências'),
               buildTilePermicao('Avisos de Visitas'),
