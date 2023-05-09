@@ -7,6 +7,8 @@ import '../../consts.dart';
 buildMinhaSnackBar(
   BuildContext context, {
   IconData icon = Icons.error_outline,
+  String title = 'Algo deu errado',
+  String subTitle = 'Tente novamente',
   /*required String categoria*/
 }) {
   ScaffoldMessenger.of(context).clearSnackBars();
@@ -101,9 +103,10 @@ buildMinhaSnackBar(
               width: size.width * 0.02,
             ),
             Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Consts.buildTextTitle('Algo deu errado'),
-                Consts.buildTextSubTitle('Tente novamente')
+                Consts.buildTextTitle(title),
+                Consts.buildTextSubTitle(subTitle)
               ],
             ),
           ],

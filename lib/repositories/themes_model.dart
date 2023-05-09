@@ -13,7 +13,7 @@ ThemeData themeLight(BuildContext context) {
       selectedItemColor: Colors.black,
     ),
     cardColor: Colors.white,
-    canvasColor: Colors.white,
+    canvasColor: Color.fromARGB(255, 248, 248, 248),
     primaryIconTheme: IconThemeData(color: Colors.black),
     iconTheme: IconThemeData(color: Colors.black),
     appBarTheme: AppBarTheme(backgroundColor: Colors.blue),

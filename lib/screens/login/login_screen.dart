@@ -24,7 +24,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   static final formKey = GlobalKey<FormState>();
   final TextEditingController userController =
-      TextEditingController(text: 'tamojunto');
+      TextEditingController(text: 'daniabreu');
   final TextEditingController senhaController =
       TextEditingController(text: '123456');
   bool obscure = true;

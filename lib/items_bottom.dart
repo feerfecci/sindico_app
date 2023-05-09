@@ -20,6 +20,7 @@ class ItensBottom extends StatefulWidget {
 }
 
 class _ItensBottomState extends State<ItensBottom> {
+  DateTime timeBackPressed = DateTime.now();
   late PageController _pageController;
   @override
   void initState() {
@@ -46,11 +47,11 @@ class _ItensBottomState extends State<ItensBottom> {
     var size = MediaQuery.of(context).size;
     return WillPopScope(
       onWillPop: () async {
-        var timeBackPressed = DateTime.now();
         final differenceBack = DateTime.now().difference(timeBackPressed);
-        final exitWarning = differenceBack >= Duration(seconds: 1);
+        final isExitWarning = differenceBack >= Duration(seconds: 1);
+        timeBackPressed = DateTime.now();
 
-        if (exitWarning) {
+        if (isExitWarning) {
           Fluttertoast.showToast(
               msg: 'Pressione novamente para sair',
               fontSize: 18,

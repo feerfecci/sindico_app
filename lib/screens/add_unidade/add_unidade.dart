@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:sindico_app/repositories/form_infos.dart';
 import 'package:sindico_app/widgets/header.dart';
 import 'package:sindico_app/widgets/scaffold_all.dart';
 
 import '../../consts.dart';
+import '../../forms/funcionario_form.dart';
 import '../../widgets/my_box_shadow.dart';
 import '../../widgets/my_text_form_field.dart';
 
@@ -14,25 +14,10 @@ class AddUnidade extends StatefulWidget {
   State<AddUnidade> createState() => _AddUnidadeState();
 }
 
-class _AddUnidadeState extends State<AddUnidade>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(vsync: this);
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
+class _AddUnidadeState extends State<AddUnidade> {
   final formKey = GlobalKey<FormState>();
   bool isChecked = false;
-  FormInfos formInfos = FormInfos();
+  FormInfosFunc formInfos = FormInfosFunc();
 
   @override
   Widget build(BuildContext context) {

@@ -7,7 +7,7 @@ import 'package:sindico_app/widgets/my_box_shadow.dart';
 import 'package:sindico_app/widgets/scaffold_all.dart';
 
 import '../../consts.dart';
-import '../add_funcionario/add_funcionario.dart';
+import '../funcionarios/lista_funcionario.dart';
 import '../../widgets/header.dart';
 
 class HomePage extends StatefulWidget {
@@ -29,34 +29,30 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return buildHeaderPage(
       context,
-      titulo: 'Fernando',
-      subTitulo: 'Síndico',
-      widget: Column(
+      titulo: ResponsalvelInfos.nome_responsavel,
+      subTitulo: 'Resposável por ${ResponsalvelInfos.nome_condominio}',
+      widget: GridView.count(
+        physics: ClampingScrollPhysics(),
+        crossAxisCount: 2,
+        shrinkWrap: true,
+        childAspectRatio: 1.6,
+        crossAxisSpacing: 1,
+        mainAxisSpacing: 0.5,
         children: [
-          GridView.count(
-            physics: ClampingScrollPhysics(),
-            crossAxisCount: 2,
-            shrinkWrap: true,
-            childAspectRatio: 1.6,
-            crossAxisSpacing: 1,
-            mainAxisSpacing: 0.5,
-            children: [
-              buildCardHome(
-                context,
-                title: 'Funcionários',
-                iconApi: 'perfil.png',
-                pageRoute: AddFuncionario(),
-              ),
-              buildCardHome(context,
-                  title: 'Moradores',
-                  pageRoute: AddMorador(),
-                  iconApi: 'perfil.png'),
-              buildCardHome(context,
-                  title: 'Unidades',
-                  pageRoute: AddUnidade(),
-                  iconApi: 'perfil.png'),
-            ],
-          )
+          buildCardHome(
+            context,
+            title: 'Funcionários',
+            iconApi: 'perfil.png',
+            pageRoute: ListaFuncionarios(),
+          ),
+          buildCardHome(context,
+              title: 'Moradores',
+              pageRoute: AddMorador(),
+              iconApi: 'perfil.png'),
+          buildCardHome(context,
+              title: 'Unidades',
+              pageRoute: AddUnidade(),
+              iconApi: 'perfil.png'),
         ],
       ),
     );

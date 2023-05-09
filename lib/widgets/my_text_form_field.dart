@@ -46,17 +46,19 @@ Widget buildMyTextFormProibido(BuildContext context, String title,
     {String mensagem = 'Este campo é obrigatótio',
     List<TextInputFormatter>? inputFormatters,
     String? hintText,
+    String? initialValue,
     String? Function(String?)? validator,
     final void Function(String? text)? onSaved}) {
   var size = MediaQuery.of(context).size;
   return Padding(
     padding: EdgeInsets.symmetric(vertical: size.height * 0.01),
     child: TextFormField(
+      initialValue: initialValue,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       textAlign: TextAlign.start,
       textInputAction: TextInputAction.next,
-      maxLines: 5,
       onSaved: onSaved,
+      maxLines: 5,
       minLines: 1,
       inputFormatters: inputFormatters,
       validator: Validatorless.multiple([Validatorless.required(mensagem)]),

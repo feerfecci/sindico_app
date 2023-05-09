@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
@@ -7,6 +9,20 @@ import 'package:sindico_app/screens/login/login_screen.dart';
 import 'items_bottom.dart';
 import 'widgets/snackbar/snack.dart';
 import 'package:http/http.dart' as http;
+
+class ResponsalvelInfos {
+  static int idcondominio = 0;
+  static String nome_condominio = "";
+  static String dividido_por = "";
+  static String nome_responsavel = "";
+  static String login = "";
+  static String endereco = "";
+  static String numero = "";
+  static String bairro = "";
+  static String cep = "";
+  static String cidade = "";
+  static String estado = "";
+}
 
 class Consts {
   static double fontTitulo = 16;
@@ -31,10 +47,11 @@ class Consts {
       {textAlign, color, double size = 16}) {
     return Text(
       title,
-      maxLines: 20,
+      maxLines: 2,
       textAlign: textAlign,
       style: TextStyle(
         color: color,
+        overflow: TextOverflow.ellipsis,
         fontSize: size,
         fontWeight: FontWeight.bold,
       ),
@@ -70,7 +87,7 @@ class Consts {
       ),
       onPressed: onPressed,
       child: Padding(
-        padding: EdgeInsets.symmetric(vertical: size.height * 0.023),
+        padding: EdgeInsets.symmetric(vertical: size.height * 0.015),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.max,
@@ -94,12 +111,6 @@ class Consts {
     );
   }
 
-  static Future navigatorRoute(BuildContext context, Widget pageRoute) {
-    return Navigator.push(context, MaterialPageRoute(builder: (context) {
-      return pageRoute;
-    }));
-  }
-
   static Future fazerLogin(
       BuildContext context, String usuario, String senha) async {
     var senhaCripto = md5.convert(utf8.encode(senha)).toString();
@@ -111,16 +122,31 @@ class Consts {
     if (resposta.statusCode == 200) {
       var apiBody = json.decode(resposta.body);
       bool erro = apiBody['erro'];
-      var mesagemAPI = apiBody['mensagem'];
-      if (erro == true) {
-        return buildMinhaSnackBar(context, icon: Icons.warning_amber);
+      var loginInfos = apiBody['login'];
+      if (erro) {
+        Consts.navigatorPageRoute(context, LoginScreen());
       } else {
-        return Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-              builder: (context) => ItensBottom(currentTab: 0),
-            ),
-            (route) => false);
+        ResponsalvelInfos.nome_condominio = loginInfos['nome_condominio'];
+        ResponsalvelInfos.idcondominio = loginInfos['idcondominio'];
+        ResponsalvelInfos.dividido_por = loginInfos['dividido_por'];
+        ResponsalvelInfos.nome_responsavel = loginInfos['nome_responsavel'];
+        ResponsalvelInfos.login = loginInfos['login'];
+        ResponsalvelInfos.endereco = loginInfos['endereco'];
+        ResponsalvelInfos.numero = loginInfos['numero'];
+        ResponsalvelInfos.bairro = loginInfos['bairro'];
+        ResponsalvelInfos.cep = loginInfos['cep'];
+        ResponsalvelInfos.cidade = loginInfos['cidade'];
+        ResponsalvelInfos.estado = loginInfos['estado'];
+        if (erro == true) {
+          return buildMinhaSnackBar(context, icon: Icons.warning_amber);
+        } else {
+          return Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ItensBottom(currentTab: 0),
+              ),
+              (route) => false);
+        }
       }
     } else {
       return buildMinhaSnackBar(context, icon: Icons.warning_amber);
@@ -145,8 +171,16 @@ class Consts {
     //   buildMinhaSnackBar(context, icon: Icons.warning_amber);
     // }
   }
-}
 
+  static Future<http.Response> changeApi(String api) {
+    return http.post(
+      Uri.parse(api),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+    );
+  }
+}
 // class UserLogin {
 //   static String email = "fernandofecci@hotmail.com";
 //   static String password = '123mudar';
