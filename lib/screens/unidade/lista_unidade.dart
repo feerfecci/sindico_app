@@ -75,7 +75,7 @@ class _ListaUnidadeStates extends State<ListaUnidades> {
                         itemCount: snapshot.data['unidades'].length,
                         itemBuilder: (context, index) {
                           var itensUnidade = snapshot.data['unidades'][index];
-
+                          var idunidade = itensUnidade['idunidade'];
                           var nome_responsavel =
                               itensUnidade['nome_responsavel'];
                           var nome_condominio = itensUnidade['nome_condominio'];
@@ -149,7 +149,13 @@ class _ListaUnidadeStates extends State<ListaUnidades> {
                                   'Editar',
                                   onPressed: () {
                                     Consts.navigatorPageRoute(
-                                        context, TesteUnidade());
+                                        context,
+                                        CadastroUnidades(
+                                          idunidade: idunidade,
+                                          nome_responsavel: nome_responsavel,
+                                          login: login,
+                                          numero: numero,
+                                        ));
                                   },
                                 )
                               ],
