@@ -11,8 +11,21 @@ import '../../widgets/my_text_form_field.dart';
 import '../funcionarios/cadastro_func.dart';
 import 'package:http/http.dart' as http;
 
+// ignore: must_be_immutable
 class CadastroUnidades extends StatefulWidget {
-  const CadastroUnidades({super.key});
+  final int? idunidade;
+  final String? numero;
+  final String? nome_responsavel;
+  final String? login;
+  final int? iddivisao;
+
+  const CadastroUnidades(
+      {this.idunidade,
+      super.key,
+      this.numero,
+      this.nome_responsavel,
+      this.login,
+      this.iddivisao});
 
   @override
   State<CadastroUnidades> createState() => _CadastroUnidadesState();
@@ -24,6 +37,7 @@ class _CadastroUnidadesState extends State<CadastroUnidades> {
 
   List categoryItemList = [];
   Object? dropdownValue;
+  var iddivisao;
   @override
   void initState() {
     super.initState();
@@ -63,7 +77,7 @@ class _CadastroUnidadesState extends State<CadastroUnidades> {
         child: DropdownButtonHideUnderline(
           child: ButtonTheme(
             alignedDropdown: true,
-            shape: Border.all(color: Colors.black26),
+            shape: Border.all(color: Colors.black),
             child: DropdownButton(
               elevation: 24,
               isExpanded: true,
@@ -84,7 +98,10 @@ class _CadastroUnidadesState extends State<CadastroUnidades> {
               }).toList(),
               onChanged: (value) {
                 setState(() {
-                  dropdownValue = value;
+                  dropdownValue =
+                      widget.idunidade == null ? value : widget.iddivisao;
+                  formInfosUnidade =
+                      formInfosUnidade.copyWith(iddivisao: dropdownValue);
                 });
               },
               value: dropdownValue,
@@ -96,8 +113,10 @@ class _CadastroUnidadesState extends State<CadastroUnidades> {
 
     return buildScaffoldAll(
       body: buildHeaderPage(context,
-          titulo: 'Nova Unidade',
-          subTitulo: 'Cadastre uma nova unidade',
+          titulo: widget.idunidade == null ? 'Nova Unidade' : 'Editar Unidade',
+          subTitulo: widget.idunidade == null
+              ? 'Cadastre uma nova unidade'
+              : 'Edite uma unidade',
           widget: Form(
             key: _formKey,
             child: MyBoxShadow(
@@ -106,22 +125,32 @@ class _CadastroUnidadesState extends State<CadastroUnidades> {
                   buildMyTextFormObrigatorio(
                     context,
                     'Nome Resposável',
+                    initialValue: widget.nome_responsavel,
                     onSaved: (text) => formInfosUnidade =
                         formInfosUnidade.copyWith(responsavel: text),
                   ),
                   buildMyTextFormObrigatorio(
                     context,
                     'Usário de login',
+                    initialValue: widget.login,
+                    onSaved: (text) => formInfosUnidade =
+                        formInfosUnidade.copyWith(login: text),
                   ),
-                  buildMyTextFormObrigatorio(
-                    context,
-                    'Senha Login',
-                  ),
-                  buildMyTextFormObrigatorio(context, 'Condomínio'),
+                  widget.idunidade != null
+                      ? SizedBox()
+                      : buildMyTextFormObrigatorio(
+                          context,
+                          'Senha Login',
+                          onSaved: (text) => formInfosUnidade =
+                              formInfosUnidade.copyWith(senha: text),
+                        ),
                   buildDropButton(),
                   buildMyTextFormObrigatorio(
                     context,
                     'Número',
+                    initialValue: widget.numero,
+                    onSaved: (text) => formInfosUnidade =
+                        formInfosUnidade.copyWith(numero: text),
                   ),
                   ConstWidget.buildCustomButton(
                     context,
@@ -130,7 +159,11 @@ class _CadastroUnidadesState extends State<CadastroUnidades> {
                       var formValid =
                           _formKey.currentState?.validate() ?? false;
                       if (formValid) {
-                        print(formValid.toString());
+                        _formKey.currentState!.save();
+                        Consts.changeApi(
+                            'https://a.portariaapp.com/sindico/api/unidades/?fn=incluirUnidade&idcond=${ResponsalvelInfos.idcondominio}&ativo=0&responsavel=${formInfosUnidade.responsavel}&login=${formInfosUnidade.login}&senha=${formInfosUnidade.senha}&iddivisao=${formInfosUnidade.iddivisao}&numero=${formInfosUnidade.numero}');
+                        print(
+                            'https://a.portariaapp.com/sindico/api/unidades/?fn=incluirUnidade&idcond=${ResponsalvelInfos.idcondominio}&ativo=0&responsavel=${formInfosUnidade.responsavel}&login=${formInfosUnidade.login}&senha=${formInfosUnidade.senha}&iddivisao=${formInfosUnidade.iddivisao}&numero=${formInfosUnidade.numero}');
                       } else {
                         print(formValid.toString());
                       }
