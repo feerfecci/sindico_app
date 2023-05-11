@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../consts.dart';
+import '../../consts/consts.dart';
+import '../../consts/const_widget.dart';
 import '../../widgets/my_box_shadow.dart';
 
 Widget buildCardHome(BuildContext context,
@@ -28,7 +29,7 @@ Widget buildCardHome(BuildContext context,
           SizedBox(
             height: size.height * 0.01,
           ),
-          Consts.buildTextTitle(title),
+          ConstWidget.buildTextTitle(title),
         ],
       ),
     ),

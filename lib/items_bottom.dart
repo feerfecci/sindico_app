@@ -4,7 +4,7 @@ import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:sindico_app/repositories/notification_widget.dart';
 import 'package:sindico_app/screens/carrinho/carrinho_screen.dart';
 import 'package:sindico_app/screens/duvidas/duvidas.dart';
-import 'consts.dart';
+import 'consts/consts.dart';
 import 'screens/home_page.dart/home_page.dart';
 import 'widgets/custom_drawer/custom_drawer.dart';
 import 'package:fluttertoast/fluttertoast.dart';

@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:sindico_app/widgets/header.dart';
 import 'package:sindico_app/widgets/scaffold_all.dart';
 
-import '../../consts.dart';
+import '../../consts/consts.dart';
+import '../../consts/const_widget.dart';
 import '../../widgets/my_box_shadow.dart';
 import '../../widgets/my_text_form_field.dart';
 
@@ -14,7 +15,7 @@ class AddMorador extends StatefulWidget {
 }
 
 class _AddMoradorState extends State<AddMorador> {
-  final formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
   bool isChecked = false;
 
   @override
@@ -22,21 +23,21 @@ class _AddMoradorState extends State<AddMorador> {
     var size = MediaQuery.of(context).size;
     Widget buildEditarFunc() {
       return Form(
-        key: formKey,
+        key: _formKey,
         child: MyBoxShadow(
           child: Column(
             children: [
-              buildMyTextFormProibido(context, 'Condomínio'),
-              buildMyTextFormProibido(context, 'Unidade'),
-              buildMyTextFormProibido(
+              buildMyTextFormObrigatorio(context, 'Condomínio'),
+              buildMyTextFormObrigatorio(context, 'Unidade'),
+              buildMyTextFormObrigatorio(
                 context,
                 'Nome Completo',
               ),
-              buildMyTextFormProibido(
+              buildMyTextFormObrigatorio(
                 context,
                 'Usário de login',
               ),
-              buildMyTextFormProibido(
+              buildMyTextFormObrigatorio(
                 context,
                 'Senha Login',
               ),
@@ -55,7 +56,7 @@ class _AddMoradorState extends State<AddMorador> {
                   mask: '(##) ##### - ####',
                   hintText: '(##) #####-####'),
               ListTile(
-                title: Consts.buildTextTitle('Permitir acesso ao sistema'),
+                title: ConstWidget.buildTextTitle('Permitir acesso ao sistema'),
                 trailing: StatefulBuilder(builder: (context, setState) {
                   return SizedBox(
                       width: size.width * 0.125,
@@ -75,11 +76,11 @@ class _AddMoradorState extends State<AddMorador> {
                       ));
                 }),
               ),
-              Consts.buildCustomButton(
+              ConstWidget.buildCustomButton(
                 context,
                 'Salvar',
                 onPressed: () {
-                  var formValid = formKey.currentState?.validate() ?? false;
+                  var formValid = _formKey.currentState?.validate() ?? false;
                   if (formValid) {
                     print(formValid.toString());
                   } else {

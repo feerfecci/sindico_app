@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
-import 'package:sindico_app/consts.dart';
+import 'package:sindico_app/consts/consts.dart';
 import 'package:validatorless/validatorless.dart';
 
 Widget buildMyTextFormField(BuildContext context,
@@ -42,7 +42,7 @@ Widget buildMyTextFormField(BuildContext context,
   );
 }
 
-Widget buildMyTextFormProibido(BuildContext context, String title,
+Widget buildMyTextFormObrigatorio(BuildContext context, String title,
     {String mensagem = 'Este campo é obrigatótio',
     List<TextInputFormatter>? inputFormatters,
     String? hintText,
@@ -63,7 +63,7 @@ Widget buildMyTextFormProibido(BuildContext context, String title,
       inputFormatters: inputFormatters,
       validator: Validatorless.multiple([Validatorless.required(mensagem)]),
       decoration: InputDecoration(
-        contentPadding: EdgeInsets.only(left: size.width * 0.04),
+        contentPadding: EdgeInsets.only(left: size.width * 0.02),
         filled: true,
         fillColor: Theme.of(context).canvasColor,
         label: Text(title),

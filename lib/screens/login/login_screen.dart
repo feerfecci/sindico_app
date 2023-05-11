@@ -11,7 +11,7 @@ import 'package:sindico_app/widgets/snackbar/snack.dart';
 import 'package:validatorless/validatorless.dart';
 import 'package:http/http.dart' as http;
 
-import '../../consts.dart';
+import '../../consts/consts.dart';
 import '../../items_bottom.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -22,7 +22,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  static final formKey = GlobalKey<FormState>();
+  static final _formkey = GlobalKey<FormState>();
   final TextEditingController userController =
       TextEditingController(text: 'daniabreu');
   final TextEditingController senhaController =
@@ -67,7 +67,7 @@ class _LoginScreenState extends State<LoginScreen> {
           TextFormField(
             textInputAction: TextInputAction.done,
             controller: senhaController,
-            autofillHints: [AutofillHints.password],
+            // autofillHints: [AutofillHints.password],
             autovalidateMode: AutovalidateMode.onUserInteraction,
             validator: Validatorless.multiple([
               Validatorless.required('Senha é obrigatório'),
@@ -137,49 +137,49 @@ class _LoginScreenState extends State<LoginScreen> {
     //   return null;
     // }
 
-    Widget buildLoginButton() {
-      return ElevatedButton(
-        onPressed: () async {
-          var formValid = formKey.currentState?.validate() ?? false;
-          if (formValid && isChecked) {
-            LocalInfos.createCache(userController.text, senhaController.text)
-                .whenComplete(
-              () => Consts.fazerLogin(
-                  context, userController.text, senhaController.text),
-            );
-          } else if (formValid && !isChecked) {
-            Consts.fazerLogin(
-                context, userController.text, senhaController.text);
-          } else {
-            buildMinhaSnackBar(context);
-          }
-        },
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Consts.kButtonColor,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(60),
-          ),
-        ),
-        child: Padding(
-          padding: EdgeInsets.symmetric(vertical: size.height * 0.023),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'Entrar',
-                style:
-                    TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
-              ),
-            ],
-          ),
-        ),
-      );
-    }
+    // Widget buildLoginButton() {
+    //   return ElevatedButton(
+    //     onPressed: () async {
+    //       var formValid = _formkey.currentState?.validate() ?? false;
+    //       if (formValid && isChecked) {
+    //         LocalInfos.createCache(userController.text, senhaController.text)
+    //             .whenComplete(
+    //           () => Consts.fazerLogin(
+    //               context, userController.text, senhaController.text),
+    //         );
+    //       } else if (formValid && !isChecked) {
+    //         Consts.fazerLogin(
+    //             context, userController.text, senhaController.text);
+    //       } else {
+    //         buildMinhaSnackBar(context);
+    //       }
+    //     },
+    //     style: ElevatedButton.styleFrom(
+    //       backgroundColor: Consts.kButtonColor,
+    //       shape: RoundedRectangleBorder(
+    //         borderRadius: BorderRadius.circular(60),
+    //       ),
+    //     ),
+    //     child: Padding(
+    //       padding: EdgeInsets.symmetric(vertical: size.height * 0.023),
+    //       child: Row(
+    //         mainAxisAlignment: MainAxisAlignment.center,
+    //         children: [
+    //           Text(
+    //             'Entrar',
+    //             style:
+    //                 TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+    //           ),
+    //         ],
+    //       ),
+    //     ),
+    //   );
+    // }
 
     return Scaffold(
       body: Center(
         child: Form(
-          key: formKey,
+          key: _formkey,
           child: Wrap(
             children: [
               Padding(
@@ -191,7 +191,46 @@ class _LoginScreenState extends State<LoginScreen> {
                       height: size.height * 0.01,
                     ),
                     buildTextFormSenha(),
-                    buildLoginButton(),
+                    ElevatedButton(
+                      onPressed: () async {
+                        var formValid =
+                            _formkey.currentState?.validate() ?? false;
+                        if (formValid && isChecked) {
+                          LocalInfos.createCache(
+                                  userController.text, senhaController.text)
+                              .whenComplete(
+                            () => Consts.fazerLogin(context,
+                                userController.text, senhaController.text),
+                          );
+                        } else if (formValid && !isChecked) {
+                          Consts.fazerLogin(context, userController.text,
+                              senhaController.text);
+                        } else {
+                          buildMinhaSnackBar(context);
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Consts.kButtonColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(60),
+                        ),
+                      ),
+                      child: Padding(
+                        padding:
+                            EdgeInsets.symmetric(vertical: size.height * 0.023),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Entrar',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),

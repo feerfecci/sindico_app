@@ -7,7 +7,8 @@ import 'package:sindico_app/repositories/notification_widget.dart';
 import 'package:sindico_app/repositories/shared_preferences.dart';
 import 'package:sindico_app/screens/login/login_screen.dart';
 
-import '../../consts.dart';
+import '../../consts/consts.dart';
+import '../../consts/const_widget.dart';
 import '../../repositories/biometrics_auth.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -77,8 +78,9 @@ class _SplashScreenState extends State<SplashScreen> {
           Padding(
             padding: EdgeInsets.symmetric(
                 vertical: size.height * 0.03, horizontal: size.width * 0.03),
-            child: Consts.buildCustomButton(context, 'Autenticar Biometria',
-                icon: Icons.lock_open_outlined, onPressed: () {
+            child: ConstWidget.buildCustomButton(
+                context, 'Autenticar Biometria', icon: Icons.lock_open_outlined,
+                onPressed: () {
               startLogin();
             },
                 color: Colors.white,

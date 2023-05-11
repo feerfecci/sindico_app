@@ -6,8 +6,8 @@ import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:sindico_app/screens/login/login_screen.dart';
 
-import 'items_bottom.dart';
-import 'widgets/snackbar/snack.dart';
+import '../items_bottom.dart';
+import '../widgets/snackbar/snack.dart';
 import 'package:http/http.dart' as http;
 
 class ResponsalvelInfos {
@@ -43,79 +43,11 @@ class Consts {
     ));
   }
 
-  static Widget buildTextTitle(String title,
-      {textAlign, color, double size = 16}) {
-    return Text(
-      title,
-      maxLines: 2,
-      textAlign: textAlign,
-      style: TextStyle(
-        color: color,
-        overflow: TextOverflow.ellipsis,
-        fontSize: size,
-        fontWeight: FontWeight.bold,
-      ),
-    );
-  }
-
-  static Widget buildTextSubTitle(String title, {color}) {
-    return Text(
-      title,
-      maxLines: 20,
-      style: TextStyle(
-        color: color,
-        fontSize: fontSubTitulo,
-        fontWeight: FontWeight.normal,
-      ),
-    );
-  }
-
-  static Widget buildCustomButton(BuildContext context, String title,
-      {IconData? icon,
-      double? altura,
-      Color? color = kButtonColor,
-      Color? textColor = Colors.white,
-      Color? iconColor = Colors.white,
-      required void Function()? onPressed}) {
-    var size = MediaQuery.of(context).size;
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        backgroundColor: color,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(borderButton),
-        ),
-      ),
-      onPressed: onPressed,
-      child: Padding(
-        padding: EdgeInsets.symmetric(vertical: size.height * 0.015),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.max,
-          children: [
-            Text(
-              title,
-              style: TextStyle(
-                overflow: TextOverflow.ellipsis,
-                color: textColor,
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            SizedBox(
-              width: size.width * 0.015,
-            ),
-            icon != null ? Icon(size: 18, icon, color: iconColor) : SizedBox(),
-          ],
-        ),
-      ),
-    );
-  }
-
   static Future fazerLogin(
       BuildContext context, String usuario, String senha) async {
     var senhaCripto = md5.convert(utf8.encode(senha)).toString();
     var url = Uri.parse(
-        'https://a.portariaapp.com/api/login-responsavel/?fn=login&usuario=$usuario&senha=${senhaCripto}');
+        'https://a.portariaapp.com/api/login-responsavel/?fn=login&usuario=${usuario}&senha=${senhaCripto}');
     var resposta = await http.get(
       url,
     );
@@ -125,7 +57,7 @@ class Consts {
       var loginInfos = apiBody['login'];
       if (erro) {
         Consts.navigatorPageRoute(context, LoginScreen());
-      } else {
+      } else if (erro == false) {
         ResponsalvelInfos.nome_condominio = loginInfos['nome_condominio'];
         ResponsalvelInfos.idcondominio = loginInfos['idcondominio'];
         ResponsalvelInfos.dividido_por = loginInfos['dividido_por'];
@@ -147,6 +79,13 @@ class Consts {
               ),
               (route) => false);
         }
+      } else {
+        return Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ItensBottom(currentTab: 0),
+            ),
+            (route) => false);
       }
     } else {
       return buildMinhaSnackBar(context, icon: Icons.warning_amber);

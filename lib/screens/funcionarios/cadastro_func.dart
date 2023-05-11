@@ -4,7 +4,8 @@ import 'package:sindico_app/widgets/header.dart';
 import 'package:sindico_app/widgets/scaffold_all.dart';
 import 'package:sindico_app/widgets/snackbar/snack.dart';
 
-import '../../consts.dart';
+import '../../consts/consts.dart';
+import '../../consts/const_widget.dart';
 import '../../forms/funcionario_form.dart';
 import '../../widgets/my_box_shadow.dart';
 import '../../widgets/my_text_form_field.dart';
@@ -44,13 +45,13 @@ class CadastroFuncionario extends StatefulWidget {
 }
 
 FormInfosFunc formInfos = FormInfosFunc();
-String dropdownValue = list.first;
 
 Widget buildDropdownButton(
   BuildContext context, {
   bool editando = false,
   String? funcao,
 }) {
+  var dropdownValue = list.first;
   return StatefulBuilder(builder: (context, setState) {
     var size = MediaQuery.of(context).size;
     return ButtonTheme(
@@ -115,7 +116,7 @@ Widget buildTilePermissao(BuildContext context, String title,
     {required int nomeCampo, bool isChecked = false}) {
   var size = MediaQuery.of(context).size;
   return ListTile(
-    title: Consts.buildTextTitle(title),
+    title: ConstWidget.buildTextTitle(title),
     trailing: StatefulBuilder(builder: (context, setState) {
       return SizedBox(
           width: size.width * 0.125,
@@ -152,12 +153,12 @@ Widget buildTilePermissao(BuildContext context, String title,
 }
 
 class _CadastroFuncionarioState extends State<CadastroFuncionario> {
-  final formKey = GlobalKey<FormState>();
+  final _formkey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     return Form(
-        key: formKey,
+        key: _formkey,
         child: buildScaffoldAll(
             body: buildHeaderPage(
           context,
@@ -171,14 +172,14 @@ class _CadastroFuncionarioState extends State<CadastroFuncionario> {
             child: Column(
               // crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                buildMyTextFormProibido(
+                buildMyTextFormObrigatorio(
                   context,
                   initialValue: widget.nomeFuncionario,
                   'Nome Completo',
                   onSaved: (text) =>
                       formInfos = formInfos.copyWith(nome_funcionario: text),
                 ),
-                buildMyTextFormProibido(
+                buildMyTextFormObrigatorio(
                   context,
                   'Usário de login',
                   initialValue: widget.login,
@@ -192,7 +193,7 @@ class _CadastroFuncionarioState extends State<CadastroFuncionario> {
                         : 'Função'),
                 widget.idfuncionario != null
                     ? SizedBox()
-                    : buildMyTextFormProibido(
+                    : buildMyTextFormObrigatorio(
                         context,
                         'Senha Login',
                         onSaved: (text) =>
@@ -206,13 +207,13 @@ class _CadastroFuncionarioState extends State<CadastroFuncionario> {
                     nomeCampo: 2, isChecked: widget.avisa_delivery),
                 buildTilePermissao(context, 'Avisos de Encomendas',
                     nomeCampo: 3, isChecked: widget.avisa_encomendas),
-                Consts.buildCustomButton(
+                ConstWidget.buildCustomButton(
                   context,
                   'Salvar',
                   onPressed: () {
-                    if (formKey.currentState!.validate() &&
+                    if (_formkey.currentState!.validate() &&
                         formInfos.funcao != 0) {
-                      formKey.currentState!.save();
+                      _formkey.currentState!.save();
                       var apiEditar =
                           'https://a.portariaapp.com/sindico/api/funcionarios/?fn=editarFuncionario&idfuncionario=${widget.idfuncionario}&idcond=${ResponsalvelInfos.idcondominio}&nomeFuncionario=${formInfos.nome_funcionario}&funcao=${formInfos.funcao}&login=${formInfos.login}&avisa_corresp=${formInfos.avisa_corresp}&avisa_visita=${formInfos.avisa_visita}&avisa_delivery=${formInfos.avisa_delivery}&avisa_encomendas=${formInfos.avisa_encomendas}';
 

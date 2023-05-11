@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-import '../../consts.dart';
+import '../../consts/consts.dart';
+import '../../consts/const_widget.dart';
 
 buildMinhaSnackBar(
   BuildContext context, {
@@ -105,8 +106,8 @@ buildMinhaSnackBar(
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Consts.buildTextTitle(title),
-                Consts.buildTextSubTitle(subTitle)
+                ConstWidget.buildTextTitle(title),
+                ConstWidget.buildTextSubTitle(subTitle)
               ],
             ),
           ],

@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:sindico_app/repositories/notification_widget.dart';
 import 'package:sindico_app/screens/add_morador/add_morador.dart';
-import 'package:sindico_app/screens/add_unidade/add_unidade.dart';
 import 'package:sindico_app/screens/home_page.dart/card_home.dart';
 import 'package:sindico_app/widgets/my_box_shadow.dart';
 import 'package:sindico_app/widgets/scaffold_all.dart';
 
-import '../../consts.dart';
+import '../../consts/consts.dart';
 import '../funcionarios/lista_funcionario.dart';
 import '../../widgets/header.dart';
+import '../unidade/cadastro_unidade.dart';
+import '../unidade/lista_unidade.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -18,13 +19,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    // NotificationWidget.init();
-  }
-
   @override
   Widget build(BuildContext context) {
     return buildHeaderPage(
@@ -51,8 +45,10 @@ class _HomePageState extends State<HomePage> {
               iconApi: 'perfil.png'),
           buildCardHome(context,
               title: 'Unidades',
-              pageRoute: AddUnidade(),
-              iconApi: 'perfil.png'),
+              pageRoute: ListaUnidades(),
+              iconApi: 'perfil.png')
+          // buildCardHome(context,
+          //     title: 'Unidades', pageRoute: Lista(), iconApi: 'perfil.png'),
         ],
       ),
     );

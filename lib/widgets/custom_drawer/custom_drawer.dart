@@ -1,6 +1,7 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables
 import 'package:flutter/material.dart';
-import '../../consts.dart';
+import '../../consts/consts.dart';
+import '../../consts/const_widget.dart';
 import '../../repositories/shared_preferences.dart';
 import '../../screens/login/login_screen.dart';
 import 'change_theme_button.dart';
@@ -29,7 +30,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
             leading,
             size: 25,
           ),
-          title: Consts.buildTextTitle(title),
+          title: ConstWidget.buildTextTitle(title),
           trailing: Icon(
             size: 30,
             trailing,
@@ -88,7 +89,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
               Spacer(),
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
-                child: Consts.buildCustomButton(
+                child: ConstWidget.buildCustomButton(
                   context,
                   'Sair',
                   onPressed: () {

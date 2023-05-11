@@ -9,8 +9,10 @@ import 'package:sindico_app/widgets/my_text_form_field.dart';
 import 'package:sindico_app/widgets/scaffold_all.dart';
 import 'package:validatorless/validatorless.dart';
 import 'package:http/http.dart' as http;
-import '../../consts.dart';
+import '../../consts/consts.dart';
 import 'package:crypto/crypto.dart';
+
+import '../../consts/const_widget.dart';
 
 class ListaFuncionarios extends StatefulWidget {
   const ListaFuncionarios({super.key});
@@ -21,7 +23,7 @@ class ListaFuncionarios extends StatefulWidget {
 
 listarFuncionario() async {
   var url = Uri.parse(
-      'https://a.portariaapp.com/sindico/api/funcionarios/?fn=listarFuncionarios&idcond=13');
+      'https://a.portariaapp.com/sindico/api/funcionarios/?fn=listarFuncionarios&idcond=${ResponsalvelInfos.idcondominio}');
   var resposta = await http.get(url);
 
   if (resposta.statusCode == 200) {
@@ -76,7 +78,7 @@ class _ListaFuncionariosState extends State<ListaFuncionarios> {
               physics: ClampingScrollPhysics(),
               children: [
                 // EditarFuncionario(),
-                Consts.buildCustomButton(
+                ConstWidget.buildCustomButton(
                   context,
                   'Adicionar Funcionário',
                   onPressed: () {
@@ -88,8 +90,7 @@ class _ListaFuncionariosState extends State<ListaFuncionarios> {
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
                         return CircularProgressIndicator();
-                      } else if (snapshot.connectionState ==
-                          ConnectionState.none) {
+                      } else if (snapshot.hasError) {
                         return Container(
                           height: 30,
                           width: 30,
@@ -123,28 +124,17 @@ class _ListaFuncionariosState extends State<ListaFuncionarios> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Consts.buildTextSubTitle('Nome'),
+                                        ConstWidget.buildTextSubTitle('Nome'),
                                         SizedBox(
                                             width: size.width * 0.7,
-                                            child: Consts.buildTextTitle(
+                                            child: ConstWidget.buildTextTitle(
                                                 '$nome_funcionario')),
                                       ],
                                     ),
                                     SizedBox(
                                       width: size.width * 0.02,
                                     ),
-                                    Container(
-                                      decoration: BoxDecoration(
-                                          color:
-                                              ativo ? Colors.green : Colors.red,
-                                          borderRadius:
-                                              BorderRadius.circular(16)),
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Consts.buildTextTitle(
-                                            ativo ? 'Ativo' : 'Inativo'),
-                                      ),
-                                    ),
+                                    ConstWidget.buildAtivoInativo(ativo),
                                   ],
                                 ),
                                 Row(
@@ -159,8 +149,9 @@ class _ListaFuncionariosState extends State<ListaFuncionarios> {
                                         SizedBox(
                                           height: 10,
                                         ),
-                                        Consts.buildTextSubTitle('Usuário'),
-                                        Consts.buildTextTitle(
+                                        ConstWidget.buildTextSubTitle(
+                                            'Usuário'),
+                                        ConstWidget.buildTextTitle(
                                             '$login_funcionario'),
                                       ],
                                     ),
@@ -171,8 +162,8 @@ class _ListaFuncionariosState extends State<ListaFuncionarios> {
                                         SizedBox(
                                           height: 10,
                                         ),
-                                        Consts.buildTextSubTitle('Cargo'),
-                                        Consts.buildTextTitle('$funcao'),
+                                        ConstWidget.buildTextSubTitle('Cargo'),
+                                        ConstWidget.buildTextTitle('$funcao'),
                                       ],
                                     ),
                                     SizedBox(
@@ -207,7 +198,7 @@ class _ListaFuncionariosState extends State<ListaFuncionarios> {
                                     ],
                                   ),
                                 ),
-                                Consts.buildCustomButton(
+                                ConstWidget.buildCustomButton(
                                   context,
                                   'Editar',
                                   onPressed: () {
