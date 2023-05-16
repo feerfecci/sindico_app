@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:sindico_app/forms/funcionario_form.dart';
+import 'package:sindico_app/forms/unidades_form.dart';
+import 'package:http/http.dart' as http;
 
 import 'consts.dart';
 
@@ -83,75 +87,140 @@ class ConstWidget {
       ),
     );
   }
-
-  static Widget buildDropdownButton(
-    BuildContext context,
-    List<String> list, {
-    bool editando = false,
-  }) {
-    return StatefulBuilder(builder: (context, setState) {
-      var dropdownValue = list.first;
-
-      var size = MediaQuery.of(context).size;
-      return ButtonTheme(
-        alignedDropdown: true,
-        child: DropdownButtonFormField<String>(
-          value: dropdownValue,
-
-          icon: Padding(
-            padding: EdgeInsets.only(
-              right: size.height * 0.015,
-            ),
-            child: Icon(
-              Icons.arrow_downward,
-              color: Theme.of(context).iconTheme.color,
-            ),
-          ),
-
-          elevation: 90,
-          style: TextStyle(
-              color: Theme.of(context).colorScheme.primary,
-              fontWeight: FontWeight.w400,
-              fontSize: 18),
-          decoration: InputDecoration(
-            contentPadding: EdgeInsets.only(right: size.width * 0.0),
-            filled: true,
-            fillColor: Theme.of(context).canvasColor,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(16),
-            ),
-          ),
-          // underline: Container(
-          //   height: 1,
-          //   color: Consts.kColorApp,
-          // ),
-          borderRadius: BorderRadius.circular(16),
-
-          onChanged: (String? value) {
-            setState(() {
-              // funcao = value!;
-              // if (funcao == 'Porteiro') {
-              //   formInfos = formInfos.copyWith(funcao: 1);
-              // } else if (funcao == 'Síndico') {
-              //   formInfos = formInfos.copyWith(funcao: 2);
-              // } else if (funcao == 'Zelador') {
-              //   formInfos = formInfos.copyWith(funcao: 3);
-              // } else if (funcao == 'Administrador(a)') {
-              //   formInfos = formInfos.copyWith(funcao: 4);
-              // } else {
-              //   formInfos = formInfos.copyWith(funcao: 0);
-              // }
-            });
-          },
-
-          items: list.map<DropdownMenuItem<String>>((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(value),
-            );
-          }).toList(),
-        ),
-      );
-    });
-  }
 }
+
+// Widget buildDropDivisoes({required void Function(Object?)? onChanged}) {
+//   return StatefulBuilder(
+//     builder: (context, setState) {
+//       Object? dropdownValueDivisioes;
+//       List categoryItemListDivisoes = [];
+//       Future apiListarDivisoes() async {
+//         var uri =
+//             'https://a.portariaapp.com/sindico/api/divisoes/?fn=listarDivisoes&idcond=13';
+//         final response = await http.get(Uri.parse(uri));
+//         if (response.statusCode == 200) {
+//           final jsonresponse = json.decode(response.body);
+//           var divisoes = jsonresponse['divisoes'];
+//           setState(() {
+//             categoryItemListDivisoes = divisoes;
+//           });
+//         } else {
+//           throw response.statusCode;
+//         }
+//       }
+//       return FutureBuilder<dynamic>(
+//           future: apiListarDivisoes(),
+//           builder: (context, snapshot) {
+//             if (snapshot.hasError) {
+//               return Container(color: Colors.red);
+//             }
+//             return Container(
+//               width: double.infinity,
+//               alignment: Alignment.center,
+//               decoration: BoxDecoration(
+//                 color: Theme.of(context).canvasColor,
+//                 border: Border.all(color: Colors.black26),
+//                 borderRadius: BorderRadius.all(Radius.circular(16)),
+//               ),
+//               child: DropdownButtonHideUnderline(
+//                 child: ButtonTheme(
+//                   alignedDropdown: true,
+//                   shape: Border.all(color: Colors.black),
+//                   child: DropdownButton(
+//                     elevation: 24,
+//                     isExpanded: true,
+//                     hint: Text('Selecione uma Divisão'),
+//                     icon: Icon(Icons.arrow_drop_down_sharp),
+//                     borderRadius: BorderRadius.circular(16),
+//                     style: TextStyle(
+//                         // fontWeight: FontWeight.bold,
+//                         fontSize: Consts.fontTitulo,
+//                         color: Colors.black),
+//                     items: categoryItemListDivisoes.map((e) {
+//                       return DropdownMenuItem(
+//                         value: e['iddivisao'],
+//                         child: Text(
+//                           e['nome_divisao'],
+//                         ),
+//                       );
+//                     }).toList(),
+//                     onChanged: onChanged,
+//                     value: dropdownValueDivisioes,
+//                   ),
+//                 ),
+//               ),
+//             );
+//           });
+//     },
+//   );
+// }
+
+// class DropDivisoes extends StatefulWidget {
+//   void Function(Object?)? onChanged;
+//   DropDivisoes({required void Function(Object?)? onChanged, super.key});
+//   @override
+//   State<DropDivisoes> createState() => DropDivisoesState();
+// }
+// class DropDivisoesState extends State<DropDivisoes> {
+//   @override
+//   void initState() {
+//     super.initState();
+//     apiListarDivisoes();
+//   }
+//   Object? dropdownValueDivisioes;
+//   List categoryItemListDivisoes = [];
+//   Future apiListarDivisoes() async {
+//     var uri =
+//         'https://a.portariaapp.com/sindico/api/divisoes/?fn=listarDivisoes&idcond=13';
+//     final response = await http.get(Uri.parse(uri));
+//     if (response.statusCode == 200) {
+//       final jsonresponse = json.decode(response.body);
+//       var divisoes = jsonresponse['divisoes'];
+//       setState(() {
+//         categoryItemListDivisoes = divisoes;
+//       });
+//     } else {
+//       throw response.statusCode;
+//     }
+//   }
+//   FormInfosUnidade formInfosUnidade = FormInfosUnidade();
+//   @override
+//   Widget build(BuildContext context) {
+//     return Container(
+//       width: double.infinity,
+//       alignment: Alignment.center,
+//       decoration: BoxDecoration(
+//         color: Theme.of(context).canvasColor,
+//         border: Border.all(color: Colors.black26),
+//         borderRadius: BorderRadius.all(Radius.circular(16)),
+//       ),
+//       child: DropdownButtonHideUnderline(
+//         child: ButtonTheme(
+//           alignedDropdown: true,
+//           shape: Border.all(color: Colors.black),
+//           child: DropdownButton(
+//             elevation: 24,
+//             isExpanded: true,
+//             hint: Text('Selecione uma Divisão'),
+//             icon: Icon(Icons.arrow_drop_down_sharp),
+//             borderRadius: BorderRadius.circular(16),
+//             style: TextStyle(
+//                 // fontWeight: FontWeight.bold,
+//                 fontSize: Consts.fontTitulo,
+//                 color: Colors.black),
+//             items: categoryItemListDivisoes.map((e) {
+//               return DropdownMenuItem(
+//                 value: e['iddivisao'],
+//                 child: Text(
+//                   e['nome_divisao'],
+//                 ),
+//               );
+//             }).toList(),
+//             onChanged: widget.onChanged,
+//             value: dropdownValueDivisioes,
+//           ),
+//         ),
+//       ),
+//     );  
+//   }
+// }

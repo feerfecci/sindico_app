@@ -12,6 +12,7 @@ import 'package:validatorless/validatorless.dart';
 import 'package:http/http.dart' as http;
 
 import '../../consts/consts.dart';
+import '../../consts/consts_future.dart';
 import '../../items_bottom.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -22,7 +23,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  static final _formkey = GlobalKey<FormState>();
+  final _formKeyLogin = GlobalKey<FormState>();
   final TextEditingController userController =
       TextEditingController(text: 'daniabreu');
   final TextEditingController senhaController =
@@ -179,7 +180,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       body: Center(
         child: Form(
-          key: _formkey,
+          key: _formKeyLogin,
           child: Wrap(
             children: [
               Padding(
@@ -194,16 +195,16 @@ class _LoginScreenState extends State<LoginScreen> {
                     ElevatedButton(
                       onPressed: () async {
                         var formValid =
-                            _formkey.currentState?.validate() ?? false;
+                            _formKeyLogin.currentState?.validate() ?? false;
                         if (formValid && isChecked) {
                           LocalInfos.createCache(
                                   userController.text, senhaController.text)
                               .whenComplete(
-                            () => Consts.fazerLogin(context,
+                            () => ConstsFuture.fazerLogin(context,
                                 userController.text, senhaController.text),
                           );
                         } else if (formValid && !isChecked) {
-                          Consts.fazerLogin(context, userController.text,
+                          ConstsFuture.fazerLogin(context, userController.text,
                               senhaController.text);
                         } else {
                           buildMinhaSnackBar(context);

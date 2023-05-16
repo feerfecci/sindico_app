@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sindico_app/repositories/notification_widget.dart';
-import 'package:sindico_app/screens/add_morador/add_morador.dart';
+import 'package:sindico_app/screens/add_morador/lista_morador.dart';
 import 'package:sindico_app/screens/home_page.dart/card_home.dart';
 import 'package:sindico_app/widgets/my_box_shadow.dart';
 import 'package:sindico_app/widgets/scaffold_all.dart';
@@ -24,7 +24,7 @@ class _HomePageState extends State<HomePage> {
     return buildHeaderPage(
       context,
       titulo: ResponsalvelInfos.nome_responsavel,
-      subTitulo: 'Resposável por ${ResponsalvelInfos.nome_condominio}',
+      subTitulo: ResponsalvelInfos.nome_condominio,
       widget: GridView.count(
         physics: ClampingScrollPhysics(),
         crossAxisCount: 2,
@@ -39,10 +39,6 @@ class _HomePageState extends State<HomePage> {
             iconApi: 'perfil.png',
             pageRoute: ListaFuncionarios(),
           ),
-          buildCardHome(context,
-              title: 'Moradores',
-              pageRoute: AddMorador(),
-              iconApi: 'perfil.png'),
           buildCardHome(context,
               title: 'Unidades',
               pageRoute: ListaUnidades(),

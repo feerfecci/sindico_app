@@ -13,6 +13,7 @@ import '../../consts/consts.dart';
 import 'package:crypto/crypto.dart';
 
 import '../../consts/const_widget.dart';
+import '../../consts/consts_future.dart';
 
 class ListaFuncionarios extends StatefulWidget {
   const ListaFuncionarios({super.key});
@@ -82,7 +83,8 @@ class _ListaFuncionariosState extends State<ListaFuncionarios> {
                   context,
                   'Adicionar Funcionário',
                   onPressed: () {
-                    Consts.navigatorPageRoute(context, CadastroFuncionario());
+                    ConstsFuture.navigatorPagePush(
+                        context, CadastroFuncionario());
                   },
                 ),
                 FutureBuilder<dynamic>(
@@ -107,6 +109,7 @@ class _ListaFuncionariosState extends State<ListaFuncionarios> {
                           var ativo = api['ativo'];
                           var nome_funcionario = api['nome_funcionario'];
                           var login_funcionario = api['login'];
+                          var idfuncao = api['idfuncao'];
                           var funcao = api['funcao'];
                           bool avisa_corresp = api['avisa_corresp'];
                           bool avisa_visita = api['avisa_visita'];
@@ -202,11 +205,12 @@ class _ListaFuncionariosState extends State<ListaFuncionarios> {
                                   context,
                                   'Editar',
                                   onPressed: () {
-                                    Consts.navigatorPageRoute(
+                                    ConstsFuture.navigatorPagePush(
                                         context,
                                         CadastroFuncionario(
                                           idfuncionario: idfuncionario,
                                           nomeFuncionario: nome_funcionario,
+                                          idfuncao: idfuncao,
                                           funcao: funcao,
                                           login: login_funcionario,
                                           avisa_corresp: avisa_corresp,

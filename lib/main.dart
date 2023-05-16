@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:sindico_app/repositories/themes_provider.dart';
+import 'package:sindico_app/screens/funcionarios/lista_funcionario.dart';
 import 'items_bottom.dart';
 import 'repositories/themes_model.dart';
 import 'screens/login/login_screen.dart';
@@ -28,11 +29,16 @@ class MyApp extends StatelessWidget {
         final themeProvider = Provider.of<ThemeProvider>(context);
         return MaterialApp(
           debugShowCheckedModeBanner: false,
+          initialRoute: '/splashScreen',
+          routes: {
+            '/splashScreen': (context) => SplashScreen(),
+            '/listaFuncionario': (context) => ListaFuncionarios()
+          },
           title: 'Flutter Demo',
           themeMode: themeProvider.themeMode,
           theme: themeLight(context),
           darkTheme: themeDark(context),
-          home: SplashScreen(),
+          // home: SplashScreen(),
           builder: (context, child) {
             return MediaQuery(
                 data: MediaQuery.of(context).copyWith(textScaleFactor: 1),

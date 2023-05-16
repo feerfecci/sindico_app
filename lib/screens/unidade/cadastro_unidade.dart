@@ -6,6 +6,7 @@ import 'package:sindico_app/widgets/header.dart';
 import 'package:sindico_app/widgets/scaffold_all.dart';
 import '../../consts/consts.dart';
 import '../../consts/const_widget.dart';
+import '../../consts/consts_future.dart';
 import '../../widgets/my_box_shadow.dart';
 import '../../widgets/my_text_form_field.dart';
 import '../funcionarios/cadastro_func.dart';
@@ -13,40 +14,46 @@ import 'package:http/http.dart' as http;
 
 // ignore: must_be_immutable
 class CadastroUnidades extends StatefulWidget {
-  final int? idunidade;
+  final int idunidade;
   final String? numero;
   final String? nome_responsavel;
   final String? login;
-  final int? iddivisao;
-
-  const CadastroUnidades(
-      {this.idunidade,
-      super.key,
-      this.numero,
-      this.nome_responsavel,
-      this.login,
-      this.iddivisao});
+  final Object? iddivisao;
+  final bool? ativo;
+  const CadastroUnidades({
+    this.idunidade = 0,
+    super.key,
+    this.numero,
+    this.nome_responsavel,
+    this.login,
+    this.iddivisao,
+    this.ativo,
+  });
 
   @override
   State<CadastroUnidades> createState() => _CadastroUnidadesState();
 }
 
 class _CadastroUnidadesState extends State<CadastroUnidades> {
-  final _formKey = GlobalKey<FormState>();
+  final _formkeyUnidade = GlobalKey<FormState>();
   FormInfosUnidade formInfosUnidade = FormInfosUnidade();
 
-  List categoryItemList = [];
-  Object? dropdownValue;
-  var iddivisao;
   @override
   void initState() {
     super.initState();
     apiListarDivisoes();
+    colocarIdDivisao();
   }
 
+  colocarIdDivisao() {
+    formInfosUnidade = formInfosUnidade.copyWith(iddivisao: widget.iddivisao);
+  }
+
+  List categoryItemListDivisoes = [];
+  // Object? dropdownValueDivisioes;
   Future apiListarDivisoes() async {
     var uri =
-        'https://a.portariaapp.com/sindico/api/divisoes/?fn=listarDivisoes&idcond=13';
+        'https://a.portariaapp.com/sindico/api/divisoes/?fn=listarDivisoes&idcond=${ResponsalvelInfos.idcondominio}';
 
     final response = await http.get(Uri.parse(uri));
 
@@ -54,7 +61,7 @@ class _CadastroUnidadesState extends State<CadastroUnidades> {
       final jsonresponse = json.decode(response.body);
       var divisoes = jsonresponse['divisoes'];
       setState(() {
-        categoryItemList = divisoes;
+        categoryItemListDivisoes = divisoes;
       });
     } else {
       throw response.statusCode;
@@ -63,8 +70,6 @@ class _CadastroUnidadesState extends State<CadastroUnidades> {
 
   @override
   Widget build(BuildContext context) {
-    var size = MediaQuery.of(context).size;
-
     Widget buildDropButton() {
       return Container(
         width: double.infinity,
@@ -88,40 +93,99 @@ class _CadastroUnidadesState extends State<CadastroUnidades> {
                   // fontWeight: FontWeight.bold,
                   fontSize: Consts.fontTitulo,
                   color: Colors.black),
-              items: categoryItemList.map((e) {
+              items: categoryItemListDivisoes.map((e) {
                 return DropdownMenuItem(
                   value: e['iddivisao'],
                   child: Text(
-                    e['nome_divisao'].toString(),
+                    e['nome_divisao'],
                   ),
                 );
               }).toList(),
               onChanged: (value) {
                 setState(() {
-                  dropdownValue =
-                      widget.idunidade == null ? value : widget.iddivisao;
+                  // dropdownValueDivisioes = value;
                   formInfosUnidade =
-                      formInfosUnidade.copyWith(iddivisao: dropdownValue);
+                      formInfosUnidade.copyWith(iddivisao: value);
                 });
               },
-              value: dropdownValue,
+              value: formInfosUnidade.iddivisao,
             ),
           ),
         ),
       );
     }
 
+    var size = MediaQuery.of(context).size;
+
+    List<String> listAtivo = <String>['Ativo', 'Inativo'];
+    var seAtivo = widget.ativo == true ? 'Ativo' : 'Inativo';
+    var dropdownValueAtivo = listAtivo.first;
+
     return buildScaffoldAll(
       body: buildHeaderPage(context,
-          titulo: widget.idunidade == null ? 'Nova Unidade' : 'Editar Unidade',
-          subTitulo: widget.idunidade == null
+          titulo: widget.idunidade == 0 ? 'Nova Unidade' : 'Editar Unidade',
+          subTitulo: widget.idunidade == 0
               ? 'Cadastre uma nova unidade'
               : 'Edite uma unidade',
           widget: Form(
-            key: _formKey,
+            key: _formkeyUnidade,
             child: MyBoxShadow(
               child: Column(
                 children: [
+                  ButtonTheme(
+                    alignedDropdown: true,
+                    child: DropdownButtonFormField<String>(
+                      value:
+                          widget.idunidade == 0 ? dropdownValueAtivo : seAtivo,
+
+                      icon: Padding(
+                        padding: EdgeInsets.only(right: size.height * 0.03),
+                        child: Icon(
+                          Icons.arrow_downward,
+                          color: Theme.of(context).iconTheme.color,
+                        ),
+                      ),
+
+                      elevation: 90,
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.primary,
+                          fontWeight: FontWeight.w400,
+                          fontSize: 18),
+                      decoration: InputDecoration(
+                        contentPadding:
+                            EdgeInsets.only(left: size.width * 0.00),
+                        filled: true,
+                        fillColor: Theme.of(context).canvasColor,
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                      ),
+                      // underline: Container(
+                      //   height: 1,
+                      //   color: Consts.kColorApp,
+                      // ),
+                      borderRadius: BorderRadius.circular(16),
+                      items: listAtivo
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                      onChanged: (String? value) {
+                        setState(() {
+                          dropdownValueAtivo = value!;
+                          if (dropdownValueAtivo == 'Ativo') {
+                            formInfosUnidade =
+                                formInfosUnidade.copyWith(ativo: 1);
+                          } else if (dropdownValueAtivo == 'Inativo') {
+                            formInfosUnidade =
+                                formInfosUnidade.copyWith(ativo: 0);
+                          }
+                        });
+                      },
+                    ),
+                  ),
                   buildMyTextFormObrigatorio(
                     context,
                     'Nome Resposável',
@@ -136,7 +200,7 @@ class _CadastroUnidadesState extends State<CadastroUnidades> {
                     onSaved: (text) => formInfosUnidade =
                         formInfosUnidade.copyWith(login: text),
                   ),
-                  widget.idunidade != null
+                  widget.idunidade != 0
                       ? SizedBox()
                       : buildMyTextFormObrigatorio(
                           context,
@@ -157,13 +221,16 @@ class _CadastroUnidadesState extends State<CadastroUnidades> {
                     'Salvar',
                     onPressed: () {
                       var formValid =
-                          _formKey.currentState?.validate() ?? false;
+                          _formkeyUnidade.currentState?.validate() ?? false;
                       if (formValid) {
-                        _formKey.currentState!.save();
-                        Consts.changeApi(
-                            'https://a.portariaapp.com/sindico/api/unidades/?fn=incluirUnidade&idcond=${ResponsalvelInfos.idcondominio}&ativo=0&responsavel=${formInfosUnidade.responsavel}&login=${formInfosUnidade.login}&senha=${formInfosUnidade.senha}&iddivisao=${formInfosUnidade.iddivisao}&numero=${formInfosUnidade.numero}');
-                        print(
-                            'https://a.portariaapp.com/sindico/api/unidades/?fn=incluirUnidade&idcond=${ResponsalvelInfos.idcondominio}&ativo=0&responsavel=${formInfosUnidade.responsavel}&login=${formInfosUnidade.login}&senha=${formInfosUnidade.senha}&iddivisao=${formInfosUnidade.iddivisao}&numero=${formInfosUnidade.numero}');
+                        _formkeyUnidade.currentState!.save();
+                        String incluindoEditando = widget.idunidade == null
+                            ? "incluirUnidade&"
+                            : 'editarUnidade&id=${widget.idunidade}&';
+                        ConstsFuture.changeApi(
+                            'https://a.portariaapp.com/sindico/api/unidades/?fn=${incluindoEditando}idcond=${ResponsalvelInfos.idcondominio}&iddivisao=${formInfosUnidade.iddivisao}&ativo=${formInfosUnidade.ativo}&responsavel=${formInfosUnidade.responsavel}&login=${formInfosUnidade.login}&senha=${formInfosUnidade.senha}&iddivisao=${formInfosUnidade.iddivisao}&numero=${formInfosUnidade.numero}');
+                        Navigator.pop(context);
+                      } else if (widget.idunidade == 0) {
                       } else {
                         print(formValid.toString());
                       }

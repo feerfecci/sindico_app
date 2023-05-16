@@ -2,7 +2,8 @@ class FormInfosFunc {
   final String responsavel;
   final String nome_funcionario;
   final String nome_condominio;
-  final int funcao;
+  final Object? idfuncao;
+  final String funcao;
   final String login;
   final String senha;
   final int avisa_corresp;
@@ -14,7 +15,8 @@ class FormInfosFunc {
     this.responsavel = '',
     this.nome_funcionario = '',
     this.nome_condominio = '',
-    this.funcao = 0,
+    this.idfuncao,
+    this.funcao = '',
     this.login = '',
     this.senha = '',
     this.avisa_corresp = 0,
@@ -27,7 +29,8 @@ class FormInfosFunc {
     String? responsavel,
     String? nome_funcionario,
     String? nome_condominio,
-    int? funcao,
+    Object? idfuncao,
+    String? funcao,
     String? login,
     String? senha,
     int? avisa_corresp,
@@ -39,6 +42,7 @@ class FormInfosFunc {
       responsavel: responsavel ?? this.responsavel,
       nome_funcionario: nome_funcionario ?? this.nome_funcionario,
       nome_condominio: nome_condominio ?? this.nome_condominio,
+      idfuncao: idfuncao ?? this.idfuncao,
       funcao: funcao ?? this.funcao,
       login: login ?? this.login,
       senha: senha ?? this.senha,

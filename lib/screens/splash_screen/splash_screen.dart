@@ -9,6 +9,7 @@ import 'package:sindico_app/screens/login/login_screen.dart';
 
 import '../../consts/consts.dart';
 import '../../consts/const_widget.dart';
+import '../../consts/consts_future.dart';
 import '../../repositories/biometrics_auth.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -35,13 +36,13 @@ class _SplashScreenState extends State<SplashScreen> {
           final hasBiometrics = await LocalAuthApi.hasBiometrics();
           if (hasBiometrics) {
             if (auth) {
-              return Consts.fazerLogin(
+              return ConstsFuture.fazerLogin(
                   context, infos.values.first, infos.values.last);
             } else {
               return false;
             }
           } else {
-            return Consts.fazerLogin(
+            return ConstsFuture.fazerLogin(
                 context, infos.values.first, infos.values.last);
           }
         }

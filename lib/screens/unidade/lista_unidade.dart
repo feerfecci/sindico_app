@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:sindico_app/forms/unidades_form.dart';
+import 'package:sindico_app/screens/add_morador/lista_morador.dart';
 import 'package:sindico_app/screens/unidade/cadastro_unidade.dart';
 import 'package:sindico_app/screens/unidade/teste.dart';
 import 'package:sindico_app/widgets/header.dart';
@@ -10,6 +11,7 @@ import 'package:http/http.dart' as http;
 
 import '../../consts/consts.dart';
 import '../../consts/const_widget.dart';
+import '../../consts/consts_future.dart';
 import '../../forms/funcionario_form.dart';
 import '../../widgets/my_box_shadow.dart';
 import '../../widgets/my_text_form_field.dart';
@@ -56,7 +58,7 @@ class _ListaUnidadeStates extends State<ListaUnidades> {
                 physics: ClampingScrollPhysics(),
                 children: [
                   ConstWidget.buildCustomButton(context, 'Adicionar Unidade',
-                      onPressed: () => Consts.navigatorPageRoute(
+                      onPressed: () => ConstsFuture.navigatorPagePush(
                           context, CadastroUnidades()),
                       icon: Icons.add),
                   FutureBuilder<dynamic>(
@@ -76,6 +78,7 @@ class _ListaUnidadeStates extends State<ListaUnidades> {
                         itemBuilder: (context, index) {
                           var itensUnidade = snapshot.data['unidades'][index];
                           var idunidade = itensUnidade['idunidade'];
+                          var iddivisao = itensUnidade['iddivisao'];
                           var nome_responsavel =
                               itensUnidade['nome_responsavel'];
                           var nome_condominio = itensUnidade['nome_condominio'];
@@ -84,7 +87,7 @@ class _ListaUnidadeStates extends State<ListaUnidades> {
                           var numero = itensUnidade['numero'];
                           var login = itensUnidade['login'];
 
-                          bool ativo = itensUnidade['ativo'];
+                          bool ativoUnidade = itensUnidade['ativo'];
                           return MyBoxShadow(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -107,7 +110,7 @@ class _ListaUnidadeStates extends State<ListaUnidades> {
                                             nome_responsavel),
                                       ],
                                     ),
-                                    ConstWidget.buildAtivoInativo(ativo),
+                                    ConstWidget.buildAtivoInativo(ativoUnidade),
                                   ],
                                 ),
                                 SizedBox(
@@ -146,16 +149,29 @@ class _ListaUnidadeStates extends State<ListaUnidades> {
                                 ),
                                 ConstWidget.buildCustomButton(
                                   context,
-                                  'Editar',
+                                  'Acessar Moradores',
+                                  onPressed: () =>
+                                      ConstsFuture.navigatorPagePush(
+                                          context,
+                                          ListaMorador(
+                                            idunidade: idunidade,
+                                            numero: numero,
+                                            idvisisao: iddivisao,
+                                          )),
+                                ),
+                                ConstWidget.buildCustomButton(
+                                  context,
+                                  'Editar Unidades',
                                   onPressed: () {
-                                    Consts.navigatorPageRoute(
+                                    ConstsFuture.navigatorPagePush(
                                         context,
                                         CadastroUnidades(
-                                          idunidade: idunidade,
-                                          nome_responsavel: nome_responsavel,
-                                          login: login,
-                                          numero: numero,
-                                        ));
+                                            idunidade: idunidade,
+                                            iddivisao: iddivisao,
+                                            nome_responsavel: nome_responsavel,
+                                            login: login,
+                                            numero: numero,
+                                            ativo: ativoUnidade));
                                   },
                                 )
                               ],

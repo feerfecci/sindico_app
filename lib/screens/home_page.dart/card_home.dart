@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../consts/consts.dart';
 import '../../consts/const_widget.dart';
+import '../../consts/consts_future.dart';
 import '../../widgets/my_box_shadow.dart';
 
 Widget buildCardHome(BuildContext context,
@@ -13,7 +14,7 @@ Widget buildCardHome(BuildContext context,
     paddingAll: 0.0,
     child: InkWell(
       onTap: () {
-        Consts.navigatorPageRoute(context, pageRoute);
+        ConstsFuture.navigatorPagePush(context, pageRoute);
       },
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
