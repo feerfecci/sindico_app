@@ -20,10 +20,10 @@ class CadastroFuncionario extends StatefulWidget {
   final String nomeFuncionario;
   final String funcao;
   final String login;
-  final bool avisa_corresp;
-  final bool avisa_visita;
-  final bool avisa_delivery;
-  final bool avisa_encomendas;
+  final bool? avisa_corresp;
+  final bool? avisa_visita;
+  final bool? avisa_delivery;
+  final bool? avisa_encomendas;
 
   const CadastroFuncionario({
     this.idfuncao,
@@ -31,10 +31,10 @@ class CadastroFuncionario extends StatefulWidget {
     this.nomeFuncionario = '',
     this.funcao = '',
     this.login = '',
-    this.avisa_corresp = false,
-    this.avisa_visita = false,
-    this.avisa_delivery = false,
-    this.avisa_encomendas = false,
+    this.avisa_corresp,
+    this.avisa_visita,
+    this.avisa_delivery,
+    this.avisa_encomendas,
     super.key,
   });
 
@@ -54,10 +54,30 @@ class _CadastroFuncionarioState extends State<CadastroFuncionario> {
 
   salvarFuncaoForm() {
     formInfosFunc = formInfosFunc.copyWith(idfuncao: widget.idfuncao);
-    /* formInfosFunc = formInfosFunc.copyWith(avisa_corresp: widget.avisa_corresp == null? false : );
-    formInfosFunc = formInfosFunc.copyWith(avisa_delivery: widget.avisa_delivery);
-    formInfosFunc = formInfosFunc.copyWith(avisa_visita: widget.avisa_encomendas);
-    formInfosFunc = formInfosFunc.copyWith(avisa_encomendas: widget.avisa_visita);*/
+    formInfosFunc = formInfosFunc.copyWith(
+        avisa_corresp: widget.avisa_corresp != null
+            ? widget.avisa_corresp == true
+                ? 1
+                : 0
+            : 0);
+    formInfosFunc = formInfosFunc.copyWith(
+        avisa_delivery: widget.avisa_delivery != null
+            ? widget.avisa_delivery == true
+                ? 1
+                : 0
+            : 0);
+    formInfosFunc = formInfosFunc.copyWith(
+        avisa_visita: widget.avisa_visita != null
+            ? widget.avisa_visita == true
+                ? 1
+                : 0
+            : 0);
+    formInfosFunc = formInfosFunc.copyWith(
+        avisa_encomendas: widget.avisa_encomendas != null
+            ? widget.avisa_encomendas == true
+                ? 1
+                : 0
+            : 0);
   }
 
   List categoryItemListFuncoes = [];
@@ -67,9 +87,8 @@ class _CadastroFuncionarioState extends State<CadastroFuncionario> {
     final response = await http.get(uri);
     if (response.statusCode == 200) {
       final jsonResponse = json.decode(response.body);
-      var funcoes = jsonResponse['funcao'];
       setState(() {
-        categoryItemListFuncoes = funcoes;
+        categoryItemListFuncoes = jsonResponse['funcao'];
       });
     } else {
       return false;

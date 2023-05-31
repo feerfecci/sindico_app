@@ -21,8 +21,8 @@ Widget buildCardHome(BuildContext context,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           SizedBox(
-            width: size.width * 0.12,
-            height: size.height * 0.075,
+            // width: size.width * 0.14,
+            // height: size.height * 0.085,
             child: Image.network(
               '${Consts.iconApi}$iconApi',
             ),

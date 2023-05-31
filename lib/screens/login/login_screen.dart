@@ -11,6 +11,7 @@ import 'package:sindico_app/widgets/snackbar/snack.dart';
 import 'package:validatorless/validatorless.dart';
 import 'package:http/http.dart' as http;
 
+import '../../consts/const_widget.dart';
 import '../../consts/consts.dart';
 import '../../consts/consts_future.dart';
 import '../../items_bottom.dart';
@@ -25,7 +26,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final _formKeyLogin = GlobalKey<FormState>();
   final TextEditingController userController =
-      TextEditingController(text: 'daniabreu');
+      TextEditingController(text: 'respcondominio');
   final TextEditingController senhaController =
       TextEditingController(text: '123456');
   bool obscure = true;
@@ -187,6 +188,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 padding: EdgeInsets.symmetric(horizontal: size.width * 0.05),
                 child: Column(
                   children: [
+                    Padding(
+                      padding:
+                          EdgeInsets.symmetric(vertical: size.height * 0.05),
+                      child: ConstWidget.buildTextTitle('App Porteiro'),
+                    ),
                     buildTextFormEmail(),
                     SizedBox(
                       height: size.height * 0.01,

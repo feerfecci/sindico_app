@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:sindico_app/consts/consts.dart';
 import 'package:sindico_app/consts/consts_future.dart';
-import 'package:sindico_app/screens/add_morador/cadastro_morador.dart';
+import 'package:sindico_app/screens/moradores/cadastro_morador.dart';
 import 'package:sindico_app/widgets/header.dart';
 import 'package:sindico_app/widgets/my_box_shadow.dart';
 import 'package:sindico_app/widgets/scaffold_all.dart';

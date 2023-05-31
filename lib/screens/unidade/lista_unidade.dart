@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:sindico_app/forms/unidades_form.dart';
-import 'package:sindico_app/screens/add_morador/lista_morador.dart';
+import 'package:sindico_app/screens/moradores/lista_morador.dart';
 import 'package:sindico_app/screens/unidade/cadastro_unidade.dart';
 import 'package:sindico_app/screens/unidade/teste.dart';
 import 'package:sindico_app/widgets/header.dart';
@@ -147,18 +147,18 @@ class _ListaUnidadeStates extends State<ListaUnidades> {
                                 SizedBox(
                                   height: size.height * 0.02,
                                 ),
-                                ConstWidget.buildCustomButton(
-                                  context,
-                                  'Acessar Moradores',
-                                  onPressed: () =>
-                                      ConstsFuture.navigatorPagePush(
-                                          context,
-                                          ListaMorador(
-                                            idunidade: idunidade,
-                                            numero: numero,
-                                            idvisisao: iddivisao,
-                                          )),
-                                ),
+                                // ConstWidget.buildCustomButton(
+                                //   context,
+                                //   'Acessar Moradores',
+                                //   onPressed: () =>
+                                //       ConstsFuture.navigatorPagePush(
+                                //           context,
+                                //           ListaMorador(
+                                //             idunidade: idunidade,
+                                //             numero: numero,
+                                //             idvisisao: iddivisao,
+                                //           )),
+                                // ),
                                 ConstWidget.buildCustomButton(
                                   context,
                                   'Editar Unidades',

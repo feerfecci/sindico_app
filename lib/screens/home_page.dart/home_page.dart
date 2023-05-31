@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sindico_app/repositories/notification_widget.dart';
-import 'package:sindico_app/screens/add_morador/lista_morador.dart';
+import 'package:sindico_app/screens/moradores/lista_morador.dart';
 import 'package:sindico_app/screens/home_page.dart/card_home.dart';
 import 'package:sindico_app/widgets/my_box_shadow.dart';
 import 'package:sindico_app/widgets/scaffold_all.dart';
@@ -36,13 +36,13 @@ class _HomePageState extends State<HomePage> {
           buildCardHome(
             context,
             title: 'Funcionários',
-            iconApi: 'perfil.png',
+            iconApi: 'mercadorias.png',
             pageRoute: ListaFuncionarios(),
           ),
           buildCardHome(context,
               title: 'Unidades',
               pageRoute: ListaUnidades(),
-              iconApi: 'perfil.png')
+              iconApi: 'visitas.png')
           // buildCardHome(context,
           //     title: 'Unidades', pageRoute: Lista(), iconApi: 'perfil.png'),
         ],

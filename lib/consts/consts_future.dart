@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
+import 'package:sindico_app/repositories/shared_preferences.dart';
 
 import '../items_bottom.dart';
 import '../screens/login/login_screen.dart';
@@ -45,11 +46,12 @@ class ConstsFuture {
       var loginInfos = apiBody['login'];
       if (erro) {
         navigatorPageReplace(context, LoginScreen());
+        LocalInfos.removeCache();
         buildMinhaSnackBar(context,
             icon: Icons.warning_amber,
             subTitle: apiBody['mensagem'],
             title: 'Algo Deu Errado!');
-      } else if (erro == false) {
+      } else if (!erro) {
         ResponsalvelInfos.nome_condominio = loginInfos['nome_condominio'];
         ResponsalvelInfos.idcondominio = loginInfos['idcondominio'];
         ResponsalvelInfos.dividido_por = loginInfos['dividido_por'];
@@ -83,7 +85,6 @@ class ConstsFuture {
   }
 
   static Future<http.Response> changeApi(String api) {
-    print(api);
     return http.post(
       Uri.parse(api),
       headers: <String, String>{

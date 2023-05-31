@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:sindico_app/consts/consts_future.dart';
 import 'package:sindico_app/forms/morador_form.dart';
-import 'package:sindico_app/screens/add_morador/lista_morador.dart';
+import 'package:sindico_app/screens/moradores/lista_morador.dart';
 import 'package:sindico_app/screens/funcionarios/cadastro_func.dart';
 import 'package:http/http.dart' as http;
 import '../../consts/const_widget.dart';
@@ -77,7 +77,6 @@ class _CadastroMoradorState extends State<CadastroMorador> {
 
   @override
   Widget build(BuildContext context) {
-    print([widget.ativo, widget.idunidade]);
     @override
     var dataParsed = widget.nascimento != ''
         ? DateFormat('dd/MM/yyy').format(DateTime.parse(widget.nascimento))
@@ -308,10 +307,10 @@ class _CadastroMoradorState extends State<CadastroMorador> {
                           ? restoApi =
                               'incluirMorador&senha=${_formInfosMorador.senha}'
                           : restoApi = 'editarMorador&id=${widget.idmorador}';
-                      print(_formInfosMorador.login);
                       ConstsFuture.changeApi(
                         'https://a.portariaapp.com/sindico/api/moradores/?fn=$restoApi&idunidade=${widget.idunidade}&idcond=${ResponsalvelInfos.idcondominio}&iddivisao=${widget.iddivisao}&ativo=${_formInfosMorador.ativo}&numero=${widget.numero}&nomeMorador=${_formInfosMorador.nome_morador}&login=${_formInfosMorador.login}&datanasc=${_formInfosMorador.nascimento}&documento=${_formInfosMorador.documento}&dddtelefone=${_formInfosMorador.ddd}&telefone=${_formInfosMorador.telefone}&acessa_sistema=${_formInfosMorador.acesso}',
                       );
+                      Navigator.pop(context);
                       Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(

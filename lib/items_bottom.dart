@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:sindico_app/repositories/notification_widget.dart';
-import 'package:sindico_app/screens/carrinho/carrinho_screen.dart';
-import 'package:sindico_app/screens/duvidas/duvidas.dart';
+import 'package:sindico_app/screens/divisoes/divisoes_screen.dart';
+import 'package:sindico_app/screens/funcoes/funcoes.dart';
 import 'consts/consts.dart';
 import 'screens/home_page.dart/home_page.dart';
 import 'widgets/custom_drawer/custom_drawer.dart';
@@ -36,7 +36,7 @@ class _ItensBottomState extends State<ItensBottom> {
     OneSignal.shared.setAppId(oneSignalAppId);
     OneSignal.shared.promptUserForPushNotificationPermission().then((accepted) {
       // OneSignal.shared.setEmail(email: "${User.emailUser}");
-      OneSignal.shared.setExternalUserId('1');
+      OneSignal.shared.setExternalUserId('26');
       // OneSignal.shared
       //     .sendTags({'isAndroid': 1, 'idweb': logado.idCliente.toString()});
     });
@@ -94,10 +94,10 @@ class _ItensBottomState extends State<ItensBottom> {
                     ? Icons.shopping_cart_rounded
                     : Icons.shopping_cart_outlined,
               ),
-              label: 'Carrinho',
+              label: 'Divisões',
             ),
             BottomNavigationBarItem(
-              label: 'Dúvidas',
+              label: 'Funções',
               icon: Icon(
                 widget.currentTab == 2
                     ? Icons.question_mark_sharp
@@ -114,7 +114,7 @@ class _ItensBottomState extends State<ItensBottom> {
               widget.currentTab = p;
             });
           },
-          children: [HomePage(), CarrinhoScreen(), DuvidaScreen()],
+          children: const [HomePage(), DivisoesScreen(), FuncoesScreen()],
         ),
       ),
     );
