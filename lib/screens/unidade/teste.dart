@@ -5,6 +5,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
+import '../../consts/consts.dart';
+
 class TesteUnidade extends StatefulWidget {
   const TesteUnidade({super.key});
 
@@ -24,8 +26,7 @@ class _TesteUnidadeState extends State<TesteUnidade> {
   }
 
   Future getAllCategory() async {
-    var baseUrl =
-        "https://a.portariaapp.com/sindico/api/divisoes/?fn=listarDivisoes&idcond=13";
+    var baseUrl = "${Consts.sindicoApi}divisoes/?fn=listarDivisoes&idcond=13";
 
     http.Response response = await http.get(Uri.parse(baseUrl));
     if (response.statusCode == 200) {

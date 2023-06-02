@@ -56,7 +56,7 @@ class _CadastroMoradorState extends State<CadastroMorador> {
 
   Future apiListarDivisoes() async {
     var uri =
-        'https://a.portariaapp.com/sindico/api/divisoes/?fn=listarDivisoes&idcond=${ResponsalvelInfos.idcondominio}';
+        '${Consts.sindicoApi}divisoes/?fn=listarDivisoes&idcond=${ResponsalvelInfos.idcondominio}';
 
     final response = await http.get(Uri.parse(uri));
     _formInfosMorador = _formInfosMorador.copyWith(acesso: widget.acesso);
@@ -164,6 +164,7 @@ class _CadastroMoradorState extends State<CadastroMorador> {
     }
 
     return buildScaffoldAll(
+      context,
       body: buildHeaderPage(
         context,
         titulo: widget.idmorador == null ? 'Incluir Morador' : 'Editar Morador',
@@ -271,7 +272,7 @@ class _CadastroMoradorState extends State<CadastroMorador> {
                 ),
                 ListTile(
                   title:
-                      ConstWidget.buildTextTitle('Permitir acesso ao sistema'),
+                      ConstsWidget.buildTextTitle('Permitir acesso ao sistema'),
                   trailing: StatefulBuilder(builder: (context, setState) {
                     return SizedBox(
                         width: size.width * 0.125,
@@ -294,7 +295,7 @@ class _CadastroMoradorState extends State<CadastroMorador> {
                         ));
                   }),
                 ),
-                ConstWidget.buildCustomButton(
+                ConstsWidget.buildCustomButton(
                   context,
                   'Salvar',
                   onPressed: () {
@@ -308,7 +309,7 @@ class _CadastroMoradorState extends State<CadastroMorador> {
                               'incluirMorador&senha=${_formInfosMorador.senha}'
                           : restoApi = 'editarMorador&id=${widget.idmorador}';
                       ConstsFuture.changeApi(
-                        'https://a.portariaapp.com/sindico/api/moradores/?fn=$restoApi&idunidade=${widget.idunidade}&idcond=${ResponsalvelInfos.idcondominio}&iddivisao=${widget.iddivisao}&ativo=${_formInfosMorador.ativo}&numero=${widget.numero}&nomeMorador=${_formInfosMorador.nome_morador}&login=${_formInfosMorador.login}&datanasc=${_formInfosMorador.nascimento}&documento=${_formInfosMorador.documento}&dddtelefone=${_formInfosMorador.ddd}&telefone=${_formInfosMorador.telefone}&acessa_sistema=${_formInfosMorador.acesso}',
+                        '${Consts.sindicoApi}moradores/?fn=$restoApi&idunidade=${widget.idunidade}&idcond=${ResponsalvelInfos.idcondominio}&iddivisao=${widget.iddivisao}&ativo=${_formInfosMorador.ativo}&numero=${widget.numero}&nomeMorador=${_formInfosMorador.nome_morador}&login=${_formInfosMorador.login}&datanasc=${_formInfosMorador.nascimento}&documento=${_formInfosMorador.documento}&dddtelefone=${_formInfosMorador.ddd}&telefone=${_formInfosMorador.telefone}&acessa_sistema=${_formInfosMorador.acesso}',
                       );
                       Navigator.pop(context);
                       Navigator.pushReplacement(

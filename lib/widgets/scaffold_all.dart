@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import '../consts/consts.dart';
 import 'custom_drawer/custom_drawer.dart';
 
-Widget buildScaffoldAll({required Widget? body}) {
+Widget buildScaffoldAll(BuildContext context, {required Widget? body}) {
   return Scaffold(
     appBar: AppBar(
-      backgroundColor: Consts.kColorApp,
+      iconTheme: IconThemeData(color: Theme.of(context).colorScheme.primary),
+      elevation: 0,
+      backgroundColor: Colors.transparent,
     ),
     endDrawer: CustomDrawer(),
     body: body,

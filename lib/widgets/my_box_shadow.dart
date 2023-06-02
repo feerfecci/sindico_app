@@ -26,12 +26,12 @@ class MyBoxShadowState extends State<MyBoxShadow> {
             boxShadow: [
               BoxShadow(
                 color: Theme.of(context).shadowColor,
-                spreadRadius: 2,
-                blurRadius: 5,
+                spreadRadius: 1,
+                blurRadius: 1,
                 offset: Offset(2, 2), // changes position of shadow
               ),
             ],
-            // border: Border.all(color: Theme.of(context).colorScheme.primary),
+            border: Border.all(color: Colors.black12),
             borderRadius: BorderRadius.circular(16)),
         child: Padding(
           padding: EdgeInsets.all(size.width * widget.paddingAll),

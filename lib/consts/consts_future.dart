@@ -84,12 +84,14 @@ class ConstsFuture {
     }
   }
 
-  static Future<http.Response> changeApi(String api) {
-    return http.post(
+  static Future<dynamic> changeApi(String api) async {
+    var resposta = await http.get(
       Uri.parse(api),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
     );
+    if (resposta.statusCode == 200) {
+      return json.decode(resposta.body);
+    } else {
+      return false;
+    }
   }
 }

@@ -23,7 +23,7 @@ class ListaMorador extends StatefulWidget {
 
 Future apiListarMoradores(idunidade) async {
   var uri = Uri.parse(
-      'https://a.portariaapp.com/sindico/api/moradores/?fn=listarMoradores&idunidade=$idunidade&idcond=${ResponsalvelInfos.idcondominio}');
+      '${Consts.sindicoApi}moradores/?fn=listarMoradores&idunidade=$idunidade&idcond=${ResponsalvelInfos.idcondominio}');
   var resposta = await http.get(uri);
   if (resposta.statusCode == 200) {
     return json.decode(resposta.body);
@@ -44,7 +44,7 @@ class _ListaMoradorState extends State<ListaMorador> {
           apiListarMoradores(widget.idunidade);
         });
       },
-      child: buildScaffoldAll(
+      child: buildScaffoldAll(context,
           body: buildHeaderPage(context,
               titulo: 'Moradores',
               subTitulo: 'Adicione ou edite moradores',
@@ -52,7 +52,7 @@ class _ListaMoradorState extends State<ListaMorador> {
                 shrinkWrap: true,
                 physics: ClampingScrollPhysics(),
                 children: [
-                  ConstWidget.buildCustomButton(context, 'Adicionar Morador',
+                  ConstsWidget.buildCustomButton(context, 'Adicionar Morador',
                       onPressed: () {
                     ConstsFuture.navigatorPagePush(
                         context,
@@ -78,11 +78,11 @@ class _ListaMoradorState extends State<ListaMorador> {
                         return Column(
                           children: [
                             SizedBox(
-                              child: ConstWidget.buildTextTitle(
+                              child: ConstsWidget.buildTextTitle(
                                   'Nenhum morador cadastrado!'),
                             ),
                             SizedBox(
-                              child: ConstWidget.buildTextSubTitle(
+                              child: ConstsWidget.buildTextSubTitle(
                                   'Adicione um morador para essa Unidade'),
                             ),
                           ],
@@ -117,7 +117,7 @@ class _ListaMoradorState extends State<ListaMorador> {
                                 child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                ConstWidget.buildTextTitle(nome_condominio),
+                                ConstsWidget.buildTextTitle(nome_condominio),
                                 SizedBox(
                                   height: size.height * 0.01,
                                 ),
@@ -125,21 +125,21 @@ class _ListaMoradorState extends State<ListaMorador> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceBetween,
                                   children: [
-                                    ConstWidget.buildTextTitle(nome_morador),
+                                    ConstsWidget.buildTextTitle(nome_morador),
                                     Container(
                                       child:
-                                          ConstWidget.buildAtivoInativo(ativo),
+                                          ConstsWidget.buildAtivoInativo(ativo),
                                     ),
                                   ],
                                 ),
-                                ConstWidget.buildTextSubTitle(
+                                ConstsWidget.buildTextSubTitle(
                                     'Localizado em :'),
                                 Row(
                                   children: [
-                                    ConstWidget.buildTextTitle('$numero - '),
-                                    ConstWidget.buildTextTitle(
+                                    ConstsWidget.buildTextTitle('$numero - '),
+                                    ConstsWidget.buildTextTitle(
                                         '$dividido_por '),
-                                    ConstWidget.buildTextTitle(nome_divisao),
+                                    ConstsWidget.buildTextTitle(nome_divisao),
                                   ],
                                 ),
                                 Padding(
@@ -151,9 +151,9 @@ class _ListaMoradorState extends State<ListaMorador> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          ConstWidget.buildTextSubTitle(
+                                          ConstsWidget.buildTextSubTitle(
                                               'Data Nascimento :'),
-                                          ConstWidget.buildTextTitle(
+                                          ConstsWidget.buildTextTitle(
                                               DateFormat('dd/MM/yyy').format(
                                                   DateTime.parse(
                                                       data_nascimento))),
@@ -166,19 +166,20 @@ class _ListaMoradorState extends State<ListaMorador> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          ConstWidget.buildTextSubTitle(
+                                          ConstsWidget.buildTextSubTitle(
                                               'Documento :'),
-                                          ConstWidget.buildTextTitle(documento),
+                                          ConstsWidget.buildTextTitle(
+                                              documento),
                                         ],
                                       )
                                     ],
                                   ),
                                 ),
-                                ConstWidget.buildTextSubTitle('Contato :'),
+                                ConstsWidget.buildTextSubTitle('Contato :'),
                                 Row(
                                   children: [
-                                    ConstWidget.buildTextTitle('($ddd) '),
-                                    ConstWidget.buildTextTitle(telefone),
+                                    ConstsWidget.buildTextTitle('($ddd) '),
+                                    ConstsWidget.buildTextTitle(telefone),
                                   ],
                                 ),
                                 Row(
@@ -187,9 +188,9 @@ class _ListaMoradorState extends State<ListaMorador> {
                                   children: [
                                     Column(
                                       children: [
-                                        ConstWidget.buildTextSubTitle(
+                                        ConstsWidget.buildTextSubTitle(
                                             'Login :'),
-                                        ConstWidget.buildTextTitle(login),
+                                        ConstsWidget.buildTextTitle(login),
                                       ],
                                     ),
                                     SizedBox(
@@ -202,7 +203,7 @@ class _ListaMoradorState extends State<ListaMorador> {
                                     )
                                   ],
                                 ),
-                                ConstWidget.buildCustomButton(
+                                ConstsWidget.buildCustomButton(
                                     context, 'Editar Morador', onPressed: () {
                                   ConstsFuture.navigatorPagePush(
                                     context,

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../consts/const_widget.dart';
+
 Widget buildHeaderPage(
   BuildContext context, {
   required String titulo,
@@ -36,26 +38,15 @@ Widget buildHeaderPage(
                   duration: Duration(milliseconds: 800),
                   child: Column(
                     children: [
-                      Text(
-                        titulo,
-                        style: TextStyle(
-                            fontSize: 40,
-                            fontWeight: FontWeight.bold,
-                            color: Theme.of(context).colorScheme.primary),
-                      ),
-                      Text(
-                        subTitulo,
-                        style: TextStyle(
-                            fontSize: 20,
-                            color: Theme.of(context).colorScheme.primary),
-                      ),
+                      ConstsWidget.buildTextTitle(titulo),
+                      ConstsWidget.buildTextSubTitle(subTitulo),
                     ],
                   ),
                 ),
               ),
               Padding(
                 padding: EdgeInsets.only(
-                  top: size.height * 0.14,
+                  top: size.height * 0.08,
                   right: size.width * 0.01,
                   left: size.width * 0.01,
                 ),

@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:sindico_app/repositories/themes_provider.dart';
 import 'package:sindico_app/screens/funcionarios/lista_funcionario.dart';
+import 'package:sindico_app/screens/unidade/lista_unidade.dart';
 import 'items_bottom.dart';
 import 'repositories/themes_model.dart';
 import 'screens/login/login_screen.dart';
@@ -32,7 +33,8 @@ class MyApp extends StatelessWidget {
           initialRoute: '/splashScreen',
           routes: {
             '/splashScreen': (context) => SplashScreen(),
-            '/listaFuncionario': (context) => ListaFuncionarios()
+            '/listaFuncionario': (context) => ListaFuncionarios(),
+            '/listaUnidade': (context) => ListaUnidades(),
           },
           title: 'Flutter Demo',
           themeMode: themeProvider.themeMode,

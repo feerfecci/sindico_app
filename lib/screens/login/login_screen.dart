@@ -191,7 +191,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     Padding(
                       padding:
                           EdgeInsets.symmetric(vertical: size.height * 0.05),
-                      child: ConstWidget.buildTextTitle('App Porteiro'),
+                      child: ConstsWidget.buildTextTitle('App Porteiro'),
                     ),
                     buildTextFormEmail(),
                     SizedBox(

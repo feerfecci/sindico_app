@@ -65,7 +65,7 @@ class _ItensBottomState extends State<ItensBottom> {
       child: Scaffold(
         endDrawer: CustomDrawer(),
         appBar: AppBar(
-          backgroundColor: Consts.kColorApp,
+          backgroundColor: Colors.transparent,
           leading: Padding(
             padding: EdgeInsets.only(left: 8.0),
             child: Image.network(

@@ -8,6 +8,7 @@ import 'package:sindico_app/widgets/scaffold_all.dart';
 import '../../consts/consts.dart';
 import '../funcionarios/lista_funcionario.dart';
 import '../../widgets/header.dart';
+import '../quadro_avisos/quadro_de_avisos.dart';
 import '../unidade/cadastro_unidade.dart';
 import '../unidade/lista_unidade.dart';
 
@@ -36,13 +37,17 @@ class _HomePageState extends State<HomePage> {
           buildCardHome(
             context,
             title: 'Funcionários',
-            iconApi: 'mercadorias.png',
+            iconApi: '${Consts.iconApi}mercadorias.png',
             pageRoute: ListaFuncionarios(),
           ),
           buildCardHome(context,
               title: 'Unidades',
               pageRoute: ListaUnidades(),
-              iconApi: 'visitas.png')
+              iconApi: '${Consts.iconApi}visitas.png'),
+          buildCardHome(context,
+              title: 'Quadro de Avisos',
+              pageRoute: QuadroDeAvisos(),
+              iconApi: '${Consts.iconApi}quadro_avisos.png'),
           // buildCardHome(context,
           //     title: 'Unidades', pageRoute: Lista(), iconApi: 'perfil.png'),
         ],

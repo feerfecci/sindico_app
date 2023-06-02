@@ -55,7 +55,6 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    // NotificationWidget.init();
     Timer(Duration(seconds: 3), () {
       startLogin();
     });
@@ -65,7 +64,7 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: Consts.kColorApp,
+      backgroundColor: Consts.kBackPageColor,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -79,14 +78,15 @@ class _SplashScreenState extends State<SplashScreen> {
           Padding(
             padding: EdgeInsets.symmetric(
                 vertical: size.height * 0.03, horizontal: size.width * 0.03),
-            child: ConstWidget.buildCustomButton(
-                context, 'Autenticar Biometria', icon: Icons.lock_open_outlined,
-                onPressed: () {
-              startLogin();
-            },
-                color: Colors.white,
-                textColor: Consts.kColorApp,
-                iconColor: Consts.kColorApp),
+            child: ConstsWidget.buildCustomButton(
+              context,
+              'Autenticar Biometria',
+              icon: Icons.lock_open_outlined,
+              onPressed: () {
+                startLogin();
+              },
+              textColor: Consts.kColorApp,
+            ),
           ),
         ],
       ),

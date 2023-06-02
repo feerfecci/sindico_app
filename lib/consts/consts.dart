@@ -34,6 +34,6 @@ class Consts {
   static const kButtonColor = kColorApp;
 
   static const kColorApp = Color.fromARGB(255, 127, 99, 254);
-
   static const String iconApi = 'https://a.portariaapp.com/img/ico-';
+  static const String sindicoApi = 'https://a.portariaapp.com/sindico/api/';
 }

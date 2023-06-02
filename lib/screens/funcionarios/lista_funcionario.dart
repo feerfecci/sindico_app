@@ -24,7 +24,7 @@ class ListaFuncionarios extends StatefulWidget {
 
 listarFuncionario() async {
   var url = Uri.parse(
-      'https://a.portariaapp.com/sindico/api/funcionarios/?fn=listarFuncionarios&idcond=${ResponsalvelInfos.idcondominio}');
+      '${Consts.sindicoApi}funcionarios/?fn=listarFuncionarios&idcond=${ResponsalvelInfos.idcondominio}');
   var resposta = await http.get(url);
 
   if (resposta.statusCode == 200) {
@@ -71,6 +71,7 @@ class _ListaFuncionariosState extends State<ListaFuncionarios> {
         );
       },
       child: buildScaffoldAll(
+        context,
         body: buildHeaderPage(context,
             titulo: 'Funcionários',
             subTitulo: 'Adicione e edite colaboradores',
@@ -79,7 +80,7 @@ class _ListaFuncionariosState extends State<ListaFuncionarios> {
               physics: ClampingScrollPhysics(),
               children: [
                 // EditarFuncionario(),
-                ConstWidget.buildCustomButton(
+                ConstsWidget.buildCustomButton(
                   context,
                   'Adicionar Funcionário',
                   onPressed: () {
@@ -127,17 +128,17 @@ class _ListaFuncionariosState extends State<ListaFuncionarios> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        ConstWidget.buildTextSubTitle('Nome'),
+                                        ConstsWidget.buildTextSubTitle('Nome'),
                                         SizedBox(
                                             width: size.width * 0.7,
-                                            child: ConstWidget.buildTextTitle(
+                                            child: ConstsWidget.buildTextTitle(
                                                 '$nome_funcionario')),
                                       ],
                                     ),
                                     SizedBox(
                                       width: size.width * 0.02,
                                     ),
-                                    ConstWidget.buildAtivoInativo(ativo),
+                                    ConstsWidget.buildAtivoInativo(ativo),
                                   ],
                                 ),
                                 Row(
@@ -152,9 +153,9 @@ class _ListaFuncionariosState extends State<ListaFuncionarios> {
                                         SizedBox(
                                           height: 10,
                                         ),
-                                        ConstWidget.buildTextSubTitle(
+                                        ConstsWidget.buildTextSubTitle(
                                             'Usuário'),
-                                        ConstWidget.buildTextTitle(
+                                        ConstsWidget.buildTextTitle(
                                             '$login_funcionario'),
                                       ],
                                     ),
@@ -165,8 +166,8 @@ class _ListaFuncionariosState extends State<ListaFuncionarios> {
                                         SizedBox(
                                           height: 10,
                                         ),
-                                        ConstWidget.buildTextSubTitle('Cargo'),
-                                        ConstWidget.buildTextTitle('$funcao'),
+                                        ConstsWidget.buildTextSubTitle('Cargo'),
+                                        ConstsWidget.buildTextTitle('$funcao'),
                                       ],
                                     ),
                                     SizedBox(
@@ -201,7 +202,7 @@ class _ListaFuncionariosState extends State<ListaFuncionarios> {
                                     ],
                                   ),
                                 ),
-                                ConstWidget.buildCustomButton(
+                                ConstsWidget.buildCustomButton(
                                   context,
                                   'Editar',
                                   onPressed: () {

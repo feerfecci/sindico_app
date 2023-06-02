@@ -20,10 +20,10 @@ class CadastroFuncionario extends StatefulWidget {
   final String nomeFuncionario;
   final String funcao;
   final String login;
-  final bool? avisa_corresp;
-  final bool? avisa_visita;
-  final bool? avisa_delivery;
-  final bool? avisa_encomendas;
+  final bool avisa_corresp;
+  final bool avisa_visita;
+  final bool avisa_delivery;
+  final bool avisa_encomendas;
 
   const CadastroFuncionario({
     this.idfuncao,
@@ -31,10 +31,10 @@ class CadastroFuncionario extends StatefulWidget {
     this.nomeFuncionario = '',
     this.funcao = '',
     this.login = '',
-    this.avisa_corresp,
-    this.avisa_visita,
-    this.avisa_delivery,
-    this.avisa_encomendas,
+    this.avisa_corresp = false,
+    this.avisa_visita = false,
+    this.avisa_delivery = false,
+    this.avisa_encomendas = false,
     super.key,
   });
 
@@ -83,7 +83,7 @@ class _CadastroFuncionarioState extends State<CadastroFuncionario> {
   List categoryItemListFuncoes = [];
   Future apiListarFuncoes() async {
     var uri = Uri.parse(
-        'https://a.portariaapp.com/sindico/api/funcoes/?fn=listarFuncoes&idcond=${ResponsalvelInfos.idcondominio}');
+        '${Consts.sindicoApi}funcoes/?fn=listarFuncoes&idcond=${ResponsalvelInfos.idcondominio}');
     final response = await http.get(uri);
     if (response.statusCode == 200) {
       final jsonResponse = json.decode(response.body);
@@ -142,9 +142,9 @@ class _CadastroFuncionarioState extends State<CadastroFuncionario> {
     }
 
     Widget buildTilePermissao(BuildContext context, String title,
-        {required int nomeCampo, bool? isChecked}) {
+        {required int nomeCampo, bool isChecked = false}) {
       return ListTile(
-        title: ConstWidget.buildTextTitle(title),
+        title: ConstsWidget.buildTextTitle(title),
         trailing: StatefulBuilder(builder: (context, setState) {
           return SizedBox(
               width: size.width * 0.125,
@@ -157,7 +157,7 @@ class _CadastroFuncionarioState extends State<CadastroFuncionario> {
                     onChanged: (bool? value) {
                       setState(() {
                         isChecked = value!;
-                        int isCheckedApi = isChecked! ? 1 : 0;
+                        int isCheckedApi = isChecked ? 1 : 0;
                         switch (nomeCampo) {
                           case 0:
                             formInfosFunc = formInfosFunc.copyWith(
@@ -204,6 +204,7 @@ class _CadastroFuncionarioState extends State<CadastroFuncionario> {
     return Form(
       key: _formkeyFuncionario,
       child: buildScaffoldAll(
+        context,
         body: buildHeaderPage(
           context,
           titulo: widget.idfuncionario != null
@@ -247,7 +248,7 @@ class _CadastroFuncionarioState extends State<CadastroFuncionario> {
                     nomeCampo: 2, isChecked: widget.avisa_delivery),
                 buildTilePermissao(context, 'Avisos de Encomendas',
                     nomeCampo: 3, isChecked: widget.avisa_encomendas),
-                ConstWidget.buildCustomButton(
+                ConstsWidget.buildCustomButton(
                   context,
                   'Salvar',
                   onPressed: () {
@@ -260,15 +261,18 @@ class _CadastroFuncionarioState extends State<CadastroFuncionario> {
                           : 'incluirFuncionario&senha=${formInfosFunc.senha}&';
 
                       ConstsFuture.changeApi(
-                          'https://a.portariaapp.com/sindico/api/funcionarios/?fn=$apiEditarIncluir&idcond=${ResponsalvelInfos.idcondominio}&nomeFuncionario=${formInfosFunc.nome_funcionario}&idfuncao=${formInfosFunc.idfuncao}&login=${formInfosFunc.login}&avisa_corresp=${formInfosFunc.avisa_corresp}&avisa_visita=${formInfosFunc.avisa_visita}&avisa_delivery=${formInfosFunc.avisa_delivery}&avisa_encomendas=${formInfosFunc.avisa_encomendas}');
-                      ConstsFuture.navigatorPopPush(
-                          context, '/listaFuncionario');
+                              '${Consts.sindicoApi}funcionarios/?fn=$apiEditarIncluir&idcond=${ResponsalvelInfos.idcondominio}&nomeFuncionario=${formInfosFunc.nome_funcionario}&idfuncao=${formInfosFunc.idfuncao}&login=${formInfosFunc.login}&avisa_corresp=${formInfosFunc.avisa_corresp}&avisa_visita=${formInfosFunc.avisa_visita}&avisa_delivery=${formInfosFunc.avisa_delivery}&avisa_encomendas=${formInfosFunc.avisa_encomendas}')
+                          .then((value) {
+                        if (!value['erro']) {
+                          setState(() {
+                            ConstsFuture.navigatorPopPush(
+                                context, '/listaFuncionario');
+                          });
 
-                      buildMinhaSnackBar(context,
-                          title: 'Parabéns',
-                          subTitle: widget.idfuncionario != null
-                              ? 'Funcionário Editado!!'
-                              : 'Funcionário Adicionado!!');
+                          buildMinhaSnackBar(context,
+                              title: 'Parabéns', subTitle: value['mensagem']);
+                        }
+                      });
                     } else {
                       buildMinhaSnackBar(context,
                           subTitle: 'Selecione uma Função');

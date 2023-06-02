@@ -7,7 +7,7 @@ import 'package:http/http.dart' as http;
 
 import 'consts.dart';
 
-class ConstWidget {
+class ConstsWidget {
   static Widget buildTextTitle(String title,
       {textAlign, color, double size = 16}) {
     return Text(
@@ -61,15 +61,15 @@ class ConstWidget {
               title,
               style: TextStyle(
                 overflow: TextOverflow.ellipsis,
-                color: textColor,
-                fontSize: 16,
+                color: Colors.white,
+                fontSize: Consts.fontTitulo,
                 fontWeight: FontWeight.w500,
               ),
             ),
             SizedBox(
               width: size.width * 0.015,
             ),
-            icon != null ? Icon(size: 18, icon, color: iconColor) : SizedBox(),
+            if (icon != null) Icon(size: 18, icon, color: iconColor),
           ],
         ),
       ),
@@ -83,7 +83,7 @@ class ConstWidget {
           borderRadius: BorderRadius.circular(16)),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: ConstWidget.buildTextTitle(ativo ? 'Ativo' : 'Inativo'),
+        child: ConstsWidget.buildTextTitle(ativo ? 'Ativo' : 'Inativo'),
       ),
     );
   }

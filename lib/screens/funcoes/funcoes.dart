@@ -17,7 +17,7 @@ class FuncoesScreen extends StatefulWidget {
 
 Future apiListarDivisoes() async {
   var uri = Uri.parse(
-      'https://a.portariaapp.com/sindico/api/funcoes/?fn=listarFuncoes&idcond=${ResponsalvelInfos.idcondominio}');
+      '${Consts.sindicoApi}funcoes/?fn=listarFuncoes&idcond=${ResponsalvelInfos.idcondominio}');
 
   final response = await http.get(uri);
 
@@ -57,7 +57,7 @@ class _FuncoesScreenState extends State<FuncoesScreen> {
                   return MyBoxShadow(
                       child: Column(
                     children: [
-                      ConstWidget.buildTextTitle(
+                      ConstsWidget.buildTextTitle(
                           snapshot.data['funcao'][index]['funcao']),
                     ],
                   ));

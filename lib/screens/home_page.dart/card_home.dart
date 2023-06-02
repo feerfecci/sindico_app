@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:http/http.dart' as http;
 import '../../consts/consts.dart';
 import '../../consts/const_widget.dart';
 import '../../consts/consts_future.dart';
@@ -10,6 +10,17 @@ Widget buildCardHome(BuildContext context,
     required Widget pageRoute,
     required String iconApi}) {
   var size = MediaQuery.of(context).size;
+  Future<Widget> apiImage() async {
+    var url = Uri.parse(iconApi);
+    var resposta = await http.get(url);
+
+    return resposta.statusCode == 200
+        ? Image.network(
+            iconApi,
+          )
+        : Image.asset('assets/portaria.png');
+  }
+
   return MyBoxShadow(
     paddingAll: 0.0,
     child: InkWell(
@@ -20,17 +31,16 @@ Widget buildCardHome(BuildContext context,
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          SizedBox(
-            // width: size.width * 0.14,
-            // height: size.height * 0.085,
-            child: Image.network(
-              '${Consts.iconApi}$iconApi',
-            ),
-          ),
+          FutureBuilder(
+              future: apiImage(),
+              builder: (context, snapshot) => SizedBox(
+                  width: size.width * 0.12,
+                  height: size.height * 0.075,
+                  child: snapshot.data)),
           SizedBox(
             height: size.height * 0.01,
           ),
-          ConstWidget.buildTextTitle(title),
+          ConstsWidget.buildTextTitle(title),
         ],
       ),
     ),

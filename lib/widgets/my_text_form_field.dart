@@ -45,9 +45,10 @@ Widget buildMyTextFormField(BuildContext context,
 
 Widget buildMyTextFormObrigatorio(BuildContext context, String title,
     {String mensagem = 'Este campo é obrigatótio',
-    List<TextInputFormatter>? inputFormatters,
+    String? mask,
     String? hintText,
     String? initialValue,
+    TextInputType? keyboardType,
     String? Function(String?)? validator,
     final void Function(String? text)? onSaved}) {
   var size = MediaQuery.of(context).size;
@@ -55,13 +56,14 @@ Widget buildMyTextFormObrigatorio(BuildContext context, String title,
     padding: EdgeInsets.symmetric(vertical: size.height * 0.01),
     child: TextFormField(
       initialValue: initialValue,
+      keyboardType: keyboardType,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       textAlign: TextAlign.start,
       textInputAction: TextInputAction.next,
       onSaved: onSaved,
       maxLines: 5,
       minLines: 1,
-      inputFormatters: inputFormatters,
+      inputFormatters: [MaskTextInputFormatter(mask: mask)],
       validator: Validatorless.multiple([Validatorless.required(mensagem)]),
       decoration: InputDecoration(
         contentPadding: EdgeInsets.only(left: size.width * 0.02),

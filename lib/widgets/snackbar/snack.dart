@@ -103,12 +103,14 @@ buildMinhaSnackBar(
             SizedBox(
               width: size.width * 0.02,
             ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ConstWidget.buildTextTitle(title),
-                ConstWidget.buildTextSubTitle(subTitle)
-              ],
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  ConstsWidget.buildTextTitle(title),
+                  ConstsWidget.buildTextSubTitle(subTitle)
+                ],
+              ),
             ),
           ],
         )),

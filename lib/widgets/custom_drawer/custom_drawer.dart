@@ -30,7 +30,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
             leading,
             size: 25,
           ),
-          title: ConstWidget.buildTextTitle(title),
+          title: ConstsWidget.buildTextTitle(title),
           trailing: Icon(
             size: 30,
             trailing,
@@ -89,7 +89,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
               Spacer(),
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
-                child: ConstWidget.buildCustomButton(
+                child: ConstsWidget.buildCustomButton(
                   context,
                   'Sair',
                   onPressed: () {
