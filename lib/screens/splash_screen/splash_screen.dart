@@ -1,12 +1,8 @@
 // ignore_for_file: use_build_context_synchronously
-
 import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:sindico_app/repositories/notification_widget.dart';
 import 'package:sindico_app/repositories/shared_preferences.dart';
 import 'package:sindico_app/screens/login/login_screen.dart';
-
 import '../../consts/consts.dart';
 import '../../consts/const_widget.dart';
 import '../../consts/consts_future.dart';

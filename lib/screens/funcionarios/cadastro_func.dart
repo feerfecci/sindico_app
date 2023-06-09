@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:sindico_app/screens/funcionarios/lista_funcionario.dart';
 import 'package:sindico_app/widgets/header.dart';
 import 'package:sindico_app/widgets/scaffold_all.dart';
 import 'package:sindico_app/widgets/snackbar/snack.dart';
@@ -55,25 +54,25 @@ class _CadastroFuncionarioState extends State<CadastroFuncionario> {
   salvarFuncaoForm() {
     formInfosFunc = formInfosFunc.copyWith(idfuncao: widget.idfuncao);
     formInfosFunc = formInfosFunc.copyWith(
-        avisa_corresp: widget.avisa_corresp != null
+        avisa_corresp: widget.avisa_corresp == false
             ? widget.avisa_corresp == true
                 ? 1
                 : 0
             : 0);
     formInfosFunc = formInfosFunc.copyWith(
-        avisa_delivery: widget.avisa_delivery != null
+        avisa_delivery: widget.avisa_delivery == false
             ? widget.avisa_delivery == true
                 ? 1
                 : 0
             : 0);
     formInfosFunc = formInfosFunc.copyWith(
-        avisa_visita: widget.avisa_visita != null
+        avisa_visita: widget.avisa_visita == false
             ? widget.avisa_visita == true
                 ? 1
                 : 0
             : 0);
     formInfosFunc = formInfosFunc.copyWith(
-        avisa_encomendas: widget.avisa_encomendas != null
+        avisa_encomendas: widget.avisa_encomendas == false
             ? widget.avisa_encomendas == true
                 ? 1
                 : 0

@@ -1,15 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:sindico_app/repositories/notification_widget.dart';
-import 'package:sindico_app/screens/moradores/lista_morador.dart';
 import 'package:sindico_app/screens/home_page.dart/card_home.dart';
-import 'package:sindico_app/widgets/my_box_shadow.dart';
-import 'package:sindico_app/widgets/scaffold_all.dart';
-
 import '../../consts/consts.dart';
 import '../funcionarios/lista_funcionario.dart';
 import '../../widgets/header.dart';
 import '../quadro_avisos/quadro_de_avisos.dart';
-import '../unidade/cadastro_unidade.dart';
 import '../unidade/lista_unidade.dart';
 
 class HomePage extends StatefulWidget {
@@ -31,8 +25,8 @@ class _HomePageState extends State<HomePage> {
         crossAxisCount: 2,
         shrinkWrap: true,
         childAspectRatio: 1.6,
-        crossAxisSpacing: 1,
-        mainAxisSpacing: 0.5,
+        crossAxisSpacing: 15,
+        mainAxisSpacing: 0,
         children: [
           buildCardHome(
             context,

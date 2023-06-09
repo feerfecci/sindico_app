@@ -1,17 +1,12 @@
 // ignore_for_file: non_constant_identifier_names
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:sindico_app/main.dart';
 import 'package:sindico_app/screens/funcionarios/cadastro_func.dart';
 import 'package:sindico_app/widgets/header.dart';
 import 'package:sindico_app/widgets/my_box_shadow.dart';
-import 'package:sindico_app/widgets/my_text_form_field.dart';
 import 'package:sindico_app/widgets/scaffold_all.dart';
-import 'package:validatorless/validatorless.dart';
 import 'package:http/http.dart' as http;
 import '../../consts/consts.dart';
-import 'package:crypto/crypto.dart';
-
 import '../../consts/const_widget.dart';
 import '../../consts/consts_future.dart';
 

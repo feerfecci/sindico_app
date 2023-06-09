@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
-import 'package:sindico_app/repositories/notification_widget.dart';
 import 'package:sindico_app/screens/divisoes/divisoes_screen.dart';
 import 'package:sindico_app/screens/funcoes/funcoes.dart';
-import 'consts/consts.dart';
 import 'screens/home_page.dart/home_page.dart';
 import 'widgets/custom_drawer/custom_drawer.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -30,7 +27,7 @@ class _ItensBottomState extends State<ItensBottom> {
     _pageController = PageController();
   }
 
-  static const String oneSignalAppId = "cb886dc8-9dc9-4297-9730-7de404a89716";
+  static const String oneSignalAppId = "25709281-f6fc-4ac7-a90e-dac40989a182";
 
   Future<void> initPlatformState() async {
     OneSignal.shared.setAppId(oneSignalAppId);

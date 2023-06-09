@@ -1,10 +1,4 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:sindico_app/forms/funcionario_form.dart';
-import 'package:sindico_app/forms/unidades_form.dart';
-import 'package:http/http.dart' as http;
-
 import 'consts.dart';
 
 class ConstsWidget {

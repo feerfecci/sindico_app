@@ -1,8 +1,11 @@
+// ignore_for_file: unused_local_variable
+
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:sindico_app/consts/consts.dart';
+import 'package:sindico_app/screens/quadro_avisos/modal_avisos.dart';
 import 'package:sindico_app/widgets/header.dart';
 import 'package:sindico_app/widgets/my_box_shadow.dart';
 import 'package:sindico_app/widgets/scaffold_all.dart';
@@ -41,6 +44,25 @@ class _QuadroDeAvisosState extends State<QuadroDeAvisos> {
           shrinkWrap: true,
           physics: ClampingScrollPhysics(),
           children: [
+            ConstsWidget.buildCustomButton(
+              context,
+              'Adicionar Aviso',
+              onPressed: () {
+                showModalBottomSheet(
+                  enableDrag: false,
+                  isScrollControlled: true,
+                  isDismissible: false,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(20),
+                    ),
+                  ),
+                  context: context,
+                  builder: (context) => SizedBox(
+                      height: size.height * 0.85, child: WidgetModalAvisos()),
+                );
+              },
+            ),
             FutureBuilder<dynamic>(
               future: apiListarAvisos(),
               builder: (context, snapshot) {

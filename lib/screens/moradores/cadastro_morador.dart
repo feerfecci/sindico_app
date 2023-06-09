@@ -1,10 +1,11 @@
+// ignore_for_file: must_be_immutable
+
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:sindico_app/consts/consts_future.dart';
 import 'package:sindico_app/forms/morador_form.dart';
 import 'package:sindico_app/screens/moradores/lista_morador.dart';
-import 'package:sindico_app/screens/funcionarios/cadastro_func.dart';
 import 'package:http/http.dart' as http;
 import '../../consts/const_widget.dart';
 import '../../consts/consts.dart';
@@ -144,10 +145,8 @@ class _CadastroMoradorState extends State<CadastroMorador> {
                   dropdownValueAtivo = value!;
                   if (dropdownValueAtivo == 'Ativo') {
                     _formInfosMorador = _formInfosMorador.copyWith(ativo: 1);
-                    print(_formInfosMorador.ativo);
                   } else if (dropdownValueAtivo == 'Inativo') {
                     _formInfosMorador = _formInfosMorador.copyWith(ativo: 0);
-                    print(_formInfosMorador.ativo);
                   }
                 });
               },
@@ -323,8 +322,6 @@ class _CadastroMoradorState extends State<CadastroMorador> {
                       //     ListaMorador(
                       //       idunidade: widget.idunidade,
                       //     ));
-                    } else {
-                      print(formValid.toString());
                     }
                   },
                 )

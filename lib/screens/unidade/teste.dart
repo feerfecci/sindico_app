@@ -1,11 +1,10 @@
 // ignore_for_file: prefer_typing_uninitialized_variables
 
-import 'dart:convert';
-
+import 'package:excel/excel.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:flutter/services.dart';
 
-import '../../consts/consts.dart';
+import '../../consts/const_widget.dart';
 
 class TesteUnidade extends StatefulWidget {
   const TesteUnidade({super.key});
@@ -14,28 +13,50 @@ class TesteUnidade extends StatefulWidget {
   State<TesteUnidade> createState() => _TesteUnidadeState();
 }
 
-class _TesteUnidadeState extends State<TesteUnidade> {
-  List categoryItemlist = [];
+List<String> rowdetail = [];
 
-  var dropdownvalue;
+Future excelData() async {
+  ByteData data = await rootBundle.load("assets/teste_condominio.csv");
+  var bytes = data.buffer.asUint8List(data.offsetInBytes, data.lengthInBytes);
+  var excel = Excel.decodeBytes(bytes);
+  // var file = "assets/teste_condominio.xlsx";
+  // var bytes = File(file).readAsBytesSync();
+  // var excel = Excel.decodeBytes(bytes);
+  int i = 0;
+  int j = 0;
 
-  @override
-  void initState() {
-    super.initState();
-    getAllCategory();
+  for (var table in excel.tables.keys) {
+    // print(table); //sheet Name
+    // print(excel.tables[table]!.maxCols);
+    // print(excel.tables[table]!.maxRows);
+    int maxCols = excel.tables[table]!.maxCols;
+    int maxRows = excel.tables[table]!.maxRows;
+    for (var row in excel.tables[table]!.rows.last) {
+      // rowdetail.add(row['']);
+      // print(row[i - 1]!.value);
+      for (i; i <= (maxCols - 1); i++) {
+        print(row!.value);
+      }
+    }
   }
 
-  Future getAllCategory() async {
-    var baseUrl = "${Consts.sindicoApi}divisoes/?fn=listarDivisoes&idcond=13";
+  // print(rowdetail.asMap());
+  // for (var table in excel.tables.keys) {
+  //   print(table); //sheet Name
+  //   print(excel.tables[table]!.maxCols);
+  //   print(excel.tables[table]!.maxRows);
+  //   for (var row in excel.tables[table]!.rows) {
+  //     rowdetail.add(row.);
+  //     print();
+  //   }
+  // }
+}
 
-    http.Response response = await http.get(Uri.parse(baseUrl));
-    if (response.statusCode == 200) {
-      var jsonData = json.decode(response.body);
-      var divisoes = jsonData['divisoes'];
-      setState(() {
-        categoryItemlist = divisoes;
-      });
-    }
+class _TesteUnidadeState extends State<TesteUnidade> {
+  @override
+  void initState() {
+    excelData();
+    super.initState();
   }
 
   @override
@@ -45,26 +66,14 @@ class _TesteUnidadeState extends State<TesteUnidade> {
         title: const Text("DropDown List"),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            DropdownButton(
-              hint: Text('Selecione uma Divisão'),
-              items: categoryItemlist.map((item) {
-                return DropdownMenuItem(
-                  value: item['iddivisao'].toString(),
-                  child: Text(item['nome_divisao'].toString()),
-                );
-              }).toList(),
-              onChanged: (newVal) {
-                setState(() {
-                  dropdownvalue = newVal;
-                });
-              },
-              value: dropdownvalue,
-            ),
-          ],
-        ),
+        child: ConstsWidget.buildCustomButton(context, 'Exel', onPressed: () {
+          Navigator.pop(context);
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => TesteUnidade(),
+              ));
+        }),
       ),
     );
   }

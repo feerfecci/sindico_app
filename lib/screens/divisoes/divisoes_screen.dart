@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:sindico_app/consts/const_widget.dart';
 import 'package:sindico_app/widgets/my_box_shadow.dart';
-import 'package:sindico_app/widgets/scaffold_all.dart';
 import 'package:http/http.dart' as http;
 import '../../consts/consts.dart';
 import '../../widgets/header.dart';

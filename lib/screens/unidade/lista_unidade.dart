@@ -1,22 +1,19 @@
+// ignore_for_file: unused_local_variable
+
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:sindico_app/forms/morador_form.dart';
 import 'package:sindico_app/forms/unidades_form.dart';
-import 'package:sindico_app/screens/moradores/lista_morador.dart';
 import 'package:sindico_app/screens/unidade/cadastro_unidade.dart';
 import 'package:sindico_app/screens/unidade/teste.dart';
 import 'package:sindico_app/widgets/header.dart';
 import 'package:sindico_app/widgets/scaffold_all.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
-
 import '../../consts/consts.dart';
 import '../../consts/const_widget.dart';
 import '../../consts/consts_future.dart';
-import '../../forms/funcionario_form.dart';
 import '../../widgets/my_box_shadow.dart';
-import '../../widgets/my_text_form_field.dart';
 
 class ListaUnidades extends StatefulWidget {
   const ListaUnidades({super.key});
@@ -91,6 +88,14 @@ class _ListaUnidadeStates extends State<ListaUnidades> {
                 shrinkWrap: true,
                 physics: ClampingScrollPhysics(),
                 children: [
+                  ConstsWidget.buildCustomButton(context, 'Exel',
+                      onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => TesteUnidade(),
+                        ));
+                  }),
                   ConstsWidget.buildCustomButton(context, 'Adicionar Unidade',
                       onPressed: () => ConstsFuture.navigatorPagePush(
                           context, CadastroUnidades()),
@@ -183,6 +188,8 @@ class _ListaUnidadeStates extends State<ListaUnidades> {
                                         CadastroUnidades(
                                           idunidade: idunidade,
                                           iddivisao: iddivisao,
+                                          localizado:
+                                              '$numero - $dividido_por $nome_divisao',
                                           nome_responsavel: nome_responsavel,
                                           login: login,
                                           numero: numero,

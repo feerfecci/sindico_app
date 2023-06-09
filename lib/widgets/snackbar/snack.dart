@@ -1,8 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
-
-import '../../consts/consts.dart';
 import '../../consts/const_widget.dart';
 
 buildMinhaSnackBar(
@@ -87,6 +83,7 @@ buildMinhaSnackBar(
               try {
                 ScaffoldMessenger.of(context).clearSnackBars();
               } on FlutterError catch (e) {
+                // ignore: avoid_print
                 print(e);
               }
             })),

@@ -3,10 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:sindico_app/repositories/themes_provider.dart';
 import 'package:sindico_app/screens/funcionarios/lista_funcionario.dart';
+import 'package:sindico_app/screens/quadro_avisos/quadro_de_avisos.dart';
 import 'package:sindico_app/screens/unidade/lista_unidade.dart';
-import 'items_bottom.dart';
 import 'repositories/themes_model.dart';
-import 'screens/login/login_screen.dart';
 import 'screens/splash_screen/splash_screen.dart';
 
 void main() async {
@@ -35,6 +34,7 @@ class MyApp extends StatelessWidget {
             '/splashScreen': (context) => SplashScreen(),
             '/listaFuncionario': (context) => ListaFuncionarios(),
             '/listaUnidade': (context) => ListaUnidades(),
+            '/quadroDeAvisos': (context) => QuadroDeAvisos(),
           },
           title: 'Flutter Demo',
           themeMode: themeProvider.themeMode,

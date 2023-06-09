@@ -47,8 +47,8 @@ Widget buildHeaderPage(
               Padding(
                 padding: EdgeInsets.only(
                   top: size.height * 0.08,
-                  right: size.width * 0.01,
-                  left: size.width * 0.01,
+                  right: size.width * 0.02,
+                  left: size.width * 0.02,
                 ),
                 child: widget,
               ),
@@ -58,5 +58,4 @@ Widget buildHeaderPage(
       ),
     );
   });
-  ;
 }

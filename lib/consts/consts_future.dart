@@ -36,7 +36,7 @@ class ConstsFuture {
       BuildContext context, String usuario, String senha) async {
     var senhaCripto = md5.convert(utf8.encode(senha)).toString();
     var url = Uri.parse(
-        'https://a.portariaapp.com/api/login-responsavel/?fn=login&usuario=${usuario}&senha=${senhaCripto}');
+        'https://a.portariaapp.com/api/login-responsavel/?fn=login&usuario=$usuario&senha=$senhaCripto');
     var resposta = await http.get(
       url,
     );
@@ -84,14 +84,14 @@ class ConstsFuture {
     }
   }
 
-  static Future<dynamic> changeApi(String api) async {
+  static Future changeApi(String api) async {
     var resposta = await http.get(
       Uri.parse(api),
     );
     if (resposta.statusCode == 200) {
       return json.decode(resposta.body);
     } else {
-      return false;
+      return {'erro': true, 'mensagem': 'Algo deu errado'};
     }
   }
 }

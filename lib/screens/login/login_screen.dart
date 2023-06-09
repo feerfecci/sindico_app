@@ -1,20 +1,12 @@
-import 'dart:convert';
-
-import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sindico_app/repositories/shared_preferences.dart';
-import 'package:sindico_app/screens/home_page.dart/home_page.dart';
-import 'package:sindico_app/widgets/my_text_form_field.dart';
-import 'package:sindico_app/widgets/scaffold_all.dart';
 import 'package:sindico_app/widgets/snackbar/snack.dart';
 import 'package:validatorless/validatorless.dart';
-import 'package:http/http.dart' as http;
 
 import '../../consts/const_widget.dart';
 import '../../consts/consts.dart';
 import '../../consts/consts_future.dart';
-import '../../items_bottom.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -191,7 +183,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     Padding(
                       padding:
                           EdgeInsets.symmetric(vertical: size.height * 0.05),
-                      child: ConstsWidget.buildTextTitle('App Porteiro'),
+                      child: ConstsWidget.buildTextTitle('App Sindico'),
                     ),
                     buildTextFormEmail(),
                     SizedBox(
@@ -228,11 +220,8 @@ class _LoginScreenState extends State<LoginScreen> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text(
+                            ConstsWidget.buildTextTitle(
                               'Entrar',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white),
                             ),
                           ],
                         ),

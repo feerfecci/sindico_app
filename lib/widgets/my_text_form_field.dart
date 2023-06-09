@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
-import 'package:sindico_app/consts/consts.dart';
 import 'package:validatorless/validatorless.dart';
 
 Widget buildMyTextFormField(BuildContext context,
@@ -49,6 +48,7 @@ Widget buildMyTextFormObrigatorio(BuildContext context, String title,
     String? hintText,
     String? initialValue,
     TextInputType? keyboardType,
+    bool readOnly = false,
     String? Function(String?)? validator,
     final void Function(String? text)? onSaved}) {
   var size = MediaQuery.of(context).size;
@@ -57,12 +57,11 @@ Widget buildMyTextFormObrigatorio(BuildContext context, String title,
     child: TextFormField(
       initialValue: initialValue,
       keyboardType: keyboardType,
+      readOnly: readOnly,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       textAlign: TextAlign.start,
       textInputAction: TextInputAction.next,
       onSaved: onSaved,
-      maxLines: 5,
-      minLines: 1,
       inputFormatters: [MaskTextInputFormatter(mask: mask)],
       validator: Validatorless.multiple([Validatorless.required(mensagem)]),
       decoration: InputDecoration(
