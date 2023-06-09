@@ -1,14 +1,5 @@
 // ignore_for_file: use_build_context_synchronously
-
-import 'dart:convert';
-
-import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
-import 'package:sindico_app/screens/login/login_screen.dart';
-
-import '../items_bottom.dart';
-import '../widgets/snackbar/snack.dart';
-import 'package:http/http.dart' as http;
 
 class ResponsalvelInfos {
   static int idcondominio = 0;
