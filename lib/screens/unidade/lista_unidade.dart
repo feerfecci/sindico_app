@@ -88,14 +88,14 @@ class _ListaUnidadeStates extends State<ListaUnidades> {
                 shrinkWrap: true,
                 physics: ClampingScrollPhysics(),
                 children: [
-                  ConstsWidget.buildCustomButton(context, 'Exel',
-                      onPressed: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => TesteUnidade(),
-                        ));
-                  }),
+                  // ConstsWidget.buildCustomButton(context, 'Exel',
+                  //     onPressed: () {
+                  //   Navigator.push(
+                  //       context,
+                  //       MaterialPageRoute(
+                  //         builder: (context) => TesteUnidade(),
+                  //       ));
+                  // }),
                   ConstsWidget.buildCustomButton(context, 'Adicionar Unidade',
                       onPressed: () => ConstsFuture.navigatorPagePush(
                           context, CadastroUnidades()),

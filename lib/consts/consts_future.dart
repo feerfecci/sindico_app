@@ -18,6 +18,28 @@ class ConstsFuture {
       builder: (context) => route,
     ));
   }
+//NÃO DÁ CERTO POR CAUSA DO SNAPSHOT QUE VEM DO LISTBUILDER
+
+  // static buildFutureBuilder(
+  //   {required Widget listBuilder,required Future<Object?>? future}
+  // ) {
+  //   FutureBuilder<dynamic>(
+  //     future: future,
+  //     builder: (context, snapshot) {
+  //       if (snapshot.connectionState == ConnectionState.waiting) {
+  //         return CircularProgressIndicator();
+  //       } else if (snapshot.hasData) {
+  //         if (!snapshot.data['erro']) {
+  //           return listBuilder;
+  //         } else {
+  //           return Text(snapshot.data['mensagem']);
+  //         }
+  //       } else {
+  //         return Text('Algo Deu errado');
+  //       }
+  //     },
+  //   );
+  // }
 
   static navigatorPopPush(BuildContext context, String Namedroute) {
     Navigator.pop(context);
@@ -84,12 +106,16 @@ class ConstsFuture {
     }
   }
 
-  static Future changeApi(String api) async {
+  static Future resquestApi(String api) async {
     var resposta = await http.get(
       Uri.parse(api),
     );
     if (resposta.statusCode == 200) {
-      return json.decode(resposta.body);
+      try {
+        return json.decode(resposta.body);
+      } catch (e) {
+        return {'erro': true, "mensagem": 'Tente Novamente'};
+      }
     } else {
       return {'erro': true, 'mensagem': 'Algo deu errado'};
     }

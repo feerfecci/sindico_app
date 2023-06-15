@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:sindico_app/screens/espacos/lista_espacos.dart';
 import 'package:sindico_app/screens/home_page.dart/card_home.dart';
+import 'package:sindico_app/screens/reservas/listar_reservar.dart';
 import '../../consts/consts.dart';
 import '../funcionarios/lista_funcionario.dart';
 import '../../widgets/header.dart';
@@ -24,7 +26,7 @@ class _HomePageState extends State<HomePage> {
         physics: ClampingScrollPhysics(),
         crossAxisCount: 2,
         shrinkWrap: true,
-        childAspectRatio: 1.6,
+        childAspectRatio: 1.4,
         crossAxisSpacing: 15,
         mainAxisSpacing: 0,
         children: [
@@ -41,7 +43,15 @@ class _HomePageState extends State<HomePage> {
           buildCardHome(context,
               title: 'Quadro de Avisos',
               pageRoute: QuadroDeAvisos(),
-              iconApi: '${Consts.iconApi}quadro_avisos.png'),
+              iconApi: '${Consts.iconApi}avisos.png'),
+          buildCardHome(context,
+              title: 'Espaços Comuns',
+              pageRoute: ListaEspacos(),
+              iconApi: '${Consts.iconApi}mercadorias.png'),
+          buildCardHome(context,
+              title: 'Reservas',
+              pageRoute: ListaReservas(),
+              iconApi: '${Consts.iconApi}visitas.png'),
           // buildCardHome(context,
           //     title: 'Unidades', pageRoute: Lista(), iconApi: 'perfil.png'),
         ],

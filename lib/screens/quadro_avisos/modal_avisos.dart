@@ -4,6 +4,7 @@ import 'package:sindico_app/consts/consts_future.dart';
 import 'package:validatorless/validatorless.dart';
 
 import '../../consts/const_widget.dart';
+import '../../widgets/my_text_form_field.dart';
 
 class WidgetModalAvisos extends StatefulWidget {
   const WidgetModalAvisos({super.key});
@@ -70,7 +71,7 @@ class _WidgetModalAvisosState extends State<WidgetModalAvisos> {
             padding: EdgeInsets.symmetric(vertical: size.height * 0.01),
             child: TextFormField(
               controller: textoCntl,
-              minLines: 1,
+              minLines: 5,
               maxLines: 20,
               maxLength: 1000,
               autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -97,7 +98,7 @@ class _WidgetModalAvisosState extends State<WidgetModalAvisos> {
           ),
           ConstsWidget.buildCustomButton(context, 'Enviar Aviso',
               onPressed: () {
-            ConstsFuture.changeApi(
+            ConstsFuture.resquestApi(
                     'https://a.portariaapp.com/sindico/api/quadro_avisos/index.php?fn=incluirAviso&idcond=${ResponsalvelInfos.idcondominio}&tipo=1&titulo=${tituloCntl.text}&texto=${textoCntl.text}')
                 .then((value) {
               if (!value['erro']) {

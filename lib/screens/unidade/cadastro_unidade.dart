@@ -382,7 +382,7 @@ class _CadastroUnidadesState extends State<CadastroUnidades> {
                               ? "incluirUnidade&"
                               : 'editarUnidade&id=${widget.idunidade}&senha=${formInfosUnidade.senha}&';
 
-                          ConstsFuture.changeApi(
+                          ConstsFuture.resquestApi(
                                   // print(
                                   '${Consts.sindicoApi}unidades/?fn=${incluindoEditando}idcond=${ResponsalvelInfos.idcondominio}&iddivisao=${formInfosUnidade.iddivisao}&ativo=${formInfosUnidade.ativo}&responsavel=${formInfosUnidade.responsavel}&login=${formInfosUnidade.login}&numero=${formInfosUnidade.numero}&datanasc=${formInfosUnidade.nascimento}&documento=${formInfosUnidade.documento}&dddtelefone=${formInfosUnidade.ddd}&telefone=${formInfosUnidade.telefone}&email=${formInfosUnidade.email}')
                               .then((value) {

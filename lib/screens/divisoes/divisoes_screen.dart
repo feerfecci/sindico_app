@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:sindico_app/consts/const_widget.dart';
+import 'package:sindico_app/consts/consts_future.dart';
 import 'package:sindico_app/widgets/my_box_shadow.dart';
 import 'package:http/http.dart' as http;
 import '../../consts/consts.dart';
@@ -43,25 +44,27 @@ class _DivisoesScreenState extends State<DivisoesScreen> {
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return CircularProgressIndicator();
-              } else if (snapshot.hasError ||
-                  snapshot.data['mensagem'] != '' ||
-                  snapshot.data['erro'] == true) {
-                return Text('Deu erro');
+              } else if (snapshot.hasData) {
+                if (!snapshot.data['erro']) {
+                  return ListView.builder(
+                    physics: ClampingScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: snapshot.data['divisoes'].length,
+                    itemBuilder: (context, index) {
+                      return MyBoxShadow(
+                          child: Column(
+                        children: [
+                          ConstsWidget.buildTextTitle(
+                              snapshot.data['divisoes'][index]['nome_divisao']),
+                        ],
+                      ));
+                    },
+                  );
+                } else {
+                  Text(snapshot.data['mensagem']);
+                }
               }
-              return ListView.builder(
-                physics: ClampingScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: snapshot.data['divisoes'].length,
-                itemBuilder: (context, index) {
-                  return MyBoxShadow(
-                      child: Column(
-                    children: [
-                      ConstsWidget.buildTextTitle(
-                          snapshot.data['divisoes'][index]['nome_divisao']),
-                    ],
-                  ));
-                },
-              );
+              return Text('Deu erro');
             },
           )
         ],

@@ -307,7 +307,7 @@ class _CadastroMoradorState extends State<CadastroMorador> {
                           ? restoApi =
                               'incluirMorador&senha=${_formInfosMorador.senha}'
                           : restoApi = 'editarMorador&id=${widget.idmorador}';
-                      ConstsFuture.changeApi(
+                      ConstsFuture.resquestApi(
                         '${Consts.sindicoApi}moradores/?fn=$restoApi&idunidade=${widget.idunidade}&idcond=${ResponsalvelInfos.idcondominio}&iddivisao=${widget.iddivisao}&ativo=${_formInfosMorador.ativo}&numero=${widget.numero}&nomeMorador=${_formInfosMorador.nome_morador}&login=${_formInfosMorador.login}&datanasc=${_formInfosMorador.nascimento}&documento=${_formInfosMorador.documento}&dddtelefone=${_formInfosMorador.ddd}&telefone=${_formInfosMorador.telefone}&acessa_sistema=${_formInfosMorador.acesso}',
                       );
                       Navigator.pop(context);

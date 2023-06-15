@@ -259,7 +259,7 @@ class _CadastroFuncionarioState extends State<CadastroFuncionario> {
                           ? 'editarFuncionario&idfuncionario=${widget.idfuncionario}&'
                           : 'incluirFuncionario&senha=${formInfosFunc.senha}&';
 
-                      ConstsFuture.changeApi(
+                      ConstsFuture.resquestApi(
                               '${Consts.sindicoApi}funcionarios/?fn=$apiEditarIncluir&idcond=${ResponsalvelInfos.idcondominio}&nomeFuncionario=${formInfosFunc.nome_funcionario}&idfuncao=${formInfosFunc.idfuncao}&login=${formInfosFunc.login}&avisa_corresp=${formInfosFunc.avisa_corresp}&avisa_visita=${formInfosFunc.avisa_visita}&avisa_delivery=${formInfosFunc.avisa_delivery}&avisa_encomendas=${formInfosFunc.avisa_encomendas}')
                           .then((value) {
                         if (!value['erro']) {

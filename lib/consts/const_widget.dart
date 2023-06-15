@@ -31,10 +31,11 @@ class ConstsWidget {
 
   static Widget buildCustomButton(BuildContext context, String title,
       {IconData? icon,
-      double? altura,
+      double altura = 0.023,
       Color? color = Consts.kButtonColor,
       Color? textColor = Colors.white,
       Color? iconColor = Colors.white,
+      double fontSize = Consts.fontTitulo,
       required void Function()? onPressed}) {
     var size = MediaQuery.of(context).size;
     return ElevatedButton(
@@ -46,7 +47,7 @@ class ConstsWidget {
       ),
       onPressed: onPressed,
       child: Padding(
-        padding: EdgeInsets.symmetric(vertical: size.height * 0.015),
+        padding: EdgeInsets.symmetric(vertical: size.height * altura),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.max,
@@ -56,7 +57,7 @@ class ConstsWidget {
               style: TextStyle(
                 overflow: TextOverflow.ellipsis,
                 color: Colors.white,
-                fontSize: Consts.fontTitulo,
+                fontSize: fontSize,
                 fontWeight: FontWeight.w500,
               ),
             ),

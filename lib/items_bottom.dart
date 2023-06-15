@@ -62,11 +62,13 @@ class _ItensBottomState extends State<ItensBottom> {
       child: Scaffold(
         endDrawer: CustomDrawer(),
         appBar: AppBar(
+          iconTheme:
+              IconThemeData(color: Theme.of(context).colorScheme.primary),
           backgroundColor: Colors.transparent,
           leading: Padding(
             padding: EdgeInsets.only(left: 8.0),
             child: Image.network(
-              'https://www.portariaapp.com/wp-content/uploads/2023/03/portria.png',
+              'http://www.portariaapp.com/wp-content/uploads/2023/03/portria.png',
             ),
           ),
           elevation: 0,
@@ -87,9 +89,10 @@ class _ItensBottomState extends State<ItensBottom> {
             ),
             BottomNavigationBarItem(
               icon: Icon(
-                widget.currentTab == 1
-                    ? Icons.shopping_cart_rounded
-                    : Icons.shopping_cart_outlined,
+                Icons.business,
+                // widget.currentTab == 1
+                //     ? Icons.business
+                //     : Icons.shopping_cart_outlined,
               ),
               label: 'Divisões',
             ),
@@ -97,8 +100,8 @@ class _ItensBottomState extends State<ItensBottom> {
               label: 'Funções',
               icon: Icon(
                 widget.currentTab == 2
-                    ? Icons.question_mark_sharp
-                    : Icons.question_mark_outlined,
+                    ? Icons.build_circle_rounded
+                    : Icons.build_circle_outlined,
               ),
             ),
           ],
