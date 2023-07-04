@@ -43,19 +43,23 @@ Widget buildMyTextFormField(BuildContext context,
 }
 
 Widget buildMyTextFormObrigatorio(BuildContext context, String title,
-    {String mensagem = 'Este campo é obrigatótio',
+    {String mensagem = 'Obrigatório',
     String? mask,
     String? hintText,
     String? initialValue,
     TextInputType? keyboardType,
     bool readOnly = false,
     int? maxLength,
+    int? maxLines,
+    int? minLines,
+    TextEditingController? controller,
     String? Function(String?)? validator,
     final void Function(String? text)? onSaved}) {
   var size = MediaQuery.of(context).size;
   return Padding(
     padding: EdgeInsets.symmetric(vertical: size.height * 0.01),
     child: TextFormField(
+      controller: controller,
       initialValue: initialValue,
       keyboardType: keyboardType,
       readOnly: readOnly,
@@ -64,10 +68,16 @@ Widget buildMyTextFormObrigatorio(BuildContext context, String title,
       textInputAction: TextInputAction.next,
       onSaved: onSaved,
       maxLength: maxLength,
+      minLines: minLines,
+      maxLines: maxLines,
       inputFormatters: [MaskTextInputFormatter(mask: mask)],
       validator: Validatorless.multiple([Validatorless.required(mensagem)]),
       decoration: InputDecoration(
-        contentPadding: EdgeInsets.only(left: size.width * 0.02),
+        hintStyle: TextStyle(height: 1.4),
+        contentPadding: EdgeInsets.symmetric(
+          horizontal: size.width * 0.03,
+          vertical: size.height * 0.020,
+        ),
         filled: true,
         fillColor: Theme.of(context).canvasColor,
         label: Text(title),
@@ -85,7 +95,10 @@ Widget buildMyTextFormObrigatorio(BuildContext context, String title,
 }
 
 Widget buildTextFormLinhas(BuildContext context,
-    {void Function(String?)? onSaved, String? initialValue}) {
+    {void Function(String?)? onSaved,
+    String? initialValue,
+    required String label,
+    String? hintText}) {
   var size = MediaQuery.of(context).size;
   return Padding(
     padding: EdgeInsets.symmetric(vertical: size.height * 0.01),
@@ -103,8 +116,9 @@ Widget buildTextFormLinhas(BuildContext context,
         contentPadding: EdgeInsets.symmetric(
             vertical: size.height * 0.015, horizontal: size.width * 0.02),
         filled: true,
+        hintText: hintText,
         fillColor: Theme.of(context).canvasColor,
-        label: Text('Texto'),
+        label: Text(label),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
         ),

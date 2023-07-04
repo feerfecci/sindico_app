@@ -45,15 +45,19 @@ dependencies:
   fluttertoast: ^8.2.1
   intl: ^0.18.1
   excel: ^2.1.0
+  path_provider: ^2.0.15
+  permission_handler: ^10.3.0
+  image_picker: 
+  shimmer: ^3.0.0
 
 
 flutter_icons:  
   
-  image_path: "assets/portaria.png"
+  image_path: "assets/logo-verde.png"
   ios: true
   remove_alpha_ios: true
   android: "launch_icon"
-  adaptive_icon_foreground: "assets/portaria.png"
+  adaptive_icon_foreground: "assets/logo-verde.png"
 
 dev_dependencies:
   flutter_test:

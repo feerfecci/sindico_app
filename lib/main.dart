@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:sindico_app/repositories/themes_provider.dart';
-import 'package:sindico_app/screens/funcionarios/lista_funcionario.dart';
+import 'package:sindico_app/screens/colaboradores/lista_colaboradores.dart';
 import 'package:sindico_app/screens/quadro_avisos/quadro_de_avisos.dart';
 import 'package:sindico_app/screens/unidade/lista_unidade.dart';
 import 'repositories/themes_model.dart';
@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
           initialRoute: '/splashScreen',
           routes: {
             '/splashScreen': (context) => SplashScreen(),
-            '/listaFuncionario': (context) => ListaFuncionarios(),
+            '/listaColaboradores': (context) => ListaColaboradores(),
             '/listaUnidade': (context) => ListaUnidades(),
             '/quadroDeAvisos': (context) => QuadroDeAvisos(),
           },

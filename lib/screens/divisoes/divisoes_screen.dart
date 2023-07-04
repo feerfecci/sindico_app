@@ -5,6 +5,7 @@ import 'package:sindico_app/consts/const_widget.dart';
 import 'package:sindico_app/consts/consts_future.dart';
 import 'package:sindico_app/widgets/my_box_shadow.dart';
 import 'package:http/http.dart' as http;
+import 'package:sindico_app/widgets/page_erro.dart';
 import '../../consts/consts.dart';
 import '../../widgets/header.dart';
 
@@ -54,17 +55,16 @@ class _DivisoesScreenState extends State<DivisoesScreen> {
                       return MyBoxShadow(
                           child: Column(
                         children: [
-                          ConstsWidget.buildTextTitle(
+                          ConstsWidget.buildTextTitle(context,
                               snapshot.data['divisoes'][index]['nome_divisao']),
                         ],
                       ));
                     },
                   );
-                } else {
-                  Text(snapshot.data['mensagem']);
+                } else {return PageErro();
                 }
               }
-              return Text('Deu erro');
+              return PageErro();
             },
           )
         ],

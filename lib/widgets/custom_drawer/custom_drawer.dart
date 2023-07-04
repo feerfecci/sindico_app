@@ -18,10 +18,10 @@ class _CustomDrawerState extends State<CustomDrawer> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
 
-    Widget buidListTile(
-        {required String title,
-        required IconData leading,
-        IconData trailing = Icons.keyboard_arrow_right_outlined}) {
+    Widget buidListTile({
+      required String title,
+      required IconData leading,
+    }) {
       return Padding(
         padding: EdgeInsets.symmetric(vertical: size.height * 0.01),
         child: ListTile(
@@ -30,10 +30,10 @@ class _CustomDrawerState extends State<CustomDrawer> {
             leading,
             size: 25,
           ),
-          title: ConstsWidget.buildTextTitle(title),
+          title: ConstsWidget.buildTextTitle(context, title),
           trailing: Icon(
             size: 30,
-            trailing,
+            Icons.keyboard_arrow_right_outlined,
           ),
         ),
       );
@@ -53,21 +53,21 @@ class _CustomDrawerState extends State<CustomDrawer> {
           child: Column(
             children: [
               SizedBox(
-                height: size.height * 0.10,
+                height: size.height * 0.08,
                 width: size.width * 0.85,
                 child: DrawerHeader(
                   padding: EdgeInsets.symmetric(
-                    vertical: size.height * 0.02,
+                    vertical: size.height * 0.015,
                     horizontal: size.width * 0.03,
                   ),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(30),
                         topLeft: Radius.circular(30),
                       ),
                       color: Consts.kColorApp),
                   child: Text(
                     'Menu',
+                    textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 30,
                       color: Colors.white,
@@ -75,16 +75,15 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   ),
                 ),
               ),
+              buidListTile(title: 'Meu Perfil', leading: Icons.person),
               buidListTile(
-                title: 'pagina 1',
-                leading: Icons.accessible,
-              ),
+                  title: 'Seja um Representante',
+                  leading: Icons.business_center_outlined),
               buidListTile(
-                  title: 'pagina 2', leading: Icons.wrap_text_outlined),
+                  title: 'Política de privacidade',
+                  leading: Icons.privacy_tip_outlined),
               buidListTile(
-                  title: 'pagina 3', leading: Icons.invert_colors_on_sharp),
-              buidListTile(
-                  title: 'pagina 4', leading: Icons.price_check_outlined),
+                  title: 'Suporte', leading: Icons.phone_forwarded_outlined),
               ChangeThemeButton(),
               Spacer(),
               Padding(

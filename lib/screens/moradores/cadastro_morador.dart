@@ -164,169 +164,163 @@ class _CadastroMoradorState extends State<CadastroMorador> {
 
     return buildScaffoldAll(
       context,
-      body: buildHeaderPage(
-        context,
-        titulo: widget.idmorador == null ? 'Incluir Morador' : 'Editar Morador',
-        subTitulo: widget.idmorador == null
-            ? 'Adicionar Morador'
-            : 'Adicione um morador',
-        widget: Form(
-          key: _formKeyMorador,
-          child: MyBoxShadow(
-            child: Column(
-              children: [
-                buildAtivoInativo2(
-                  context,
-                  seAtivoApi: widget.ativo,
-                  seEditando: widget.idmorador == null ? 0 : 1,
-                ),
-                buildMyTextFormObrigatorio(
-                  context,
-                  'Nome Completo',
-                  initialValue: widget.nome_morador,
-                  onSaved: (text) => _formInfosMorador =
-                      _formInfosMorador.copyWith(nome_morador: text),
-                ),
-                buildMyTextFormObrigatorio(
-                  context,
-                  'Usário de login',
-                  initialValue: widget.login,
-                  onSaved: (text) => _formInfosMorador =
-                      _formInfosMorador.copyWith(login: text),
-                ),
-                widget.idmorador == null
-                    ? buildMyTextFormObrigatorio(
-                        context,
-                        'Senha Login',
-                        onSaved: (text) => _formInfosMorador =
-                            _formInfosMorador.copyWith(senha: text),
-                      )
-                    : SizedBox(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    SizedBox(
-                      width: size.width * 0.37,
-                      child: buildMyTextFormField(context,
-                          initialValue: dataParsed,
-                          title: 'Data de Nascimento',
-                          keyboardType: TextInputType.number,
-                          mask: '##/##/####',
-                          hintText: '##/##/####', onSaved: (text) {
-                        // var replace = text!.replaceAll('/', '-');
-
-                        var ano = text!.substring(6);
-                        var mes = text.substring(3, 5);
-                        var dia = text.substring(0, 2);
-                        // print(replace);
-
-                        _formInfosMorador = _formInfosMorador.copyWith(
-                            nascimento: '$ano-$mes-$dia');
-                      }),
-                    ),
-                    SizedBox(
-                      width: size.width * 0.5,
-                      child: buildMyTextFormField(
-                        context,
-                        title: 'Documento',
-                        initialValue: widget.documento,
-                        keyboardType: TextInputType.number,
-                        hintText: 'RG, CPF',
-                        onSaved: (text) => _formInfosMorador =
-                            _formInfosMorador.copyWith(documento: text),
-                      ),
+      title: widget.idmorador == null ? 'Incluir Morador' : 'Editar Morador',
+      body: Form(
+        key: _formKeyMorador,
+        child: MyBoxShadow(
+          child: Column(
+            children: [
+              buildAtivoInativo2(
+                context,
+                seAtivoApi: widget.ativo,
+                seEditando: widget.idmorador == null ? 0 : 1,
+              ),
+              buildMyTextFormObrigatorio(
+                context,
+                'Nome Completo',
+                initialValue: widget.nome_morador,
+                onSaved: (text) => _formInfosMorador =
+                    _formInfosMorador.copyWith(nome_morador: text),
+              ),
+              buildMyTextFormObrigatorio(
+                context,
+                'Usário de login',
+                initialValue: widget.login,
+                onSaved: (text) =>
+                    _formInfosMorador = _formInfosMorador.copyWith(login: text),
+              ),
+              widget.idmorador == null
+                  ? buildMyTextFormObrigatorio(
+                      context,
+                      'Senha Login',
+                      onSaved: (text) => _formInfosMorador =
+                          _formInfosMorador.copyWith(senha: text),
                     )
-                  ],
-                ),
-                Row(
-                  children: [
-                    SizedBox(
-                      width: size.width * 0.145,
-                      child: buildMyTextFormField(context,
-                          initialValue: widget.ddd,
-                          onSaved: (text) => _formInfosMorador =
-                              _formInfosMorador.copyWith(ddd: text),
-                          title: 'DDD',
-                          keyboardType: TextInputType.number,
-                          mask: '##',
-                          hintText: '11'),
-                    ),
-                    SizedBox(
-                      width: size.width * 0.1,
-                    ),
-                    SizedBox(
-                      width: size.width * 0.5,
-                      child: buildMyTextFormField(
-                        context,
-                        initialValue: widget.telefone,
-                        title: 'Telefone',
+                  : SizedBox(),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  SizedBox(
+                    width: size.width * 0.37,
+                    child: buildMyTextFormField(context,
+                        initialValue: dataParsed,
+                        title: 'Data de Nascimento',
                         keyboardType: TextInputType.number,
-                        mask: '# ########',
-                        hintText: '9 11223344',
-                        onSaved: (text) => _formInfosMorador =
-                            _formInfosMorador.copyWith(telefone: text),
-                      ),
+                        mask: '##/##/####',
+                        hintText: '##/##/####', onSaved: (text) {
+                      // var replace = text!.replaceAll('/', '-');
+
+                      var ano = text!.substring(6);
+                      var mes = text.substring(3, 5);
+                      var dia = text.substring(0, 2);
+                      // print(replace);
+
+                      _formInfosMorador = _formInfosMorador.copyWith(
+                          nascimento: '$ano-$mes-$dia');
+                    }),
+                  ),
+                  SizedBox(
+                    width: size.width * 0.5,
+                    child: buildMyTextFormField(
+                      context,
+                      title: 'Documento',
+                      initialValue: widget.documento,
+                      keyboardType: TextInputType.number,
+                      hintText: 'RG, CPF',
+                      onSaved: (text) => _formInfosMorador =
+                          _formInfosMorador.copyWith(documento: text),
                     ),
-                  ],
-                ),
-                ListTile(
-                  title:
-                      ConstsWidget.buildTextTitle('Permitir acesso ao sistema'),
-                  trailing: StatefulBuilder(builder: (context, setState) {
-                    return SizedBox(
-                        width: size.width * 0.125,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Checkbox(
-                              value: isChecked,
-                              activeColor: Consts.kColorApp,
-                              onChanged: (bool? value) {
-                                setState(() {
-                                  isChecked = value!;
-                                  int salvaAcesso = isChecked == true ? 1 : 0;
-                                  _formInfosMorador = _formInfosMorador
-                                      .copyWith(acesso: salvaAcesso);
-                                });
-                              },
-                            ),
-                          ],
-                        ));
-                  }),
-                ),
-                ConstsWidget.buildCustomButton(
-                  context,
-                  'Salvar',
-                  onPressed: () {
-                    var formValid =
-                        _formKeyMorador.currentState?.validate() ?? false;
-                    if (formValid) {
-                      _formKeyMorador.currentState?.save();
-                      String restoApi = '';
-                      widget.idmorador == null
-                          ? restoApi =
-                              'incluirMorador&senha=${_formInfosMorador.senha}'
-                          : restoApi = 'editarMorador&id=${widget.idmorador}';
-                      ConstsFuture.resquestApi(
-                        '${Consts.sindicoApi}moradores/?fn=$restoApi&idunidade=${widget.idunidade}&idcond=${ResponsalvelInfos.idcondominio}&iddivisao=${widget.iddivisao}&ativo=${_formInfosMorador.ativo}&numero=${widget.numero}&nomeMorador=${_formInfosMorador.nome_morador}&login=${_formInfosMorador.login}&datanasc=${_formInfosMorador.nascimento}&documento=${_formInfosMorador.documento}&dddtelefone=${_formInfosMorador.ddd}&telefone=${_formInfosMorador.telefone}&acessa_sistema=${_formInfosMorador.acesso}',
-                      );
-                      Navigator.pop(context);
-                      Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => ListaMorador(
-                                    idunidade: widget.idunidade,
-                                  )));
-                      // ConstsFuture.navigatorPageReplace(
-                      //     context,
-                      //     ListaMorador(
-                      //       idunidade: widget.idunidade,
-                      //     ));
-                    }
-                  },
-                )
-              ],
-            ),
+                  )
+                ],
+              ),
+              Row(
+                children: [
+                  SizedBox(
+                    width: size.width * 0.145,
+                    child: buildMyTextFormField(context,
+                        initialValue: widget.ddd,
+                        onSaved: (text) => _formInfosMorador =
+                            _formInfosMorador.copyWith(ddd: text),
+                        title: 'DDD',
+                        keyboardType: TextInputType.number,
+                        mask: '##',
+                        hintText: '11'),
+                  ),
+                  SizedBox(
+                    width: size.width * 0.1,
+                  ),
+                  SizedBox(
+                    width: size.width * 0.5,
+                    child: buildMyTextFormField(
+                      context,
+                      initialValue: widget.telefone,
+                      title: 'Telefone',
+                      keyboardType: TextInputType.number,
+                      mask: '# ########',
+                      hintText: '9 11223344',
+                      onSaved: (text) => _formInfosMorador =
+                          _formInfosMorador.copyWith(telefone: text),
+                    ),
+                  ),
+                ],
+              ),
+              ListTile(
+                title: ConstsWidget.buildTextTitle(
+                    context, 'Permitir acesso ao sistema'),
+                trailing: StatefulBuilder(builder: (context, setState) {
+                  return SizedBox(
+                      width: size.width * 0.125,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Checkbox(
+                            value: isChecked,
+                            activeColor: Consts.kColorApp,
+                            onChanged: (bool? value) {
+                              setState(() {
+                                isChecked = value!;
+                                int salvaAcesso = isChecked == true ? 1 : 0;
+                                _formInfosMorador = _formInfosMorador.copyWith(
+                                    acesso: salvaAcesso);
+                              });
+                            },
+                          ),
+                        ],
+                      ));
+                }),
+              ),
+              ConstsWidget.buildCustomButton(
+                context,
+                'Salvar',
+                onPressed: () {
+                  var formValid =
+                      _formKeyMorador.currentState?.validate() ?? false;
+                  if (formValid) {
+                    _formKeyMorador.currentState?.save();
+                    String restoApi = '';
+                    widget.idmorador == null
+                        ? restoApi =
+                            'incluirMorador&senha=${_formInfosMorador.senha}'
+                        : restoApi = 'editarMorador&id=${widget.idmorador}';
+                    ConstsFuture.resquestApi(
+                      '${Consts.sindicoApi}moradores/?fn=$restoApi&idunidade=${widget.idunidade}&idcond=${ResponsalvelInfos.idcondominio}&iddivisao=${widget.iddivisao}&ativo=${_formInfosMorador.ativo}&numero=${widget.numero}&nomeMorador=${_formInfosMorador.nome_morador}&login=${_formInfosMorador.login}&datanasc=${_formInfosMorador.nascimento}&documento=${_formInfosMorador.documento}&dddtelefone=${_formInfosMorador.ddd}&telefone=${_formInfosMorador.telefone}&acessa_sistema=${_formInfosMorador.acesso}',
+                    );
+                    Navigator.pop(context);
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ListaMorador(
+                                  idunidade: widget.idunidade,
+                                )));
+                    // ConstsFuture.navigatorPageReplace(
+                    //     context,
+                    //     ListaMorador(
+                    //       idunidade: widget.idunidade,
+                    //     ));
+                  }
+                },
+              )
+            ],
           ),
         ),
       ),

@@ -33,6 +33,7 @@ Widget buildHeaderPage(
                 child: Column(
                   children: [
                     ConstsWidget.buildTextTitle(
+                      context,
                       titulo,
                       size: 24,
                     ),
@@ -43,7 +44,7 @@ Widget buildHeaderPage(
             ),
             Padding(
               padding: EdgeInsets.only(
-                top: size.height * 0.1,
+                top: size.height * 0.09,
                 right: size.width * 0.02,
                 left: size.width * 0.02,
               ),

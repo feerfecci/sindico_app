@@ -2,11 +2,12 @@
 import 'package:flutter/material.dart';
 
 class ResponsalvelInfos {
+  static String login = "";
+  static String senhacripto = '';
   static int idcondominio = 0;
   static String nome_condominio = "";
   static String dividido_por = "";
   static String nome_responsavel = "";
-  static String login = "";
   static String endereco = "";
   static String numero = "";
   static String bairro = "";
@@ -25,6 +26,11 @@ class Consts {
   static const kButtonColor = kColorApp;
 
   static const kColorApp = Color.fromARGB(255, 127, 99, 254);
+  static const kColorRed = Color.fromARGB(255, 251, 80, 93);
+  static const kColorAzul = Color.fromARGB(255, 75, 132, 255);
+  static const kColorVerde = Color.fromARGB(255, 44, 201, 104);
+  static const kColorAmarelo = Color.fromARGB(255, 255, 193, 7);
   static const String iconApi = 'https://a.portariaapp.com/img/ico-';
   static const String sindicoApi = 'https://a.portariaapp.com/sindico/api/';
+  static const String iconApiPort = 'https://a.portariaapp.com/img/ico-';
 }

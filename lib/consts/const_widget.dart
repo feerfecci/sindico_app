@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'consts.dart';
 
 class ConstsWidget {
-  static Widget buildTextTitle(String title,
-      {textAlign, color, double size = 16}) {
+  static Widget buildTextTitle(BuildContext context, String title,
+      {textAlign, Color? color, double size = 16}) {
     return Text(
       title,
       maxLines: 2,
       textAlign: textAlign,
       style: TextStyle(
-        color: color,
+        color: color ?? Theme.of(context).colorScheme.primary,
         overflow: TextOverflow.ellipsis,
         fontSize: size,
         fontWeight: FontWeight.bold,
@@ -17,13 +17,20 @@ class ConstsWidget {
     );
   }
 
-  static Widget buildTextSubTitle(String title, {color}) {
+  static Widget buildTextSubTitle(
+    String title, {
+    color,
+    TextAlign? textAlign,
+    double? size = Consts.fontSubTitulo,
+  }) {
     return Text(
       title,
       maxLines: 20,
+      textAlign: textAlign,
       style: TextStyle(
+        height: 1.4,
         color: color,
-        fontSize: Consts.fontSubTitulo,
+        fontSize: size,
         fontWeight: FontWeight.normal,
       ),
     );
@@ -32,7 +39,8 @@ class ConstsWidget {
   static Widget buildCustomButton(BuildContext context, String title,
       {IconData? icon,
       double altura = 0.023,
-      Color? color = Consts.kButtonColor,
+      double largura = 0.0,
+      Color? color = Consts.kColorAzul,
       Color? textColor = Colors.white,
       Color? iconColor = Colors.white,
       double fontSize = Consts.fontTitulo,
@@ -40,18 +48,20 @@ class ConstsWidget {
     var size = MediaQuery.of(context).size;
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
-        backgroundColor: color,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(Consts.borderButton),
-        ),
-      ),
+          backgroundColor: color, shape: StadiumBorder()),
       onPressed: onPressed,
       child: Padding(
-        padding: EdgeInsets.symmetric(vertical: size.height * altura),
+        padding: EdgeInsets.symmetric(
+            vertical: size.height * altura, horizontal: size.width * largura),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.max,
           children: [
+            if (icon != null) Icon(size: 18, icon, color: iconColor),
+            if (icon != null)
+              SizedBox(
+                width: size.width * 0.015,
+              ),
             Text(
               title,
               style: TextStyle(
@@ -61,28 +71,125 @@ class ConstsWidget {
                 fontWeight: FontWeight.w500,
               ),
             ),
-            SizedBox(
-              width: size.width * 0.015,
-            ),
-            if (icon != null) Icon(size: 18, icon, color: iconColor),
           ],
         ),
       ),
     );
   }
 
-  static Widget buildAtivoInativo(bool ativo) {
+  static Widget buildLoadingButton(BuildContext context,
+      {required void Function()? onPressed,
+      required bool isLoading,
+      required String title,
+      color = Consts.kColorAzul,
+      double fontSize = 14}) {
+    var size = MediaQuery.of(context).size;
+
+    return ElevatedButton(
+        style: ElevatedButton.styleFrom(
+            padding: EdgeInsets.symmetric(vertical: size.height * 0.023),
+            backgroundColor: color,
+            shape: StadiumBorder()),
+        onPressed: onPressed,
+        child: isLoading == false
+            ? Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Text(
+                    title,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: fontSize,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              )
+            : Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  SizedBox(
+                    height: size.height * 0.020,
+                    width: size.width * 0.05,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ));
+  }
+
+  static Widget buildAtivoInativo(BuildContext context, bool ativo) {
+    var size = MediaQuery.of(context).size;
     return Container(
       decoration: BoxDecoration(
-          color: ativo ? Colors.green : Colors.red,
+          color: ativo ? Consts.kColorVerde : Colors.red,
           borderRadius: BorderRadius.circular(16)),
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: ConstsWidget.buildTextTitle(ativo ? 'Ativo' : 'Inativo'),
+        padding: EdgeInsets.symmetric(
+            vertical: size.height * 0.01, horizontal: size.width * 0.035),
+        child: ConstsWidget.buildTextTitle(context, ativo ? 'Ativo' : 'Inativo',
+            color: Colors.white),
+      ),
+    );
+  }
+
+  static Widget buildCheckBox(BuildContext context,
+      {required bool isChecked,
+      required void Function(bool?)? onChanged,
+      required String title,
+      MainAxisAlignment mainAxisAlignment = MainAxisAlignment.center}) {
+    var size = MediaQuery.of(context).size;
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: size.height * 0.005),
+      child: Row(
+        mainAxisAlignment: mainAxisAlignment,
+        children: [
+          buildTextTitle(context, title),
+          Transform.scale(
+            scale: 1.3,
+            child: Checkbox(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(15)),
+              value: isChecked,
+              onChanged: onChanged,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  static Widget buildOutlinedButton(BuildContext context,
+      {required String title, required void Function()? onPressed}) {
+    var size = MediaQuery.of(context).size;
+    return OutlinedButton(
+      style: OutlinedButton.styleFrom(
+        alignment: Alignment.center,
+        padding: EdgeInsets.symmetric(vertical: size.height * 0.021),
+        side: BorderSide(width: size.width * 0.005, color: Colors.blue),
+        shape: StadiumBorder(),
+      ),
+      onPressed: onPressed,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          ConstsWidget.buildTextSubTitle(
+            title,
+            size: 18,
+            color: Colors.blue,
+          ),
+        ],
       ),
     );
   }
 }
+
+
 
 // Widget buildDropDivisoes({required void Function(Object?)? onChanged}) {
 //   return StatefulBuilder(

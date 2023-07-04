@@ -19,7 +19,6 @@ buildMinhaSnackBar(
   //     return null;
   //   }
   // }
-
   // Widget buildCorpoSnack(double width) {
   //   return Row(
   //     children: [
@@ -53,7 +52,7 @@ buildMinhaSnackBar(
   //               mainAxisSize: MainAxisSize.min,
   //               crossAxisAlignment: CrossAxisAlignment.start,
   //               children: [
-  //                 logado.buildTextTitle(titulo, color: Colors.white
+  //                 logado.buildTextTitle(context,titulo, color: Colors.white
   //                     // color: Theme.of(context).snackBarTheme.actionTextColor,
   //                     ),
   //                 logado.buildTextSubTitle(texto, color: Colors.white
@@ -91,6 +90,7 @@ buildMinhaSnackBar(
         duration: Duration(seconds: 4),
         backgroundColor: Colors.blue,
         behavior: SnackBarBehavior.floating,
+        dismissDirection: DismissDirection.endToStart,
         content: Row(
           children: [
             Icon(
@@ -104,8 +104,15 @@ buildMinhaSnackBar(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  ConstsWidget.buildTextTitle(title),
-                  ConstsWidget.buildTextSubTitle(subTitle)
+                  ConstsWidget.buildTextTitle(
+                    context,
+                    title,
+                    color: Colors.white,
+                  ),
+                  ConstsWidget.buildTextSubTitle(
+                    subTitle,
+                    color: Colors.white,
+                  )
                 ],
               ),
             ),

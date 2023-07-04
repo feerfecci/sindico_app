@@ -99,65 +99,84 @@ class _CadastroEspacosState extends State<CadastroEspacos> {
     }
 
     return buildScaffoldAll(context,
-        body: buildHeaderPage(context,
-            titulo: 'Espacos',
-            subTitulo: widget.idespaco == null
-                ? 'Adicione um espaço comum'
-                : 'Edite um espaço',
-            widget: MyBoxShadow(
+        title: widget.idespaco == null ? 'Adicionar Espaço' : 'Editar Espaço',
+        body: ListView(
+          physics: ClampingScrollPhysics(),
+          shrinkWrap: true,
+          children: [
+            MyBoxShadow(
               child: Form(
                 key: formKey,
-                child: Column(
-                  children: [
-                    buildDropAtivoInativo(context),
-                    buildMyTextFormObrigatorio(
-                      context,
-                      'Nome Espaco',
-                      initialValue: widget.nome_espaco,
-                      onSaved: (text) => _formInfosEspacos =
-                          _formInfosEspacos.copyWith(nome_espaco: text),
-                    ),
-                    buildTextFormLinhas(
-                      context,
-                      initialValue: widget.descricao,
-                      onSaved: (newValue) => _formInfosEspacos =
-                          _formInfosEspacos.copyWith(descricao: newValue),
-                    ),
-                    ConstsWidget.buildCustomButton(
-                      context,
-                      'Salvar',
-                      onPressed: () {
-                        var keyForm = formKey.currentState?.validate() ?? false;
-                        if (keyForm) {
-                          formKey.currentState?.save();
-                          String editaInlui = widget.idespaco == null
-                              ? 'fn=incluirEspacos'
-                              : 'fn=editarEspacos&idespaco=${widget.idespaco}';
+                child: Padding(
+                  padding: EdgeInsets.symmetric(vertical: size.height * 0.01),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      buildDropAtivoInativo(context),
+                      Padding(
+                        padding: EdgeInsets.only(top: size.height * 0.01),
+                        child: buildMyTextFormObrigatorio(
+                          context,
+                          'Nome Espaço',
+                          hintText: 'Exemplo: Churrasqueira Bloco B',
+                          initialValue: widget.nome_espaco,
+                          onSaved: (text) => _formInfosEspacos =
+                              _formInfosEspacos.copyWith(nome_espaco: text),
+                        ),
+                      ),
+                      Padding(
+                        padding:
+                            EdgeInsets.symmetric(vertical: size.height * 0.01),
+                        child: buildTextFormLinhas(
+                          context,
+                          label: 'Observações',
+                          hintText:
+                              'Exemplo: Salão de festas localizado no andar térreo entre as torres A e B. Capacidade máxima 150 pessoas',
+                          initialValue: widget.descricao,
+                          onSaved: (newValue) => _formInfosEspacos =
+                              _formInfosEspacos.copyWith(descricao: newValue),
+                        ),
+                      ),
+                      ConstsWidget.buildCustomButton(
+                        context,
+                        'Salvar',
+                        color: Consts.kColorRed,
+                        onPressed: () {
+                          var keyForm =
+                              formKey.currentState?.validate() ?? false;
+                          if (keyForm) {
+                            formKey.currentState?.save();
+                            String editaInlui = widget.idespaco == null
+                                ? 'fn=incluirEspacos'
+                                : 'fn=editarEspacos&idespaco=${widget.idespaco}';
 
-                          ConstsFuture.resquestApi(
-                                  '${Consts.sindicoApi}espacos/index.php?$editaInlui&idcond=${ResponsalvelInfos.idcondominio}&ativo=${_formInfosEspacos.ativo}&nome_espaco=${_formInfosEspacos.nome_espaco}&descricao=${_formInfosEspacos.descricao}')
-                              .then((value) {
-                            if (!value['erro']) {
-                              Navigator.pop(context);
-                              Navigator.pop(context);
-                              ConstsFuture.navigatorPagePush(
-                                  context, ListaEspacos());
+                            ConstsFuture.resquestApi(
+                                    '${Consts.sindicoApi}espacos/index.php?$editaInlui&idcond=${ResponsalvelInfos.idcondominio}&ativo=${_formInfosEspacos.ativo}&nome_espaco=${_formInfosEspacos.nome_espaco}&descricao=${_formInfosEspacos.descricao}')
+                                .then((value) {
+                              if (!value['erro']) {
+                                Navigator.pop(context);
+                                Navigator.pop(context);
+                                ConstsFuture.navigatorPagePush(
+                                    context, ListaEspacos());
 
-                              buildMinhaSnackBar(context,
-                                  title: 'Muito Obrigado',
-                                  subTitle: value['mensagem']);
-                            } else {
-                              buildMinhaSnackBar(context,
-                                  title: 'Algo Saiu Mau',
-                                  subTitle: value['mensagem']);
-                            }
-                          });
-                        }
-                      },
-                    )
-                  ],
+                                buildMinhaSnackBar(context,
+                                    title: 'Muito Obrigado',
+                                    subTitle: value['mensagem']);
+                              } else {
+                                buildMinhaSnackBar(context,
+                                    title: 'Algo Saiu Mau',
+                                    subTitle: value['mensagem']);
+                              }
+                            });
+                          }
+                        },
+                      )
+                    ],
+                  ),
                 ),
               ),
-            )));
+            ),
+          ],
+        ));
   }
 }

@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:sindico_app/consts/const_widget.dart';
 import 'package:sindico_app/widgets/my_box_shadow.dart';
 import 'package:http/http.dart' as http;
+import 'package:sindico_app/widgets/page_vazia.dart';
 import '../../consts/consts.dart';
 import '../../widgets/header.dart';
+import '../../widgets/page_erro.dart';
 
 class FuncoesScreen extends StatefulWidget {
   const FuncoesScreen({super.key});
@@ -34,34 +36,34 @@ class _FuncoesScreenState extends State<FuncoesScreen> {
       context,
       titulo: 'Funções',
       subTitulo: 'Vejas as Funções Listadas',
-      widget: ListView(
-        physics: ClampingScrollPhysics(),
-        shrinkWrap: true,
+      widget: Column(
         children: [
           FutureBuilder(
             future: apiListarDivisoes(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return CircularProgressIndicator();
-              } else if (snapshot.hasError ||
-                  snapshot.data['mensagem'] != '' ||
-                  snapshot.data['erro'] == true) {
-                return Text('Deu erro');
+              } else if (snapshot.hasData) {
+                if (!snapshot.data['erro']) {
+                  return ListView.builder(
+                    physics: ClampingScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: snapshot.data['funcao'].length,
+                    itemBuilder: (context, index) {
+                      return MyBoxShadow(
+                          child: Column(
+                        children: [
+                          ConstsWidget.buildTextTitle(context,
+                              snapshot.data['funcao'][index]['funcao']),
+                        ],
+                      ));
+                    },
+                  );
+                } else {
+                  return PageVazia(title: snapshot.data['mensagem']);
+                }
               }
-              return ListView.builder(
-                physics: ClampingScrollPhysics(),
-                shrinkWrap: true,
-                itemCount: snapshot.data['funcao'].length,
-                itemBuilder: (context, index) {
-                  return MyBoxShadow(
-                      child: Column(
-                    children: [
-                      ConstsWidget.buildTextTitle(
-                          snapshot.data['funcao'][index]['funcao']),
-                    ],
-                  ));
-                },
-              );
+              return PageErro();
             },
           )
         ],

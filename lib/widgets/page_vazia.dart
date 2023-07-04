@@ -14,16 +14,18 @@ class PageVazia extends StatefulWidget {
 class _PageVaziaState extends State<PageVazia> {
   @override
   Widget build(BuildContext context) {
+    var size = MediaQuery.of(context).size;
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 30),
+      padding: EdgeInsets.symmetric(vertical: size.height * 0.02),
       child: Column(
         children: [
           Center(
-            child: Image.network('https://a.portariaapp.com/img/img.png'),
+            child: Image.asset('assets/vazio.png'),
           ),
           Padding(
             padding: EdgeInsets.all(8.0),
-            child: ConstsWidget.buildTextTitle(widget.title),
+            child: ConstsWidget.buildTextTitle(context, widget.title,
+                textAlign: TextAlign.center),
           ),
         ],
       ),

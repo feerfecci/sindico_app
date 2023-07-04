@@ -19,7 +19,7 @@ class MyBoxShadowState extends State<MyBoxShadow> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: size.height * 0.01),
+      padding: EdgeInsets.symmetric(vertical: size.height * 0.003),
       child: Container(
         decoration: BoxDecoration(
             color: Theme.of(context).primaryColor,
@@ -27,11 +27,13 @@ class MyBoxShadowState extends State<MyBoxShadow> {
               BoxShadow(
                 color: Theme.of(context).shadowColor,
                 spreadRadius: 1,
-                blurRadius: 1,
-                offset: Offset(2, 2), // changes position of shadow
+                blurRadius: 6,
+                offset: Offset(5, 5), // changes position of shadow
               ),
             ],
-            border: Border.all(color: Colors.black12),
+            border: Border.all(
+              color: Theme.of(context).shadowColor,
+            ),
             borderRadius: BorderRadius.circular(16)),
         child: Padding(
           padding: EdgeInsets.all(size.width * widget.paddingAll),

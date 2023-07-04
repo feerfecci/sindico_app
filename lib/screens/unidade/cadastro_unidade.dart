@@ -92,6 +92,7 @@ class _CadastroUnidadesState extends State<CadastroUnidades> {
 
   String loginGerado = '';
   String dataLogin = '';
+  bool isChecked = true;
 
   @override
   Widget build(BuildContext context) {
@@ -116,18 +117,20 @@ class _CadastroUnidadesState extends State<CadastroUnidades> {
                 elevation: 24,
                 isExpanded: true,
                 hint: Text('Selecione uma Divisão'),
-                icon: Icon(Icons.arrow_drop_down_sharp),
+                icon: Icon(
+                  Icons.arrow_downward_outlined,
+                ),
                 borderRadius: BorderRadius.circular(16),
                 style: TextStyle(
-                    // fontWeight: FontWeight.bold,
-                    fontSize: Consts.fontTitulo,
-                    color: Colors.black),
+                  // fontWeight: FontWeight.bold,
+                  fontSize: Consts.fontTitulo,
+                ),
                 items: categoryItemListDivisoes.map((e) {
                   return DropdownMenuItem(
+                    alignment: Alignment.center,
                     value: e['iddivisao'],
-                    child: Text(
-                      e['nome_divisao'],
-                    ),
+                    child:
+                        ConstsWidget.buildTextTitle(context, e['nome_divisao']),
                   );
                 }).toList(),
                 onChanged: (value) {
@@ -149,91 +152,83 @@ class _CadastroUnidadesState extends State<CadastroUnidades> {
     var seAtivo = widget.ativo == true ? 'Ativo' : 'Inativo';
     var dropdownValueAtivo = listAtivo.first;
 
-    return buildScaffoldAll(
-      context,
-      body: buildHeaderPage(context,
-          titulo: widget.idunidade == 0 ? 'Nova Unidade' : 'Editar Unidade',
-          subTitulo: widget.idunidade == 0
-              ? 'Cadastre uma nova unidade'
-              : 'Edite uma unidade',
-          widget: Form(
-            key: _formkeyUnidade,
-            child: MyBoxShadow(
+    return buildScaffoldAll(context,
+        title: widget.idunidade == 0 ? 'Nova Unidade' : 'Editar Unidade',
+        body: Form(
+          key: _formkeyUnidade,
+          child: MyBoxShadow(
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: size.height * 0.01),
               child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   //infos unidade
                   // if (widget.idunidade == null)
                   Column(
                     children: [
-                      Padding(
-                        padding:
-                            EdgeInsets.symmetric(vertical: size.height * 0.01),
-                        child: ButtonTheme(
-                          alignedDropdown: true,
-                          child: DropdownButtonFormField<String>(
-                            value: widget.idunidade == 0
-                                ? dropdownValueAtivo
-                                : seAtivo,
-
-                            icon: Padding(
-                              padding:
-                                  EdgeInsets.only(right: size.height * 0.03),
-                              child: Icon(
-                                Icons.arrow_downward,
-                                color: Theme.of(context).iconTheme.color,
+                      Container(
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          color: Theme.of(context).canvasColor,
+                          border: Border.all(color: Colors.black26),
+                          borderRadius: BorderRadius.all(Radius.circular(16)),
+                        ),
+                        child: DropdownButtonHideUnderline(
+                          child: ButtonTheme(
+                            alignedDropdown: true,
+                            shape: Border.all(color: Colors.black),
+                            child: DropdownButton(
+                              alignment: Alignment.center,
+                              value: widget.idunidade == 0
+                                  ? dropdownValueAtivo
+                                  : seAtivo,
+                              icon: Icon(
+                                Icons.arrow_downward_outlined,
                               ),
-                            ),
-
-                            elevation: 90,
-                            style: TextStyle(
-                                color: Theme.of(context).colorScheme.primary,
-                                fontWeight: FontWeight.w400,
-                                fontSize: 18),
-                            decoration: InputDecoration(
-                              contentPadding:
-                                  EdgeInsets.only(left: size.width * 0.00),
-                              filled: true,
-                              fillColor: Theme.of(context).canvasColor,
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(16),
+                              elevation: 24,
+                              style: TextStyle(
+                                fontSize: Consts.fontTitulo,
                               ),
+                              borderRadius: BorderRadius.circular(16),
+                              items: listAtivo
+                                  .map<DropdownMenuItem>((String value) {
+                                return DropdownMenuItem(
+                                  alignment: Alignment.center,
+                                  value: value,
+                                  child: ConstsWidget.buildTextTitle(
+                                      context, value),
+                                );
+                              }).toList(),
+                              onChanged: (value) {
+                                setState(() {
+                                  dropdownValueAtivo = value!;
+                                  if (dropdownValueAtivo == 'Ativo') {
+                                    formInfosUnidade =
+                                        formInfosUnidade.copyWith(ativo: 1);
+                                  } else if (dropdownValueAtivo == 'Inativo') {
+                                    formInfosUnidade =
+                                        formInfosUnidade.copyWith(ativo: 0);
+                                  }
+                                });
+                              },
                             ),
-                            // underline: Container(
-                            //   height: 1,
-                            //   color: Consts.kColorApp,
-                            // ),
-                            borderRadius: BorderRadius.circular(16),
-                            items: listAtivo
-                                .map<DropdownMenuItem<String>>((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(value),
-                              );
-                            }).toList(),
-                            onChanged: (String? value) {
-                              setState(() {
-                                dropdownValueAtivo = value!;
-                                if (dropdownValueAtivo == 'Ativo') {
-                                  formInfosUnidade =
-                                      formInfosUnidade.copyWith(ativo: 1);
-                                } else if (dropdownValueAtivo == 'Inativo') {
-                                  formInfosUnidade =
-                                      formInfosUnidade.copyWith(ativo: 0);
-                                }
-                              });
-                            },
                           ),
                         ),
                       ),
                       widget.idunidade == null
                           ? buildDropButton()
-                          : ConstsWidget.buildTextTitle(widget.localizado!),
+                          : Padding(
+                              padding: EdgeInsets.symmetric(
+                                  vertical: size.height * 0.015),
+                              child: ConstsWidget.buildTextTitle(
+                                  context, widget.localizado!),
+                            ),
                       //infos resp
                       if (widget.idunidade == null)
                         buildMyTextFormObrigatorio(
                           context,
                           'Número',
-                          readOnly: widget.idunidade == null ? false : true,
+                          // readOnly: widget.idunidade == null ? false : true,
                           initialValue: widget.numero,
                           onSaved: (text) => formInfosUnidade =
                               formInfosUnidade.copyWith(numero: text),
@@ -241,7 +236,7 @@ class _CadastroUnidadesState extends State<CadastroUnidades> {
                       buildMyTextFormObrigatorio(
                         context,
                         'Nome Responsável',
-                        readOnly: widget.idunidade == null ? false : true,
+                        // readOnly: widget.idunidade == null ? false : true,
                         initialValue: widget.nome_responsavel,
                         onSaved: (text) => formInfosUnidade =
                             formInfosUnidade.copyWith(responsavel: text),
@@ -256,7 +251,7 @@ class _CadastroUnidadesState extends State<CadastroUnidades> {
                         child: buildMyTextFormObrigatorio(
                           context,
                           'Nascimento',
-                          readOnly: widget.idunidade == null ? false : true,
+                          // readOnly: widget.idunidade == null ? false : true,
                           initialValue: widget.dataNascimento,
                           mask: '##/##/####',
                           keyboardType: TextInputType.number,
@@ -281,12 +276,18 @@ class _CadastroUnidadesState extends State<CadastroUnidades> {
                         child: buildMyTextFormObrigatorio(
                           context,
                           'Documento',
-                          readOnly: widget.idunidade == null ? false : true,
+                          // readOnly: widget.idunidade == null ? false : true,
                           keyboardType: TextInputType.number,
                           initialValue: widget.documento,
                           onSaved: (text) {
-                            formInfosUnidade =
-                                formInfosUnidade.copyWith(documento: text);
+                            if (text!.length >= 4) {
+                              formInfosUnidade =
+                                  formInfosUnidade.copyWith(documento: text);
+                            } else {
+                              buildMinhaSnackBar(context,
+                                  title: 'Cuidado',
+                                  subTitle: 'Complete a documento');
+                            }
                           },
                         ),
                       ),
@@ -325,42 +326,70 @@ class _CadastroUnidadesState extends State<CadastroUnidades> {
                           )),
                     ],
                   ),
-                  if (widget.idunidade == null)
-                    ConstsWidget.buildCustomButton(
-                      context,
-                      'Gerar Login',
-                      onPressed: () {
-                        var formValid =
-                            _formkeyUnidade.currentState?.validate() ?? false;
-                        if (formValid) {
-                          _formkeyUnidade.currentState!.save();
-                          List nomeToList =
-                              formInfosUnidade.responsavel.split(' ');
-                          List listNome = nomeToList;
 
-                          setState(() {
-                            loginGerado =
-                                "${listNome.first.toString().toLowerCase()}${listNome.last.toString().toLowerCase()}${dataLogin}r";
-                          });
-                          formInfosUnidade =
-                              formInfosUnidade.copyWith(login: loginGerado);
-                        } else if (widget.idunidade == 0) {}
-                      },
+                  if (widget.idunidade == null)
+                    SizedBox(
+                      height: size.height * 0.01,
                     ),
+                  // if (widget.idunidade == null)
+                  ConstsWidget.buildCustomButton(
+                    context,
+                    'Gerar Login',
+                    onPressed: () {
+                      var formValid =
+                          _formkeyUnidade.currentState?.validate() ?? false;
+                      if (formValid) {
+                        _formkeyUnidade.currentState!.save();
+                        List nomeToList =
+                            formInfosUnidade.responsavel.split(' ');
+                        List listNome = nomeToList;
+
+                        setState(() {
+                          loginGerado =
+                              "${listNome.first.toString().toLowerCase()}${listNome.last.toString().toLowerCase()}${formInfosUnidade.documento.substring(0, 4)}r";
+                        });
+                        formInfosUnidade =
+                            formInfosUnidade.copyWith(login: loginGerado);
+                      } else if (widget.idunidade == 0) {}
+                    },
+                  ),
                   //loginGerado
                   if (loginGerado != '')
                     Column(
                       children: [
+                        SizedBox(
+                          height: size.height * 0.01,
+                        ),
                         MyBoxShadow(
-                            child: Row(
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: size.height * 0.01),
-                              child: ConstsWidget.buildTextTitle(loginGerado),
-                            ),
-                          ],
+                            child: Padding(
+                          padding: EdgeInsets.symmetric(
+                              vertical: size.height * 0.005),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                width: size.width * 0.01,
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  ConstsWidget.buildTextSubTitle('Login:'),
+                                  SizedBox(
+                                    height: size.height * 0.01,
+                                  ),
+                                  ConstsWidget.buildTextTitle(
+                                      context, loginGerado),
+                                ],
+                              ),
+                            ],
+                          ),
                         )),
+                        ConstsWidget.buildCheckBox(context,
+                            isChecked: isChecked, onChanged: (p0) {
+                          setState(() {
+                            isChecked = !isChecked;
+                          });
+                        }, title: "Acesso ao Sistema"),
                         buildMyTextFormObrigatorio(
                           context,
                           'Senha Login',
@@ -368,6 +397,11 @@ class _CadastroUnidadesState extends State<CadastroUnidades> {
                               formInfosUnidade.copyWith(senha: text),
                         ),
                       ],
+                    ),
+
+                  if (loginGerado != '' || widget.idunidade != null)
+                    SizedBox(
+                      height: size.height * 0.01,
                     ),
                   if (loginGerado != '' || widget.idunidade != null)
                     ConstsWidget.buildCustomButton(
@@ -384,17 +418,17 @@ class _CadastroUnidadesState extends State<CadastroUnidades> {
 
                           ConstsFuture.resquestApi(
                                   // print(
-                                  '${Consts.sindicoApi}unidades/?fn=${incluindoEditando}idcond=${ResponsalvelInfos.idcondominio}&iddivisao=${formInfosUnidade.iddivisao}&ativo=${formInfosUnidade.ativo}&responsavel=${formInfosUnidade.responsavel}&login=${formInfosUnidade.login}&numero=${formInfosUnidade.numero}&datanasc=${formInfosUnidade.nascimento}&documento=${formInfosUnidade.documento}&dddtelefone=${formInfosUnidade.ddd}&telefone=${formInfosUnidade.telefone}&email=${formInfosUnidade.email}')
+                                  '${Consts.sindicoApi}unidades/?fn=${incluindoEditando}idcond=${ResponsalvelInfos.idcondominio}&iddivisao=${formInfosUnidade.iddivisao}&ativo=${formInfosUnidade.ativo}&responsavel=${formInfosUnidade.responsavel}&login=${formInfosUnidade.login}&numero=${formInfosUnidade.numero}&datanasc=${formInfosUnidade.nascimento}&documento=${formInfosUnidade.documento}&dddtelefone=${formInfosUnidade.ddd}&telefone=${formInfosUnidade.telefone}&email=${formInfosUnidade.email}&acessa_sistema=${isChecked ? 1 : 0}')
                               .then((value) {
                             if (!value['erro']) {
-                              setState(() {
-                                apiListarDivisoes();
-                              });
                               ConstsFuture.navigatorPopPush(
                                   context, '/listaUnidade');
                               buildMinhaSnackBar(context,
                                   title: 'Muito Bem',
                                   subTitle: value['mensagem']);
+                              setState(() {
+                                apiListarDivisoes();
+                              });
                             } else {
                               buildMinhaSnackBar(context,
                                   title: 'Uma pena',
@@ -407,7 +441,7 @@ class _CadastroUnidadesState extends State<CadastroUnidades> {
                 ],
               ),
             ),
-          )),
-    );
+          ),
+        ));
   }
 }

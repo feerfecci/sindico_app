@@ -10,6 +10,7 @@ import 'package:sindico_app/widgets/my_box_shadow.dart';
 import 'package:sindico_app/widgets/scaffold_all.dart';
 import 'package:http/http.dart' as http;
 import '../../consts/const_widget.dart';
+import '../../widgets/page_erro.dart';
 
 class ListaMorador extends StatefulWidget {
   final int? idunidade;
@@ -44,194 +45,187 @@ class _ListaMoradorState extends State<ListaMorador> {
           apiListarMoradores(widget.idunidade);
         });
       },
-      child: buildScaffoldAll(context,
-          body: buildHeaderPage(context,
-              titulo: 'Moradores',
-              subTitulo: 'Adicione ou edite moradores',
-              widget: ListView(
-                shrinkWrap: true,
-                physics: ClampingScrollPhysics(),
-                children: [
-                  ConstsWidget.buildCustomButton(context, 'Adicionar Morador',
-                      onPressed: () {
-                    ConstsFuture.navigatorPagePush(
-                        context,
-                        CadastroMorador(
-                          numero: widget.numero,
-                          iddivisao: widget.idvisisao,
-                          idunidade: widget.idunidade,
-                        ));
-                  }),
-                  FutureBuilder<dynamic>(
-                    future: apiListarMoradores(widget.idunidade),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return CircularProgressIndicator();
-                      }
-                      if (snapshot.hasError) {
-                        return Container(
-                          color: Colors.red,
-                        );
-                      } else if ((snapshot.hasData == false ||
-                          snapshot.data['mensagem'] ==
-                              "Não foi possível exibir a lista de moradores!")) {
-                        return Column(
-                          children: [
-                            SizedBox(
-                              child: ConstsWidget.buildTextTitle(
-                                  'Nenhum morador cadastrado!'),
-                            ),
-                            SizedBox(
-                              child: ConstsWidget.buildTextSubTitle(
-                                  'Adicione um morador para essa Unidade'),
-                            ),
-                          ],
-                        );
-                      } else {
-                        return ListView.builder(
-                          shrinkWrap: true,
-                          physics: ClampingScrollPhysics(),
-                          itemCount: snapshot.data['morador'].length,
-                          itemBuilder: (context, index) {
-                            var apiMorador = snapshot.data['morador'][index];
-                            var idmorador = apiMorador['idmorador'];
-                            var idunidade = apiMorador['idunidade'];
-                            var iddivisao = apiMorador['iddivisao'];
-                            var ativo = apiMorador['ativo'];
-                            var nome_condominio = apiMorador['nome_condominio'];
-                            var nome_divisao = apiMorador['nome_divisao'];
-                            var dividido_por = apiMorador['dividido_por'];
-                            var numero = apiMorador['numero'];
-                            var nome_morador = apiMorador['nome_morador'];
-                            var login = apiMorador['login'];
-                            var documento = apiMorador['documento'];
-                            var data_nascimento = apiMorador['data_nascimento'];
-                            // var data_nascimento = DateFormat('dd/MM/yyy').format(
-                            //     DateTime.parse(apiMorador['data_nascimento']));
-                            var ddd = apiMorador['ddd'];
-                            var telefone = apiMorador['telefone'];
-                            var acessa_sistema = apiMorador['acessa_sistema'];
+      child: buildScaffoldAll(
+        context,
+        title: 'Moradores',
+        body: Column(
+          children: [
+            ConstsWidget.buildCustomButton(context, 'Adicionar Morador',
+                onPressed: () {
+              ConstsFuture.navigatorPagePush(
+                  context,
+                  CadastroMorador(
+                    numero: widget.numero,
+                    iddivisao: widget.idvisisao,
+                    idunidade: widget.idunidade,
+                  ));
+            }),
+            FutureBuilder<dynamic>(
+              future: apiListarMoradores(widget.idunidade),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return CircularProgressIndicator();
+                } if(snapshot.hasData){
+                  
+                  if(snapshot.data['erro']){
+    return ListView.builder(
+                    shrinkWrap: true,
+                    physics: ClampingScrollPhysics(),
+                    itemCount: snapshot.data['morador'].length,
+                    itemBuilder: (context, index) {
+                      var apiMorador = snapshot.data['morador'][index];
+                      var idmorador = apiMorador['idmorador'];
+                      var idunidade = apiMorador['idunidade'];
+                      var iddivisao = apiMorador['iddivisao'];
+                      var ativo = apiMorador['ativo'];
+                      var nome_condominio = apiMorador['nome_condominio'];
+                      var nome_divisao = apiMorador['nome_divisao'];
+                      var dividido_por = apiMorador['dividido_por'];
+                      var numero = apiMorador['numero'];
+                      var nome_morador = apiMorador['nome_morador'];
+                      var login = apiMorador['login'];
+                      var documento = apiMorador['documento'];
+                      var data_nascimento = apiMorador['data_nascimento'];
+                      // var data_nascimento = DateFormat('dd/MM/yyy').format(
+                      //     DateTime.parse(apiMorador['data_nascimento']));
+                      var ddd = apiMorador['ddd'];
+                      var telefone = apiMorador['telefone'];
+                      var acessa_sistema = apiMorador['acessa_sistema'];
 
-                            int acesso = acessa_sistema == true ? 1 : 0;
-                            return MyBoxShadow(
-                                child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                      int acesso = acessa_sistema == true ? 1 : 0;
+                      return MyBoxShadow(
+                          child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ConstsWidget.buildTextTitle(context, nome_condominio),
+                          SizedBox(
+                            height: size.height * 0.01,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              ConstsWidget.buildTextTitle(
+                                  context, nome_morador),
+                              Container(
+                                child: ConstsWidget.buildAtivoInativo(
+                                    context, ativo),
+                              ),
+                            ],
+                          ),
+                          ConstsWidget.buildTextSubTitle('Localizado em :'),
+                          Row(
+                            children: [
+                              ConstsWidget.buildTextTitle(
+                                  context, '$numero - '),
+                              ConstsWidget.buildTextTitle(
+                                  context, '$dividido_por '),
+                              ConstsWidget.buildTextTitle(
+                                  context, nome_divisao),
+                            ],
+                          ),
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                                vertical: size.height * 0.015),
+                            child: Row(
                               children: [
-                                ConstsWidget.buildTextTitle(nome_condominio),
-                                SizedBox(
-                                  height: size.height * 0.01,
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    ConstsWidget.buildTextTitle(nome_morador),
-                                    Container(
-                                      child:
-                                          ConstsWidget.buildAtivoInativo(ativo),
-                                    ),
-                                  ],
-                                ),
-                                ConstsWidget.buildTextSubTitle(
-                                    'Localizado em :'),
-                                Row(
-                                  children: [
-                                    ConstsWidget.buildTextTitle('$numero - '),
+                                    ConstsWidget.buildTextSubTitle(
+                                        'Data Nascimento :'),
                                     ConstsWidget.buildTextTitle(
-                                        '$dividido_por '),
-                                    ConstsWidget.buildTextTitle(nome_divisao),
+                                        context,
+                                        DateFormat('dd/MM/yyy').format(
+                                            DateTime.parse(data_nascimento))),
                                   ],
                                 ),
-                                Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: size.height * 0.015),
-                                  child: Row(
-                                    children: [
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          ConstsWidget.buildTextSubTitle(
-                                              'Data Nascimento :'),
-                                          ConstsWidget.buildTextTitle(
-                                              DateFormat('dd/MM/yyy').format(
-                                                  DateTime.parse(
-                                                      data_nascimento))),
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        width: size.width * 0.1,
-                                      ),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          ConstsWidget.buildTextSubTitle(
-                                              'Documento :'),
-                                          ConstsWidget.buildTextTitle(
-                                              documento),
-                                        ],
-                                      )
-                                    ],
-                                  ),
+                                SizedBox(
+                                  width: size.width * 0.1,
                                 ),
-                                ConstsWidget.buildTextSubTitle('Contato :'),
-                                Row(
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    ConstsWidget.buildTextTitle('($ddd) '),
-                                    ConstsWidget.buildTextTitle(telefone),
+                                    ConstsWidget.buildTextSubTitle(
+                                        'Documento :'),
+                                    ConstsWidget.buildTextTitle(
+                                        context, documento),
                                   ],
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Column(
-                                      children: [
-                                        ConstsWidget.buildTextSubTitle(
-                                            'Login :'),
-                                        ConstsWidget.buildTextTitle(login),
-                                      ],
-                                    ),
-                                    SizedBox(
-                                      width: size.width * 0.6,
-                                      child: CheckboxListTile(
-                                        title: Text('Acesso ao sistema'),
-                                        value: acessa_sistema,
-                                        onChanged: (value) {},
-                                      ),
-                                    )
-                                  ],
-                                ),
-                                ConstsWidget.buildCustomButton(
-                                    context, 'Editar Morador', onPressed: () {
-                                  ConstsFuture.navigatorPagePush(
-                                    context,
-                                    CadastroMorador(
-                                      idmorador: idmorador,
-                                      iddivisao: iddivisao,
-                                      idunidade: idunidade,
-                                      numero: numero,
-                                      nome_morador: nome_morador,
-                                      login: login,
-                                      documento: documento,
-                                      nascimento: data_nascimento,
-                                      telefone: telefone,
-                                      ddd: ddd,
-                                      acesso: acesso,
-                                      ativo: ativo,
-                                    ),
-                                  );
-                                })
+                                )
                               ],
-                            ));
-                          },
-                        );
-                      }
+                            ),
+                          ),
+                          ConstsWidget.buildTextSubTitle('Contato :'),
+                          Row(
+                            children: [
+                              ConstsWidget.buildTextTitle(context, '($ddd) '),
+                              ConstsWidget.buildTextTitle(context, telefone),
+                            ],
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                children: [
+                                  ConstsWidget.buildTextSubTitle('Login :'),
+                                  ConstsWidget.buildTextTitle(context, login),
+                                ],
+                              ),
+                              SizedBox(
+                                width: size.width * 0.6,
+                                child: CheckboxListTile(
+                                  title: Text('Acesso ao sistema'),
+                                  value: acessa_sistema,
+                                  onChanged: (value) {},
+                                ),
+                              )
+                            ],
+                          ),
+                          ConstsWidget.buildCustomButton(
+                              context, 'Editar Morador', onPressed: () {
+                            ConstsFuture.navigatorPagePush(
+                              context,
+                              CadastroMorador(
+                                idmorador: idmorador,
+                                iddivisao: iddivisao,
+                                idunidade: idunidade,
+                                numero: numero,
+                                nome_morador: nome_morador,
+                                login: login,
+                                documento: documento,
+                                nascimento: data_nascimento,
+                                telefone: telefone,
+                                ddd: ddd,
+                                acesso: acesso,
+                                ativo: ativo,
+                              ),
+                            );
+                          })
+                        ],
+                      ));
                     },
-                  )
-                ],
-              ))),
+                  );
+              
+                  }else {
+                    return Column(
+                    children: [
+                      SizedBox(
+                        child: ConstsWidget.buildTextTitle(
+                            context, 'Nenhum morador cadastrado!'),
+                      ),
+                      SizedBox(
+                        child: ConstsWidget.buildTextSubTitle(
+                            'Adicione um morador para essa Unidade'),
+                      ),
+                    ],
+                  );
+                  }
+                }else { return PageErro();
+                }
+              },
+            )
+          ],
+        ),
+      ),
     );
   }
 }

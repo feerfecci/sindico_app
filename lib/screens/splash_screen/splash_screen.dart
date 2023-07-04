@@ -16,34 +16,23 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  startLogin() {
-    LocalInfos.readCache().then((value) {
+  startLogin() async {
+    await LocalInfos.readCache().then((value) async {
       Map<String, dynamic> infos = value;
-      if (infos.values.first == null || infos.values.last == null) {
+      if (infos.values.first != null && infos.values.last != null) {
+        final auth = await LocalAuthApi.authenticate();
+        final hasBiometrics = await LocalAuthApi.hasBiometrics();
+        if (auth && hasBiometrics) {
+          return ConstsFuture.fazerLogin(
+              context, infos.values.first, infos.values.last);
+        }
+      } else {
         Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
               builder: (context) => LoginScreen(),
             ),
             (route) => false);
-      } else if (infos.values.first != null && infos.values.last != null) {
-        Future authentic() async {
-          final auth = await LocalAuthApi.authenticate();
-          final hasBiometrics = await LocalAuthApi.hasBiometrics();
-          if (hasBiometrics) {
-            if (auth) {
-              return ConstsFuture.fazerLogin(
-                  context, infos.values.first, infos.values.last);
-            } else {
-              return false;
-            }
-          } else {
-            return ConstsFuture.fazerLogin(
-                context, infos.values.first, infos.values.last);
-          }
-        }
-
-        return authentic();
       }
     });
   }
@@ -51,9 +40,10 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Timer(Duration(seconds: 3), () {
-      startLogin();
-    });
+    // Timer(Duration(seconds: 3), () {
+    //   startLogin();
+    // });
+    startLogin();
   }
 
   @override
@@ -68,7 +58,9 @@ class _SplashScreenState extends State<SplashScreen> {
           SizedBox(
             height: size.height * 0.2,
             width: size.width * 0.6,
-            child: Image.asset('assets/portaria.png'),
+            child: Image.network(
+              'https://a.portariaapp.com/img/logo_verde.png',
+            ),
           ),
           Spacer(),
           Padding(

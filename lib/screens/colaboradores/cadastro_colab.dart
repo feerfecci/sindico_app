@@ -13,7 +13,7 @@ import '../../forms/funcionario_form.dart';
 import '../../widgets/my_box_shadow.dart';
 import '../../widgets/my_text_form_field.dart';
 
-class CadastroFuncionario extends StatefulWidget {
+class CadastroColaborador extends StatefulWidget {
   final int? idfuncionario;
   final Object? idfuncao;
   final String nomeFuncionario;
@@ -24,7 +24,7 @@ class CadastroFuncionario extends StatefulWidget {
   final bool avisa_delivery;
   final bool avisa_encomendas;
 
-  const CadastroFuncionario({
+  const CadastroColaborador({
     this.idfuncao,
     this.idfuncionario,
     this.nomeFuncionario = '',
@@ -38,10 +38,10 @@ class CadastroFuncionario extends StatefulWidget {
   });
 
   @override
-  State<CadastroFuncionario> createState() => _CadastroFuncionarioState();
+  State<CadastroColaborador> createState() => _CadastroColaboradorState();
 }
 
-class _CadastroFuncionarioState extends State<CadastroFuncionario> {
+class _CadastroColaboradorState extends State<CadastroColaborador> {
   final _formkeyFuncionario = GlobalKey<FormState>();
   FormInfosFunc formInfosFunc = FormInfosFunc();
   @override
@@ -54,25 +54,25 @@ class _CadastroFuncionarioState extends State<CadastroFuncionario> {
   salvarFuncaoForm() {
     formInfosFunc = formInfosFunc.copyWith(idfuncao: widget.idfuncao);
     formInfosFunc = formInfosFunc.copyWith(
-        avisa_corresp: widget.avisa_corresp == false
+        avisa_corresp: widget.avisa_corresp == true
             ? widget.avisa_corresp == true
                 ? 1
                 : 0
             : 0);
     formInfosFunc = formInfosFunc.copyWith(
-        avisa_delivery: widget.avisa_delivery == false
+        avisa_delivery: widget.avisa_delivery == true
             ? widget.avisa_delivery == true
                 ? 1
                 : 0
             : 0);
     formInfosFunc = formInfosFunc.copyWith(
-        avisa_visita: widget.avisa_visita == false
+        avisa_visita: widget.avisa_visita == true
             ? widget.avisa_visita == true
                 ? 1
                 : 0
             : 0);
     formInfosFunc = formInfosFunc.copyWith(
-        avisa_encomendas: widget.avisa_encomendas == false
+        avisa_encomendas: widget.avisa_encomendas == true
             ? widget.avisa_encomendas == true
                 ? 1
                 : 0
@@ -142,8 +142,54 @@ class _CadastroFuncionarioState extends State<CadastroFuncionario> {
 
     Widget buildTilePermissao(BuildContext context, String title,
         {required int nomeCampo, bool isChecked = false}) {
-      return ListTile(
-        title: ConstsWidget.buildTextTitle(title),
+      return StatefulBuilder(builder: (context, setState) {
+        return ConstsWidget.buildCheckBox(context,
+            isChecked: isChecked,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            onChanged: (bool? value) {
+          setState(() {
+            isChecked = value!;
+            int isCheckedApi = isChecked ? 1 : 0;
+            switch (nomeCampo) {
+              case 0:
+                formInfosFunc =
+                    formInfosFunc.copyWith(avisa_corresp: isCheckedApi);
+                break;
+              case 1:
+                formInfosFunc =
+                    formInfosFunc.copyWith(avisa_visita: isCheckedApi);
+                break;
+              case 2:
+                formInfosFunc =
+                    formInfosFunc.copyWith(avisa_delivery: isCheckedApi);
+
+                break;
+              case 3:
+                formInfosFunc =
+                    formInfosFunc.copyWith(avisa_encomendas: isCheckedApi);
+
+                break;
+              default:
+            }
+            // if (nomeCampo == 0) {
+            //   formInfosFunc = formInfosFunc.copyWith(
+            //       avisa_corresp: isCheckedApi);
+            // } else if (nomeCampo == 1) {
+            //   formInfosFunc = formInfosFunc.copyWith(
+            //       avisa_visita: isCheckedApi);
+            // } else if (nomeCampo == 2) {
+            //   formInfosFunc = formInfosFunc.copyWith(
+            //       avisa_delivery: isCheckedApi);
+            // } else if (nomeCampo == 3) {
+            //   formInfosFunc = formInfosFunc.copyWith(
+            //       avisa_encomendas: isCheckedApi);
+            // }
+          });
+        }, title: title);
+      });
+
+      ListTile(
+        title: ConstsWidget.buildTextTitle(context, title),
         trailing: StatefulBuilder(builder: (context, setState) {
           return SizedBox(
               width: size.width * 0.125,
@@ -200,20 +246,17 @@ class _CadastroFuncionarioState extends State<CadastroFuncionario> {
       );
     }
 
-    return Form(
-      key: _formkeyFuncionario,
-      child: buildScaffoldAll(
-        context,
-        body: buildHeaderPage(
-          context,
-          titulo: widget.idfuncionario != null
-              ? 'Editar Cadastro'
-              : 'Novo Funcionário',
-          subTitulo: widget.idfuncionario != null
-              ? 'Edite o cadastro'
-              : 'Adicione colaboradores',
-          widget: MyBoxShadow(
+    return buildScaffoldAll(
+      context,
+      title:
+          widget.idfuncionario != null ? 'Editar Cadastro' : 'Novo Funcionário',
+      body: Form(
+        key: _formkeyFuncionario,
+        child: MyBoxShadow(
+          child: Padding(
+            padding: EdgeInsets.symmetric(vertical: size.height * 0.015),
             child: Column(
+              mainAxisSize: MainAxisSize.min,
               // crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 buildMyTextFormObrigatorio(
@@ -230,7 +273,10 @@ class _CadastroFuncionarioState extends State<CadastroFuncionario> {
                   onSaved: (text) =>
                       formInfosFunc = formInfosFunc.copyWith(login: text),
                 ),
-                buildDropdownButtonFuncoes(),
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: size.height * 0.01),
+                  child: buildDropdownButtonFuncoes(),
+                ),
                 widget.idfuncionario != null
                     ? SizedBox()
                     : buildMyTextFormObrigatorio(
@@ -239,17 +285,25 @@ class _CadastroFuncionarioState extends State<CadastroFuncionario> {
                         onSaved: (text) =>
                             formInfosFunc = formInfosFunc.copyWith(senha: text),
                       ),
-                buildTilePermissao(context, 'Avisos de Correspondências',
-                    nomeCampo: 0, isChecked: widget.avisa_corresp),
-                buildTilePermissao(context, 'Avisos de Visitas',
-                    nomeCampo: 1, isChecked: widget.avisa_visita),
-                buildTilePermissao(context, 'Avisos de Delivery',
-                    nomeCampo: 2, isChecked: widget.avisa_delivery),
-                buildTilePermissao(context, 'Avisos de Encomendas',
-                    nomeCampo: 3, isChecked: widget.avisa_encomendas),
+                Padding(
+                  padding: EdgeInsets.symmetric(vertical: size.height * 0.01),
+                  child: Column(
+                    children: [
+                      buildTilePermissao(context, 'Avisos de Cartas',
+                          nomeCampo: 0, isChecked: widget.avisa_corresp),
+                      buildTilePermissao(context, 'Avisos de Visitas',
+                          nomeCampo: 1, isChecked: widget.avisa_visita),
+                      buildTilePermissao(context, 'Avisos de Delivery',
+                          nomeCampo: 2, isChecked: widget.avisa_delivery),
+                      buildTilePermissao(context, 'Avisos de Caixas',
+                          nomeCampo: 3, isChecked: widget.avisa_encomendas),
+                    ],
+                  ),
+                ),
                 ConstsWidget.buildCustomButton(
                   context,
                   'Salvar',
+                  color: Consts.kColorRed,
                   onPressed: () {
                     if (_formkeyFuncionario.currentState!.validate() &&
                         formInfosFunc.idfuncao != null) {
@@ -263,14 +317,16 @@ class _CadastroFuncionarioState extends State<CadastroFuncionario> {
                               '${Consts.sindicoApi}funcionarios/?fn=$apiEditarIncluir&idcond=${ResponsalvelInfos.idcondominio}&nomeFuncionario=${formInfosFunc.nome_funcionario}&idfuncao=${formInfosFunc.idfuncao}&login=${formInfosFunc.login}&avisa_corresp=${formInfosFunc.avisa_corresp}&avisa_visita=${formInfosFunc.avisa_visita}&avisa_delivery=${formInfosFunc.avisa_delivery}&avisa_encomendas=${formInfosFunc.avisa_encomendas}')
                           .then((value) {
                         if (!value['erro']) {
-                          setState(() {
-                            ConstsFuture.navigatorPopPush(
-                                context, '/listaFuncionario');
-                          });
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                          setState(() {});
 
-                          buildMinhaSnackBar(context,
+                          return buildMinhaSnackBar(context,
                               title: 'Parabéns', subTitle: value['mensagem']);
                         }
+                        return buildMinhaSnackBar(context,
+                            title: 'Algo deu errado!',
+                            subTitle: value['mensagem']);
                       });
                     } else {
                       buildMinhaSnackBar(context,
