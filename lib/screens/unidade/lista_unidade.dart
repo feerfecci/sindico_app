@@ -50,8 +50,8 @@ class _ListaUnidadeStates extends State<ListaUnidades> {
         required String subTitle1,
         required String title2,
         required String subTitle2}) {
-      return Padding(
-        padding: EdgeInsets.symmetric(vertical: size.height * 0.01),
+      return ConstsWidget.buildPadding001(
+        context,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -78,7 +78,8 @@ class _ListaUnidadeStates extends State<ListaUnidades> {
       );
     }
 
-    return RefreshIndicator(
+    return ConstsWidget.buildRefreshIndicator(
+      context,
       onRefresh: () async {
         setState(() {
           listarUnidades();
@@ -96,8 +97,8 @@ class _ListaUnidadeStates extends State<ListaUnidades> {
               //         builder: (context) => TesteUnidade(),
               //       ));
               // }),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: size.height * 0.01),
+              ConstsWidget.buildPadding001(
+                context,
                 child: ConstsWidget.buildCustomButton(
                     context, 'Adicionar Unidade',
                     color: Consts.kColorRed,
@@ -135,14 +136,14 @@ class _ListaUnidadeStates extends State<ListaUnidades> {
                           var login = itensUnidade['login'];
 
                           bool ativoUnidade = itensUnidade['ativo'];
-                          return Padding(
-                            padding: EdgeInsets.symmetric(
-                                vertical: size.height * 0.005),
+                          return ConstsWidget.buildPadding001(
+                            context,
+                            vertical: 0.005,
                             child: MyBoxShadow(
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: size.height * 0.005,
-                                    horizontal: size.width * 0.02),
+                              child: ConstsWidget.buildPadding001(
+                                context,
+                                vertical: 0.005,
+                                horizontal: 0.02,
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -177,9 +178,8 @@ class _ListaUnidadeStates extends State<ListaUnidades> {
                                         subTitle1: data_nascimento,
                                         title2: 'Documento:',
                                         subTitle2: documento),
-                                    Padding(
-                                      padding: EdgeInsets.symmetric(
-                                          vertical: size.height * 0.01),
+                                    ConstsWidget.buildPadding001(
+                                      context,
                                       child: Column(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,

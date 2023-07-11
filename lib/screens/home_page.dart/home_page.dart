@@ -120,47 +120,54 @@ class _HomePageState extends State<HomePage> {
           return true;
         }
       },
-      child: Scaffold(
-        endDrawer: CustomDrawer(),
-        appBar: AppBar(
-          centerTitle: true,
-          title: ConstsWidget.buildTextTitle(
-              context, ResponsalvelInfos.nome_responsavel,
-              textAlign: TextAlign.center, size: 20),
-          iconTheme:
-              IconThemeData(color: Theme.of(context).colorScheme.primary),
-          backgroundColor: Colors.transparent,
-          leading: Padding(
-            padding: EdgeInsets.only(left: size.width * 0.025),
-            child: FutureBuilder(
-              future: ConstsFuture.apiImage(
-                'https://a.portariaapp.com/img/logo_verde.png',
-              ),
-              builder: (context, snapshot) {
-                return SizedBox(child: snapshot.data);
-              },
-            ),
-          ),
-          elevation: 0,
-          leadingWidth: size.height * 0.06,
-        ),
-        body: Padding(
-          padding: EdgeInsets.symmetric(horizontal: size.width * 0.02),
-          child: RefreshIndicator(
-            onRefresh: () async {
-              setState(() {
-                ConstsFuture.apiImage(
+      child: ConstsWidget.buildRefreshIndicator(
+        context,
+        onRefresh: () async {
+          setState(() {
+            ConstsFuture.apiImage(
+              'https://a.portariaapp.com/img/logo_verde.png',
+            );
+          });
+        },
+        child: Scaffold(
+          endDrawer: CustomDrawer(),
+          appBar: AppBar(
+            centerTitle: true,
+            title: ConstsWidget.buildTextTitle(
+                context, ResponsalvelInfos.nome_responsavel,
+                textAlign: TextAlign.center, size: 20),
+            iconTheme:
+                IconThemeData(color: Theme.of(context).colorScheme.primary),
+            backgroundColor: Colors.transparent,
+            leading: Padding(
+              padding: EdgeInsets.only(left: size.width * 0.025),
+              child: FutureBuilder(
+                future: ConstsFuture.apiImage(
                   'https://a.portariaapp.com/img/logo_verde.png',
-                );
-              });
-            },
+                ),
+                builder: (context, snapshot) {
+                  return SizedBox(child: snapshot.data);
+                },
+              ),
+            ),
+            elevation: 0,
+            leadingWidth: size.height * 0.06,
+          ),
+          body: Padding(
+            padding: EdgeInsets.symmetric(horizontal: size.width * 0.02),
             child: ListView(
               children: [
-                DropCond(),
+                ResponsalvelInfos.qntCond == 1
+                    ? ConstsWidget.buildPadding001(
+                        context,
+                        child: ConstsWidget.buildTextTitle(
+                            context, ResponsalvelInfos.nome_condominio,
+                            textAlign: TextAlign.center, size: 22),
+                      )
+                    : DropCond(),
                 StatefulBuilder(
                   builder: (context, setState) {
                     return ReorderableListView(
-                      buildDefaultDragHandles: false,
                       shrinkWrap: true,
                       physics: ClampingScrollPhysics(),
                       children: models.map((card) {

@@ -60,7 +60,8 @@ class _ListaReservasState extends State<ListaReservas> {
 
     var apiListar = ConstsFuture.resquestApi(
         '${Consts.sindicoApi}reserva_espacos/?fn=listarReservas&idcond=${ResponsalvelInfos.idcondominio}&ativo=$statusReserva');
-    return RefreshIndicator(
+    return ConstsWidget.buildRefreshIndicator(
+      context,
       onRefresh: () async {
         setState(() {
           apiListar;
@@ -70,8 +71,9 @@ class _ListaReservasState extends State<ListaReservas> {
           title: 'Reservas',
           body: Column(
             children: [
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: size.height * 0.015),
+              ConstsWidget.buildPadding001(
+                context,
+                vertical: 0.015,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -223,14 +225,12 @@ class _ListaReservasState extends State<ListaReservas> {
                             );
                           }
 
-                          return Padding(
-                            padding: EdgeInsets.symmetric(
-                                vertical: size.height * 0.005),
+                          return ConstsWidget.buildPadding001(
+                            context,
+                            vertical: 0.005,
                             child: MyBoxShadow(
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: size.width * 0.02,
-                                    vertical: size.height * 0.01),
+                              child: ConstsWidget.buildPadding001(
+                                context,
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -250,10 +250,10 @@ class _ListaReservasState extends State<ListaReservas> {
                                                       : amarelo,
                                               borderRadius:
                                                   BorderRadius.circular(16)),
-                                          child: Padding(
-                                            padding: EdgeInsets.symmetric(
-                                                vertical: size.height * 0.012,
-                                                horizontal: size.width * 0.05),
+                                          child: ConstsWidget.buildPadding001(
+                                            context,
+                                            vertical: 0.012,
+                                            horizontal: 0.05,
                                             child: ConstsWidget.buildTextTitle(
                                               context,
                                               texto_status,
@@ -263,9 +263,9 @@ class _ListaReservasState extends State<ListaReservas> {
                                         ),
                                       ],
                                     ),
-                                    Padding(
-                                      padding: EdgeInsets.symmetric(
-                                          vertical: size.height * 0.02),
+                                    ConstsWidget.buildPadding001(
+                                      context,
+                                      vertical: 0.02,
                                       child: Container(
                                         alignment: Alignment.centerLeft,
                                         width: double.maxFinite,

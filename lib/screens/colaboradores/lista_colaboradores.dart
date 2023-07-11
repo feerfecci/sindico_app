@@ -1,6 +1,7 @@
 // ignore_for_file: non_constant_identifier_names
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:sindico_app/screens/colaboradores/cadastro_colab.dart';
 import 'package:sindico_app/widgets/header.dart';
 import 'package:sindico_app/widgets/my_box_shadow.dart';
@@ -38,9 +39,38 @@ class _ListaColaboradoresState extends State<ListaColaboradores> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
 
+    Widget buildRowInfos({
+      required String titulo1,
+      required String texto1,
+      required String titulo2,
+      required String texto2,
+    }) {
+      return ConstsWidget.buildPadding001(
+        context,
+        child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ConstsWidget.buildTextSubTitle(titulo1),
+              ConstsWidget.buildTextTitle(context, texto1),
+            ],
+          ),
+          Spacer(),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ConstsWidget.buildTextSubTitle(titulo2),
+              ConstsWidget.buildTextTitle(context, texto2),
+            ],
+          ),
+        ]),
+      );
+    }
+
     Widget buildTilePermissaoSalvo(String title, {bool isChecked = false}) {
-      return Padding(
-        padding: EdgeInsets.symmetric(vertical: size.height * 0.005),
+      return ConstsWidget.buildPadding001(
+        context,
+        vertical: 0.005,
         child: Container(
           height: size.height * 0.05,
           width: size.width * 0.43,
@@ -61,7 +91,8 @@ class _ListaColaboradoresState extends State<ListaColaboradores> {
       );
     }
 
-    return RefreshIndicator(
+    return ConstsWidget.buildRefreshIndicator(
+      context,
       onRefresh: () async {
         setState(
           () {
@@ -76,8 +107,8 @@ class _ListaColaboradoresState extends State<ListaColaboradores> {
             physics: ClampingScrollPhysics(),
             children: [
               // EditarFuncionario(),
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: size.height * 0.01),
+              ConstsWidget.buildPadding001(
+                context,
                 child: ConstsWidget.buildCustomButton(
                   context,
                   'Adicionar Colaborador',
@@ -114,14 +145,20 @@ class _ListaColaboradoresState extends State<ListaColaboradores> {
                             bool avisa_delivery = api['avisa_delivery'];
                             bool avisa_encomendas = api['avisa_encomendas'];
 
-                            return Padding(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: size.height * 0.005),
+                            String documento = '500929816';
+                            String ddd = '11';
+                            String telefone = '942169968';
+                            String email = 'exemplo@ex.com';
+                            String data_nascimento = DateFormat('dd/MM/yyyy')
+                                .format(DateTime.parse('1997-09-25'));
+
+                            return ConstsWidget.buildPadding001(
+                              context,
+                              vertical: 0.005,
                               child: MyBoxShadow(
-                                child: Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: size.width * 0.01,
-                                      vertical: size.height * 0.01),
+                                child: ConstsWidget.buildPadding001(
+                                  context,
+                                  horizontal: 0.01,
                                   child: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
@@ -129,67 +166,34 @@ class _ListaColaboradoresState extends State<ListaColaboradores> {
                                       Row(
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              ConstsWidget.buildTextSubTitle(
-                                                  'Nome'),
-                                              SizedBox(
-                                                  width: size.width * 0.7,
-                                                  child: ConstsWidget
-                                                      .buildTextTitle(context,
-                                                          '$nome_funcionario')),
-                                            ],
-                                          ),
                                           SizedBox(
-                                            width: size.width * 0.02,
-                                          ),
+                                              width: size.width * 0.7,
+                                              child:
+                                                  ConstsWidget.buildTextTitle(
+                                                      context,
+                                                      '$nome_funcionario')),
+                                          Spacer(),
                                           ConstsWidget.buildAtivoInativo(
                                               context, ativo),
                                         ],
                                       ),
-                                      Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              SizedBox(
-                                                height: 10,
-                                              ),
-                                              ConstsWidget.buildTextSubTitle(
-                                                  'Usuário'),
-                                              ConstsWidget.buildTextTitle(
-                                                  context,
-                                                  '$login_funcionario'),
-                                            ],
-                                          ),
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              SizedBox(
-                                                height: 10,
-                                              ),
-                                              ConstsWidget.buildTextSubTitle(
-                                                  'Cargo'),
-                                              ConstsWidget.buildTextTitle(
-                                                  context, '$funcao'),
-                                            ],
-                                          ),
-                                          SizedBox(
-                                            width: 30,
-                                          )
-                                        ],
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsets.symmetric(
-                                            vertical: size.height * 0.01),
+                                      buildRowInfos(
+                                          titulo1: 'Usuário',
+                                          texto1: '$login_funcionario',
+                                          titulo2: 'Cargo',
+                                          texto2: '$funcao'),
+                                      buildRowInfos(
+                                          titulo1: 'Telefone',
+                                          texto1: '($ddd) $telefone',
+                                          titulo2: 'Documento',
+                                          texto2: documento),
+                                      buildRowInfos(
+                                          titulo1: 'Email',
+                                          texto1: email,
+                                          titulo2: 'Nascimento',
+                                          texto2: data_nascimento),
+                                      ConstsWidget.buildPadding001(
+                                        context,
                                         child: Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceEvenly,
@@ -197,7 +201,7 @@ class _ListaColaboradoresState extends State<ListaColaboradores> {
                                             Column(
                                               children: [
                                                 buildTilePermissaoSalvo(
-                                                    'Correspondências',
+                                                    'Cartas',
                                                     isChecked: avisa_corresp),
                                                 buildTilePermissaoSalvo(
                                                     'Delivery',
@@ -210,7 +214,7 @@ class _ListaColaboradoresState extends State<ListaColaboradores> {
                                                     'Visitas',
                                                     isChecked: avisa_visita),
                                                 buildTilePermissaoSalvo(
-                                                    'Encomendas',
+                                                    'Caixas',
                                                     isChecked:
                                                         avisa_encomendas),
                                               ],
@@ -225,18 +229,24 @@ class _ListaColaboradoresState extends State<ListaColaboradores> {
                                           ConstsFuture.navigatorPagePush(
                                               context,
                                               CadastroColaborador(
-                                                idfuncionario: idfuncionario,
-                                                nomeFuncionario:
-                                                    nome_funcionario,
-                                                idfuncao: idfuncao,
-                                                funcao: funcao,
-                                                login: login_funcionario,
-                                                avisa_corresp: avisa_corresp,
-                                                avisa_visita: avisa_visita,
-                                                avisa_delivery: avisa_delivery,
-                                                avisa_encomendas:
-                                                    avisa_encomendas,
-                                              ));
+                                                  idfuncionario: idfuncionario,
+                                                  nomeFuncionario:
+                                                      nome_funcionario,
+                                                  idfuncao: idfuncao,
+                                                  funcao: funcao,
+                                                  nascimento: data_nascimento,
+                                                  documento: documento,
+                                                  ddd: ddd,
+                                                  telefone: telefone,
+                                                  email: email,
+                                                  login: login_funcionario,
+                                                  avisa_corresp: avisa_corresp,
+                                                  avisa_visita: avisa_visita,
+                                                  avisa_delivery:
+                                                      avisa_delivery,
+                                                  avisa_encomendas:
+                                                      avisa_encomendas,
+                                                  ativo: ativo ? 1 : 0));
                                         },
                                       )
                                     ],

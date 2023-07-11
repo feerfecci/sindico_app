@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../consts/const_widget.dart';
 import '../../widgets/my_box_shadow.dart';
 import '../../widgets/shimmer_widget.dart';
 
@@ -31,8 +32,8 @@ class _LoadingReservasState extends State<LoadingReservas> {
             ),
           ],
         ),
-        Padding(
-          padding: EdgeInsets.symmetric(vertical: size.height * 0.01),
+        ConstsWidget.buildPadding001(
+          context,
           child: ShimmerWidget(
             height: size.height * 0.06,
             width: size.width * 0.5,
@@ -51,8 +52,8 @@ class _LoadingReservasState extends State<LoadingReservas> {
             ),
           ],
         ),
-        Padding(
-          padding: EdgeInsets.symmetric(vertical: size.height * 0.01),
+        ConstsWidget.buildPadding001(
+          context,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

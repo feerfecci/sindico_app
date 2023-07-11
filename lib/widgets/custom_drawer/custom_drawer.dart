@@ -22,8 +22,8 @@ class _CustomDrawerState extends State<CustomDrawer> {
       required String title,
       required IconData leading,
     }) {
-      return Padding(
-        padding: EdgeInsets.symmetric(vertical: size.height * 0.01),
+      return ConstsWidget.buildPadding001(
+        context,
         child: ListTile(
           iconColor: Theme.of(context).iconTheme.color,
           leading: Icon(

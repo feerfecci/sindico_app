@@ -28,7 +28,8 @@ class _QuadroDeAvisosState extends State<QuadroDeAvisos> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    return RefreshIndicator(
+    return ConstsWidget.buildRefreshIndicator(
+      context,
       onRefresh: () async {
         setState(() {
           ConstsFuture.resquestApi(
@@ -42,8 +43,8 @@ class _QuadroDeAvisosState extends State<QuadroDeAvisos> {
           shrinkWrap: true,
           physics: ClampingScrollPhysics(),
           children: [
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: size.height * 0.01),
+            ConstsWidget.buildPadding001(
+              context,
               child: ConstsWidget.buildCustomButton(
                 context,
                 'Adicionar Aviso',
@@ -89,22 +90,20 @@ class _QuadroDeAvisosState extends State<QuadroDeAvisos> {
                             .format(DateTime.parse(apiAvisos['datahora']));
                         var arquivo = apiAvisos['arquivo'];
 
-                        return Padding(
-                          padding: EdgeInsets.symmetric(
-                              vertical: size.height * 0.005),
+                        return ConstsWidget.buildPadding001(
+                          context,
+                          vertical: 0.005,
                           child: MyBoxShadow(
-                              child: Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: size.width * 0.02,
-                                vertical: size.height * 0.01),
+                              child: ConstsWidget.buildPadding001(
+                            context,
+                            horizontal: 0.02,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 ConstsWidget.buildTextTitle(context, titulo,
                                     size: 18),
-                                Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: size.height * 0.01),
+                                ConstsWidget.buildPadding001(
+                                  context,
                                   child: ConstsWidget.buildTextSubTitle(texto,
                                       textAlign: TextAlign.center),
                                 ),

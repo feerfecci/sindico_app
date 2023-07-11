@@ -23,7 +23,8 @@ class _ListaEspacosState extends State<ListaEspacos> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    return RefreshIndicator(
+    return ConstsWidget.buildRefreshIndicator(
+      context,
       onRefresh: () async {
         setState(
           () {
@@ -38,8 +39,9 @@ class _ListaEspacosState extends State<ListaEspacos> {
         body: StatefulBuilder(builder: (context, setState) {
           return Column(
             children: [
-              Padding(
-                padding: EdgeInsets.symmetric(vertical: size.height * 0.02),
+              ConstsWidget.buildPadding001(
+                context,
+                vertical: 0.02,
                 child: ConstsWidget.buildCustomButton(
                   context,
                   'Adicionar Espaço',
@@ -69,13 +71,12 @@ class _ListaEspacosState extends State<ListaEspacos> {
                             var nome_espaco = apiEspacos['nome_espaco'];
                             var idcondominio = apiEspacos['idcondominio'];
                             var descricao = apiEspacos['descricao'];
-                            return Padding(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: size.height * 0.005),
+                            return ConstsWidget.buildPadding001(
+                              context,
+                              vertical: 0.005,
                               child: MyBoxShadow(
-                                  child: Padding(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: size.height * 0.01),
+                                  child: ConstsWidget.buildPadding001(
+                                context,
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -90,9 +91,9 @@ class _ListaEspacosState extends State<ListaEspacos> {
                                             context, ativo),
                                       ],
                                     ),
-                                    Padding(
-                                      padding: EdgeInsets.symmetric(
-                                          vertical: size.height * 0.015),
+                                    ConstsWidget.buildPadding001(
+                                      context,
+                                      vertical: 0.015,
                                       child: ConstsWidget.buildTextSubTitle(
                                           descricao),
                                     ),

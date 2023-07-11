@@ -120,8 +120,8 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
           ),
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: size.height * 0.01),
+          ConstsWidget.buildPadding001(
+            context,
             child: StatefulBuilder(builder: (context, setState) {
               return ConstsWidget.buildCheckBox(context,
                   title: 'Mantenha-me conectado',

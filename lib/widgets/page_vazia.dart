@@ -15,8 +15,9 @@ class _PageVaziaState extends State<PageVazia> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: size.height * 0.02),
+    return ConstsWidget.buildPadding001(
+      context,
+      vertical: 0.02,
       child: Column(
         children: [
           Center(

@@ -2,6 +2,18 @@ import 'package:flutter/material.dart';
 import 'consts.dart';
 
 class ConstsWidget {
+  static Widget buildPadding001(BuildContext context,
+      {double horizontal = 0, double vertical = 0.01, required Widget? child}) {
+    var size = MediaQuery.of(context).size;
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        vertical: size.height * vertical,
+        horizontal: size.width * horizontal,
+      ),
+      child: child,
+    );
+  }
+
   static Widget buildTextTitle(BuildContext context, String title,
       {textAlign, Color? color, double size = 16}) {
     return Text(
@@ -50,9 +62,10 @@ class ConstsWidget {
       style: ElevatedButton.styleFrom(
           backgroundColor: color, shape: StadiumBorder()),
       onPressed: onPressed,
-      child: Padding(
-        padding: EdgeInsets.symmetric(
-            vertical: size.height * altura, horizontal: size.width * largura),
+      child: buildPadding001(
+        context,
+        vertical: altura,
+        horizontal: largura,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.max,
@@ -87,7 +100,7 @@ class ConstsWidget {
 
     return ElevatedButton(
         style: ElevatedButton.styleFrom(
-            padding: EdgeInsets.symmetric(vertical: size.height * 0.023),
+            padding: EdgeInsets.symmetric(vertical: size.height * 0.025),
             backgroundColor: color,
             shape: StadiumBorder()),
         onPressed: onPressed,
@@ -112,7 +125,7 @@ class ConstsWidget {
                 mainAxisSize: MainAxisSize.max,
                 children: [
                   SizedBox(
-                    height: size.height * 0.020,
+                    height: size.height * 0.025,
                     width: size.width * 0.05,
                     child: CircularProgressIndicator(
                       strokeWidth: 2,
@@ -124,17 +137,65 @@ class ConstsWidget {
   }
 
   static Widget buildAtivoInativo(BuildContext context, bool ativo) {
-    var size = MediaQuery.of(context).size;
     return Container(
       decoration: BoxDecoration(
           color: ativo ? Consts.kColorVerde : Colors.red,
           borderRadius: BorderRadius.circular(16)),
-      child: Padding(
-        padding: EdgeInsets.symmetric(
-            vertical: size.height * 0.01, horizontal: size.width * 0.035),
+      child: buildPadding001(
+        context,
+        horizontal: 0.035,
         child: ConstsWidget.buildTextTitle(context, ativo ? 'Ativo' : 'Inativo',
             color: Colors.white),
       ),
+    );
+  }
+
+  static Widget buildAtivoInativo2(BuildContext context,
+      {int seEditando = 0,
+      required void Function(dynamic)? onChanged,
+      required List<dynamic> list,
+      required Object? dropdownValue}) {
+    var size = MediaQuery.of(context).size;
+    return ConstsWidget.buildPadding001(
+      context,
+      child: StatefulBuilder(builder: (context, setState) {
+        return Container(
+          width: double.infinity,
+          decoration: BoxDecoration(
+            color: Theme.of(context).canvasColor,
+            border: Border.all(color: Colors.black26),
+            borderRadius: BorderRadius.all(Radius.circular(16)),
+          ),
+          child: ButtonTheme(
+            alignedDropdown: true,
+            child: DropdownButtonHideUnderline(
+              child: DropdownButton(
+                value: dropdownValue,
+                icon: Padding(
+                  padding: EdgeInsets.only(right: size.height * 0.03),
+                  child: Icon(
+                    Icons.arrow_downward,
+                    color: Theme.of(context).iconTheme.color,
+                  ),
+                ),
+                elevation: 24,
+                style: TextStyle(
+                    color: Theme.of(context).colorScheme.primary,
+                    fontWeight: FontWeight.w400,
+                    fontSize: 18),
+                borderRadius: BorderRadius.circular(16),
+                onChanged: onChanged,
+                items: list.map<DropdownMenuItem>((value) {
+                  return DropdownMenuItem(
+                    value: value,
+                    child: value == 0 ? Text('Inativo') : Text('Ativo'),
+                  );
+                }).toList(),
+              ),
+            ),
+          ),
+        );
+      }),
     );
   }
 
@@ -144,8 +205,9 @@ class ConstsWidget {
       required String title,
       MainAxisAlignment mainAxisAlignment = MainAxisAlignment.center}) {
     var size = MediaQuery.of(context).size;
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: size.height * 0.005),
+    return ConstsWidget.buildPadding001(
+      context,
+      vertical: 0.005,
       child: Row(
         mainAxisAlignment: mainAxisAlignment,
         children: [
@@ -187,7 +249,21 @@ class ConstsWidget {
       ),
     );
   }
+
+  static Widget buildRefreshIndicator(BuildContext context,
+      {required Widget child, required Future<void> Function() onRefresh}) {
+    var size = MediaQuery.of(context).size;
+    return RefreshIndicator(
+        strokeWidth: 2,
+        backgroundColor: Theme.of(context).snackBarTheme.backgroundColor,
+        color: Theme.of(context).canvasColor,
+        displacement: size.height * 0.1,
+        onRefresh: onRefresh,
+        child: child);
+  }
 }
+
+
 
 
 

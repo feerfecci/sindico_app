@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../consts/const_widget.dart';
 import '../../widgets/my_box_shadow.dart';
 import '../../widgets/shimmer_widget.dart';
 
@@ -26,8 +27,8 @@ class _LoadingColaboradoresState extends State<LoadingColaboradores> {
                   width: size.width * 0.2, height: size.height * 0.035),
             ],
           ),
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: size.height * 0.01),
+          ConstsWidget.buildPadding001(
+            context,
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -59,8 +60,8 @@ class _LoadingColaboradoresState extends State<LoadingColaboradores> {
                   width: size.width * 0.42, height: size.height * 0.045),
             ],
           ),
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: size.height * 0.01),
+          ConstsWidget.buildPadding001(
+            context,
             child: ShimmerWidget(
               height: size.height * 0.07,
               circular: 30,

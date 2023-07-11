@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../consts/const_widget.dart';
+
 class MyBoxShadow extends StatefulWidget {
   final dynamic child;
   final double paddingAll;
@@ -18,8 +20,9 @@ class MyBoxShadowState extends State<MyBoxShadow> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: size.height * 0.003),
+    return ConstsWidget.buildPadding001(
+      context,
+      vertical: 0.003,
       child: Container(
         decoration: BoxDecoration(
             color: Theme.of(context).primaryColor,

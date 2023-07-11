@@ -63,8 +63,8 @@ class _WidgetModalAvisosState extends State<WidgetModalAvisos> {
                     hintText: 'Exemplo: ',
                     maxLength: 70,
                     controller: tituloCntl),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: size.height * 0.01),
+                ConstsWidget.buildPadding001(
+                  context,
                   child: buildMyTextFormObrigatorio(context, 'Descrição',
                       minLines: 8,
                       maxLines: 8,

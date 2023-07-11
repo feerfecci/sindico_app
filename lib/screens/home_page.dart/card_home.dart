@@ -22,8 +22,9 @@ Widget buildCardHome(
         : Image.asset('assets/ico-error.png');
   }
 
-  return Padding(
-    padding: EdgeInsets.symmetric(vertical: size.height * 0.005),
+  return ConstsWidget.buildPadding001(
+    context,
+    vertical: 0.005,
     child: MyBoxShadow(
       paddingAll: 0.03,
       child: InkWell(

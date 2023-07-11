@@ -41,8 +41,8 @@ class _DropCondState extends State<DropCond> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    return Padding(
-      padding: EdgeInsets.symmetric(vertical: size.height * 0.01),
+    return ConstsWidget.buildPadding001(
+      context,
       child: MyBoxShadow(
         child: Container(
           width: double.maxFinite,
@@ -64,7 +64,6 @@ class _DropCondState extends State<DropCond> {
                   color: Theme.of(context).iconTheme.color,
                 ),
                 borderRadius: BorderRadius.circular(16),
-                hint: Text('Selecione Um Apto'),
                 // style: TextStyle(
                 //     color: Theme.of(context).colorScheme.primary,
                 //     fontWeight: FontWeight.w400,

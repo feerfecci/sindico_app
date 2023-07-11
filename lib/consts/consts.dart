@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 class ResponsalvelInfos {
   static String login = "";
   static String senhacripto = '';
+  static int qntCond = 0;
   static int idcondominio = 0;
   static String nome_condominio = "";
   static String dividido_por = "";

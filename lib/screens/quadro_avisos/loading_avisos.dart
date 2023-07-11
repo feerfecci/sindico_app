@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../consts/const_widget.dart';
 import '../../widgets/my_box_shadow.dart';
 import '../../widgets/shimmer_widget.dart';
 
@@ -18,8 +19,8 @@ class _LoadingAvisos extends State<LoadingAvisos> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: size.height * 0.01),
+          ConstsWidget.buildPadding001(
+            context,
             child: ShimmerWidget(
               height: size.height * 0.03,
               width: size.width * 0.7,
@@ -34,8 +35,8 @@ class _LoadingAvisos extends State<LoadingAvisos> {
               ),
             ],
           ),
-          Padding(
-            padding: EdgeInsets.symmetric(vertical: size.height * 0.01),
+          ConstsWidget.buildPadding001(
+            context,
             child: ShimmerWidget(
               height: size.height * 0.03,
               width: size.width * 0.6,

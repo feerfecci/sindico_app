@@ -49,8 +49,8 @@ class _CadastroEspacosState extends State<CadastroEspacos> {
       BuildContext context, {
       int seEditando = 0,
     }) {
-      return Padding(
-        padding: EdgeInsets.symmetric(vertical: size.height * 0.01),
+      return ConstsWidget.buildPadding001(
+        context,
         child: StatefulBuilder(builder: (context, setState) {
           return Container(
             width: double.infinity,
@@ -107,8 +107,8 @@ class _CadastroEspacosState extends State<CadastroEspacos> {
             MyBoxShadow(
               child: Form(
                 key: formKey,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: size.height * 0.01),
+                child: ConstsWidget.buildPadding001(
+                  context,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -124,9 +124,8 @@ class _CadastroEspacosState extends State<CadastroEspacos> {
                               _formInfosEspacos.copyWith(nome_espaco: text),
                         ),
                       ),
-                      Padding(
-                        padding:
-                            EdgeInsets.symmetric(vertical: size.height * 0.01),
+                      ConstsWidget.buildPadding001(
+                        context,
                         child: buildTextFormLinhas(
                           context,
                           label: 'Observações',

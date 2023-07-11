@@ -94,8 +94,8 @@ class _CadastroMoradorState extends State<CadastroMorador> {
       bool? seAtivoApi,
     }) {
       var size = MediaQuery.of(context).size;
-      return Padding(
-        padding: EdgeInsets.symmetric(vertical: size.height * 0.01),
+      return ConstsWidget.buildPadding001(
+        context,
         child: StatefulBuilder(builder: (context, setState) {
           List<String> listAtivo = <String>['Ativo', 'Inativo'];
           // var seAtivo = seAtivoApi == null ? 'Inativo' : 'Ativo';

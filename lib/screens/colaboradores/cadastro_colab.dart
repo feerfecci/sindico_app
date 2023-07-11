@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:sindico_app/screens/colaboradores/lista_colaboradores.dart';
 import 'package:sindico_app/widgets/header.dart';
 import 'package:sindico_app/widgets/scaffold_all.dart';
 import 'package:sindico_app/widgets/snackbar/snack.dart';
@@ -16,20 +17,32 @@ import '../../widgets/my_text_form_field.dart';
 class CadastroColaborador extends StatefulWidget {
   final int? idfuncionario;
   final Object? idfuncao;
+  final int ativo;
   final String nomeFuncionario;
   final String funcao;
   final String login;
+  final String? nascimento;
+  final String? telefone;
+  final String? ddd;
+  final String? email;
+  final String? documento;
   final bool avisa_corresp;
   final bool avisa_visita;
   final bool avisa_delivery;
   final bool avisa_encomendas;
 
   const CadastroColaborador({
+    this.ativo = 1,
     this.idfuncao,
     this.idfuncionario,
     this.nomeFuncionario = '',
     this.funcao = '',
     this.login = '',
+    this.telefone,
+    this.ddd,
+    this.email,
+    this.nascimento,
+    this.documento,
     this.avisa_corresp = false,
     this.avisa_visita = false,
     this.avisa_delivery = false,
@@ -40,6 +53,9 @@ class CadastroColaborador extends StatefulWidget {
   @override
   State<CadastroColaborador> createState() => _CadastroColaboradorState();
 }
+
+List listAtivo = [1, 0];
+Object? dropdownValueAtivo;
 
 class _CadastroColaboradorState extends State<CadastroColaborador> {
   final _formkeyFuncionario = GlobalKey<FormState>();
@@ -52,31 +68,17 @@ class _CadastroColaboradorState extends State<CadastroColaborador> {
   }
 
   salvarFuncaoForm() {
+    formInfosFunc = formInfosFunc.copyWith(ativo: widget.ativo);
+    formInfosFunc = formInfosFunc.copyWith(idfuncao: widget.idfuncao);
     formInfosFunc = formInfosFunc.copyWith(idfuncao: widget.idfuncao);
     formInfosFunc = formInfosFunc.copyWith(
-        avisa_corresp: widget.avisa_corresp == true
-            ? widget.avisa_corresp == true
-                ? 1
-                : 0
-            : 0);
+        avisa_corresp: widget.avisa_corresp == true ? 1 : 0);
     formInfosFunc = formInfosFunc.copyWith(
-        avisa_delivery: widget.avisa_delivery == true
-            ? widget.avisa_delivery == true
-                ? 1
-                : 0
-            : 0);
+        avisa_delivery: widget.avisa_delivery == true ? 1 : 0);
     formInfosFunc = formInfosFunc.copyWith(
-        avisa_visita: widget.avisa_visita == true
-            ? widget.avisa_visita == true
-                ? 1
-                : 0
-            : 0);
+        avisa_visita: widget.avisa_visita == true ? 1 : 0);
     formInfosFunc = formInfosFunc.copyWith(
-        avisa_encomendas: widget.avisa_encomendas == true
-            ? widget.avisa_encomendas == true
-                ? 1
-                : 0
-            : 0);
+        avisa_encomendas: widget.avisa_encomendas == true ? 1 : 0);
   }
 
   List categoryItemListFuncoes = [];
@@ -93,6 +95,8 @@ class _CadastroColaboradorState extends State<CadastroColaborador> {
       return false;
     }
   }
+
+  String loginGerado = '';
 
   @override
   Widget build(BuildContext context) {
@@ -187,158 +191,288 @@ class _CadastroColaboradorState extends State<CadastroColaborador> {
           });
         }, title: title);
       });
-
-      ListTile(
-        title: ConstsWidget.buildTextTitle(context, title),
-        trailing: StatefulBuilder(builder: (context, setState) {
-          return SizedBox(
-              width: size.width * 0.125,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Checkbox(
-                    value: isChecked,
-                    activeColor: Consts.kColorApp,
-                    onChanged: (bool? value) {
-                      setState(() {
-                        isChecked = value!;
-                        int isCheckedApi = isChecked ? 1 : 0;
-                        switch (nomeCampo) {
-                          case 0:
-                            formInfosFunc = formInfosFunc.copyWith(
-                                avisa_corresp: isCheckedApi);
-                            break;
-                          case 1:
-                            formInfosFunc = formInfosFunc.copyWith(
-                                avisa_visita: isCheckedApi);
-                            break;
-                          case 2:
-                            formInfosFunc = formInfosFunc.copyWith(
-                                avisa_delivery: isCheckedApi);
-
-                            break;
-                          case 3:
-                            formInfosFunc = formInfosFunc.copyWith(
-                                avisa_encomendas: isCheckedApi);
-
-                            break;
-                          default:
-                        }
-                        // if (nomeCampo == 0) {
-                        //   formInfosFunc = formInfosFunc.copyWith(
-                        //       avisa_corresp: isCheckedApi);
-                        // } else if (nomeCampo == 1) {
-                        //   formInfosFunc = formInfosFunc.copyWith(
-                        //       avisa_visita: isCheckedApi);
-                        // } else if (nomeCampo == 2) {
-                        //   formInfosFunc = formInfosFunc.copyWith(
-                        //       avisa_delivery: isCheckedApi);
-                        // } else if (nomeCampo == 3) {
-                        //   formInfosFunc = formInfosFunc.copyWith(
-                        //       avisa_encomendas: isCheckedApi);
-                        // }
-                      });
-                    },
-                  ),
-                ],
-              ));
-        }),
-      );
     }
 
     return buildScaffoldAll(
       context,
-      title:
-          widget.idfuncionario != null ? 'Editar Cadastro' : 'Novo Funcionário',
+      title: widget.idfuncionario != null
+          ? 'Editar Colaborador'
+          : 'Novo Colaborador',
       body: Form(
         key: _formkeyFuncionario,
         child: MyBoxShadow(
-          child: Padding(
-            padding: EdgeInsets.symmetric(vertical: size.height * 0.015),
+          child: ConstsWidget.buildPadding001(
+            context,
+            vertical: 0.015,
             child: Column(
               mainAxisSize: MainAxisSize.min,
-              // crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                buildDropAtivo(
+                  context,
+                ),
                 buildMyTextFormObrigatorio(
                   context,
                   initialValue: widget.nomeFuncionario,
                   'Nome Completo',
+                  hintText: 'Joao da Silva Sousa',
                   onSaved: (text) => formInfosFunc =
                       formInfosFunc.copyWith(nome_funcionario: text),
                 ),
-                buildMyTextFormObrigatorio(
-                  context,
-                  'Usário de login',
-                  initialValue: widget.login,
-                  onSaved: (text) =>
-                      formInfosFunc = formInfosFunc.copyWith(login: text),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SizedBox(
+                      width: size.width * 0.4,
+                      child: buildMyTextFormObrigatorio(
+                          context, 'Data de nascimento',
+                          initialValue: widget.nascimento, onSaved: (text) {
+                        if (text!.length >= 6) {
+                          var ano = text.substring(6);
+                          var mes = text.substring(3, 5);
+                          var dia = text.substring(0, 2);
+                          formInfosFunc = formInfosFunc.copyWith(
+                              nascimento: '$ano-$mes-$dia');
+                        }
+                      }, hintText: '25/09/1997', mask: '##/##/####'),
+                    ),
+                    SizedBox(
+                      width: size.width * 0.5,
+                      child: buildMyTextFormObrigatorio(
+                        context,
+                        'Documento',
+                        hintText: 'Exemplo: RG, CPF',
+                        initialValue: widget.documento,
+                        onSaved: (text) {
+                          if (text!.length >= 4) {
+                            formInfosFunc =
+                                formInfosFunc.copyWith(documento: text);
+                          } else {
+                            buildMinhaSnackBar(context,
+                                title: 'Cuidado',
+                                subTitle: 'Complete o documento');
+                          }
+                        },
+                      ),
+                    ),
+                  ],
                 ),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: size.height * 0.01),
+                ConstsWidget.buildPadding001(
+                  context,
                   child: buildDropdownButtonFuncoes(),
                 ),
-                widget.idfuncionario != null
-                    ? SizedBox()
-                    : buildMyTextFormObrigatorio(
+                ConstsWidget.buildPadding001(
+                  context,
+                  horizontal: 0.01,
+                  child: ConstsWidget.buildTextTitle(context, 'Contatos'),
+                ),
+                Row(
+                  children: [
+                    SizedBox(
+                      width: size.width * 0.2,
+                      child: buildMyTextFormObrigatorio(
                         context,
-                        'Senha Login',
+                        'DDD',
+                        hintText: '11',
+                        initialValue: widget.ddd,
+                        mask: '##',
                         onSaved: (text) =>
-                            formInfosFunc = formInfosFunc.copyWith(senha: text),
+                            formInfosFunc = formInfosFunc.copyWith(ddd: text),
                       ),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: size.height * 0.01),
-                  child: Column(
-                    children: [
-                      buildTilePermissao(context, 'Avisos de Cartas',
-                          nomeCampo: 0, isChecked: widget.avisa_corresp),
-                      buildTilePermissao(context, 'Avisos de Visitas',
-                          nomeCampo: 1, isChecked: widget.avisa_visita),
-                      buildTilePermissao(context, 'Avisos de Delivery',
-                          nomeCampo: 2, isChecked: widget.avisa_delivery),
-                      buildTilePermissao(context, 'Avisos de Caixas',
-                          nomeCampo: 3, isChecked: widget.avisa_encomendas),
-                    ],
-                  ),
+                    ),
+                    Spacer(),
+                    SizedBox(
+                      width: size.width * 0.4,
+                      child: buildMyTextFormObrigatorio(context, 'Telefone',
+                          onSaved: (text) => formInfosFunc =
+                              formInfosFunc.copyWith(telefone: text),
+                          initialValue: widget.telefone,
+                          hintText: '911112222'),
+                    ),
+                    Spacer(),
+                  ],
+                ),
+                buildMyTextFormObrigatorio(
+                  context,
+                  'Email',
+                  hintText: 'exemplo@exp.com',
+                  initialValue: widget.email,
+                  onSaved: (text) =>
+                      formInfosFunc = formInfosFunc.copyWith(email: text),
                 ),
                 ConstsWidget.buildCustomButton(
                   context,
-                  'Salvar',
-                  color: Consts.kColorRed,
+                  'Gerar Login',
                   onPressed: () {
-                    if (_formkeyFuncionario.currentState!.validate() &&
-                        formInfosFunc.idfuncao != null) {
-                      _formkeyFuncionario.currentState!.save();
+                    var formValid =
+                        _formkeyFuncionario.currentState?.validate() ?? false;
+                    if (formValid) {
+                      _formkeyFuncionario.currentState?.save();
+                      if (formInfosFunc.nascimento.length >= 6) {
+                        List nomeEmLista =
+                            formInfosFunc.nome_funcionario.split(' ');
+                        List listaNome = nomeEmLista;
 
-                      var apiEditarIncluir = widget.idfuncionario != null
-                          ? 'editarFuncionario&idfuncionario=${widget.idfuncionario}&'
-                          : 'incluirFuncionario&senha=${formInfosFunc.senha}&';
-
-                      ConstsFuture.resquestApi(
-                              '${Consts.sindicoApi}funcionarios/?fn=$apiEditarIncluir&idcond=${ResponsalvelInfos.idcondominio}&nomeFuncionario=${formInfosFunc.nome_funcionario}&idfuncao=${formInfosFunc.idfuncao}&login=${formInfosFunc.login}&avisa_corresp=${formInfosFunc.avisa_corresp}&avisa_visita=${formInfosFunc.avisa_visita}&avisa_delivery=${formInfosFunc.avisa_delivery}&avisa_encomendas=${formInfosFunc.avisa_encomendas}')
-                          .then((value) {
-                        if (!value['erro']) {
-                          Navigator.pop(context);
-                          Navigator.pop(context);
-                          setState(() {});
-
-                          return buildMinhaSnackBar(context,
-                              title: 'Parabéns', subTitle: value['mensagem']);
-                        }
-                        return buildMinhaSnackBar(context,
-                            title: 'Algo deu errado!',
-                            subTitle: value['mensagem']);
-                      });
+                        setState(() {
+                          loginGerado =
+                              '${listaNome.first.toString().toLowerCase()}${listaNome.last.toString().toLowerCase()}${formInfosFunc.documento!.substring(0, 4)}';
+                          formInfosFunc =
+                              formInfosFunc.copyWith(login: loginGerado);
+                        });
+                      } else {
+                        buildMinhaSnackBar(context,
+                            title: 'Cuidado', subTitle: 'Complete a data');
+                      }
                     } else {
                       buildMinhaSnackBar(context,
-                          subTitle: 'Selecione uma Função');
+                          title: 'Cuidado',
+                          subTitle: 'Complete as Informações');
                     }
                   },
-                )
+                ),
+                if (loginGerado != '')
+                  ConstsWidget.buildPadding001(
+                    context,
+                    child: Column(
+                      children: [
+                        MyBoxShadow(
+                            child: ConstsWidget.buildPadding001(
+                          context,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  ConstsWidget.buildTextSubTitle('Login'),
+                                  ConstsWidget.buildTextTitle(
+                                      context, loginGerado),
+                                ],
+                              ),
+                            ],
+                          ),
+                        )),
+                        buildMyTextFormObrigatorio(
+                          context,
+                          'Senha Login',
+                          onSaved: (text) => formInfosFunc =
+                              formInfosFunc.copyWith(senha: text),
+                        ),
+                        ConstsWidget.buildPadding001(context,
+                            child: ConstsWidget.buildTextTitle(
+                                context, 'Tipos de acesso')),
+                        ConstsWidget.buildPadding001(
+                          context,
+                          child: Column(
+                            children: [
+                              buildTilePermissao(context, 'Avisos de Cartas',
+                                  nomeCampo: 0,
+                                  isChecked: widget.avisa_corresp),
+                              buildTilePermissao(context, 'Avisos de Visitas',
+                                  nomeCampo: 1, isChecked: widget.avisa_visita),
+                              buildTilePermissao(context, 'Avisos de Delivery',
+                                  nomeCampo: 2,
+                                  isChecked: widget.avisa_delivery),
+                              buildTilePermissao(context, 'Avisos de Caixas',
+                                  nomeCampo: 3,
+                                  isChecked: widget.avisa_encomendas),
+                            ],
+                          ),
+                        ),
+                        ConstsWidget.buildCustomButton(
+                          context,
+                          'Salvar',
+                          color: Consts.kColorRed,
+                          onPressed: () {
+                            if (_formkeyFuncionario.currentState!.validate() &&
+                                formInfosFunc.idfuncao != null) {
+                              _formkeyFuncionario.currentState!.save();
+
+                              var apiEditarIncluir = widget.idfuncionario !=
+                                      null
+                                  ? 'editarFuncionario&idfuncionario=${widget.idfuncionario}&'
+                                  : 'incluirFuncionario&senha=${formInfosFunc.senha}&';
+                              ConstsFuture.resquestApi(
+                                      '${Consts.sindicoApi}funcionarios/?fn=$apiEditarIncluir&idcond=${ResponsalvelInfos.idcondominio}&nomeFuncionario=${formInfosFunc.nome_funcionario}&idfuncao=${formInfosFunc.idfuncao}&login=${formInfosFunc.login}&avisa_corresp=${formInfosFunc.avisa_corresp}&avisa_visita=${formInfosFunc.avisa_visita}&avisa_delivery=${formInfosFunc.avisa_delivery}&avisa_encomendas=${formInfosFunc.avisa_encomendas}&ativo=${formInfosFunc.ativo}')
+                                  .then((value) {
+                                if (!value['erro']) {
+                                  Navigator.pop(context);
+
+                                  return buildMinhaSnackBar(context,
+                                      title: 'Parabéns',
+                                      subTitle: value['mensagem']);
+                                }
+                                return buildMinhaSnackBar(context,
+                                    title: 'Algo deu errado!',
+                                    subTitle: value['mensagem']);
+                              });
+                            } else {
+                              buildMinhaSnackBar(context,
+                                  subTitle: 'Selecione uma Função');
+                            }
+                          },
+                        )
+                      ],
+                    ),
+                  ),
               ],
             ),
           ),
         ),
       ),
+    );
+  }
+
+  Widget buildDropAtivo(
+    BuildContext context, {
+    int seEditando = 0,
+  }) {
+    var size = MediaQuery.of(context).size;
+    return ConstsWidget.buildPadding001(
+      context,
+      child: StatefulBuilder(builder: (context, setState) {
+        return Container(
+          width: double.infinity,
+          decoration: BoxDecoration(
+            color: Theme.of(context).canvasColor,
+            border: Border.all(color: Colors.black26),
+            borderRadius: BorderRadius.all(Radius.circular(16)),
+          ),
+          child: ButtonTheme(
+            alignedDropdown: true,
+            child: DropdownButtonHideUnderline(
+              child: DropdownButton(
+                value: dropdownValueAtivo = formInfosFunc.ativo,
+                icon: Padding(
+                  padding: EdgeInsets.only(right: size.height * 0.03),
+                  child: Icon(
+                    Icons.arrow_downward,
+                    color: Theme.of(context).iconTheme.color,
+                  ),
+                ),
+                elevation: 24,
+                style: TextStyle(
+                    color: Theme.of(context).colorScheme.primary,
+                    fontWeight: FontWeight.w400,
+                    fontSize: 18),
+                borderRadius: BorderRadius.circular(16),
+                onChanged: (value) {
+                  setState(() {
+                    dropdownValueAtivo = value!;
+                    formInfosFunc = formInfosFunc.copyWith(ativo: value);
+                  });
+                },
+                items: listAtivo.map<DropdownMenuItem>((value) {
+                  return DropdownMenuItem(
+                    value: value,
+                    child: value == 0 ? Text('Inativo') : Text('Ativo'),
+                  );
+                }).toList(),
+              ),
+            ),
+          ),
+        );
+      }),
     );
   }
 }

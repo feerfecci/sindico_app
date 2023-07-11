@@ -69,7 +69,11 @@ class ConstsFuture {
     if (resposta.statusCode == 200) {
       var apiBody = json.decode(resposta.body);
       bool erro = apiBody['erro'];
+
       if (!erro) {
+        if (idCondominio == null) {
+          ResponsalvelInfos.qntCond = apiBody['login'].length;
+        }
         var loginInfos = apiBody['login'][0];
         if (idCondominio == null) DropCond.listCond = apiBody['login'];
         ResponsalvelInfos.nome_condominio = loginInfos['nome_condominio'];

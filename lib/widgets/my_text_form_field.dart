@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:validatorless/validatorless.dart';
 
+import '../consts/const_widget.dart';
+
 Widget buildMyTextFormField(BuildContext context,
     {required String title,
     String? mask,
@@ -12,8 +14,8 @@ Widget buildMyTextFormField(BuildContext context,
     String? initialValue,
     final void Function(String? text)? onSaved}) {
   var size = MediaQuery.of(context).size;
-  return Padding(
-    padding: EdgeInsets.symmetric(vertical: size.height * 0.01),
+  return ConstsWidget.buildPadding001(
+    context,
     child: TextFormField(
       autovalidateMode: AutovalidateMode.onUserInteraction,
       inputFormatters: [MaskTextInputFormatter(mask: mask)],
@@ -56,8 +58,8 @@ Widget buildMyTextFormObrigatorio(BuildContext context, String title,
     String? Function(String?)? validator,
     final void Function(String? text)? onSaved}) {
   var size = MediaQuery.of(context).size;
-  return Padding(
-    padding: EdgeInsets.symmetric(vertical: size.height * 0.01),
+  return ConstsWidget.buildPadding001(
+    context,
     child: TextFormField(
       controller: controller,
       initialValue: initialValue,
@@ -73,11 +75,8 @@ Widget buildMyTextFormObrigatorio(BuildContext context, String title,
       inputFormatters: [MaskTextInputFormatter(mask: mask)],
       validator: Validatorless.multiple([Validatorless.required(mensagem)]),
       decoration: InputDecoration(
-        hintStyle: TextStyle(height: 1.4),
         contentPadding: EdgeInsets.symmetric(
-          horizontal: size.width * 0.03,
-          vertical: size.height * 0.020,
-        ),
+            horizontal: size.width * 0.035, vertical: size.height * 0.023),
         filled: true,
         fillColor: Theme.of(context).canvasColor,
         label: Text(title),
@@ -100,8 +99,8 @@ Widget buildTextFormLinhas(BuildContext context,
     required String label,
     String? hintText}) {
   var size = MediaQuery.of(context).size;
-  return Padding(
-    padding: EdgeInsets.symmetric(vertical: size.height * 0.01),
+  return ConstsWidget.buildPadding001(
+    context,
     child: TextFormField(
       onSaved: onSaved,
       minLines: 5,
