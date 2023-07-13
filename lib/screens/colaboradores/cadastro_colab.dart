@@ -60,6 +60,7 @@ Object? dropdownValueAtivo;
 class _CadastroColaboradorState extends State<CadastroColaborador> {
   final _formkeyFuncionario = GlobalKey<FormState>();
   FormInfosFunc formInfosFunc = FormInfosFunc();
+  final TextEditingController senhaContr = TextEditingController();
   @override
   void initState() {
     super.initState();
@@ -354,9 +355,9 @@ class _CadastroColaboradorState extends State<CadastroColaborador> {
                         )),
                         buildMyTextFormObrigatorio(
                           context,
-                          'Senha Login',
-                          onSaved: (text) => formInfosFunc =
-                              formInfosFunc.copyWith(senha: text),
+                          'Senha Login', controller: senhaContr,
+                          // onSaved: (text) => formInfosFunc =
+                          //     formInfosFunc.copyWith(senha: text),
                         ),
                         ConstsWidget.buildPadding001(context,
                             child: ConstsWidget.buildTextTitle(
@@ -392,8 +393,9 @@ class _CadastroColaboradorState extends State<CadastroColaborador> {
                                       null
                                   ? 'editarFuncionario&idfuncionario=${widget.idfuncionario}&'
                                   : 'incluirFuncionario&senha=${formInfosFunc.senha}&';
+
                               ConstsFuture.resquestApi(
-                                      '${Consts.sindicoApi}funcionarios/?fn=$apiEditarIncluir&idcond=${ResponsalvelInfos.idcondominio}&nomeFuncionario=${formInfosFunc.nome_funcionario}&idfuncao=${formInfosFunc.idfuncao}&login=${formInfosFunc.login}&avisa_corresp=${formInfosFunc.avisa_corresp}&avisa_visita=${formInfosFunc.avisa_visita}&avisa_delivery=${formInfosFunc.avisa_delivery}&avisa_encomendas=${formInfosFunc.avisa_encomendas}&ativo=${formInfosFunc.ativo}')
+                                      '${Consts.sindicoApi}funcionarios/?fn=$apiEditarIncluir&idcond=${ResponsalvelInfos.idcondominio}&nomeFuncionario=${formInfosFunc.nome_funcionario}&idfuncao=${formInfosFunc.idfuncao}&login=${formInfosFunc.login}&avisa_corresp=${formInfosFunc.avisa_corresp}&avisa_visita=${formInfosFunc.avisa_visita}&avisa_delivery=${formInfosFunc.avisa_delivery}&avisa_encomendas=${formInfosFunc.avisa_encomendas}&ativo=${formInfosFunc.ativo}&senha=${senhaContr.text}')
                                   .then((value) {
                                 if (!value['erro']) {
                                   Navigator.pop(context);

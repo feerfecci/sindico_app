@@ -42,6 +42,10 @@ class ConstsFuture {
   //     },
   //   );
   // }
+  static Future criptoSenha(String senha) async {
+    String senhacripto = md5.convert(utf8.encode(senha)).toString();
+    return senhacripto;
+  }
 
   static navigatorPopPush(BuildContext context, String Namedroute) {
     Navigator.pop(context);

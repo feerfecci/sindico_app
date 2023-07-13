@@ -75,15 +75,18 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   ),
                 ),
               ),
-              buidListTile(title: 'Meu Perfil', leading: Icons.person),
               buidListTile(
-                  title: 'Seja um Representante',
+                  title: 'Meu perfil', leading: Icons.person_outline_rounded),
+              buidListTile(
+                  title: 'Seja um representante',
                   leading: Icons.business_center_outlined),
               buidListTile(
                   title: 'Política de privacidade',
                   leading: Icons.privacy_tip_outlined),
               buidListTile(
-                  title: 'Suporte', leading: Icons.phone_forwarded_outlined),
+                  title: 'Indicar para amigos',
+                  leading: Icons.add_reaction_outlined),
+              buidListTile(title: 'Central de ajuda', leading: Icons.support),
               ChangeThemeButton(),
               Spacer(),
               Padding(

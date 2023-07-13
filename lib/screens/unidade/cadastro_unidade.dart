@@ -48,6 +48,7 @@ class CadastroUnidades extends StatefulWidget {
 class _CadastroUnidadesState extends State<CadastroUnidades> {
   final _formkeyUnidade = GlobalKey<FormState>();
   FormInfosUnidade formInfosUnidade = FormInfosUnidade();
+  final TextEditingController senhaContr = TextEditingController();
 
   @override
   void initState() {
@@ -374,10 +375,16 @@ class _CadastroUnidadesState extends State<CadastroUnidades> {
                           });
                         }, title: "Acesso ao Sistema"),
                         buildMyTextFormObrigatorio(
-                          context,
-                          'Senha Login',
-                          onSaved: (text) => formInfosUnidade =
-                              formInfosUnidade.copyWith(senha: text),
+                          context, 'Senha Login',
+                          controller: senhaContr,
+                          //     onSaved: (text) {
+                          //   ConstsFuture.criptoSenha(text!).then((value) {
+                          //     print(value);
+                          //     formInfosUnidade ==
+                          //         formInfosUnidade.copyWith(senha: value);
+                          //     print(formInfosUnidade.senha);
+                          //   });
+                          // }
                         ),
                       ],
                     ),
@@ -397,26 +404,29 @@ class _CadastroUnidadesState extends State<CadastroUnidades> {
                         if (formValid) {
                           String incluindoEditando = widget.idunidade == null
                               ? "incluirUnidade&"
-                              : 'editarUnidade&id=${widget.idunidade}&senha=${formInfosUnidade.senha}&';
-
-                          ConstsFuture.resquestApi(
-                                  // print(
-                                  '${Consts.sindicoApi}unidades/?fn=${incluindoEditando}idcond=${ResponsalvelInfos.idcondominio}&iddivisao=${formInfosUnidade.iddivisao}&ativo=${formInfosUnidade.ativo}&responsavel=${formInfosUnidade.responsavel}&login=${formInfosUnidade.login}&numero=${formInfosUnidade.numero}&datanasc=${formInfosUnidade.nascimento}&documento=${formInfosUnidade.documento}&dddtelefone=${formInfosUnidade.ddd}&telefone=${formInfosUnidade.telefone}&email=${formInfosUnidade.email}&acessa_sistema=${isChecked ? 1 : 0}')
+                              : 'editarUnidade&id=${widget.idunidade}&';
+                          ConstsFuture.criptoSenha(senhaContr.text)
                               .then((value) {
-                            if (!value['erro']) {
-                              ConstsFuture.navigatorPopPush(
-                                  context, '/listaUnidade');
-                              buildMinhaSnackBar(context,
-                                  title: 'Muito Bem',
-                                  subTitle: value['mensagem']);
-                              setState(() {
-                                apiListarDivisoes();
-                              });
-                            } else {
-                              buildMinhaSnackBar(context,
-                                  title: 'Uma pena',
-                                  subTitle: value['mensagem']);
-                            }
+                            ConstsFuture.resquestApi(
+                                    // print(
+                                    '${Consts.sindicoApi}unidades/?fn=${incluindoEditando}idcond=${ResponsalvelInfos.idcondominio}&iddivisao=${formInfosUnidade.iddivisao}&ativo=${formInfosUnidade.ativo}&responsavel=${formInfosUnidade.responsavel}&login=${formInfosUnidade.login}&senha=$value&numero=${formInfosUnidade.numero}&datanasc=${formInfosUnidade.nascimento}&documento=${formInfosUnidade.documento}&dddtelefone=${formInfosUnidade.ddd}&telefone=${formInfosUnidade.telefone}&email=${formInfosUnidade.email}&acessa_sistema=${isChecked ? 1 : 0}')
+                                .then((value) {
+                              if (!value['erro']) {
+                                ConstsFuture.navigatorPopPush(
+                                    context, '/listaUnidade');
+                                buildMinhaSnackBar(context,
+                                    title: 'Muito Bem',
+                                    subTitle: value['mensagem']);
+
+                                setState(() {
+                                  apiListarDivisoes();
+                                });
+                              } else {
+                                buildMinhaSnackBar(context,
+                                    title: 'Uma pena',
+                                    subTitle: value['mensagem']);
+                              }
+                            });
                           });
                         } else if (widget.idunidade == 0) {}
                       },
