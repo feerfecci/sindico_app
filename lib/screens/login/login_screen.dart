@@ -61,7 +61,7 @@ class _LoginScreenState extends State<LoginScreen> {
           Validatorless.required('Usuário é obrigatório'),
           // Validatorless.email('Preencha com um email Válido')
         ]),
-        // autofillHints: [AutofillHints.email],
+        autofillHints: const [AutofillHints.email],
         decoration: InputDecoration(
           contentPadding: EdgeInsets.symmetric(
               vertical: size.height * 0.02, horizontal: size.width * 0.04),
@@ -88,7 +88,7 @@ class _LoginScreenState extends State<LoginScreen> {
           TextFormField(
             textInputAction: TextInputAction.done,
             controller: senhaController,
-            // autofillHints: [AutofillHints.password],
+            autofillHints: const [AutofillHints.password],
             autovalidateMode: AutovalidateMode.onUserInteraction,
             validator: Validatorless.multiple([
               Validatorless.required('Senha é obrigatório'),
@@ -130,17 +130,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   isChecked = value!;
                 });
               });
-
-              CheckboxListTile(
-                title: Text('Mantenha-me conectado'),
-                value: isChecked,
-                activeColor: Consts.kButtonColor,
-                onChanged: (bool? value) {
-                  setState(() {
-                    isChecked = value!;
-                  });
-                },
-              );
             }),
           )
         ],
@@ -148,53 +137,55 @@ class _LoginScreenState extends State<LoginScreen> {
     }
 
     return Scaffold(
-      body: Center(
-        child: Form(
-          key: _formKeyLogin,
-          child: Wrap(
-            children: [
-              Padding(
-                padding: EdgeInsets.only(
-                    left: size.width * 0.05,
-                    right: size.width * 0.05,
-                    bottom: size.height * 0.15),
-                child: Column(
-                  children: [
-                    Padding(
-                        padding: EdgeInsets.only(left: 8.0),
-                        child: FutureBuilder(
-                          future: ConstsFuture.apiImage(
-                              'https://a.portariaapp.com/img/logo_verde.png'),
-                          builder: (context, snapshot) {
-                            return SizedBox(
-                              height: size.height * 0.2,
-                              width: size.width * 0.5,
-                              child: snapshot.data,
-                            );
-                          },
-                        )),
-                    Padding(
-                      padding: EdgeInsets.only(
-                          bottom: size.height * 0.035,
-                          top: size.height * 0.025),
-                      child: ConstsWidget.buildTextTitle(
-                          context, 'Portaria App | Síndico',
-                          size: 19),
-                    ),
-                    buildTextFormEmail(),
-                    SizedBox(
-                      height: size.height * 0.03,
-                    ),
-                    buildTextFormSenha(),
-                    ConstsWidget.buildLoadingButton(context,
-                        onPressed: starLogin,
-                        isLoading: isLoading,
-                        title: 'Entrar',
-                        fontSize: 18),
-                  ],
+      body: AutofillGroup(
+        child: Center(
+          child: Form(
+            key: _formKeyLogin,
+            child: Wrap(
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(
+                      left: size.width * 0.05,
+                      right: size.width * 0.05,
+                      bottom: size.height * 0.15),
+                  child: Column(
+                    children: [
+                      Padding(
+                          padding: EdgeInsets.only(left: 8.0),
+                          child: FutureBuilder(
+                            future: ConstsFuture.apiImage(
+                                'https://a.portariaapp.com/img/logo_verde.png'),
+                            builder: (context, snapshot) {
+                              return SizedBox(
+                                height: size.height * 0.2,
+                                width: size.width * 0.5,
+                                child: snapshot.data,
+                              );
+                            },
+                          )),
+                      Padding(
+                        padding: EdgeInsets.only(
+                            bottom: size.height * 0.035,
+                            top: size.height * 0.025),
+                        child: ConstsWidget.buildTextTitle(
+                            context, 'Portaria App | Síndico',
+                            size: 19),
+                      ),
+                      buildTextFormEmail(),
+                      SizedBox(
+                        height: size.height * 0.03,
+                      ),
+                      buildTextFormSenha(),
+                      ConstsWidget.buildLoadingButton(context,
+                          onPressed: starLogin,
+                          isLoading: isLoading,
+                          title: 'Entrar',
+                          fontSize: 18),
+                    ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

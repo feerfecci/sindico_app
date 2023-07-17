@@ -27,7 +27,8 @@ Widget buildMyTextFormField(BuildContext context,
       maxLines: 5,
       minLines: 1,
       decoration: InputDecoration(
-        contentPadding: EdgeInsets.only(left: size.width * 0.04),
+        contentPadding: EdgeInsets.symmetric(
+            horizontal: size.width * 0.035, vertical: size.height * 0.023),
         filled: true,
         fillColor: Theme.of(context).canvasColor,
         label: Text(title),

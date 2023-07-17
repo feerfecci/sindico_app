@@ -27,6 +27,7 @@ class CadastroMorador extends StatefulWidget {
   int? idunidade;
   int? iddivisao;
   String? numero;
+  bool isDrawer;
   CadastroMorador(
       {this.idmorador,
       this.nome_morador,
@@ -40,6 +41,7 @@ class CadastroMorador extends StatefulWidget {
       this.ativo,
       this.iddivisao,
       this.numero,
+      this.isDrawer = false,
       super.key});
 
   @override
@@ -83,7 +85,7 @@ class _CadastroMoradorState extends State<CadastroMorador> {
         ? DateFormat('dd/MM/yyy').format(DateTime.parse(widget.nascimento))
         : '';
     bool isChecked = widget.acesso == null
-        ? false
+        ? true
         : widget.acesso == 0
             ? false
             : true;
@@ -113,7 +115,6 @@ class _CadastroMoradorState extends State<CadastroMorador> {
             alignedDropdown: true,
             child: DropdownButtonFormField<String>(
               value: seEditando == 0 ? dropdownValueAtivo : itemComeco,
-
               icon: Padding(
                 padding: EdgeInsets.only(right: size.height * 0.03),
                 child: Icon(
@@ -121,24 +122,21 @@ class _CadastroMoradorState extends State<CadastroMorador> {
                   color: Theme.of(context).iconTheme.color,
                 ),
               ),
-
-              elevation: 90,
+              elevation: 24,
               style: TextStyle(
-                  color: Theme.of(context).colorScheme.primary,
-                  fontWeight: FontWeight.w400,
-                  fontSize: 18),
+                color: Theme.of(context).colorScheme.primary,
+                fontWeight: FontWeight.w400,
+                fontSize: 18,
+              ),
               decoration: InputDecoration(
-                contentPadding: EdgeInsets.only(left: size.width * 0.00),
+                contentPadding:
+                    EdgeInsets.symmetric(vertical: size.height * 0.02),
                 filled: true,
                 fillColor: Theme.of(context).canvasColor,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(16),
                 ),
               ),
-              // underline: Container(
-              //   height: 1,
-              //   color: Consts.kColorApp,
-              // ),
               borderRadius: BorderRadius.circular(16),
               onChanged: (String? value) {
                 setState(() {
@@ -164,7 +162,11 @@ class _CadastroMoradorState extends State<CadastroMorador> {
 
     return buildScaffoldAll(
       context,
-      title: widget.idmorador == null ? 'Incluir Morador' : 'Editar Morador',
+      title: widget.isDrawer
+          ? 'Meu Perfil'
+          : widget.idunidade == null
+              ? 'Incluir Morador'
+              : 'Editar Morador',
       body: Form(
         key: _formKeyMorador,
         child: MyBoxShadow(
@@ -173,7 +175,7 @@ class _CadastroMoradorState extends State<CadastroMorador> {
               buildAtivoInativo2(
                 context,
                 seAtivoApi: widget.ativo,
-                seEditando: widget.idmorador == null ? 0 : 1,
+                seEditando: widget.idunidade == null ? 0 : 1,
               ),
               buildMyTextFormObrigatorio(
                 context,
@@ -189,7 +191,7 @@ class _CadastroMoradorState extends State<CadastroMorador> {
                 onSaved: (text) =>
                     _formInfosMorador = _formInfosMorador.copyWith(login: text),
               ),
-              widget.idmorador == null
+              widget.idunidade == null
                   ? buildMyTextFormObrigatorio(
                       context,
                       'Senha Login',
@@ -202,9 +204,10 @@ class _CadastroMoradorState extends State<CadastroMorador> {
                 children: [
                   SizedBox(
                     width: size.width * 0.37,
-                    child: buildMyTextFormField(context,
+                    child: buildMyTextFormObrigatorio(
+                        context,
                         initialValue: dataParsed,
-                        title: 'Data de Nascimento',
+                        'Data de Nascimento',
                         keyboardType: TextInputType.number,
                         mask: '##/##/####',
                         hintText: '##/##/####', onSaved: (text) {
@@ -221,29 +224,30 @@ class _CadastroMoradorState extends State<CadastroMorador> {
                   ),
                   SizedBox(
                     width: size.width * 0.5,
-                    child: buildMyTextFormField(
+                    child: buildMyTextFormObrigatorio(
                       context,
-                      title: 'Documento',
+                      'Documento',
                       initialValue: widget.documento,
                       keyboardType: TextInputType.number,
                       hintText: 'RG, CPF',
                       onSaved: (text) => _formInfosMorador =
                           _formInfosMorador.copyWith(documento: text),
                     ),
-                  )
+                  ),
                 ],
               ),
               Row(
                 children: [
                   SizedBox(
-                    width: size.width * 0.145,
-                    child: buildMyTextFormField(context,
+                    width: size.width * 0.18,
+                    child: buildMyTextFormObrigatorio(
+                        context,
                         initialValue: widget.ddd,
                         onSaved: (text) => _formInfosMorador =
                             _formInfosMorador.copyWith(ddd: text),
-                        title: 'DDD',
+                        'DDD',
                         keyboardType: TextInputType.number,
-                        mask: '##',
+                        mask: '(##)',
                         hintText: '11'),
                   ),
                   SizedBox(
@@ -251,10 +255,10 @@ class _CadastroMoradorState extends State<CadastroMorador> {
                   ),
                   SizedBox(
                     width: size.width * 0.5,
-                    child: buildMyTextFormField(
+                    child: buildMyTextFormObrigatorio(
                       context,
+                      'Telefone',
                       initialValue: widget.telefone,
-                      title: 'Telefone',
                       keyboardType: TextInputType.number,
                       mask: '# ########',
                       hintText: '9 11223344',
@@ -264,38 +268,24 @@ class _CadastroMoradorState extends State<CadastroMorador> {
                   ),
                 ],
               ),
-              ListTile(
-                title: ConstsWidget.buildTextTitle(
-                    context, 'Permitir acesso ao sistema'),
-                trailing: StatefulBuilder(builder: (context, setState) {
-                  return SizedBox(
-                      width: size.width * 0.125,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Checkbox(
-                            value: isChecked,
-                            activeColor: Consts.kColorApp,
-                            onChanged: (bool? value) {
-                              setState(() {
-                                isChecked = value!;
-                                int salvaAcesso = isChecked == true ? 1 : 0;
-                                _formInfosMorador = _formInfosMorador.copyWith(
-                                    acesso: salvaAcesso);
-                              });
-                            },
-                          ),
-                        ],
-                      ));
-                }),
-              ),
+              StatefulBuilder(builder: (context, setState) {
+                return ConstsWidget.buildCheckBox(context, isChecked: isChecked,
+                    onChanged: (bool? value) {
+                  setState(() {
+                    isChecked = value!;
+                    int salvaAcesso = isChecked == true ? 1 : 0;
+                    _formInfosMorador =
+                        _formInfosMorador.copyWith(acesso: salvaAcesso);
+                  });
+                }, title: 'Permitir acesso ao sistema');
+              }),
               ConstsWidget.buildCustomButton(
                 context,
                 'Salvar',
                 onPressed: () {
                   var formValid =
                       _formKeyMorador.currentState?.validate() ?? false;
-                  if (formValid) {
+                  if (formValid && !widget.isDrawer) {
                     _formKeyMorador.currentState?.save();
                     String restoApi = '';
                     widget.idmorador == null

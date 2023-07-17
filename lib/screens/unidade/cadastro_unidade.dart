@@ -25,9 +25,10 @@ class CadastroUnidades extends StatefulWidget {
   final String? login;
   final String? ddd;
   final String? telefone;
+  final bool isDrawer;
   const CadastroUnidades({
     this.iddivisao,
-    this.idunidade,
+    this.idunidade = 0,
     super.key,
     this.numero,
     this.nome_responsavel,
@@ -39,6 +40,7 @@ class CadastroUnidades extends StatefulWidget {
     this.telefone,
     this.ativo = true,
     this.localizado,
+    this.isDrawer = false,
   });
 
   @override
@@ -94,6 +96,7 @@ class _CadastroUnidadesState extends State<CadastroUnidades> {
   String loginGerado = '';
   String dataLogin = '';
   bool isChecked = true;
+  bool nomeDocAlterado = false;
   List listAtivo = [1, 0];
   Object? dropdownValueAtivo;
 
@@ -156,7 +159,11 @@ class _CadastroUnidadesState extends State<CadastroUnidades> {
     // var dropdownValueAtivo = listAtivo.first;
 
     return buildScaffoldAll(context,
-        title: widget.idunidade == 0 ? 'Nova Unidade' : 'Editar Unidade',
+        title: widget.isDrawer
+            ? 'Meu Perfil'
+            : widget.idunidade == 0
+                ? 'Nova Unidade'
+                : 'Editar Unidade',
         body: Form(
           key: _formkeyUnidade,
           child: MyBoxShadow(
@@ -166,13 +173,13 @@ class _CadastroUnidadesState extends State<CadastroUnidades> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   //infos unidade
-                  // if (widget.idunidade == null)
+                  // if (widget.idunidade == 0)
                   Column(
                     children: [
                       buildDropAtivo(
                         context,
                       ),
-                      widget.idunidade == null
+                      widget.idunidade == 0
                           ? buildDropButton()
                           : ConstsWidget.buildPadding001(
                               context,
@@ -181,37 +188,48 @@ class _CadastroUnidadesState extends State<CadastroUnidades> {
                                   context, widget.localizado!),
                             ),
                       //infos resp
-                      if (widget.idunidade == null)
-                        Row(
-                          children: [
-                            SizedBox(
-                                width: size.width * 0.3,
-                                child: buildDropButton()),
-                            Spacer(),
-                            SizedBox(
-                              width: size.width * 0.3,
-                              child: buildMyTextFormObrigatorio(
-                                context,
-                                'Número',
-                                hintText: '335',
-                                // readOnly: widget.idunidade == null ? false : true,
-                                initialValue: widget.numero,
-                                onSaved: (text) => formInfosUnidade =
-                                    formInfosUnidade.copyWith(numero: text),
-                              ),
+                      Row(
+                        children: [
+                          SizedBox(
+                            width: size.width * 0.3,
+                            child: buildMyTextFormObrigatorio(
+                              context,
+                              'Será drop',
+                              hintText: 'AP, Casa',
                             ),
-                            Spacer(),
-                          ],
-                        ),
+                          ),
+                          Spacer(),
+                          SizedBox(
+                            width: size.width * 0.3,
+                            child: buildMyTextFormObrigatorio(
+                              context,
+                              'Número',
+                              hintText: '335',
+                              // readOnly: widget.idunidade == 0 ? false : true,
+                              initialValue: widget.numero,
+                              onSaved: (text) => formInfosUnidade =
+                                  formInfosUnidade.copyWith(numero: text),
+                            ),
+                          ),
+                          Spacer(),
+                        ],
+                      ),
                       buildMyTextFormObrigatorio(
                         context,
                         'Nome Responsável',
                         hintText: 'João da Silva',
-                        // readOnly: widget.idunidade == null ? false : true,
+                        // readOnly: widget.idunidade == 0 ? false : true,
                         initialValue: widget.nome_responsavel,
                         onSaved: (text) {
                           formInfosUnidade =
                               formInfosUnidade.copyWith(responsavel: text);
+                          if (widget.idunidade != 0) {
+                            if (widget.nome_responsavel != text) {
+                              setState(() {
+                                nomeDocAlterado = true;
+                              });
+                            }
+                          }
                         },
                       ),
                     ],
@@ -224,7 +242,7 @@ class _CadastroUnidadesState extends State<CadastroUnidades> {
                         child: buildMyTextFormObrigatorio(
                           context,
                           'Nascimento', hintText: '25/09/1997',
-                          // readOnly: widget.idunidade == null ? false : true,
+                          // readOnly: widget.idunidade == 0 ? false : true,
                           initialValue: widget.dataNascimento,
                           mask: '##/##/####',
                           keyboardType: TextInputType.number,
@@ -252,10 +270,17 @@ class _CadastroUnidadesState extends State<CadastroUnidades> {
                           context,
                           'Documento',
                           hintText: 'Exemplo: RG, CPF',
-                          // readOnly: widget.idunidade == null ? false : true,
+                          // readOnly: widget.idunidade == 0 ? false : true,
                           keyboardType: TextInputType.number,
                           initialValue: widget.documento,
                           onSaved: (text) {
+                            if (widget.idunidade != 0) {
+                              if (widget.documento != text) {
+                                setState(() {
+                                  nomeDocAlterado = true;
+                                });
+                              }
+                            }
                             if (text!.length >= 4) {
                               formInfosUnidade =
                                   formInfosUnidade.copyWith(documento: text);
@@ -306,14 +331,14 @@ class _CadastroUnidadesState extends State<CadastroUnidades> {
                     ],
                   ),
 
-                  if (widget.idunidade == null)
+                  if (widget.idunidade == 0)
                     SizedBox(
                       height: size.height * 0.01,
                     ),
-                  // if (widget.idunidade == null)
+                  // if (widget.idunidade == 0)
                   ConstsWidget.buildCustomButton(
                     context,
-                    'Gerar Login',
+                    'Continuar',
                     onPressed: () {
                       var formValid =
                           _formkeyUnidade.currentState?.validate() ?? false;
@@ -322,7 +347,7 @@ class _CadastroUnidadesState extends State<CadastroUnidades> {
                         List listNome = [];
                         List nomeToList =
                             formInfosUnidade.responsavel.split(' ');
-                        for (var i = 0; i < (nomeToList.length - 1); i++) {
+                        for (var i = 0; i <= nomeToList.length - 1; i++) {
                           if (nomeToList[i] != '') {
                             listNome.add(nomeToList[i]);
                           }
@@ -332,6 +357,12 @@ class _CadastroUnidadesState extends State<CadastroUnidades> {
                           loginGerado =
                               "${listNome.first.toString().toLowerCase()}${listNome.last.toString().toLowerCase()}${formInfosUnidade.documento.substring(0, 4)}r";
                         });
+                        if (nomeDocAlterado) {
+                          buildMinhaSnackBar(context,
+                              title: 'Dados alterados',
+                              subTitle:
+                                  'Refizemos o login com Nome e documento');
+                        }
                         formInfosUnidade =
                             formInfosUnidade.copyWith(login: loginGerado);
                       } else if (widget.idunidade == 0) {}
@@ -374,35 +405,40 @@ class _CadastroUnidadesState extends State<CadastroUnidades> {
                             isChecked = !isChecked;
                           });
                         }, title: "Acesso ao Sistema"),
-                        buildMyTextFormObrigatorio(
-                          context, 'Senha Login',
-                          controller: senhaContr,
-                          //     onSaved: (text) {
-                          //   ConstsFuture.criptoSenha(text!).then((value) {
-                          //     print(value);
-                          //     formInfosUnidade ==
-                          //         formInfosUnidade.copyWith(senha: value);
-                          //     print(formInfosUnidade.senha);
-                          //   });
-                          // }
-                        ),
+                        widget.idunidade == 0
+                            ? buildMyTextFormObrigatorio(
+                                context, 'Senha Login',
+                                controller: senhaContr,
+                                //     onSaved: (text) {
+                                //   ConstsFuture.criptoSenha(text!).then((value) {
+                                //     print(value);
+                                //     formInfosUnidade ==
+                                //         formInfosUnidade.copyWith(senha: value);
+                                //     print(formInfosUnidade.senha);
+                                //   });
+                                // }
+                              )
+                            : ConstsWidget.buildCustomButton(
+                                context, 'Alterar Senha',
+                                onPressed: () {}),
                       ],
                     ),
 
-                  if (loginGerado != '' || widget.idunidade != null)
+                  if (loginGerado != '')
                     SizedBox(
                       height: size.height * 0.01,
                     ),
-                  if (loginGerado != '' || widget.idunidade != null)
+                  if (loginGerado != '')
                     ConstsWidget.buildCustomButton(
                       context,
                       'Salvar',
+                      color: Consts.kColorRed,
                       onPressed: () {
                         _formkeyUnidade.currentState!.save();
                         var formValid =
                             _formkeyUnidade.currentState?.validate() ?? false;
-                        if (formValid) {
-                          String incluindoEditando = widget.idunidade == null
+                        if (formValid && !widget.isDrawer) {
+                          String incluindoEditando = widget.idunidade == 0
                               ? "incluirUnidade&"
                               : 'editarUnidade&id=${widget.idunidade}&';
                           ConstsFuture.criptoSenha(senhaContr.text)

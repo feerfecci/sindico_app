@@ -1,5 +1,8 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables
 import 'package:flutter/material.dart';
+import 'package:sindico_app/consts/consts_future.dart';
+import 'package:sindico_app/screens/moradores/cadastro_morador.dart';
+import 'package:sindico_app/screens/unidade/cadastro_unidade.dart';
 import '../../consts/consts.dart';
 import '../../consts/const_widget.dart';
 import '../../repositories/shared_preferences.dart';
@@ -21,10 +24,12 @@ class _CustomDrawerState extends State<CustomDrawer> {
     Widget buidListTile({
       required String title,
       required IconData leading,
+      void Function()? onTap,
     }) {
       return ConstsWidget.buildPadding001(
         context,
         child: ListTile(
+          onTap: onTap,
           iconColor: Theme.of(context).iconTheme.color,
           leading: Icon(
             leading,
@@ -76,7 +81,19 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 ),
               ),
               buidListTile(
-                  title: 'Meu perfil', leading: Icons.person_outline_rounded),
+                title: 'Meu perfil',
+                leading: Icons.person_outline_rounded,
+                onTap: () {
+                  ConstsFuture.navigatorPagePush(
+                      context,
+                      CadastroUnidades(
+                        isDrawer: true,
+                        nome_responsavel: ResponsalvelInfos.nome_responsavel,
+                        login: ResponsalvelInfos.login,
+                        numero: ResponsalvelInfos.numero,
+                      ));
+                },
+              ),
               buidListTile(
                   title: 'Seja um representante',
                   leading: Icons.business_center_outlined),

@@ -16,12 +16,16 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  bool load = false;
   startLogin() async {
     await LocalInfos.readCache().then((value) async {
       Map<String, dynamic> infos = value;
       if (infos.values.first != null && infos.values.last != null) {
         final auth = await LocalAuthApi.authenticate();
         final hasBiometrics = await LocalAuthApi.hasBiometrics();
+        setState(() {
+          load = true;
+        });
         if (auth && hasBiometrics) {
           return ConstsFuture.fazerLogin(
               context, infos.values.first, infos.values.last);
@@ -40,10 +44,9 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    // Timer(Duration(seconds: 3), () {
-    //   startLogin();
-    // });
-    startLogin();
+    Timer(Duration(seconds: 3), () {
+      startLogin();
+    });
   }
 
   @override
@@ -63,20 +66,22 @@ class _SplashScreenState extends State<SplashScreen> {
             ),
           ),
           Spacer(),
-          ConstsWidget.buildPadding001(
-            context,
-            vertical: 0.03,
-            horizontal: 0.03,
-            child: ConstsWidget.buildCustomButton(
+          Row(),
+          if (load)
+            ConstsWidget.buildPadding001(
               context,
-              'Autenticar Biometria',
-              icon: Icons.lock_open_outlined,
-              onPressed: () {
-                startLogin();
-              },
-              textColor: Consts.kColorApp,
+              vertical: 0.03,
+              horizontal: 0.03,
+              child: ConstsWidget.buildCustomButton(
+                context,
+                'Autenticar Biometria',
+                icon: Icons.lock_open_outlined,
+                onPressed: () {
+                  startLogin();
+                },
+                textColor: Consts.kColorApp,
+              ),
             ),
-          ),
         ],
       ),
     );

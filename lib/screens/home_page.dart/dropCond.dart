@@ -82,7 +82,6 @@ class _DropCondState extends State<DropCond> {
                   setState(
                     () {
                       dropCond = value;
-                      Navigator.pop(context);
                       ConstsFuture.fazerLogin(context, ResponsalvelInfos.login,
                           ResponsalvelInfos.senhacripto,
                           idCondominio: int.parse('$dropCond'));
