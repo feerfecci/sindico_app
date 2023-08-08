@@ -26,14 +26,9 @@ Future excelData() async {
   int j = 0;
 
   for (var table in excel.tables.keys) {
-    // print(table); //sheet Name
-    // print(excel.tables[table]!.maxCols);
-    // print(excel.tables[table]!.maxRows);
     int maxCols = excel.tables[table]!.maxCols;
     int maxRows = excel.tables[table]!.maxRows;
     for (var row in excel.tables[table]!.rows.last) {
-      // rowdetail.add(row['']);
-      // print(row[i - 1]!.value);
       for (i; i <= (maxCols - 1); i++) {
         print(row!.value);
       }

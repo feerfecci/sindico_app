@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:sindico_app/forms/unidades_form.dart';
+import 'package:sindico_app/widgets/alert_dialogs/alertdialog_all.dart';
 import 'package:sindico_app/widgets/header.dart';
 import 'package:sindico_app/widgets/scaffold_all.dart';
 import 'package:sindico_app/widgets/snackbar/snack.dart';
@@ -15,29 +17,20 @@ import 'package:http/http.dart' as http;
 class CadastroUnidades extends StatefulWidget {
   final int? idunidade;
   final Object? iddivisao;
+  final Object? id_divisao_unidade;
   final bool ativo;
   final String? localizado;
   final String? numero;
   final String? nome_responsavel;
-  final String? dataNascimento;
-  final String? documento;
-  final String? email;
-  final String? login;
-  final String? ddd;
-  final String? telefone;
   final bool isDrawer;
+
   const CadastroUnidades({
     this.iddivisao,
+    this.id_divisao_unidade,
     this.idunidade = 0,
     super.key,
     this.numero,
     this.nome_responsavel,
-    this.dataNascimento,
-    this.documento,
-    this.email,
-    this.login,
-    this.ddd,
-    this.telefone,
     this.ativo = true,
     this.localizado,
     this.isDrawer = false,
@@ -57,24 +50,21 @@ class _CadastroUnidadesState extends State<CadastroUnidades> {
     super.initState();
     apiListarDivisoes();
     setInfosMorador();
+    apiListarDivididoPor();
   }
 
   setInfosMorador() {
     formInfosUnidade = formInfosUnidade.copyWith(iddivisao: widget.iddivisao);
+    formInfosUnidade = formInfosUnidade.copyWith(
+        id_divisao_unidade: widget.id_divisao_unidade);
     formInfosUnidade = formInfosUnidade.copyWith(numero: widget.numero);
     formInfosUnidade =
         formInfosUnidade.copyWith(responsavel: widget.nome_responsavel);
-    formInfosUnidade =
-        formInfosUnidade.copyWith(nascimento: widget.dataNascimento);
-    formInfosUnidade = formInfosUnidade.copyWith(documento: widget.documento);
-    formInfosUnidade = formInfosUnidade.copyWith(email: widget.email);
-    formInfosUnidade = formInfosUnidade.copyWith(login: widget.login);
-    formInfosUnidade = formInfosUnidade.copyWith(ddd: widget.ddd);
-    formInfosUnidade = formInfosUnidade.copyWith(telefone: widget.telefone);
     formInfosUnidade = formInfosUnidade.copyWith(ativo: widget.ativo ? 1 : 0);
   }
 
   List categoryItemListDivisoes = [];
+  List categoryItemListDivididoPor = [];
   // Object? dropdownValueDivisioes;
   Future apiListarDivisoes() async {
     var uri =
@@ -93,6 +83,23 @@ class _CadastroUnidadesState extends State<CadastroUnidades> {
     }
   }
 
+  Future apiListarDivididoPor() async {
+    var uri =
+        '${Consts.sindicoApi}divisoes_unidades/?fn=listarDivisoesUnidades&idcond=${ResponsalvelInfos.idcondominio}';
+
+    final response = await http.get(Uri.parse(uri));
+
+    if (response.statusCode == 200) {
+      final jsonresponse = json.decode(response.body);
+      var divisoes = jsonresponse['divisoesUnidades'];
+      setState(() {
+        categoryItemListDivididoPor = divisoes;
+      });
+    } else {
+      throw response.statusCode;
+    }
+  }
+
   String loginGerado = '';
   String dataLogin = '';
   bool isChecked = true;
@@ -103,56 +110,6 @@ class _CadastroUnidadesState extends State<CadastroUnidades> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-
-    Widget buildDropButton() {
-      return ConstsWidget.buildPadding001(
-        context,
-        child: Container(
-          width: double.infinity,
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            color: Theme.of(context).canvasColor,
-            border: Border.all(color: Colors.black26),
-            borderRadius: BorderRadius.all(Radius.circular(16)),
-          ),
-          child: DropdownButtonHideUnderline(
-            child: ButtonTheme(
-              alignedDropdown: true,
-              shape: Border.all(color: Colors.black),
-              child: DropdownButton(
-                elevation: 24,
-                isExpanded: true,
-                hint: Text('Selecione uma Divisão'),
-                icon: Icon(
-                  Icons.arrow_downward_outlined,
-                ),
-                borderRadius: BorderRadius.circular(16),
-                style: TextStyle(
-                  // fontWeight: FontWeight.bold,
-                  fontSize: Consts.fontTitulo,
-                ),
-                items: categoryItemListDivisoes.map((e) {
-                  return DropdownMenuItem(
-                    alignment: Alignment.center,
-                    value: e['iddivisao'],
-                    child:
-                        ConstsWidget.buildTextTitle(context, e['nome_divisao']),
-                  );
-                }).toList(),
-                onChanged: (value) {
-                  setState(() {
-                    // dropdownValueDivisioes = value;
-                    formInfosUnidade =
-                        formInfosUnidade.copyWith(iddivisao: value);
-                  });
-                },
-                value: formInfosUnidade.iddivisao,
-              ),
-            ),
-          ),
-        ),
-      );
-    }
 
     // List<String> listAtivo = <String>['Ativo', 'Inativo'];
     // var seAtivo = widget.ativo == true ? 'Ativo' : 'Inativo';
@@ -179,24 +136,22 @@ class _CadastroUnidadesState extends State<CadastroUnidades> {
                       buildDropAtivo(
                         context,
                       ),
-                      widget.idunidade == 0
-                          ? buildDropButton()
-                          : ConstsWidget.buildPadding001(
-                              context,
-                              vertical: 0.015,
-                              child: ConstsWidget.buildTextTitle(
-                                  context, widget.localizado!),
-                            ),
+                      widget.isDrawer
+                          ? Row()
+                          : widget.idunidade == 0
+                              ? buildDropButtonDivisao()
+                              : ConstsWidget.buildPadding001(
+                                  context,
+                                  vertical: 0.015,
+                                  child: ConstsWidget.buildTextTitle(
+                                      context, widget.localizado!),
+                                ),
                       //infos resp
                       Row(
                         children: [
                           SizedBox(
-                            width: size.width * 0.3,
-                            child: buildMyTextFormObrigatorio(
-                              context,
-                              'Será drop',
-                              hintText: 'AP, Casa',
-                            ),
+                            width: size.width * 0.4,
+                            child: buildDropButtonDividoPor(),
                           ),
                           Spacer(),
                           SizedBox(
@@ -214,264 +169,194 @@ class _CadastroUnidadesState extends State<CadastroUnidades> {
                           Spacer(),
                         ],
                       ),
-                      buildMyTextFormObrigatorio(
-                        context,
-                        'Nome Responsável',
-                        hintText: 'João da Silva',
-                        // readOnly: widget.idunidade == 0 ? false : true,
-                        initialValue: widget.nome_responsavel,
-                        onSaved: (text) {
-                          formInfosUnidade =
-                              formInfosUnidade.copyWith(responsavel: text);
-                          if (widget.idunidade != 0) {
-                            if (widget.nome_responsavel != text) {
-                              setState(() {
-                                nomeDocAlterado = true;
-                              });
-                            }
-                          }
-                        },
-                      ),
                     ],
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SizedBox(
-                        width: size.width * 0.35,
-                        child: buildMyTextFormObrigatorio(
-                          context,
-                          'Nascimento', hintText: '25/09/1997',
-                          // readOnly: widget.idunidade == 0 ? false : true,
-                          initialValue: widget.dataNascimento,
-                          mask: '##/##/####',
-                          keyboardType: TextInputType.number,
-                          onSaved: (text) {
-                            if (text!.length >= 6) {
-                              var ano = text.substring(6);
-                              var mes = text.substring(3, 5);
-                              var dias = text.substring(0, 2);
-                              dataLogin = '$dias$mes';
-                              formInfosUnidade = formInfosUnidade.copyWith(
-                                  nascimento: "$ano-$mes-$dias");
-                            } else {
-                              buildMinhaSnackBar(
-                                context,
-                                title: 'Cuidado',
-                                subTitle: 'Complete a data',
-                              );
-                            }
-                          },
-                        ),
-                      ),
-                      SizedBox(
-                        width: size.width * 0.5,
-                        child: buildMyTextFormObrigatorio(
-                          context,
-                          'Documento',
-                          hintText: 'Exemplo: RG, CPF',
-                          // readOnly: widget.idunidade == 0 ? false : true,
-                          keyboardType: TextInputType.number,
-                          initialValue: widget.documento,
-                          onSaved: (text) {
-                            if (widget.idunidade != 0) {
-                              if (widget.documento != text) {
-                                setState(() {
-                                  nomeDocAlterado = true;
-                                });
-                              }
-                            }
-                            if (text!.length >= 4) {
-                              formInfosUnidade =
-                                  formInfosUnidade.copyWith(documento: text);
-                            } else {
-                              buildMinhaSnackBar(context,
-                                  title: 'Cuidado',
-                                  subTitle: 'Complete a documento');
-                            }
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                  //contato
-                  buildMyTextFormObrigatorio(
-                    context,
-                    'Email',
-                    hintText: 'exemplo@exp.com',
-                    initialValue: formInfosUnidade.email,
-                    onSaved: (text) => formInfosUnidade =
-                        formInfosUnidade.copyWith(email: text),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SizedBox(
-                          width: size.width * 0.2,
-                          child: buildMyTextFormObrigatorio(
-                            context,
-                            'DDD',
-                            hintText: '11',
-                            initialValue: formInfosUnidade.ddd,
-                            mask: '##',
-                            onSaved: (text) => formInfosUnidade =
-                                formInfosUnidade.copyWith(ddd: text),
-                          )),
-                      SizedBox(
-                          width: size.width * 0.6,
-                          child: buildMyTextFormObrigatorio(
-                            context,
-                            initialValue: formInfosUnidade.telefone,
-                            'Telefone',
-                            hintText: '900001111',
-                            mask: '# ########',
-                            onSaved: (text) => formInfosUnidade =
-                                formInfosUnidade.copyWith(telefone: text),
-                          )),
-                    ],
-                  ),
-
-                  if (widget.idunidade == 0)
-                    SizedBox(
-                      height: size.height * 0.01,
-                    ),
-                  // if (widget.idunidade == 0)
                   ConstsWidget.buildCustomButton(
                     context,
-                    'Continuar',
+                    'Salvar',
+                    color: Consts.kColorRed,
                     onPressed: () {
                       var formValid =
                           _formkeyUnidade.currentState?.validate() ?? false;
-                      if (formValid) {
-                        _formkeyUnidade.currentState!.save();
-                        List listNome = [];
-                        List nomeToList =
-                            formInfosUnidade.responsavel.split(' ');
-                        for (var i = 0; i <= nomeToList.length - 1; i++) {
-                          if (nomeToList[i] != '') {
-                            listNome.add(nomeToList[i]);
-                          }
-                        }
 
-                        setState(() {
-                          loginGerado =
-                              "${listNome.first.toString().toLowerCase()}${listNome.last.toString().toLowerCase()}${formInfosUnidade.documento.substring(0, 4)}r";
-                        });
-                        if (nomeDocAlterado) {
-                          buildMinhaSnackBar(context,
-                              title: 'Dados alterados',
-                              subTitle:
-                                  'Refizemos o login com Nome e documento');
-                        }
-                        formInfosUnidade =
-                            formInfosUnidade.copyWith(login: loginGerado);
-                      } else if (widget.idunidade == 0) {}
-                    },
-                  ),
-                  //loginGerado
-                  if (loginGerado != '')
-                    Column(
-                      children: [
-                        SizedBox(
-                          height: size.height * 0.01,
-                        ),
-                        MyBoxShadow(
-                            child: ConstsWidget.buildPadding001(
-                          context,
-                          vertical: 0.005,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
+                      if (formValid && !widget.isDrawer) {
+                        _formkeyUnidade.currentState!.save();
+
+                        showAllDialog(context,
+                            title: ConstsWidget.buildTextTitle(
+                                context, 'Deseja continuar?'),
                             children: [
+                              RichText(
+                                  text: TextSpan(children: [
+                                TextSpan(
+                                    text:
+                                        'Confira as informações antes de prosseguir. Após salvar os dados, eles não poderão ser editados',
+                                    style: TextStyle(
+                                        color: Consts.kColorRed, fontSize: 20))
+                              ])),
                               SizedBox(
-                                width: size.width * 0.01,
+                                height: size.height * 0.025,
                               ),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
-                                  ConstsWidget.buildTextSubTitle('Login:'),
-                                  SizedBox(
-                                    height: size.height * 0.01,
+                                  ConstsWidget.buildOutlinedButton(
+                                    context,
+                                    title: 'Cancelar',
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
                                   ),
-                                  ConstsWidget.buildTextTitle(
-                                      context, loginGerado),
+                                  SizedBox(
+                                    width: size.width * 0.05,
+                                  ),
+                                  ConstsWidget.buildCustomButton(
+                                    context,
+                                    'Salvar',
+                                    onPressed: () {
+                                      String incluindoEditando = widget
+                                                  .idunidade ==
+                                              0
+                                          ? "incluirUnidade&"
+                                          : 'editarUnidade&id=${widget.idunidade}&';
+
+                                      ConstsFuture.resquestApi(
+                                              '${Consts.sindicoApi}unidades/?fn=${incluindoEditando}idcond=${ResponsalvelInfos.idcondominio}&iddivisao=${formInfosUnidade.iddivisao}&ativo=${formInfosUnidade.ativo}&numero=${"$tipoSelec${formInfosUnidade.numero}"}')
+                                          .then((value) {
+                                        if (!value['erro']) {
+                                          ConstsFuture.navigatorPopPush(
+                                              context, '/listaUnidade');
+                                          buildMinhaSnackBar(context,
+                                              title: 'Muito Bem',
+                                              subTitle: value['mensagem']);
+                                        } else {
+                                          buildMinhaSnackBar(context,
+                                              title: 'Uma pena',
+                                              subTitle: value['mensagem']);
+                                        }
+                                      });
+                                    },
+                                  )
                                 ],
-                              ),
-                            ],
-                          ),
-                        )),
-                        ConstsWidget.buildCheckBox(context,
-                            isChecked: isChecked, onChanged: (p0) {
-                          setState(() {
-                            isChecked = !isChecked;
-                          });
-                        }, title: "Acesso ao Sistema"),
-                        widget.idunidade == 0
-                            ? buildMyTextFormObrigatorio(
-                                context, 'Senha Login',
-                                controller: senhaContr,
-                                //     onSaved: (text) {
-                                //   ConstsFuture.criptoSenha(text!).then((value) {
-                                //     print(value);
-                                //     formInfosUnidade ==
-                                //         formInfosUnidade.copyWith(senha: value);
-                                //     print(formInfosUnidade.senha);
-                                //   });
-                                // }
                               )
-                            : ConstsWidget.buildCustomButton(
-                                context, 'Alterar Senha',
-                                onPressed: () {}),
-                      ],
-                    ),
-
-                  if (loginGerado != '')
-                    SizedBox(
-                      height: size.height * 0.01,
-                    ),
-                  if (loginGerado != '')
-                    ConstsWidget.buildCustomButton(
-                      context,
-                      'Salvar',
-                      color: Consts.kColorRed,
-                      onPressed: () {
-                        _formkeyUnidade.currentState!.save();
-                        var formValid =
-                            _formkeyUnidade.currentState?.validate() ?? false;
-                        if (formValid && !widget.isDrawer) {
-                          String incluindoEditando = widget.idunidade == 0
-                              ? "incluirUnidade&"
-                              : 'editarUnidade&id=${widget.idunidade}&';
-                          ConstsFuture.criptoSenha(senhaContr.text)
-                              .then((value) {
-                            ConstsFuture.resquestApi(
-                                    // print(
-                                    '${Consts.sindicoApi}unidades/?fn=${incluindoEditando}idcond=${ResponsalvelInfos.idcondominio}&iddivisao=${formInfosUnidade.iddivisao}&ativo=${formInfosUnidade.ativo}&responsavel=${formInfosUnidade.responsavel}&login=${formInfosUnidade.login}&senha=$value&numero=${formInfosUnidade.numero}&datanasc=${formInfosUnidade.nascimento}&documento=${formInfosUnidade.documento}&dddtelefone=${formInfosUnidade.ddd}&telefone=${formInfosUnidade.telefone}&email=${formInfosUnidade.email}&acessa_sistema=${isChecked ? 1 : 0}')
-                                .then((value) {
-                              if (!value['erro']) {
-                                ConstsFuture.navigatorPopPush(
-                                    context, '/listaUnidade');
-                                buildMinhaSnackBar(context,
-                                    title: 'Muito Bem',
-                                    subTitle: value['mensagem']);
-
-                                setState(() {
-                                  apiListarDivisoes();
-                                });
-                              } else {
-                                buildMinhaSnackBar(context,
-                                    title: 'Uma pena',
-                                    subTitle: value['mensagem']);
-                              }
-                            });
-                          });
-                        } else if (widget.idunidade == 0) {}
-                      },
-                    )
+                            ]);
+                      }
+                    },
+                  )
                 ],
               ),
             ),
           ),
         ));
+  }
+
+  String tipoSelec = '';
+
+  Widget buildDropButtonDividoPor() {
+    return ConstsWidget.buildPadding001(
+      context,
+      child: Container(
+        width: double.infinity,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: Theme.of(context).canvasColor,
+          border: Border.all(color: Colors.black26),
+          borderRadius: BorderRadius.all(Radius.circular(16)),
+        ),
+        child: DropdownButtonHideUnderline(
+          child: ButtonTheme(
+            alignedDropdown: true,
+            shape: Border.all(color: Colors.black),
+            child: DropdownButton(
+              elevation: 24,
+              isExpanded: true,
+              hint: Text('Selecione'),
+              icon: Icon(
+                Icons.arrow_downward_outlined,
+              ),
+              borderRadius: BorderRadius.circular(16),
+              style: TextStyle(
+                // fontWeight: FontWeight.bold,
+                fontSize: Consts.fontTitulo,
+              ),
+              items: categoryItemListDivididoPor.map((e) {
+                return DropdownMenuItem(
+                  alignment: Alignment.center,
+                  value: e['id_divisao_unidade'],
+                  child: ConstsWidget.buildTextTitle(
+                      context, e['nome_divisao_unidade']),
+                );
+              }).toList(),
+              onChanged: (value) {
+                setState(() {
+                  // dropdownValueDivisioes = value;
+                  formInfosUnidade =
+                      formInfosUnidade.copyWith(id_divisao_unidade: value);
+                  categoryItemListDivididoPor.map((e) {
+                    if (value == e['id_divisao_unidade']) {
+                      setState(() {
+                        tipoSelec = e['nome_divisao_unidade'];
+                      });
+                    }
+                  }).toList();
+                });
+              },
+              value: formInfosUnidade.id_divisao_unidade,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget buildDropButtonDivisao() {
+    return ConstsWidget.buildPadding001(
+      context,
+      child: Container(
+        width: double.infinity,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: Theme.of(context).canvasColor,
+          border: Border.all(color: Colors.black26),
+          borderRadius: BorderRadius.all(Radius.circular(16)),
+        ),
+        child: DropdownButtonHideUnderline(
+          child: ButtonTheme(
+            alignedDropdown: true,
+            shape: Border.all(color: Colors.black),
+            child: DropdownButton(
+              elevation: 24,
+              isExpanded: true,
+              hint: Text('Selecione uma Divisão'),
+              icon: Icon(
+                Icons.arrow_downward_outlined,
+              ),
+              borderRadius: BorderRadius.circular(16),
+              style: TextStyle(
+                // fontWeight: FontWeight.bold,
+                fontSize: Consts.fontTitulo,
+              ),
+              items: categoryItemListDivisoes.map((e) {
+                return DropdownMenuItem(
+                  alignment: Alignment.center,
+                  value: e['iddivisao'],
+                  child:
+                      ConstsWidget.buildTextTitle(context, e['nome_divisao']),
+                );
+              }).toList(),
+              onChanged: (value) {
+                setState(() {
+                  // dropdownValueDivisioes = value;
+                  formInfosUnidade =
+                      formInfosUnidade.copyWith(iddivisao: value);
+                });
+              },
+              value: dropdownValueAtivo = formInfosUnidade.iddivisao,
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   Widget buildDropAtivo(
@@ -484,6 +369,7 @@ class _CadastroUnidadesState extends State<CadastroUnidades> {
       child: StatefulBuilder(builder: (context, setState) {
         return Container(
           width: double.infinity,
+          alignment: Alignment.center,
           decoration: BoxDecoration(
             color: Theme.of(context).canvasColor,
             border: Border.all(color: Colors.black26),
@@ -494,12 +380,8 @@ class _CadastroUnidadesState extends State<CadastroUnidades> {
             child: DropdownButtonHideUnderline(
               child: DropdownButton(
                 value: dropdownValueAtivo = formInfosUnidade.ativo,
-                icon: Padding(
-                  padding: EdgeInsets.only(right: size.height * 0.03),
-                  child: Icon(
-                    Icons.arrow_downward,
-                    color: Theme.of(context).iconTheme.color,
-                  ),
+                icon: Icon(
+                  Icons.arrow_downward_outlined,
                 ),
                 elevation: 24,
                 style: TextStyle(
@@ -511,13 +393,14 @@ class _CadastroUnidadesState extends State<CadastroUnidades> {
                   setState(() {
                     dropdownValueAtivo = value!;
                     formInfosUnidade = formInfosUnidade.copyWith(ativo: value);
-                    print(formInfosUnidade.ativo);
                   });
                 },
                 items: listAtivo.map<DropdownMenuItem>((value) {
                   return DropdownMenuItem(
                     value: value,
-                    child: value == 0 ? Text('Inativo') : Text('Ativo'),
+                    child: value == 0
+                        ? ConstsWidget.buildTextTitle(context, 'Inativo')
+                        : ConstsWidget.buildTextTitle(context, 'Ativo'),
                   );
                 }).toList(),
               ),

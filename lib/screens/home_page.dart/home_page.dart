@@ -14,7 +14,9 @@ import '../../widgets/header.dart';
 import '../../widgets/my_box_shadow.dart';
 import '../colaboradores/lista_colaboradores.dart';
 import '../quadro_avisos/quadro_de_avisos.dart';
+import '../tarefas/tarefas_screen.dart';
 import '../unidade/lista_unidade.dart';
+import 'package:reorderable_grid_view/reorderable_grid_view.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -29,31 +31,59 @@ class _HomePageState extends State<HomePage> {
   List<Models> models = [
     Models(
         indexOrder: 0,
+        title: 'Bombeiros',
+        numberCall: '193',
+        iconApi: '${Consts.iconApiPort}bombeiro.png'),
+    Models(
+        indexOrder: 1,
+        title: 'Samu',
+        numberCall: '192',
+        iconApi: '${Consts.iconApiPort}ambulancia.png'),
+    Models(
+        indexOrder: 2,
+        title: 'Polícia',
+        numberCall: '190',
+        iconApi: '${Consts.iconApiPort}policia.png'),
+    Models(
+      indexOrder: 3,
+      title: 'Lista | Colaboradores',
+      iconApi: '${Consts.iconApiPort}visitas.png',
+      pageRoute: ListaColaboradores(),
+    ),
+    Models(
+        indexOrder: 4,
+        title: 'Cadastro | Espaços',
+        pageRoute: ListaEspacos(),
+        iconApi: '${Consts.iconApiPort}cadastro-espacos-azul.png'),
+    Models(
+        indexOrder: 5,
+        title: 'Cadastro | Unidades',
+        pageRoute: ListaUnidades(),
+        iconApi: '${Consts.iconApiPort}cadastro-unidades.png'),
+    Models(
+        indexOrder: 6,
         title: 'Reservas Solicitadas',
         pageRoute: ListaReservas(),
         iconApi: '${Consts.iconApiPort}reservas-solicitadas.png'),
     Models(
-      indexOrder: 1,
+      indexOrder: 7,
       pageRoute: QuadroDeAvisos(),
       title: 'Quadro de Avisos',
       iconApi: '${Consts.iconApiPort}quadrodeavisos.png',
     ),
     Models(
-      indexOrder: 2,
-      title: 'Cadastro de Colaboradores',
-      iconApi: '${Consts.iconApiPort}visitas.png',
-      pageRoute: ListaColaboradores(),
+      indexOrder: 7,
+      title: 'Ligar Portaria',
+      isWhats: true,
+      numberCall: ResponsalvelInfos.telefone_portaria,
+      iconApi: '${Consts.iconApiPort}ligar.png',
     ),
     Models(
-        indexOrder: 3,
-        title: 'Cadastro de Unidades',
-        pageRoute: ListaUnidades(),
-        iconApi: '${Consts.iconApiPort}cadastro-unidades.png'),
-    Models(
-        indexOrder: 4,
-        title: 'Cadastro de Espaços',
-        pageRoute: ListaEspacos(),
-        iconApi: '${Consts.iconApiPort}cadastroespacos.png'),
+      indexOrder: 7,
+      pageRoute: TarefasScreen(),
+      title: 'Lista | Tarefas',
+      iconApi: '${Consts.iconApiPort}cadastro-unidades.png',
+    ),
   ];
 
   gettingCacheDrag() async {
@@ -103,6 +133,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
+
     return WillPopScope(
       onWillPop: () async {
         final differenceBack = DateTime.now().difference(timeBackPressed);
@@ -153,49 +184,56 @@ class _HomePageState extends State<HomePage> {
             elevation: 0,
             leadingWidth: size.height * 0.06,
           ),
-          body: Padding(
-            padding: EdgeInsets.symmetric(horizontal: size.width * 0.02),
-            child: ListView(
-              children: [
-                ResponsalvelInfos.qntCond == 1
-                    ? ConstsWidget.buildPadding001(
-                        context,
-                        child: ConstsWidget.buildTextTitle(
-                            context, ResponsalvelInfos.nome_condominio,
-                            textAlign: TextAlign.center, size: 22),
-                      )
-                    : DropCond(),
-                StatefulBuilder(
-                  builder: (context, setState) {
-                    return ReorderableListView(
-                      shrinkWrap: true,
-                      physics: ClampingScrollPhysics(),
-                      children: models.map((card) {
-                        return Container(
-                          key: ValueKey(card),
-                          child: buildCardHome(context,
-                              title: card.title,
-                              pageRoute: card.pageRoute!,
-                              iconApi: card.iconApi),
-                        );
-                      }).toList(),
-                      onReorder: (oldIndex, newIndex) {
-                        var card = models.removeAt(oldIndex);
-                        setState(
-                          () {
-                            models.insert(
-                                newIndex == 5 ? newIndex - 1 : newIndex, card);
-                            LocalInfos.setOrderDragg(models.map((e) {
-                              return e.indexOrder.toString();
-                            }).toList());
-                          },
-                        );
-                      },
-                    );
-                  },
-                ),
-              ],
-            ),
+          body: ListView(
+            padding: EdgeInsets.symmetric(horizontal: size.height * 0.01),
+            children: [
+              ResponsalvelInfos.qntCond == 1
+                  ? ConstsWidget.buildPadding001(
+                      context,
+                      child: ConstsWidget.buildTextTitle(
+                          context, ResponsalvelInfos.nome_condominio,
+                          textAlign: TextAlign.center, size: 22),
+                    )
+                  : DropCond(),
+              StatefulBuilder(
+                builder: (context, setState) {
+                  return ReorderableGridView.count(
+                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 0.5,
+                    crossAxisCount: 2,
+                    shrinkWrap: true,
+                    childAspectRatio: 1.4,
+                    physics: ClampingScrollPhysics(),
+                    onReorder: (oldIndex, newIndex) {
+                      var card = models.removeAt(oldIndex);
+                      setState(
+                        () {
+                          models.insert(
+                              newIndex == 5 ? newIndex - 1 : newIndex, card);
+                          LocalInfos.setOrderDragg(models.map((e) {
+                            return e.indexOrder.toString();
+                          }).toList());
+                        },
+                      );
+                    },
+                    children: models.map((card) {
+                      return Container(
+                        key: ValueKey(card),
+                        child: buildCardHome(context,
+                            title: card.title,
+                            pageRoute: card.pageRoute,
+                            isWhats: card.isWhats,
+                            numberCall: card.numberCall,
+                            iconApi: card.iconApi),
+                      );
+                    }).toList(),
+                  );
+                },
+              ),
+              SizedBox(
+                height: size.height * 0.01,
+              )
+            ],
           ),
         ),
       ),
@@ -210,10 +248,15 @@ class Models {
   Widget? pageRoute;
 
   String iconApi = '';
+
+  bool isWhats;
+  String? numberCall;
   Models({
     required this.indexOrder,
     required this.title,
-    required this.pageRoute,
+    this.pageRoute,
     required this.iconApi,
+    this.isWhats = false,
+    this.numberCall,
   });
 }

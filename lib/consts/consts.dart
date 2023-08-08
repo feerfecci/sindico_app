@@ -6,20 +6,27 @@ class ResponsalvelInfos {
   static String senhacripto = '';
   static int qntCond = 0;
   static int idcondominio = 0;
+  static int idfuncionario = 0;
   static String nome_condominio = "";
   static String dividido_por = "";
   static String nome_responsavel = "";
+  static String nascimento = "";
+  static String documento = "";
+  static String telefone = "";
+  static String telefone_portaria = "";
+  static String email = "";
+  static String estado = "";
   static String endereco = "";
   static String numero = "";
   static String bairro = "";
   static String cep = "";
   static String cidade = "";
-  static String estado = "";
+  static int temporespostas = 0;
 }
 
 class Consts {
-  static const double fontTitulo = 18;
-  static const double fontSubTitulo = 16;
+  static const double fontTitulo = 20;
+  static const double fontSubTitulo = 18;
   static const double borderButton = 60;
 
   static const kBackPageColor = Color.fromARGB(255, 245, 245, 255);

@@ -15,10 +15,13 @@ class ConstsWidget {
   }
 
   static Widget buildTextTitle(BuildContext context, String title,
-      {textAlign, Color? color, double size = 16}) {
+      {textAlign,
+      Color? color,
+      double size = Consts.fontTitulo,
+      int maxLines = 2}) {
     return Text(
       title,
-      maxLines: 2,
+      maxLines: maxLines,
       textAlign: textAlign,
       style: TextStyle(
         color: color ?? Theme.of(context).colorScheme.primary,
@@ -95,7 +98,7 @@ class ConstsWidget {
       required bool isLoading,
       required String title,
       color = Consts.kColorAzul,
-      double fontSize = 14}) {
+      double fontSize = 16}) {
     var size = MediaQuery.of(context).size;
 
     return ElevatedButton(
@@ -109,15 +112,8 @@ class ConstsWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  Text(
-                    title,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: fontSize,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
+                  ConstsWidget.buildTextTitle(context, title,
+                      size: fontSize, color: Colors.white),
                 ],
               )
             : Row(
@@ -232,7 +228,8 @@ class ConstsWidget {
     return OutlinedButton(
       style: OutlinedButton.styleFrom(
         alignment: Alignment.center,
-        padding: EdgeInsets.symmetric(vertical: size.height * 0.021),
+        padding: EdgeInsets.symmetric(
+            vertical: size.height * 0.021, horizontal: size.width * 0.024),
         side: BorderSide(width: size.width * 0.005, color: Colors.blue),
         shape: StadiumBorder(),
       ),

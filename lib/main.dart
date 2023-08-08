@@ -4,9 +4,11 @@ import 'package:provider/provider.dart';
 import 'package:sindico_app/repositories/themes_provider.dart';
 import 'package:sindico_app/screens/colaboradores/lista_colaboradores.dart';
 import 'package:sindico_app/screens/quadro_avisos/quadro_de_avisos.dart';
+import 'package:sindico_app/screens/tarefas/tarefas_screen.dart';
 import 'package:sindico_app/screens/unidade/lista_unidade.dart';
 import 'repositories/themes_model.dart';
 import 'screens/splash_screen/splash_screen.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -35,7 +37,17 @@ class MyApp extends StatelessWidget {
             '/listaColaboradores': (context) => ListaColaboradores(),
             '/listaUnidade': (context) => ListaUnidades(),
             '/quadroDeAvisos': (context) => QuadroDeAvisos(),
+            '/tarefasScreen': (context) => TarefasScreen(),
           },
+          localizationsDelegates: const [
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: const [
+            Locale('en', 'USA'), // English, UK
+            Locale('pt', 'BR'), // Arabic, UAE
+          ],
           title: 'Flutter Demo',
           themeMode: themeProvider.themeMode,
           theme: themeLight(context),

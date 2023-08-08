@@ -30,7 +30,7 @@ class _LoginScreenState extends State<LoginScreen> {
         LocalInfos.createCache(userController.text, senhaController.text)
             .whenComplete(() {
           setState(() {
-            isLoading = !isLoading;
+            isLoading = !true;
           });
 
           ConstsFuture.fazerLogin(
@@ -38,12 +38,10 @@ class _LoginScreenState extends State<LoginScreen> {
         });
       } else if (formValid && !isChecked) {
         setState(() {
-          isLoading = !isLoading;
+          isLoading = false;
         });
         ConstsFuture.fazerLogin(
             context, userController.text, senhaController.text);
-      } else {
-        buildMinhaSnackBar(context);
       }
     });
   }
@@ -176,11 +174,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         height: size.height * 0.03,
                       ),
                       buildTextFormSenha(),
-                      ConstsWidget.buildLoadingButton(context,
-                          onPressed: starLogin,
-                          isLoading: isLoading,
-                          title: 'Entrar',
-                          fontSize: 18),
+                      ConstsWidget.buildLoadingButton(context, onPressed: () {
+                        starLogin();
+                      }, isLoading: isLoading, title: 'Entrar', fontSize: 18),
                     ],
                   ),
                 ),

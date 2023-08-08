@@ -7,6 +7,8 @@ import '../../consts/consts.dart';
 import '../../consts/const_widget.dart';
 import '../../repositories/shared_preferences.dart';
 import '../../screens/login/login_screen.dart';
+import '../../screens/meu_perfil/informacoes_cond.dart';
+import '../../screens/meu_perfil/meu_perfil_screen.dart';
 import 'change_theme_button.dart';
 
 class CustomDrawer extends StatefulWidget {
@@ -69,7 +71,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                       borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(30),
                       ),
-                      color: Consts.kColorApp),
+                      color: Consts.kColorAzul),
                   child: Text(
                     'Menu',
                     textAlign: TextAlign.center,
@@ -84,16 +86,16 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 title: 'Meu perfil',
                 leading: Icons.person_outline_rounded,
                 onTap: () {
-                  ConstsFuture.navigatorPagePush(
-                      context,
-                      CadastroUnidades(
-                        isDrawer: true,
-                        nome_responsavel: ResponsalvelInfos.nome_responsavel,
-                        login: ResponsalvelInfos.login,
-                        numero: ResponsalvelInfos.numero,
-                      ));
+                  ConstsFuture.navigatorPagePush(context, MeuPerfilScreen());
                 },
               ),
+              // buidListTile(
+              //   title: 'Informações Condomínio',
+              //   leading: Icons.person_outline_rounded,
+              //   onTap: () {
+              //     ConstsFuture.navigatorPagePush(context, InformacoesCond());
+              //   },
+              // ),
               buidListTile(
                   title: 'Seja um representante',
                   leading: Icons.business_center_outlined),

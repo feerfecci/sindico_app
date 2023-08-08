@@ -12,6 +12,7 @@ Widget buildMyTextFormField(BuildContext context,
     List<TextInputFormatter>? inputFormatters,
     String? hintText,
     String? initialValue,
+    bool labelCenter = false,
     final void Function(String? text)? onSaved}) {
   var size = MediaQuery.of(context).size;
   return ConstsWidget.buildPadding001(
@@ -31,7 +32,11 @@ Widget buildMyTextFormField(BuildContext context,
             horizontal: size.width * 0.035, vertical: size.height * 0.023),
         filled: true,
         fillColor: Theme.of(context).canvasColor,
-        label: Text(title),
+        label: labelCenter
+            ? Center(
+                child: Text(title),
+              )
+            : Text(title),
         hintText: hintText,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
@@ -52,6 +57,7 @@ Widget buildMyTextFormObrigatorio(BuildContext context, String title,
     String? initialValue,
     TextInputType? keyboardType,
     bool readOnly = false,
+    bool labelCenter = false,
     int? maxLength,
     int? maxLines,
     int? minLines,
@@ -74,13 +80,18 @@ Widget buildMyTextFormObrigatorio(BuildContext context, String title,
       minLines: minLines,
       maxLines: maxLines,
       inputFormatters: [MaskTextInputFormatter(mask: mask)],
-      validator: Validatorless.multiple([Validatorless.required(mensagem)]),
+      validator: validator ??
+          Validatorless.multiple([Validatorless.required(mensagem)]),
       decoration: InputDecoration(
         contentPadding: EdgeInsets.symmetric(
             horizontal: size.width * 0.035, vertical: size.height * 0.023),
         filled: true,
         fillColor: Theme.of(context).canvasColor,
-        label: Text(title),
+        label: labelCenter
+            ? Center(
+                child: Text(title),
+              )
+            : Text(title),
         hintText: hintText,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),

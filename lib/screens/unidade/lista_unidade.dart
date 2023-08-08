@@ -4,6 +4,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:sindico_app/forms/unidades_form.dart';
+import 'package:sindico_app/screens/moradores/lista_morador.dart';
 import 'package:sindico_app/screens/unidade/cadastro_unidade.dart';
 import 'package:sindico_app/screens/unidade/loading_unidade.dart';
 import 'package:sindico_app/screens/unidade/teste.dart';
@@ -89,14 +90,6 @@ class _ListaUnidadeStates extends State<ListaUnidades> {
           title: ResponsalvelInfos.nome_condominio,
           body: Column(
             children: [
-              // ConstsWidget.buildCustomButton(context, 'Exel',
-              //     onPressed: () {
-              //   Navigator.push(
-              //       context,
-              //       MaterialPageRoute(
-              //         builder: (context) => TesteUnidade(),
-              //       ));
-              // }),
               ConstsWidget.buildPadding001(
                 context,
                 child: ConstsWidget.buildCustomButton(
@@ -121,19 +114,10 @@ class _ListaUnidadeStates extends State<ListaUnidades> {
                           var itensUnidade = snapshot.data['unidades'][index];
                           var idunidade = itensUnidade['idunidade'];
                           var iddivisao = itensUnidade['iddivisao'];
-                          var nome_responsavel =
-                              itensUnidade['nome_responsavel'];
                           var nome_condominio = itensUnidade['nome_condominio'];
                           var nome_divisao = itensUnidade['nome_divisao'];
                           var dividido_por = itensUnidade['dividido_por'];
                           var numero = itensUnidade['numero'];
-                          var data_nascimento = DateFormat('dd/MM/yyyy').format(
-                              DateTime.parse(itensUnidade['data_nascimento']));
-                          var documento = itensUnidade['documento'];
-                          var email = itensUnidade['email'];
-                          var ddd = itensUnidade['dddtelefone'];
-                          var telefone = itensUnidade['telefone'];
-                          var login = itensUnidade['login'];
 
                           bool ativoUnidade = itensUnidade['ativo'];
                           return ConstsWidget.buildPadding001(
@@ -145,76 +129,24 @@ class _ListaUnidadeStates extends State<ListaUnidades> {
                                 vertical: 0.005,
                                 horizontal: 0.02,
                                 child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            ConstsWidget.buildTextSubTitle(
-                                                'Nome do Responsável'),
-                                            ConstsWidget.buildTextTitle(
-                                                context, nome_responsavel),
-                                          ],
-                                        ),
-                                        ConstsWidget.buildAtivoInativo(
-                                            context, ativoUnidade),
-                                      ],
-                                    ),
-                                    buildRowUnidade(
-                                        title1: 'Localiza do em',
-                                        subTitle1:
-                                            '$numero - $dividido_por $nome_divisao',
-                                        title2: 'Login:',
-                                        subTitle2: login),
-                                    buildRowUnidade(
-                                        title1: 'Nascimento:',
-                                        subTitle1: data_nascimento,
-                                        title2: 'Documento:',
-                                        subTitle2: documento),
-                                    ConstsWidget.buildPadding001(
-                                      context,
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          ConstsWidget.buildTextSubTitle(
-                                              'Email:'),
-                                          ConstsWidget.buildTextTitle(
-                                              context, email),
-                                        ],
-                                      ),
-                                    ),
+                                    ConstsWidget.buildTextTitle(context,
+                                        "$dividido_por $nome_divisao - $numero"),
                                     SizedBox(
                                       height: size.height * 0.01,
                                     ),
                                     ConstsWidget.buildCustomButton(
                                       context,
-                                      'Editar Unidades',
+                                      'Listar Moradores',
                                       onPressed: () {
                                         ConstsFuture.navigatorPagePush(
                                             context,
-                                            CadastroUnidades(
+                                            ListaMorador(
                                               idunidade: idunidade,
-                                              iddivisao: iddivisao,
+                                              idvisisao: iddivisao,
                                               localizado:
-                                                  '$numero - $dividido_por $nome_divisao',
-                                              nome_responsavel:
-                                                  nome_responsavel,
-                                              login: login,
-                                              numero: numero,
-                                              ativo: ativoUnidade,
-                                              dataNascimento: data_nascimento,
-                                              documento: documento,
-                                              email: email,
-                                              ddd: ddd,
-                                              telefone: telefone,
+                                                  "$dividido_por $nome_divisao - $numero",
                                             ));
                                       },
                                     )

@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 import 'package:excel/excel.dart';
 import 'package:image_picker/image_picker.dart';
@@ -11,6 +12,8 @@ import 'package:sindico_app/widgets/my_text_form_field.dart';
 import 'package:sindico_app/widgets/snackbar/snack.dart';
 import 'package:validatorless/validatorless.dart';
 import '../../consts/const_widget.dart';
+import 'package:path/path.dart';
+import 'package:http/http.dart' as http;
 
 class WidgetModalAvisos extends StatefulWidget {
   const WidgetModalAvisos({super.key});
@@ -26,6 +29,8 @@ class _WidgetModalAvisosState extends State<WidgetModalAvisos> {
   File? fileImage;
   bool isFile = false;
   List<String> listImage = [];
+  String? nameImage = '';
+  String? pathImage = '';
 
   @override
   Widget build(BuildContext context) {
@@ -84,13 +89,17 @@ class _WidgetModalAvisosState extends State<WidgetModalAvisos> {
 
                     if (!isFile) {
                       final file = File(pickedFile.path);
-
-                      setState(() {
-                        listImage.add(file.uri.toString());
+                      nameImage = pickedFile.name;
+                      pathImage = pickedFile.path;
+                      if (listImage.isEmpty) {
+                        setState(() {
+                          listImage.add(file.uri.toString());
+                        });
+                      } else {
                         buildMinhaSnackBar(context,
-                            title: 'Esse é apenas um teste',
-                            subTitle: 'A imagem não irá para o aviso');
-                      });
+                            title: 'Cuidado!',
+                            subTitle: 'Permitido apenas um arquivo');
+                      }
                     }
                   },
                 ),
@@ -114,6 +123,7 @@ class _WidgetModalAvisosState extends State<WidgetModalAvisos> {
                             children: [
                               Icon(Icons.upload_file_outlined),
                               Text(
+                                // listImage[index],
                                 '...${listImage[index].substring(listImage[index].length - 28, listImage[index].length)}',
                               ),
                               IconButton(
@@ -121,6 +131,8 @@ class _WidgetModalAvisosState extends State<WidgetModalAvisos> {
                                 onPressed: () {
                                   setState(() {
                                     listImage.remove(listImage[index]);
+                                    nameImage = '';
+                                    pathImage = '';
                                   });
                                 },
                               )
@@ -134,22 +146,36 @@ class _WidgetModalAvisosState extends State<WidgetModalAvisos> {
                     color: Consts.kColorRed, onPressed: () {
                   var formValid = _keyForm.currentState?.validate();
                   if (formValid!) {
-                    // print(listImage.join(','));
-                    ConstsFuture.resquestApi(
-                            '${Consts.sindicoApi}quadro_avisos/index.php?fn=incluirAviso&idcond=${ResponsalvelInfos.idcondominio}&tipo=1&titulo=${tituloCntl.text}&texto=${textoCntl.text}')
+                    upload(nameImage: nameImage, pathImage: pathImage)
                         .then((value) {
                       if (!value['erro']) {
                         Navigator.pop(context);
                         Navigator.pop(context);
                         ConstsFuture.navigatorPagePush(
                             context, QuadroDeAvisos());
-                        return buildMinhaSnackBar(context,
+                        buildMinhaSnackBar(context,
                             title: 'Muito Obrigado!',
                             subTitle: value['mensagem']);
                       } else {
                         buildMinhaSnackBar(context);
                       }
                     });
+
+                    // ConstsFuture.resquestApi(
+                    //         '${Consts.sindicoApi}quadro_avisos/index.php?fn=incluirAviso&idcond=${ResponsalvelInfos.idcondominio}&tipo=1&titulo=${tituloCntl.text}&texto=${textoCntl.text}')
+                    //     .then((value) {
+                    //   if (!value['erro']) {
+                    //     Navigator.pop(context);
+                    //     Navigator.pop(context);
+                    //     ConstsFuture.navigatorPagePush(
+                    //         context, QuadroDeAvisos());
+                    //     return buildMinhaSnackBar(context,
+                    //         title: 'Muito Obrigado!',
+                    //         subTitle: value['mensagem']);
+                    //   } else {
+                    //     buildMinhaSnackBar(context);
+                    //   }
+                    // });
                   }
                 }),
               ],
@@ -158,5 +184,33 @@ class _WidgetModalAvisosState extends State<WidgetModalAvisos> {
         ),
       ],
     );
+  }
+
+  Future upload(
+      {required String? nameImage, required String? pathImage}) async {
+    var postUri = Uri.parse(
+        "https://a.portariaapp.com/portaria/api/quadro_avisos/?fn=enviarAviso");
+
+    http.MultipartRequest request = http.MultipartRequest("POST", postUri);
+
+    if (pathImage != '') {
+      http.MultipartFile multipartFile = await http.MultipartFile.fromPath(
+          'imagem', pathImage!,
+          filename: nameImage);
+
+      request.files.add(multipartFile);
+    }
+    request.fields['tipo'] = '1';
+    request.fields['idcond'] = '${ResponsalvelInfos.idcondominio}';
+    request.fields['titulo'] = tituloCntl.text;
+    request.fields['texto'] = textoCntl.text;
+
+    var response = await request.send();
+
+    if (response.statusCode == 200) {
+      return {'erro': false, "mensagem": 'Cadastrado com Sucesso!'};
+    } else {
+      return {'erro': true, 'mensagem': 'Tente Novamente'};
+    }
   }
 }

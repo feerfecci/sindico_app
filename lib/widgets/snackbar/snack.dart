@@ -83,7 +83,6 @@ buildMinhaSnackBar(
                 ScaffoldMessenger.of(context).clearSnackBars();
               } on FlutterError catch (e) {
                 // ignore: avoid_print
-                print(e);
               }
             })),
         elevation: 8,

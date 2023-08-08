@@ -9,6 +9,7 @@ class FormInfosUnidade {
   final String ddd;
   final String telefone;
   final Object? iddivisao;
+  final Object? id_divisao_unidade;
   final int ativo;
   // final String senha;
   // final int avisa_corresp;
@@ -22,6 +23,7 @@ class FormInfosUnidade {
     this.senha = '',
     this.numero = '',
     this.iddivisao,
+    this.id_divisao_unidade,
     this.ativo = 0,
     this.email = '',
     this.nascimento = '',
@@ -36,6 +38,7 @@ class FormInfosUnidade {
     String? senha,
     String? numero,
     iddivisao,
+    id_divisao_unidade,
     int? ativo,
     String? email,
     String? nascimento,
@@ -49,6 +52,7 @@ class FormInfosUnidade {
         senha: senha ?? this.senha,
         numero: numero ?? this.numero,
         iddivisao: iddivisao ?? this.iddivisao,
+        id_divisao_unidade: id_divisao_unidade ?? this.id_divisao_unidade,
         ativo: ativo ?? this.ativo,
         email: email ?? this.email,
         nascimento: nascimento ?? this.nascimento,

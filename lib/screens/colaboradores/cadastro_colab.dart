@@ -6,11 +6,13 @@ import 'package:sindico_app/widgets/header.dart';
 import 'package:sindico_app/widgets/scaffold_all.dart';
 import 'package:sindico_app/widgets/snackbar/snack.dart';
 import 'package:http/http.dart' as http;
+import 'package:validatorless/validatorless.dart';
 
 import '../../consts/consts.dart';
 import '../../consts/const_widget.dart';
 import '../../consts/consts_future.dart';
 import '../../forms/funcionario_form.dart';
+import '../../widgets/alert_dialogs/alertdialog_all.dart';
 import '../../widgets/my_box_shadow.dart';
 import '../../widgets/my_text_form_field.dart';
 
@@ -59,8 +61,11 @@ Object? dropdownValueAtivo;
 
 class _CadastroColaboradorState extends State<CadastroColaborador> {
   final _formkeyFuncionario = GlobalKey<FormState>();
+  final _formkeySenha = GlobalKey<FormState>();
   FormInfosFunc formInfosFunc = FormInfosFunc();
-  final TextEditingController senhaContr = TextEditingController();
+  final TextEditingController atualSenhaCtrl = TextEditingController();
+  final TextEditingController novaSenhaCtrl = TextEditingController();
+  final TextEditingController confirmSenhaCtrl = TextEditingController();
   @override
   void initState() {
     super.initState();
@@ -98,6 +103,8 @@ class _CadastroColaboradorState extends State<CadastroColaborador> {
   }
 
   String loginGerado = '';
+  bool isLoading = false;
+  bool nomeDocAlterado = false;
 
   @override
   Widget build(BuildContext context) {
@@ -213,13 +220,18 @@ class _CadastroColaboradorState extends State<CadastroColaborador> {
                   context,
                 ),
                 buildMyTextFormObrigatorio(
-                  context,
-                  initialValue: widget.nomeFuncionario,
-                  'Nome Completo',
-                  hintText: 'Joao da Silva Sousa',
-                  onSaved: (text) => formInfosFunc =
-                      formInfosFunc.copyWith(nome_funcionario: text),
-                ),
+                    context,
+                    initialValue: widget.nomeFuncionario,
+                    'Nome Completo',
+                    hintText: 'Joao da Silva Sousa', onSaved: (text) {
+                  formInfosFunc =
+                      formInfosFunc.copyWith(nome_funcionario: text);
+                  if (text != widget.nomeFuncionario) {
+                    setState(() {
+                      nomeDocAlterado = true;
+                    });
+                  }
+                }),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -248,6 +260,11 @@ class _CadastroColaboradorState extends State<CadastroColaborador> {
                           if (text!.length >= 4) {
                             formInfosFunc =
                                 formInfosFunc.copyWith(documento: text);
+                            if (text != widget.documento) {
+                              setState(() {
+                                nomeDocAlterado = true;
+                              });
+                            }
                           } else {
                             buildMinhaSnackBar(context,
                                 title: 'Cuidado',
@@ -309,21 +326,7 @@ class _CadastroColaboradorState extends State<CadastroColaborador> {
                         _formkeyFuncionario.currentState?.validate() ?? false;
                     if (formValid) {
                       _formkeyFuncionario.currentState?.save();
-                      if (formInfosFunc.nascimento.length >= 6) {
-                        List nomeEmLista =
-                            formInfosFunc.nome_funcionario.split(' ');
-                        List listaNome = nomeEmLista;
-
-                        setState(() {
-                          loginGerado =
-                              '${listaNome.first.toString().toLowerCase()}${listaNome.last.toString().toLowerCase()}${formInfosFunc.documento!.substring(0, 4)}';
-                          formInfosFunc =
-                              formInfosFunc.copyWith(login: loginGerado);
-                        });
-                      } else {
-                        buildMinhaSnackBar(context,
-                            title: 'Cuidado', subTitle: 'Complete a data');
-                      }
+                      gerarLogin();
                     } else {
                       buildMinhaSnackBar(context,
                           title: 'Cuidado',
@@ -353,12 +356,110 @@ class _CadastroColaboradorState extends State<CadastroColaborador> {
                             ],
                           ),
                         )),
-                        buildMyTextFormObrigatorio(
-                          context,
-                          'Senha Login', controller: senhaContr,
-                          // onSaved: (text) => formInfosFunc =
-                          //     formInfosFunc.copyWith(senha: text),
-                        ),
+                        if (widget.idfuncionario != null)
+                          Form(
+                            key: _formkeySenha,
+                            child: ConstsWidget.buildPadding001(
+                              context,
+                              child: ConstsWidget.buildCustomButton(
+                                context,
+                                'Alterar Senha',
+                                onPressed: () {
+                                  showAllDialog(context, children: [
+                                    buildMyTextFormObrigatorio(
+                                      context,
+                                      'Senha Atual',
+                                      validator: Validatorless.multiple([
+                                        Validatorless.required(
+                                            'Confirme a senha'),
+                                        Validatorless.min(6,
+                                            'Senha precisa ter 6 caracteres'),
+                                      ]),
+                                      controller: atualSenhaCtrl,
+                                      // onSaved: (text) => formInfosFunc =
+                                      //     formInfosFunc.copyWith(senha: text),
+                                    ),
+                                    buildMyTextFormObrigatorio(
+                                      context,
+                                      'Nova Senha',
+                                      validator: Validatorless.multiple([
+                                        Validatorless.required(
+                                            'Confirme a senha'),
+                                        Validatorless.min(6,
+                                            'Senha precisa ter 6 caracteres'),
+                                      ]),
+                                      controller: novaSenhaCtrl,
+                                      // onSaved: (text) => formInfosFunc =
+                                      //     formInfosFunc.copyWith(senha: text),
+                                    ),
+                                    buildMyTextFormObrigatorio(
+                                      context,
+                                      'Confirmar Senha',
+                                      validator: Validatorless.multiple([
+                                        Validatorless.required(
+                                            'Confirme a senha'),
+                                        Validatorless.min(6,
+                                            'Senha precisa ter 6 caracteres'),
+                                        Validatorless.compare(novaSenhaCtrl,
+                                            'Senhas não são iguais'),
+                                      ]),
+                                      controller: confirmSenhaCtrl,
+                                      // onSaved: (text) => formInfosFunc =
+                                      //     formInfosFunc.copyWith(senha: text),
+                                    ),
+                                    ConstsWidget.buildPadding001(
+                                      context,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          Spacer(),
+                                          ConstsWidget.buildOutlinedButton(
+                                            context,
+                                            title: 'Cancelar',
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                              atualSenhaCtrl.clear();
+                                              novaSenhaCtrl.clear();
+                                              confirmSenhaCtrl.clear();
+                                            },
+                                          ),
+                                          Spacer(),
+                                          ConstsWidget.buildCustomButton(
+                                            context,
+                                            'Salvar',
+                                            onPressed: () {
+                                              var validSenha = _formkeySenha
+                                                      .currentState
+                                                      ?.validate() ??
+                                                  false;
+                                              if (validSenha &&
+                                                  novaSenhaCtrl.text ==
+                                                      confirmSenhaCtrl.text) {
+                                                Navigator.pop(context);
+                                                buildMinhaSnackBar(context,
+                                                    title: 'Salvou senha',
+                                                    subTitle:
+                                                        'Não gravou ainda no banco');
+                                              }
+                                            },
+                                          )
+                                        ],
+                                      ),
+                                    )
+                                  ]);
+                                },
+                              ),
+                            ),
+                          ),
+                        if (widget.idfuncionario == null)
+                          buildMyTextFormObrigatorio(
+                            context,
+                            'Nova Senha',
+                            controller: novaSenhaCtrl,
+                            // onSaved: (text) => formInfosFunc =
+                            //     formInfosFunc.copyWith(senha: text),
+                          ),
                         ConstsWidget.buildPadding001(context,
                             child: ConstsWidget.buildTextTitle(
                                 context, 'Tipos de acesso')),
@@ -380,34 +481,16 @@ class _CadastroColaboradorState extends State<CadastroColaborador> {
                             ],
                           ),
                         ),
-                        ConstsWidget.buildCustomButton(
+                        ConstsWidget.buildLoadingButton(
                           context,
-                          'Salvar',
+                          title: 'Salvar',
+                          isLoading: isLoading,
                           color: Consts.kColorRed,
                           onPressed: () {
                             if (_formkeyFuncionario.currentState!.validate() &&
                                 formInfosFunc.idfuncao != null) {
                               _formkeyFuncionario.currentState!.save();
-
-                              var apiEditarIncluir = widget.idfuncionario !=
-                                      null
-                                  ? 'editarFuncionario&idfuncionario=${widget.idfuncionario}&'
-                                  : 'incluirFuncionario&senha=${formInfosFunc.senha}&';
-
-                              ConstsFuture.resquestApi(
-                                      '${Consts.sindicoApi}funcionarios/?fn=$apiEditarIncluir&idcond=${ResponsalvelInfos.idcondominio}&nomeFuncionario=${formInfosFunc.nome_funcionario}&idfuncao=${formInfosFunc.idfuncao}&login=${formInfosFunc.login}&avisa_corresp=${formInfosFunc.avisa_corresp}&avisa_visita=${formInfosFunc.avisa_visita}&avisa_delivery=${formInfosFunc.avisa_delivery}&avisa_encomendas=${formInfosFunc.avisa_encomendas}&ativo=${formInfosFunc.ativo}&senha=${senhaContr.text}')
-                                  .then((value) {
-                                if (!value['erro']) {
-                                  Navigator.pop(context);
-
-                                  return buildMinhaSnackBar(context,
-                                      title: 'Parabéns',
-                                      subTitle: value['mensagem']);
-                                }
-                                return buildMinhaSnackBar(context,
-                                    title: 'Algo deu errado!',
-                                    subTitle: value['mensagem']);
-                              });
+                              loadingSalvar();
                             } else {
                               buildMinhaSnackBar(context,
                                   subTitle: 'Selecione uma Função');
@@ -423,6 +506,52 @@ class _CadastroColaboradorState extends State<CadastroColaborador> {
         ),
       ),
     );
+  }
+
+  loadingSalvar() {
+    setState(() {
+      isLoading = true;
+    });
+
+    var apiEditarIncluir = widget.idfuncionario != null
+        ? 'editarFuncionario&idfuncionario=${widget.idfuncionario}&'
+        : 'incluirFuncionario&senha=${formInfosFunc.senha}&';
+
+    ConstsFuture.resquestApi(
+            '${Consts.sindicoApi}funcionarios/?fn=$apiEditarIncluir&idcond=${ResponsalvelInfos.idcondominio}&nomefuncionario=${formInfosFunc.nome_funcionario}&idfuncao=${formInfosFunc.idfuncao}&email=${formInfosFunc.email}&documento=${formInfosFunc.documento}&dddtelefone=${formInfosFunc.ddd}&telefone=${formInfosFunc.telefone}&datanasc=${formInfosFunc.nascimento}&login=${formInfosFunc.login}&avisa_corresp=${formInfosFunc.avisa_corresp}&avisa_visita=${formInfosFunc.avisa_visita}&avisa_delivery=${formInfosFunc.avisa_delivery}&avisa_encomendas=${formInfosFunc.avisa_encomendas}&ativo=${formInfosFunc.ativo}&senha=${novaSenhaCtrl.text}')
+        .then((value) {
+      setState(() {
+        isLoading = false;
+      });
+      if (!value['erro']) {
+        Navigator.pop(context);
+
+        return buildMinhaSnackBar(context,
+            title: 'Parabéns', subTitle: value['mensagem']);
+      }
+      return buildMinhaSnackBar(context,
+          title: 'Algo deu errado!', subTitle: value['mensagem']);
+    });
+  }
+
+  gerarLogin() {
+    if (nomeDocAlterado) {
+      buildMinhaSnackBar(context,
+          title: 'Dados alterados', subTitle: 'Alteramos o login');
+    }
+    if (formInfosFunc.nascimento.length >= 6) {
+      List nomeEmLista = formInfosFunc.nome_funcionario.split(' ');
+      List listaNome = nomeEmLista;
+
+      setState(() {
+        loginGerado =
+            '${listaNome.first.toString().toLowerCase()}${listaNome.last.toString().toLowerCase()}${formInfosFunc.documento!.substring(0, 4)}';
+        formInfosFunc = formInfosFunc.copyWith(login: loginGerado);
+      });
+    } else {
+      buildMinhaSnackBar(context,
+          title: 'Cuidado', subTitle: 'Complete a data');
+    }
   }
 
   Widget buildDropAtivo(

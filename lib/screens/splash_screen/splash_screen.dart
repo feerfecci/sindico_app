@@ -7,6 +7,7 @@ import '../../consts/consts.dart';
 import '../../consts/const_widget.dart';
 import '../../consts/consts_future.dart';
 import '../../repositories/biometrics_auth.dart';
+import '../../widgets/snackbar/snack.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -36,7 +37,7 @@ class _SplashScreenState extends State<SplashScreen> {
             MaterialPageRoute(
               builder: (context) => LoginScreen(),
             ),
-            (route) => false);
+            (route) => true).then((value) => buildMinhaSnackBar(context));
       }
     });
   }

@@ -144,13 +144,13 @@ class _ListaColaboradoresState extends State<ListaColaboradores> {
                             bool avisa_visita = api['avisa_visita'];
                             bool avisa_delivery = api['avisa_delivery'];
                             bool avisa_encomendas = api['avisa_encomendas'];
+                            String email = api['email'];
 
-                            String documento = '500929816';
-                            String ddd = '11';
-                            String telefone = '942169968';
-                            String email = 'exemplo@ex.com';
+                            String documento = api['documento'];
+                            String ddd = api['dddtelefone'];
+                            String telefone = api['telefone'];
                             String data_nascimento = DateFormat('dd/MM/yyyy')
-                                .format(DateTime.parse('1997-09-25'));
+                                .format(DateTime.parse(api['datanasc']));
 
                             return ConstsWidget.buildPadding001(
                               context,
@@ -167,7 +167,7 @@ class _ListaColaboradoresState extends State<ListaColaboradores> {
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
                                           SizedBox(
-                                              width: size.width * 0.7,
+                                              width: size.width * 0.6,
                                               child:
                                                   ConstsWidget.buildTextTitle(
                                                       context,
@@ -192,63 +192,78 @@ class _ListaColaboradoresState extends State<ListaColaboradores> {
                                           texto1: email,
                                           titulo2: 'Nascimento',
                                           texto2: data_nascimento),
-                                      ConstsWidget.buildPadding001(
-                                        context,
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
+                                      if (funcao != 'Síndico' &&
+                                          funcao != 'Administrador')
+                                        Column(
                                           children: [
-                                            Column(
-                                              children: [
-                                                buildTilePermissaoSalvo(
-                                                    'Cartas',
-                                                    isChecked: avisa_corresp),
-                                                buildTilePermissaoSalvo(
-                                                    'Delivery',
-                                                    isChecked: avisa_delivery),
-                                              ],
-                                            ),
-                                            Column(
-                                              children: [
-                                                buildTilePermissaoSalvo(
-                                                    'Visitas',
-                                                    isChecked: avisa_visita),
-                                                buildTilePermissaoSalvo(
-                                                    'Caixas',
-                                                    isChecked:
-                                                        avisa_encomendas),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      ConstsWidget.buildOutlinedButton(
-                                        context,
-                                        title: 'Editar',
-                                        onPressed: () {
-                                          ConstsFuture.navigatorPagePush(
+                                            ConstsWidget.buildPadding001(
                                               context,
-                                              CadastroColaborador(
-                                                  idfuncionario: idfuncionario,
-                                                  nomeFuncionario:
-                                                      nome_funcionario,
-                                                  idfuncao: idfuncao,
-                                                  funcao: funcao,
-                                                  nascimento: data_nascimento,
-                                                  documento: documento,
-                                                  ddd: ddd,
-                                                  telefone: telefone,
-                                                  email: email,
-                                                  login: login_funcionario,
-                                                  avisa_corresp: avisa_corresp,
-                                                  avisa_visita: avisa_visita,
-                                                  avisa_delivery:
-                                                      avisa_delivery,
-                                                  avisa_encomendas:
-                                                      avisa_encomendas,
-                                                  ativo: ativo ? 1 : 0));
-                                        },
-                                      )
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceEvenly,
+                                                children: [
+                                                  Column(
+                                                    children: [
+                                                      buildTilePermissaoSalvo(
+                                                          'Cartas',
+                                                          isChecked:
+                                                              avisa_corresp),
+                                                      buildTilePermissaoSalvo(
+                                                          'Delivery',
+                                                          isChecked:
+                                                              avisa_delivery),
+                                                    ],
+                                                  ),
+                                                  Column(
+                                                    children: [
+                                                      buildTilePermissaoSalvo(
+                                                          'Visitas',
+                                                          isChecked:
+                                                              avisa_visita),
+                                                      buildTilePermissaoSalvo(
+                                                          'Caixas',
+                                                          isChecked:
+                                                              avisa_encomendas),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            ConstsWidget.buildOutlinedButton(
+                                              context,
+                                              title: 'Editar',
+                                              onPressed: () {
+                                                ConstsFuture.navigatorPagePush(
+                                                    context,
+                                                    CadastroColaborador(
+                                                        idfuncionario:
+                                                            idfuncionario,
+                                                        nomeFuncionario:
+                                                            nome_funcionario,
+                                                        idfuncao: idfuncao,
+                                                        funcao: funcao,
+                                                        nascimento:
+                                                            data_nascimento,
+                                                        documento: documento,
+                                                        ddd: ddd,
+                                                        telefone: telefone,
+                                                        email: email,
+                                                        login:
+                                                            login_funcionario,
+                                                        avisa_corresp:
+                                                            avisa_corresp,
+                                                        avisa_visita:
+                                                            avisa_visita,
+                                                        avisa_delivery:
+                                                            avisa_delivery,
+                                                        avisa_encomendas:
+                                                            avisa_encomendas,
+                                                        ativo: ativo ? 1 : 0));
+                                              },
+                                            )
+                                          ],
+                                        )
                                     ],
                                   ),
                                 ),

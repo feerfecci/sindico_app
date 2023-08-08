@@ -4,7 +4,7 @@ import 'package:sindico_app/consts/const_widget.dart';
 import 'custom_drawer/custom_drawer.dart';
 
 Widget buildScaffoldAll(BuildContext context,
-    {required Widget body, required String title}) {
+    {required String title, required Widget body}) {
   var size = MediaQuery.of(context).size;
   return Scaffold(
     extendBody: true,
@@ -16,13 +16,13 @@ Widget buildScaffoldAll(BuildContext context,
       backgroundColor: Colors.transparent,
     ),
     endDrawer: CustomDrawer(),
-    body: Padding(
-      padding: EdgeInsets.symmetric(horizontal: size.width * 0.02),
-      child: ListView(
-        children: [
-          body,
-        ],
-      ),
+    body: ListView(
+      children: [
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: size.width * 0.02),
+          child: body,
+        ),
+      ],
     ),
   );
 }

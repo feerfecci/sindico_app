@@ -77,23 +77,33 @@ class ConstsFuture {
       if (!erro) {
         if (idCondominio == null) {
           ResponsalvelInfos.qntCond = apiBody['login'].length;
+          DropCond.listCond = apiBody['login'];
         }
         var loginInfos = apiBody['login'][0];
-        if (idCondominio == null) DropCond.listCond = apiBody['login'];
         ResponsalvelInfos.nome_condominio = loginInfos['nome_condominio'];
         ResponsalvelInfos.idcondominio = loginInfos['idcondominio'];
+        ResponsalvelInfos.idfuncionario = loginInfos['idfuncionario'];
         ResponsalvelInfos.dividido_por = loginInfos['dividido_por'];
-        ResponsalvelInfos.nome_responsavel = loginInfos['nome_responsavel'];
+        ResponsalvelInfos.nome_responsavel = loginInfos['nome_funcionario'];
         ResponsalvelInfos.login = loginInfos['login'];
+        ResponsalvelInfos.nascimento = loginInfos['datanasc'];
+        ResponsalvelInfos.telefone = loginInfos['telefone'];
+        ResponsalvelInfos.telefone_portaria = loginInfos['telefone_portaria'];
+        ResponsalvelInfos.documento = loginInfos['documento'];
+        ResponsalvelInfos.email = loginInfos['email'];
         ResponsalvelInfos.endereco = loginInfos['endereco'];
         ResponsalvelInfos.numero = loginInfos['numero'];
         ResponsalvelInfos.bairro = loginInfos['bairro'];
         ResponsalvelInfos.cep = loginInfos['cep'];
         ResponsalvelInfos.cidade = loginInfos['cidade'];
         ResponsalvelInfos.estado = loginInfos['estado'];
+        ResponsalvelInfos.temporespostas = loginInfos['temporespostas'];
+
         navigatorPageReplace(context, HomePage());
       } else {
-        navigatorPageReplace(context, LoginScreen());
+        // navigatorPageReplace(context, LoginScreen()).then((value) {
+
+        // });
         LocalInfos.removeCache();
         buildMinhaSnackBar(context,
             icon: Icons.warning_amber,
@@ -105,7 +115,9 @@ class ConstsFuture {
     }
   }
 
-  static Future resquestApi(String api) async {
+  static Future resquestApi(
+    String api,
+  ) async {
     var resposta = await http.get(
       Uri.parse(api),
     );
