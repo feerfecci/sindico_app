@@ -179,7 +179,10 @@ class _ListaReservasState extends State<ListaReservas> {
                                                       ),
                                                     )),
                                                 ElevatedButton(
-                                                    onPressed: () {},
+                                                    onPressed: () {
+                                                      ConstsFuture.resquestApi(
+                                                          '${Consts.sindicoApi}reserva_espacos/?fn=atenderReserva&idcond=${ResponsalvelInfos.idcondominio}&idunidade=$idunidade&idmorador=$idmorador&idespaco=$idespaco&data_reserva=${apiReservar['data_reserva']}idreserva=$idreserva&ativo=$tipo');
+                                                    },
                                                     style: ElevatedButton
                                                         .styleFrom(
                                                             shape:
