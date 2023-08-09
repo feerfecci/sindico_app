@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:sindico_app/screens/home_page.dart/home_page.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../consts/const_widget.dart';
 import '../../consts/consts_future.dart';
@@ -61,7 +62,7 @@ Widget buildCardHome(BuildContext context,
               height: size.height * 0.001,
             ),
             ConstsWidget.buildTextTitle(context, title,
-                size: Platform.isAndroid ? 16 : 14),
+                size: HomePage.isAndroid ? 16 : 14),
           ],
         ),
       ),

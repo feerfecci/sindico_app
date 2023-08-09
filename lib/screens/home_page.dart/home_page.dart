@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
@@ -19,6 +21,7 @@ import '../unidade/lista_unidade.dart';
 import 'package:reorderable_grid_view/reorderable_grid_view.dart';
 
 class HomePage extends StatefulWidget {
+  static bool isAndroid = false;
   const HomePage({super.key});
 
   @override
@@ -112,6 +115,7 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     initPlatformState();
     gettingCacheDrag();
+    HomePage.isAndroid = Platform.isAndroid;
     // NotificationWidget.init();
     // _pageController = PageController();
   }

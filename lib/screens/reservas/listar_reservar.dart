@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:sindico_app/consts/consts.dart';
@@ -11,6 +13,7 @@ import 'package:sindico_app/widgets/snackbar/snack.dart';
 import '../../consts/const_widget.dart';
 import '../../widgets/page_erro.dart';
 import '../../widgets/page_vazia.dart';
+import '../home_page.dart/home_page.dart';
 import 'loading_reserva.dart';
 
 class ListaReservas extends StatefulWidget {
@@ -22,9 +25,108 @@ class ListaReservas extends StatefulWidget {
 
 class _ListaReservasState extends State<ListaReservas> {
   int statusReserva = 2;
+  bool? isAndroid;
+  @override
+  void initState() {
+    isAndroid = Platform.isAndroid;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
+    alertAtender(
+        {required String title,
+        required int idunidade,
+        required int idmorador,
+        required int idespaco,
+        required String data,
+        required int idreserva,
+        required int tipo}) {
+      return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(13),
+            ),
+            insetPadding: EdgeInsets.symmetric(
+                horizontal: size.width * 0.05, vertical: size.height * 0.01),
+            title: Text(
+              'Tem certeza?',
+              textAlign: TextAlign.center,
+            ),
+            content: SizedBox(
+              width: size.width * 0.85,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'Você deseja $title essa solicitação?',
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(
+                    height: size.height * 0.025,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      TextButton(
+                          style: OutlinedButton.styleFrom(
+                            shape: StadiumBorder(
+                                side: BorderSide(color: Consts.kColorAzul)),
+                          ),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: Padding(
+                            padding: EdgeInsets.all(size.height * 0.01),
+                            child: Text(
+                              'Cancelar',
+                              style: TextStyle(color: Consts.kColorAzul),
+                            ),
+                          )),
+                      ElevatedButton(
+                          onPressed: () {
+                            ConstsFuture.resquestApi(
+                                    '${Consts.sindicoApi}reserva_espacos/?fn=atenderReserva&idcond=${ResponsalvelInfos.idcondominio}&idunidade=$idunidade&idmorador=$idmorador&idespaco=$idespaco&data_reserva=$data&idreserva=$idreserva&ativo=$tipo')
+                                .then((value) {
+                              if (!value['erro']) {
+                                Navigator.pop(context);
+
+                                setState(() {});
+                                buildMinhaSnackBar(context,
+                                    title: 'Muito Obrigado',
+                                    subTitle: value['mensagem']);
+                              } else {
+                                buildMinhaSnackBar(context,
+                                    title: 'Algo saiu mal',
+                                    subTitle: value['mensagem']);
+                              }
+                              ;
+                            });
+                          },
+                          style: ElevatedButton.styleFrom(
+                              shape: StadiumBorder(),
+                              backgroundColor: Consts.kColorAzul),
+                          child: Padding(
+                            padding: EdgeInsets.all(size.height * 0.019),
+                            child: Text(
+                              'Continuar',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                          )),
+                    ],
+                  )
+                ],
+              ),
+            ),
+          );
+        },
+      );
+    }
 
     Widget buildTextReserva({required titulo, required texto}) {
       return Column(
@@ -39,13 +141,12 @@ class _ListaReservasState extends State<ListaReservas> {
 
     Widget buildFiltroReserv(String title, int ativo, {Color? color}) {
       return SizedBox(
-        width: size.width * 0.31,
+        width: size.width * 0.315,
         child: ConstsWidget.buildCustomButton(
           context,
-          largura: 0,
           title,
+          fontSize: HomePage.isAndroid ? 18 : 16,
           color: color,
-          fontSize: 16,
           onPressed: () {
             setState(() {
               statusReserva = ativo;
@@ -123,91 +224,15 @@ class _ListaReservasState extends State<ListaReservas> {
                               altura: 0.02,
                               largura: 0.07,
                               onPressed: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return AlertDialog(
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(13),
-                                      ),
-                                      insetPadding: EdgeInsets.symmetric(
-                                          horizontal: size.width * 0.05,
-                                          vertical: size.height * 0.01),
-                                      title: Text(
-                                        'Tem certeza?',
-                                        textAlign: TextAlign.center,
-                                      ),
-                                      content: SizedBox(
-                                        width: size.width * 0.85,
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          mainAxisSize: MainAxisSize.min,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              'Você deseja $title essa solicitação?',
-                                              textAlign: TextAlign.center,
-                                            ),
-                                            SizedBox(
-                                              height: size.height * 0.025,
-                                            ),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceEvenly,
-                                              children: [
-                                                TextButton(
-                                                    style: OutlinedButton
-                                                        .styleFrom(
-                                                      shape: StadiumBorder(
-                                                          side: BorderSide(
-                                                              color: Consts
-                                                                  .kColorAzul)),
-                                                    ),
-                                                    onPressed: () {
-                                                      Navigator.pop(context);
-                                                    },
-                                                    child: Padding(
-                                                      padding: EdgeInsets.all(
-                                                          size.height * 0.01),
-                                                      child: Text(
-                                                        'Cancelar',
-                                                        style: TextStyle(
-                                                            color: Consts
-                                                                .kColorAzul),
-                                                      ),
-                                                    )),
-                                                ElevatedButton(
-                                                    onPressed: () {
-                                                      ConstsFuture.resquestApi(
-                                                          '${Consts.sindicoApi}reserva_espacos/?fn=atenderReserva&idcond=${ResponsalvelInfos.idcondominio}&idunidade=$idunidade&idmorador=$idmorador&idespaco=$idespaco&data_reserva=${apiReservar['data_reserva']}idreserva=$idreserva&ativo=$tipo');
-                                                    },
-                                                    style: ElevatedButton
-                                                        .styleFrom(
-                                                            shape:
-                                                                StadiumBorder(),
-                                                            backgroundColor:
-                                                                Consts
-                                                                    .kColorAzul),
-                                                    child: Padding(
-                                                      padding: EdgeInsets.all(
-                                                          size.height * 0.019),
-                                                      child: Text(
-                                                        'Continuar',
-                                                        style: TextStyle(
-                                                            color:
-                                                                Colors.white),
-                                                      ),
-                                                    )),
-                                              ],
-                                            )
-                                          ],
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                );
+                                alertAtender(
+                                    idespaco: idespaco,
+                                    idmorador: idmorador,
+                                    idreserva: idreserva,
+                                    idunidade: idunidade,
+                                    tipo: tipo,
+                                    title: title,
+                                    data: apiReservar['data_reserva']);
+
                                 // ConstsFuture.resquestApi(
                                 //         '${Consts.sindicoApi}reserva_espacos/?fn=atenderReserva&idcond=${ResponsalvelInfos.idcondominio}&idunidade=$idunidade&idmorador=$idmorador&idreserva=$idreserva&ativo=$tipo')
                                 //     .then((value) {

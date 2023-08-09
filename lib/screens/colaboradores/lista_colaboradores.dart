@@ -47,11 +47,13 @@ class _ListaColaboradoresState extends State<ListaColaboradores> {
     }) {
       return ConstsWidget.buildPadding001(
         context,
-        child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+        child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ConstsWidget.buildTextSubTitle(titulo1),
+              SizedBox(
+                  width: size.width * 0.4,
+                  child: ConstsWidget.buildTextSubTitle(titulo1)),
               ConstsWidget.buildTextTitle(context, texto1),
             ],
           ),
@@ -60,7 +62,9 @@ class _ListaColaboradoresState extends State<ListaColaboradores> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ConstsWidget.buildTextSubTitle(titulo2),
-              ConstsWidget.buildTextTitle(context, texto2),
+              SizedBox(
+                  width: size.width * 0.4,
+                  child: ConstsWidget.buildTextTitle(context, texto2)),
             ],
           ),
         ]),
@@ -183,6 +187,12 @@ class _ListaColaboradoresState extends State<ListaColaboradores> {
                                           titulo2: 'Cargo',
                                           texto2: '$funcao'),
                                       buildRowInfos(
+                                          titulo1: 'Nascimento',
+                                          texto1: 'data_nascimento',
+                                          titulo2: 'Documento',
+                                          texto2: documento),
+
+                                      /*     buildRowInfos(
                                           titulo1: 'Telefone',
                                           texto1: '($ddd) $telefone',
                                           titulo2: 'Documento',
@@ -191,7 +201,30 @@ class _ListaColaboradoresState extends State<ListaColaboradores> {
                                           titulo1: 'Email',
                                           texto1: email,
                                           titulo2: 'Nascimento',
-                                          texto2: data_nascimento),
+                                          texto2: data_nascimento),*/
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          ConstsWidget.buildTextSubTitle(
+                                              'Telefone'),
+                                          ConstsWidget.buildTextTitle(
+                                              context, '($ddd) $telefone'),
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height: size.height * 0.01,
+                                      ),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          ConstsWidget.buildTextSubTitle(
+                                              'Email'),
+                                          ConstsWidget.buildTextTitle(
+                                              context, email),
+                                        ],
+                                      ),
                                       if (funcao != 'Síndico' &&
                                           funcao != 'Administrador')
                                         Column(

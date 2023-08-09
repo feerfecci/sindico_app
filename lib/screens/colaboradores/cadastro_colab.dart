@@ -305,6 +305,7 @@ class _CadastroColaboradorState extends State<CadastroColaborador> {
                           onSaved: (text) => formInfosFunc =
                               formInfosFunc.copyWith(telefone: text),
                           initialValue: widget.telefone,
+                          mask: '#########',
                           hintText: '911112222'),
                     ),
                     Spacer(),
@@ -524,8 +525,7 @@ class _CadastroColaboradorState extends State<CadastroColaborador> {
         isLoading = false;
       });
       if (!value['erro']) {
-        Navigator.pop(context);
-
+        ConstsFuture.navigatorPopPush(context, '/listaColaboradores');
         return buildMinhaSnackBar(context,
             title: 'Parabéns', subTitle: value['mensagem']);
       }

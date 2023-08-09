@@ -15,10 +15,7 @@ class ConstsWidget {
   }
 
   static Widget buildTextTitle(BuildContext context, String title,
-      {textAlign,
-      Color? color,
-      double size = Consts.fontTitulo,
-      int maxLines = 2}) {
+      {textAlign, Color? color, double? size, int maxLines = 2}) {
     return Text(
       title,
       maxLines: maxLines,
@@ -36,7 +33,7 @@ class ConstsWidget {
     String title, {
     color,
     TextAlign? textAlign,
-    double? size = Consts.fontSubTitulo,
+    double? size,
   }) {
     return Text(
       title,
@@ -58,7 +55,7 @@ class ConstsWidget {
       Color? color = Consts.kColorAzul,
       Color? textColor = Colors.white,
       Color? iconColor = Colors.white,
-      double fontSize = Consts.fontTitulo,
+      double? fontSize,
       required void Function()? onPressed}) {
     var size = MediaQuery.of(context).size;
     return ElevatedButton(
