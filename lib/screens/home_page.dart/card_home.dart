@@ -1,11 +1,9 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:sindico_app/screens/home_page.dart/home_page.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../consts/const_widget.dart';
 import '../../consts/consts_future.dart';
+import '../../screens/splash_screen/splash_screen.dart';
 import '../../widgets/my_box_shadow.dart';
 
 Widget buildCardHome(BuildContext context,
@@ -15,16 +13,6 @@ Widget buildCardHome(BuildContext context,
     bool isWhats = false,
     String? numberCall}) {
   var size = MediaQuery.of(context).size;
-  Future<Widget> apiImage() async {
-    var url = Uri.parse(iconApi);
-    var resposta = await http.get(url);
-
-    return resposta.statusCode == 200
-        ? Image.network(
-            iconApi,
-          )
-        : Image.asset('assets/ico-error.png');
-  }
 
   launchNumber(number) async {
     await launchUrl(Uri.parse('tel:$number'));
@@ -52,17 +40,23 @@ Widget buildCardHome(BuildContext context,
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            FutureBuilder(
-                future: apiImage(),
-                builder: (context, snapshot) => SizedBox(
-                    width: size.width * 0.12,
-                    height: size.height * 0.075,
-                    child: snapshot.data)),
+            ConstsWidget.buildFutureImage(
+              context,
+              iconApi: iconApi,
+              width: SplashScreen.isSmall ? 0.12 : 0.14,
+              height: SplashScreen.isSmall ? 0.07 : 0.065,
+            ),
+            // FutureBuilder(
+            //     future: apiImage(),
+            //     builder: (context, snapshot) => SizedBox(
+            //         width: size.width * 0.12,
+            //         height: size.height * 0.075,
+            //         child: snapshot.data)),
             SizedBox(
-              height: size.height * 0.001,
+              height: size.height * 0.008,
             ),
             ConstsWidget.buildTextTitle(context, title,
-                size: HomePage.isAndroid ? 16 : 14),
+                size: SplashScreen.isSmall ? 14 : 16),
           ],
         ),
       ),

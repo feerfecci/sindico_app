@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import '../../screens/splash_screen/splash_screen.dart';
+import '../widgets/shimmer_widget.dart';
 import 'consts.dart';
+import 'consts_future.dart';
 
 class ConstsWidget {
   static Widget buildPadding001(BuildContext context,
@@ -15,7 +18,7 @@ class ConstsWidget {
   }
 
   static Widget buildTextTitle(BuildContext context, String title,
-      {textAlign, Color? color, double? size, int maxLines = 2}) {
+      {textAlign, Color? color, double size = 16, int maxLines = 2}) {
     return Text(
       title,
       maxLines: maxLines,
@@ -23,7 +26,7 @@ class ConstsWidget {
       style: TextStyle(
         color: color ?? Theme.of(context).colorScheme.primary,
         overflow: TextOverflow.ellipsis,
-        fontSize: size,
+        fontSize: SplashScreen.isSmall ? (size - 2) : size,
         fontWeight: FontWeight.bold,
       ),
     );
@@ -33,7 +36,7 @@ class ConstsWidget {
     String title, {
     color,
     TextAlign? textAlign,
-    double? size,
+    double size = 14,
   }) {
     return Text(
       title,
@@ -42,7 +45,7 @@ class ConstsWidget {
       style: TextStyle(
         height: 1.4,
         color: color,
-        fontSize: size,
+        fontSize: SplashScreen.isSmall ? (size - 2) : size,
         fontWeight: FontWeight.normal,
       ),
     );
@@ -80,7 +83,11 @@ class ConstsWidget {
               style: TextStyle(
                 overflow: TextOverflow.ellipsis,
                 color: Colors.white,
-                fontSize: fontSize,
+                fontSize: fontSize != null
+                    ? SplashScreen.isSmall
+                        ? (fontSize - 5)
+                        : fontSize
+                    : null,
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -110,7 +117,7 @@ class ConstsWidget {
                 mainAxisSize: MainAxisSize.max,
                 children: [
                   ConstsWidget.buildTextTitle(context, title,
-                      size: fontSize, color: Colors.white),
+                      color: Colors.white),
                 ],
               )
             : Row(
@@ -175,13 +182,17 @@ class ConstsWidget {
                 style: TextStyle(
                     color: Theme.of(context).colorScheme.primary,
                     fontWeight: FontWeight.w400,
-                    fontSize: 18),
+                    fontSize: SplashScreen.isSmall ? 16 : 18),
                 borderRadius: BorderRadius.circular(16),
                 onChanged: onChanged,
                 items: list.map<DropdownMenuItem>((value) {
                   return DropdownMenuItem(
                     value: value,
-                    child: value == 0 ? Text('Inativo') : Text('Ativo'),
+                    child: value == 0
+                        ? Text(
+                            'Inativo',
+                          )
+                        : Text('Ativo'),
                   );
                 }).toList(),
               ),
@@ -236,7 +247,7 @@ class ConstsWidget {
         children: [
           ConstsWidget.buildTextSubTitle(
             title,
-            size: 18,
+            size: SplashScreen.isSmall ? 16 : 18,
             color: Colors.blue,
           ),
         ],
@@ -255,11 +266,36 @@ class ConstsWidget {
         onRefresh: onRefresh,
         child: child);
   }
+
+  static Widget buildFutureImage(BuildContext context,
+      {required String iconApi, double? width, double? height}) {
+    var size = MediaQuery.of(context).size;
+    return FutureBuilder(
+        future: ConstsFuture.apiImage(iconApi),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return ShimmerWidget(
+                height: SplashScreen.isSmall
+                    ? size.height * 0.08
+                    : size.height * 0.068,
+                width: SplashScreen.isSmall
+                    ? size.width * 0.14
+                    : size.width * 0.15);
+          } else if (snapshot.hasData) {
+            return SizedBox(
+              width: width != null ? size.width * width : null,
+              height: height != null ? size.height * height : null,
+              child: Image.network(
+                iconApi,
+                fit: BoxFit.fill,
+              ),
+            );
+          } else {
+            return Image.asset('assets/ico-error.png');
+          }
+        });
+  }
 }
-
-
-
-
 
 // Widget buildDropDivisoes({required void Function(Object?)? onChanged}) {
 //   return StatefulBuilder(

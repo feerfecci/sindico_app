@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 import 'package:flutter/material.dart';
 import 'package:sindico_app/screens/home_page.dart/home_page.dart';
+import 'package:sindico_app/screens/splash_screen/splash_screen.dart';
 
 class ResponsalvelInfos {
   static String login = "";
@@ -26,8 +27,8 @@ class ResponsalvelInfos {
 }
 
 class Consts {
-  static const double fontTitulo = 20;
-  static const double fontSubTitulo = 18;
+  static double fontTitulo = SplashScreen.isSmall ? 18 : 20;
+  static double fontSubTitulo = SplashScreen.isSmall ? 16 : 18;
   static const double borderButton = 60;
 
   static const kBackPageColor = Color.fromARGB(255, 245, 245, 255);

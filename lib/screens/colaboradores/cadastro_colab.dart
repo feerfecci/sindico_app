@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:sindico_app/screens/colaboradores/lista_colaboradores.dart';
+import 'package:sindico_app/screens/splash_screen/splash_screen.dart';
 import 'package:sindico_app/widgets/header.dart';
 import 'package:sindico_app/widgets/scaffold_all.dart';
 import 'package:sindico_app/widgets/snackbar/snack.dart';
@@ -133,7 +134,7 @@ class _CadastroColaboradorState extends State<CadastroColaborador> {
               style: TextStyle(
                   color: Theme.of(context).colorScheme.primary,
                   fontWeight: FontWeight.w400,
-                  fontSize: 18),
+                  fontSize: SplashScreen.isSmall ? 16 : 18),
               items: categoryItemListFuncoes.map((e) {
                 return DropdownMenuItem(
                   value: e['idfuncao'],

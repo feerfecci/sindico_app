@@ -13,6 +13,7 @@ import 'package:sindico_app/widgets/scaffold_all.dart';
 import 'package:sindico_app/widgets/snackbar/snack.dart';
 
 import '../../consts/consts.dart';
+import '../splash_screen/splash_screen.dart';
 
 // ignore: must_be_immutable
 class AdicionarTarefa extends StatefulWidget {
@@ -116,80 +117,109 @@ class _AdicionarTarefaState extends State<AdicionarTarefa> {
               if (isExpired)
                 ConstsWidget.buildPadding001(
                   context,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      SizedBox(
-                        width: size.width * 0.5,
-                        child: MyDatePicker(
-                          dataSelected: dataSelected,
-                          initialDate: initialDate != null
-                              ? DateTime.parse(widget.initialDate!)
-                              : null,
-                          hintText: initialDate ?? 'Escolha uma data',
-                        ),
-                      ),
-                      Spacer(),
-                      Column(
-                        children: [
-                          ConstsWidget.buildTextSubTitle('Ser Notificado em',
-                              size: 14),
-                          SizedBox(
-                            width: size.width * 0.4,
-                            child:
-                                StatefulBuilder(builder: (context, setState) {
-                              return Container(
-                                width: double.infinity,
-                                height: size.height * 0.066,
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  color: Theme.of(context).canvasColor,
-                                  border: Border.all(color: Colors.black26),
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(16)),
-                                ),
-                                child: ButtonTheme(
-                                  alignedDropdown: true,
-                                  child: DropdownButtonHideUnderline(
-                                    child: DropdownButton(
-                                      value: dropdownValueAtivo,
-                                      icon: Icon(
-                                        Icons.arrow_downward_outlined,
-                                      ),
-                                      elevation: 24,
-                                      // style: TextStyle(
-                                      //     // color: Theme.of(context)
-                                      //     //     .colorScheme
-                                      //     //     .primary,
-                                      //     fontWeight: FontWeight.bold,
-                                      //     fontSize: 18),
-                                      borderRadius: BorderRadius.circular(16),
-                                      onChanged: (value) {
-                                        setState(() {
-                                          dropdownValueAtivo = value!;
-                                        });
-                                      },
-                                      hint: ConstsWidget.buildTextTitle(
-                                          context, 'Selecione',
-                                          size: 18),
-                                      items: listLembretes.map((value) {
-                                        return DropdownMenuItem(
-                                            value: value['idtempo'],
-                                            child: ConstsWidget.buildTextTitle(
-                                                context, value['nometempo'],
-                                                size: 18));
-                                      }).toList(),
-                                    ),
-                                  ),
-                                ),
-                              );
-                            }),
-                          ),
-                        ],
-                      ),
-                    ],
+                  child: MyDatePicker(
+                    dataSelected: dataSelected,
+                    initialDate: initialDate != null
+                        ? DateTime.parse(widget.initialDate!)
+                        : null,
+                    hintText: initialDate ?? 'Escolha uma data',
                   ),
                 ),
+              ConstsWidget.buildTextSubTitle('Ser Notificado em', size: 14),
+              StatefulBuilder(builder: (context, setState) {
+                return Container(
+                  width: double.infinity,
+                  height: size.height * 0.066,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).canvasColor,
+                    border: Border.all(color: Colors.black26),
+                    borderRadius: BorderRadius.all(Radius.circular(16)),
+                  ),
+                  child: ButtonTheme(
+                    alignedDropdown: true,
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton(
+                        value: dropdownValueAtivo,
+                        icon: Icon(
+                          Icons.arrow_downward_outlined,
+                        ),
+                        elevation: 24,
+                        // style: TextStyle(
+                        //     // color: Theme.of(context)
+                        //     //     .colorScheme
+                        //     //     .primary,
+                        //     fontWeight: FontWeight.bold,
+                        //     fontSize: 18),
+                        borderRadius: BorderRadius.circular(16),
+                        onChanged: (value) {
+                          setState(() {
+                            dropdownValueAtivo = value!;
+                          });
+                        },
+                        hint: ConstsWidget.buildTextTitle(context, 'Selecione',
+                            size: SplashScreen.isSmall ? 16 : 18),
+                        items: listLembretes.map((value) {
+                          return DropdownMenuItem(
+                              value: value['idtempo'],
+                              child: ConstsWidget.buildTextTitle(
+                                  context, value['nometempo'],
+                                  size: SplashScreen.isSmall ? 16 : 18));
+                        }).toList(),
+                      ),
+                    ),
+                  ),
+                );
+              }),
+              SizedBox(
+                height: size.height * 0.01,
+              ),
+              ConstsWidget.buildTextSubTitle('Repitir em', size: 14),
+              StatefulBuilder(builder: (context, setState) {
+                return Container(
+                  width: double.infinity,
+                  height: size.height * 0.066,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).canvasColor,
+                    border: Border.all(color: Colors.black26),
+                    borderRadius: BorderRadius.all(Radius.circular(16)),
+                  ),
+                  child: ButtonTheme(
+                    alignedDropdown: true,
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton(
+                        value: dropdownValueAtivo,
+                        icon: Icon(
+                          Icons.arrow_downward_outlined,
+                        ),
+                        elevation: 24,
+                        // style: TextStyle(
+                        //     // color: Theme.of(context)
+                        //     //     .colorScheme
+                        //     //     .primary,
+                        //     fontWeight: FontWeight.bold,
+                        //     fontSize: 18),
+                        borderRadius: BorderRadius.circular(16),
+                        onChanged: (value) {
+                          setState(() {
+                            dropdownValueAtivo = value!;
+                          });
+                        },
+                        hint: ConstsWidget.buildTextTitle(context, 'Selecione',
+                            size: SplashScreen.isSmall ? 16 : 18),
+                        items: listLembretes.map((value) {
+                          return DropdownMenuItem(
+                              value: value['idtempo'],
+                              child: ConstsWidget.buildTextTitle(
+                                  context, value['nometempo'],
+                                  size: SplashScreen.isSmall ? 16 : 18));
+                        }).toList(),
+                      ),
+                    ),
+                  ),
+                );
+              }),
               if (!isExpired)
                 ConstsWidget.buildPadding001(context,
                     child: Column(
@@ -199,6 +229,9 @@ class _AdicionarTarefaState extends State<AdicionarTarefa> {
                             color: Colors.red)
                       ],
                     )),
+              SizedBox(
+                height: size.height * 0.01,
+              ),
               ConstsWidget.buildLoadingButton(
                 context,
                 title: 'Salvar',

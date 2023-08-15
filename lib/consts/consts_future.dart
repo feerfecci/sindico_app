@@ -132,14 +132,16 @@ class ConstsFuture {
     }
   }
 
-  static Future<Widget> apiImage(String iconApi) async {
+  static Future<Widget> apiImage(iconApi) async {
     var url = Uri.parse(iconApi);
     var resposta = await http.get(url);
 
-    return resposta.statusCode == 200
-        ? Image.network(
-            iconApi,
-          )
-        : Image.asset('assets/ico-error.png');
+    try {
+      return resposta.statusCode == 200
+          ? Image.network(iconApi)
+          : Image.asset('assets/ico-error.png');
+    } on Exception catch (e) {
+      return Image.asset('assets/ico-error.png');
+    }
   }
 }

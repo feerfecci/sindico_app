@@ -4,16 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:sindico_app/consts/consts.dart';
 import 'package:sindico_app/consts/consts_future.dart';
-import 'package:sindico_app/widgets/header.dart';
 import 'package:sindico_app/widgets/my_box_shadow.dart';
 import 'package:sindico_app/widgets/scaffold_all.dart';
-import 'package:sindico_app/widgets/shimmer_widget.dart';
 import 'package:sindico_app/widgets/snackbar/snack.dart';
+import '../../screens/splash_screen/splash_screen.dart';
 
 import '../../consts/const_widget.dart';
 import '../../widgets/page_erro.dart';
 import '../../widgets/page_vazia.dart';
-import '../home_page.dart/home_page.dart';
 import 'loading_reserva.dart';
 
 class ListaReservas extends StatefulWidget {
@@ -25,10 +23,8 @@ class ListaReservas extends StatefulWidget {
 
 class _ListaReservasState extends State<ListaReservas> {
   int statusReserva = 2;
-  bool? isAndroid;
   @override
   void initState() {
-    isAndroid = Platform.isAndroid;
     super.initState();
   }
 
@@ -133,8 +129,10 @@ class _ListaReservasState extends State<ListaReservas> {
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          ConstsWidget.buildTextTitle(context, titulo, size: 18),
-          ConstsWidget.buildTextSubTitle(texto, size: 16),
+          ConstsWidget.buildTextTitle(context, titulo,
+              size: SplashScreen.isSmall ? 16 : 18),
+          ConstsWidget.buildTextSubTitle(texto,
+              size: SplashScreen.isSmall ? 14 : 16),
         ],
       );
     }
@@ -145,7 +143,7 @@ class _ListaReservasState extends State<ListaReservas> {
         child: ConstsWidget.buildCustomButton(
           context,
           title,
-          fontSize: HomePage.isAndroid ? 18 : 16,
+          fontSize: SplashScreen.isSmall ? 18 : 16,
           color: color,
           onPressed: () {
             setState(() {

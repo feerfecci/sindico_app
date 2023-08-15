@@ -1,5 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 import 'dart:async';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:sindico_app/repositories/shared_preferences.dart';
 import 'package:sindico_app/screens/login/login_screen.dart';
@@ -10,6 +11,7 @@ import '../../repositories/biometrics_auth.dart';
 import '../../widgets/snackbar/snack.dart';
 
 class SplashScreen extends StatefulWidget {
+  static bool isSmall = false;
   const SplashScreen({super.key});
 
   @override
@@ -27,8 +29,13 @@ class _SplashScreenState extends State<SplashScreen> {
         setState(() {
           load = true;
         });
-        if (auth && hasBiometrics) {
-          return ConstsFuture.fazerLogin(
+        if (hasBiometrics) {
+          if (auth) {
+            return ConstsFuture.fazerLogin(
+                context, infos.values.first, infos.values.last);
+          }
+        } else {
+          ConstsFuture.fazerLogin(
               context, infos.values.first, infos.values.last);
         }
       } else {
@@ -53,6 +60,11 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
+    SplashScreen.isSmall = size.width <= 350
+        ? true
+        : Platform.isIOS
+            ? true
+            : false;
     return Scaffold(
       backgroundColor: Consts.kBackPageColor,
       body: Column(

@@ -7,6 +7,7 @@ import 'package:sindico_app/consts/consts_future.dart';
 import 'package:sindico_app/forms/morador_form.dart';
 import 'package:sindico_app/screens/moradores/lista_morador.dart';
 import 'package:http/http.dart' as http;
+import 'package:sindico_app/screens/splash_screen/splash_screen.dart';
 import 'package:sindico_app/widgets/alert_dialogs/alertdialog_all.dart';
 import '../../consts/const_widget.dart';
 import '../../consts/consts.dart';
@@ -71,6 +72,7 @@ class _CadastroMoradorState extends State<CadastroMorador> {
   void initState() {
     super.initState();
     apiListarDivisoes();
+    // loginGerado = widget.idmorador != null ? widget.login! : '';
     _formInfosMorador =
         _formInfosMorador.copyWith(ativo: widget.ativo == true ? 1 : 0);
     _formInfosMorador = _formInfosMorador.copyWith(acesso: widget.acesso);
@@ -356,7 +358,7 @@ class _CadastroMoradorState extends State<CadastroMorador> {
     }
   }
 
-  salvarMorador() {
+  salvarMorador() async {
     setState(() {
       isLoading = true;
     });
@@ -374,6 +376,8 @@ class _CadastroMoradorState extends State<CadastroMorador> {
       });
       if (!value['erro']) {
         Navigator.pop(context);
+        Navigator.pop(context);
+
         ConstsFuture.navigatorPagePush(
           context,
           ListaMorador(
@@ -381,12 +385,11 @@ class _CadastroMoradorState extends State<CadastroMorador> {
             idvisisao: widget.iddivisao,
             localizado: widget.localizado,
           ),
-        ).then((value) {
-          setState(() {});
-          Navigator.pop(context);
-          return buildMinhaSnackBar(context,
-              title: 'Tudo Certo!', subTitle: value['Mensagem']);
-        });
+        );
+        // buildMinhaSnackBar(context,
+        //     title: 'Tudo Certo!', subTitle: value['Mensagem']);
+        // buildMinhaSnackBar(context,
+        //     title: 'Tudo Certo!', subTitle: value['Mensagem']);
       } else {
         return buildMinhaSnackBar(context, subTitle: value['Mensagem']);
       }
@@ -431,7 +434,7 @@ class _CadastroMoradorState extends State<CadastroMorador> {
                 style: TextStyle(
                     color: Theme.of(context).colorScheme.primary,
                     fontWeight: FontWeight.w400,
-                    fontSize: 18),
+                    fontSize: SplashScreen.isSmall ? 16 : 18),
                 borderRadius: BorderRadius.circular(16),
                 onChanged: (value) {
                   setState(() {

@@ -12,16 +12,14 @@ import 'package:sindico_app/screens/home_page.dart/dropCond.dart';
 import 'package:sindico_app/screens/reservas/listar_reservar.dart';
 import 'package:sindico_app/widgets/custom_drawer/custom_drawer.dart';
 import '../../consts/consts.dart';
-import '../../widgets/header.dart';
-import '../../widgets/my_box_shadow.dart';
 import '../colaboradores/lista_colaboradores.dart';
 import '../quadro_avisos/quadro_de_avisos.dart';
 import '../tarefas/tarefas_screen.dart';
 import '../unidade/lista_unidade.dart';
 import 'package:reorderable_grid_view/reorderable_grid_view.dart';
+import '../../screens/splash_screen/splash_screen.dart';
 
 class HomePage extends StatefulWidget {
-  static bool isAndroid = false;
   const HomePage({super.key});
 
   @override
@@ -115,7 +113,6 @@ class _HomePageState extends State<HomePage> {
     super.initState();
     initPlatformState();
     gettingCacheDrag();
-    HomePage.isAndroid = Platform.isAndroid;
     // NotificationWidget.init();
     // _pageController = PageController();
   }
@@ -168,25 +165,40 @@ class _HomePageState extends State<HomePage> {
           endDrawer: CustomDrawer(),
           appBar: AppBar(
             centerTitle: true,
+            toolbarHeight:
+                SplashScreen.isSmall ? size.height * 0.09 : size.height * 0.07,
             title: ConstsWidget.buildTextTitle(
                 context, ResponsalvelInfos.nome_responsavel,
-                textAlign: TextAlign.center, size: 20),
+                textAlign: TextAlign.center,
+                size: SplashScreen.isSmall ? 18 : 20),
             iconTheme:
                 IconThemeData(color: Theme.of(context).colorScheme.primary),
             backgroundColor: Colors.transparent,
             leading: Padding(
-              padding: EdgeInsets.only(left: size.width * 0.025),
-              child: FutureBuilder(
-                future: ConstsFuture.apiImage(
-                  'https://a.portariaapp.com/img/logo_verde.png',
-                ),
-                builder: (context, snapshot) {
-                  return SizedBox(child: snapshot.data);
-                },
+              padding: EdgeInsets.only(
+                  left: size.width * 0.025,
+                  top: SplashScreen.isSmall
+                      ? size.height * 0.02
+                      : size.height * 0.01,
+                  bottom: SplashScreen.isSmall
+                      ? size.height * 0.005
+                      : size.height * 0.01),
+              child: ConstsWidget.buildFutureImage(
+                context,
+                iconApi: 'https://a.portariaapp.com/img/logo_verde.png',
               ),
+              // FutureBuilder(
+              //   future: ConstsFuture.apiImage(
+              //     'https://a.portariaapp.com/img/logo_verde.png',
+              //   ),
+              //   builder: (context, snapshot) {
+              //     return SizedBox(child: snapshot.data);
+              //   },
+              // ),
             ),
             elevation: 0,
-            leadingWidth: size.height * 0.06,
+            leadingWidth:
+                SplashScreen.isSmall ? size.height * 0.08 : size.height * 0.06,
           ),
           body: ListView(
             padding: EdgeInsets.symmetric(horizontal: size.height * 0.01),
@@ -206,7 +218,7 @@ class _HomePageState extends State<HomePage> {
                     mainAxisSpacing: 0.5,
                     crossAxisCount: 2,
                     shrinkWrap: true,
-                    childAspectRatio: 1.4,
+                    childAspectRatio: SplashScreen.isSmall ? 1.7 : 1.4,
                     physics: ClampingScrollPhysics(),
                     onReorder: (oldIndex, newIndex) {
                       var card = models.removeAt(oldIndex);

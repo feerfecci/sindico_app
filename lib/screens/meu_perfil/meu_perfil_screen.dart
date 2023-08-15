@@ -29,7 +29,7 @@ class _MeuPerfilScreenState extends State<MeuPerfilScreen> {
     });
 
     ConstsFuture.resquestApi(
-            '${Consts.sindicoApi}funcionarios/?fn=editarFuncionario&idcond=${ResponsalvelInfos.idcondominio}&idfuncao=2&idfuncionario=${ResponsalvelInfos.idfuncionario}&datanasc=${responsalvelInfos.nascimento}&documento=${responsalvelInfos.documento}&email=${responsalvelInfos.email}&telefone=${responsalvelInfos.telefone}&login=${ResponsalvelInfos.login}&avisa_corresp=1&avisa_visita=1&avisa_delivery=1&avisa_encomendas=1')
+            '${Consts.sindicoApi}funcionarios/?fn=editarFuncionario&idcond=${ResponsalvelInfos.idcondominio}&idfuncao=2&idfuncionario=${ResponsalvelInfos.idfuncionario}&nome_funcionario=${ResponsalvelInfos.nome_responsavel}&datanasc=${responsalvelInfos.nascimento}&documento=${responsalvelInfos.documento}&email=${responsalvelInfos.email}&telefone=${responsalvelInfos.telefone}&login=${ResponsalvelInfos.login}&avisa_corresp=1&avisa_visita=1&avisa_delivery=1&avisa_encomendas=1')
         .then((value) {
       setState(() {
         isLoading = false;

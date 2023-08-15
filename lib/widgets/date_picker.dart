@@ -6,6 +6,7 @@ import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 import '../consts/consts.dart';
+import '../screens/splash_screen/splash_screen.dart';
 
 class MyDatePicker extends StatefulWidget {
   static String dataSelected = '';
@@ -45,7 +46,7 @@ class _MyDatePickerState extends State<MyDatePicker> {
         ),
         hintText: widget.hintText,
         hintStyle: TextStyle(
-          fontSize: 18,
+          fontSize: SplashScreen.isSmall ? 16 : 18,
           fontWeight: FontWeight.bold,
         ),
         enabledBorder: OutlineInputBorder(

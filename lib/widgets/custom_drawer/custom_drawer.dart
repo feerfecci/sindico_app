@@ -1,15 +1,13 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables
 import 'package:flutter/material.dart';
 import 'package:sindico_app/consts/consts_future.dart';
-import 'package:sindico_app/screens/moradores/cadastro_morador.dart';
-import 'package:sindico_app/screens/unidade/cadastro_unidade.dart';
 import '../../consts/consts.dart';
 import '../../consts/const_widget.dart';
 import '../../repositories/shared_preferences.dart';
 import '../../screens/login/login_screen.dart';
-import '../../screens/meu_perfil/informacoes_cond.dart';
 import '../../screens/meu_perfil/meu_perfil_screen.dart';
 import 'change_theme_button.dart';
+import '../../screens/splash_screen/splash_screen.dart';
 
 class CustomDrawer extends StatefulWidget {
   const CustomDrawer({super.key});
@@ -30,16 +28,17 @@ class _CustomDrawerState extends State<CustomDrawer> {
     }) {
       return ConstsWidget.buildPadding001(
         context,
+        vertical: SplashScreen.isSmall ? 0 : 0.01,
         child: ListTile(
           onTap: onTap,
           iconColor: Theme.of(context).iconTheme.color,
           leading: Icon(
             leading,
-            size: 25,
+            size: SplashScreen.isSmall ? 20 : 25,
           ),
           title: ConstsWidget.buildTextTitle(context, title),
           trailing: Icon(
-            size: 30,
+            size: SplashScreen.isSmall ? 25 : 30,
             Icons.keyboard_arrow_right_outlined,
           ),
         ),
@@ -49,19 +48,24 @@ class _CustomDrawerState extends State<CustomDrawer> {
     return SafeArea(
       child: SizedBox(
         height: size.height * 0.95,
+        width: SplashScreen.isSmall ? size.width * 0.9 : size.width * 0.85,
         child: Drawer(
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
               topLeft: Radius.circular(30),
-              bottomLeft: Radius.circular(30),
+              bottomLeft: Radius.circular(SplashScreen.isSmall ? 30 : 30),
             ),
           ),
           child: Column(
+            // physics: ClampingScrollPhysics(),
+            // shrinkWrap: true,
             children: [
               SizedBox(
-                height: size.height * 0.08,
-                width: size.width * 0.85,
+                height: SplashScreen.isSmall
+                    ? size.width * 0.2
+                    : size.height * 0.08,
+                width: double.maxFinite,
                 child: DrawerHeader(
                   padding: EdgeInsets.symmetric(
                     vertical: size.height * 0.015,

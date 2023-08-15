@@ -29,7 +29,7 @@ class _TarefasScreenState extends State<TarefasScreen> {
       },
       child: buildScaffoldAll(
         context,
-        title: 'Minha Tarefas',
+        title: 'Minhas Tarefas',
         body: Column(
           children: [
             ConstsWidget.buildCustomButton(
@@ -95,16 +95,15 @@ class _TarefasScreenState extends State<TarefasScreen> {
                             SizedBox(
                               height: size.height * 0.01,
                             ),
-                            ConstsWidget.buildTextSubTitle('Descrição'),
-                            ConstsWidget.buildTextTitle(context, descricao,
-                                textAlign: TextAlign.center, maxLines: 6),
+                            ConstsWidget.buildTextTitle(context, 'Descrição'),
+                            ConstsWidget.buildTextSubTitle(descricao,
+                                textAlign: TextAlign.center),
                             SizedBox(
                               height: size.height * 0.01,
                             ),
-                            ConstsWidget.buildTextSubTitle(
-                                'Data de vencimento'),
                             ConstsWidget.buildTextTitle(
-                                context,
+                                context, 'Data de vencimento'),
+                            ConstsWidget.buildTextSubTitle(
                                 DateFormat('dd/MM/yyyy')
                                     .format(DateTime.parse(data_vencimento))
                                     .toString()),

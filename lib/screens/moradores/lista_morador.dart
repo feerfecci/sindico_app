@@ -211,6 +211,90 @@ class _ListaMoradorState extends State<ListaMorador> {
                             ),
                             ConstsWidget.buildCustomButton(
                                 context, 'Editar Morador', onPressed: () {
+                              // Navigator.pushReplacement(
+                              //   context,
+                              //   MaterialPageRoute(
+                              //     builder: (context) => CadastroMorador(
+                              //         idmorador: idmorador,
+                              //         iddivisao: iddivisao,
+                              //         idunidade: idunidade,
+                              //         localizado: widget.localizado,
+                              //         nome_morador: nome_morador,
+                              //         login: login,
+                              //         documento: documento,
+                              //         nascimento: data_nascimento,
+                              //         telefone: telefone,
+                              //         ddd: ddd,
+                              //         acesso: acesso,
+                              //         ativo: ativo,
+                              //         responsavel: responsavel,
+                              //         email: email),
+                              //   ),
+                              // );
+                              // Navigator.replace(
+                              //   context,
+                              //   oldRoute: MaterialPageRoute(
+                              //     builder: (context) =>
+                              //         ListaMorador(idunidade: widget.idunidade),
+                              //   ),
+                              // newRoute: MaterialPageRoute(
+                              //   builder: (context) => CadastroMorador(
+                              //       idmorador: idmorador,
+                              //       iddivisao: iddivisao,
+                              //       idunidade: idunidade,
+                              //       localizado: widget.localizado,
+                              //       nome_morador: nome_morador,
+                              //       login: login,
+                              //       documento: documento,
+                              //       nascimento: data_nascimento,
+                              //       telefone: telefone,
+                              //       ddd: ddd,
+                              //       acesso: acesso,
+                              //       ativo: ativo,
+                              //       responsavel: responsavel,
+                              //       email: email),
+                              // ),
+                              // );
+                              // Navigator.pushAndRemoveUntil(
+                              //     context,
+                              //     MaterialPageRoute(
+                              //       builder: (context) => CadastroMorador(
+                              //           idmorador: idmorador,
+                              //           iddivisao: iddivisao,
+                              //           idunidade: idunidade,
+                              //           localizado: widget.localizado,
+                              //           nome_morador: nome_morador,
+                              //           login: login,
+                              //           documento: documento,
+                              //           nascimento: data_nascimento,
+                              //           telefone: telefone,
+                              //           ddd: ddd,
+                              //           acesso: acesso,
+                              //           ativo: ativo,
+                              //           responsavel: responsavel,
+                              //           email: email),
+                              //     ),
+                              //     (route) => false
+                              // ConstsFuture.navigatorPageReplace(
+                              //   context,
+                              //   CadastroMorador(
+                              //       idmorador: idmorador,
+                              //       iddivisao: iddivisao,
+                              //       idunidade: idunidade,
+                              //       localizado: widget.localizado,
+                              //       nome_morador: nome_morador,
+                              //       login: login,
+                              //       documento: documento,
+                              //       nascimento: data_nascimento,
+                              //       telefone: telefone,
+                              //       ddd: ddd,
+                              //       acesso: acesso,
+                              //       ativo: ativo,
+                              //       responsavel: responsavel,
+                              //       email: email),
+                              // );
+                              // Navigator.pop(context);
+
                               ConstsFuture.navigatorPagePush(
                                 context,
                                 CadastroMorador(

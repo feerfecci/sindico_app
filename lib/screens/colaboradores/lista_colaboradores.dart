@@ -183,12 +183,12 @@ class _ListaColaboradoresState extends State<ListaColaboradores> {
                                       ),
                                       buildRowInfos(
                                           titulo1: 'Usuário',
-                                          texto1: '$login_funcionario',
+                                          texto1: login_funcionario,
                                           titulo2: 'Cargo',
-                                          texto2: '$funcao'),
+                                          texto2: funcao),
                                       buildRowInfos(
                                           titulo1: 'Nascimento',
-                                          texto1: 'data_nascimento',
+                                          texto1: data_nascimento,
                                           titulo2: 'Documento',
                                           texto2: documento),
 
@@ -263,40 +263,38 @@ class _ListaColaboradoresState extends State<ListaColaboradores> {
                                                 ],
                                               ),
                                             ),
-                                            ConstsWidget.buildOutlinedButton(
-                                              context,
-                                              title: 'Editar',
-                                              onPressed: () {
-                                                ConstsFuture.navigatorPagePush(
-                                                    context,
-                                                    CadastroColaborador(
-                                                        idfuncionario:
-                                                            idfuncionario,
-                                                        nomeFuncionario:
-                                                            nome_funcionario,
-                                                        idfuncao: idfuncao,
-                                                        funcao: funcao,
-                                                        nascimento:
-                                                            data_nascimento,
-                                                        documento: documento,
-                                                        ddd: ddd,
-                                                        telefone: telefone,
-                                                        email: email,
-                                                        login:
-                                                            login_funcionario,
-                                                        avisa_corresp:
-                                                            avisa_corresp,
-                                                        avisa_visita:
-                                                            avisa_visita,
-                                                        avisa_delivery:
-                                                            avisa_delivery,
-                                                        avisa_encomendas:
-                                                            avisa_encomendas,
-                                                        ativo: ativo ? 1 : 0));
-                                              },
-                                            )
                                           ],
-                                        )
+                                        ),
+                                      SizedBox(
+                                        height: size.height * 0.02,
+                                      ),
+                                      ConstsWidget.buildOutlinedButton(
+                                        context,
+                                        title: 'Editar',
+                                        onPressed: () {
+                                          ConstsFuture.navigatorPagePush(
+                                              context,
+                                              CadastroColaborador(
+                                                  idfuncionario: idfuncionario,
+                                                  nomeFuncionario:
+                                                      nome_funcionario,
+                                                  idfuncao: idfuncao,
+                                                  funcao: funcao,
+                                                  nascimento: data_nascimento,
+                                                  documento: documento,
+                                                  ddd: ddd,
+                                                  telefone: telefone,
+                                                  email: email,
+                                                  login: login_funcionario,
+                                                  avisa_corresp: avisa_corresp,
+                                                  avisa_visita: avisa_visita,
+                                                  avisa_delivery:
+                                                      avisa_delivery,
+                                                  avisa_encomendas:
+                                                      avisa_encomendas,
+                                                  ativo: ativo ? 1 : 0));
+                                        },
+                                      )
                                     ],
                                   ),
                                 ),

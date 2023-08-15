@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:sindico_app/screens/home_page.dart/home_page.dart';
 import 'package:validatorless/validatorless.dart';
 
 import '../consts/const_widget.dart';
+import '../screens/splash_screen/splash_screen.dart';
 
 Widget buildMyTextFormField(BuildContext context,
     {required String title,
@@ -27,6 +29,7 @@ Widget buildMyTextFormField(BuildContext context,
       keyboardType: keyboardType,
       maxLines: 5,
       minLines: 1,
+      style: TextStyle(fontSize: SplashScreen.isSmall ? 16 : 18),
       decoration: InputDecoration(
         contentPadding: EdgeInsets.symmetric(
             horizontal: size.width * 0.035, vertical: size.height * 0.023),
@@ -34,9 +37,15 @@ Widget buildMyTextFormField(BuildContext context,
         fillColor: Theme.of(context).canvasColor,
         label: labelCenter
             ? Center(
-                child: Text(title),
+                child: Text(
+                  title,
+                  style: TextStyle(fontSize: SplashScreen.isSmall ? 14 : 16),
+                ),
               )
-            : Text(title),
+            : Text(
+                title,
+                style: TextStyle(fontSize: SplashScreen.isSmall ? 14 : 16),
+              ),
         hintText: hintText,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
@@ -79,19 +88,30 @@ Widget buildMyTextFormObrigatorio(BuildContext context, String title,
       maxLength: maxLength,
       minLines: minLines,
       maxLines: maxLines,
+      style: TextStyle(fontSize: SplashScreen.isSmall ? 14 : 18),
       inputFormatters: [MaskTextInputFormatter(mask: mask)],
       validator: validator ??
           Validatorless.multiple([Validatorless.required(mensagem)]),
       decoration: InputDecoration(
         contentPadding: EdgeInsets.symmetric(
-            horizontal: size.width * 0.035, vertical: size.height * 0.023),
+            horizontal:
+                SplashScreen.isSmall ? size.width * 0.03 : size.width * 0.035,
+            vertical: SplashScreen.isSmall
+                ? size.height * 0.01
+                : size.height * 0.023),
         filled: true,
         fillColor: Theme.of(context).canvasColor,
         label: labelCenter
             ? Center(
-                child: Text(title),
+                child: Text(
+                  title,
+                  style: TextStyle(fontSize: SplashScreen.isSmall ? 14 : 16),
+                ),
               )
-            : Text(title),
+            : Text(
+                title,
+                style: TextStyle(fontSize: SplashScreen.isSmall ? 14 : 16),
+              ),
         hintText: hintText,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
@@ -129,7 +149,10 @@ Widget buildTextFormLinhas(BuildContext context,
         filled: true,
         hintText: hintText,
         fillColor: Theme.of(context).canvasColor,
-        label: Text(label),
+        label: Text(
+          label,
+          style: TextStyle(fontSize: SplashScreen.isSmall ? 14 : 16),
+        ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
         ),

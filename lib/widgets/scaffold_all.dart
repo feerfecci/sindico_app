@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sindico_app/consts/const_widget.dart';
+import 'package:sindico_app/screens/splash_screen/splash_screen.dart';
 
 import 'custom_drawer/custom_drawer.dart';
 
@@ -10,7 +11,8 @@ Widget buildScaffoldAll(BuildContext context,
     extendBody: true,
     appBar: AppBar(
       centerTitle: true,
-      title: ConstsWidget.buildTextTitle(context, title, size: 24),
+      title: ConstsWidget.buildTextTitle(context, title,
+          size: SplashScreen.isSmall ? 20 : 24),
       iconTheme: IconThemeData(color: Theme.of(context).colorScheme.primary),
       elevation: 0,
       backgroundColor: Colors.transparent,
