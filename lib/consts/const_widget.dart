@@ -1,7 +1,9 @@
+import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import '../../screens/splash_screen/splash_screen.dart';
 import '../widgets/shimmer_widget.dart';
 import 'consts.dart';
+import 'package:badges/badges.dart' as badges;
 import 'consts_future.dart';
 
 class ConstsWidget {
@@ -255,8 +257,11 @@ class ConstsWidget {
     );
   }
 
-  static Widget buildRefreshIndicator(BuildContext context,
-      {required Widget child, required Future<void> Function() onRefresh}) {
+  static Widget buildRefreshIndicator(
+    BuildContext context, {
+    required Widget child,
+    required Future<void> Function() onRefresh,
+  }) {
     var size = MediaQuery.of(context).size;
     return RefreshIndicator(
         strokeWidth: 2,
@@ -268,34 +273,87 @@ class ConstsWidget {
   }
 
   static Widget buildFutureImage(BuildContext context,
-      {required String iconApi, double? width, double? height}) {
+      {required String iconApi, double? width, double? height, String? title}) {
     var size = MediaQuery.of(context).size;
-    return FutureBuilder(
-        future: ConstsFuture.apiImage(iconApi),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return ShimmerWidget(
-                height: SplashScreen.isSmall
-                    ? size.height * 0.08
-                    : size.height * 0.068,
-                width: SplashScreen.isSmall
-                    ? size.width * 0.14
-                    : size.width * 0.15);
-          } else if (snapshot.hasData) {
-            return SizedBox(
-              width: width != null ? size.width * width : null,
-              height: height != null ? size.height * height : null,
-              child: Image.network(
-                iconApi,
-                fit: BoxFit.fill,
-              ),
-            );
-          } else {
-            return Image.asset('assets/ico-error.png');
-          }
-        });
+    return Stack(
+      alignment: Alignment.bottomCenter,
+      children: [
+        FutureBuilder(
+            future: ConstsFuture.apiImage(iconApi),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return ShimmerWidget(
+                    height: SplashScreen.isSmall
+                        ? size.height * 0.08
+                        : size.height * 0.068,
+                    width: SplashScreen.isSmall
+                        ? size.width * 0.14
+                        : size.width * 0.15);
+              } else if (snapshot.hasData) {
+                return SizedBox(
+                  width: width != null ? size.width * width : null,
+                  height: height != null ? size.height * height : null,
+                  child: Image.network(
+                    iconApi,
+                    fit: BoxFit.fill,
+                  ),
+                );
+              } else {
+                return Image.asset('assets/ico-error.png');
+              }
+            }),
+        if (title != null)
+          ConstsWidget.buildTextTitle(
+            context,
+            title,
+            color: Colors.white,
+          )
+      ],
+    );
+  }
+
+  static Widget buildDecorationDrop(BuildContext context,
+      {required Widget child}) {
+    var size = MediaQuery.of(context).size;
+    return Container(
+      height: size.height * 0.0725,
+      width: double.infinity,
+      alignment: Alignment.center,
+      decoration: BoxDecoration(
+        color: Theme.of(context).canvasColor,
+        border: Border.all(color: Colors.black26),
+        borderRadius: BorderRadius.all(Radius.circular(16)),
+      ),
+      child: DropdownButtonHideUnderline(
+        child: ButtonTheme(
+            alignedDropdown: true,
+            shape: Border.all(color: Colors.black),
+            child: child),
+      ),
+    );
+  }
+
+  static Widget buildBadge(BuildContext context,
+      {String title = '',
+      required bool showBadge,
+      required Widget? child,
+      BadgePosition? position}) {
+    return badges.Badge(
+        showBadge: showBadge,
+        badgeAnimation: badges.BadgeAnimation.fade(toAnimate: false),
+        badgeContent: Text(
+          title,
+          style: TextStyle(
+              color: Theme.of(context).cardColor, fontWeight: FontWeight.bold),
+        ),
+        position: position,
+        badgeStyle: badges.BadgeStyle(
+          badgeColor: Consts.kColorRed,
+        ),
+        child: child);
   }
 }
+
 
 // Widget buildDropDivisoes({required void Function(Object?)? onChanged}) {
 //   return StatefulBuilder(

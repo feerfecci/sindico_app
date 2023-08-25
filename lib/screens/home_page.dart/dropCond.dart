@@ -44,52 +44,41 @@ class _DropCondState extends State<DropCond> {
     return ConstsWidget.buildPadding001(
       context,
       child: MyBoxShadow(
-        child: Container(
-          width: double.maxFinite,
-          height: size.height * 0.05,
-          decoration: BoxDecoration(
-            // color:Colors.red,
-            // border: Border.all(color: Colors.black26),
-            borderRadius: BorderRadius.all(Radius.circular(16)),
-          ),
-          child: DropdownButtonHideUnderline(
-            child: ButtonTheme(
-              alignedDropdown: true,
-              child: DropdownButton(
-                alignment: Alignment.center,
-                isExpanded: true,
-                elevation: 24,
-                icon: Icon(
-                  Icons.arrow_downward,
-                  color: Theme.of(context).iconTheme.color,
-                ),
-                borderRadius: BorderRadius.circular(16),
-                // style: TextStyle(
-                //     color: Theme.of(context).colorScheme.primary,
-                //     fontWeight: FontWeight.w400,
-                //     fontSize: 18),
-                value: dropCond,
-                items: DropCond.listCond.map((e) {
-                  return DropdownMenuItem(
-                      alignment: Alignment.center,
-                      value: e['idcondominio'],
-                      child: ConstsWidget.buildTextTitle(
-                        context,
-                        e['nome_condominio'],
-                      ));
-                }).toList(),
-                onChanged: (value) {
-                  setState(
-                    () {
-                      dropCond = value;
-                      ConstsFuture.fazerLogin(context, ResponsalvelInfos.login,
-                          ResponsalvelInfos.senhacripto,
-                          idCondominio: int.parse('$dropCond'));
-                    },
-                  );
-                },
-              ),
+        child: ConstsWidget.buildDecorationDrop(
+          context,
+          child: DropdownButton(
+            alignment: Alignment.center,
+            isExpanded: true,
+            elevation: 24,
+            icon: Icon(
+              Icons.arrow_downward,
+              color: Theme.of(context).iconTheme.color,
             ),
+            borderRadius: BorderRadius.circular(16),
+            // style: TextStyle(
+            //     color: Theme.of(context).colorScheme.primary,
+            //     fontWeight: FontWeight.w400,
+            //     fontSize: 18),
+            value: dropCond,
+            items: DropCond.listCond.map((e) {
+              return DropdownMenuItem(
+                  alignment: Alignment.center,
+                  value: e['idcondominio'],
+                  child: ConstsWidget.buildTextTitle(
+                    context,
+                    e['nome_condominio'],
+                  ));
+            }).toList(),
+            onChanged: (value) {
+              setState(
+                () {
+                  dropCond = value;
+                  ConstsFuture.fazerLogin(context, ResponsalvelInfos.login,
+                      ResponsalvelInfos.senhacripto,
+                      idCondominio: int.parse('$dropCond'));
+                },
+              );
+            },
           ),
         ),
       ),

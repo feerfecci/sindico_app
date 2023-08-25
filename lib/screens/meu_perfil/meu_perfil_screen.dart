@@ -29,7 +29,7 @@ class _MeuPerfilScreenState extends State<MeuPerfilScreen> {
     });
 
     ConstsFuture.resquestApi(
-            '${Consts.sindicoApi}funcionarios/?fn=editarFuncionario&idcond=${ResponsalvelInfos.idcondominio}&idfuncao=2&idfuncionario=${ResponsalvelInfos.idfuncionario}&nome_funcionario=${ResponsalvelInfos.nome_responsavel}&datanasc=${responsalvelInfos.nascimento}&documento=${responsalvelInfos.documento}&email=${responsalvelInfos.email}&telefone=${responsalvelInfos.telefone}&login=${ResponsalvelInfos.login}&avisa_corresp=1&avisa_visita=1&avisa_delivery=1&avisa_encomendas=1')
+            '${Consts.sindicoApi}funcionarios/?fn=editarFuncionario&idcond=${ResponsalvelInfos.idcondominio}&idfuncao=2&idfuncionario=${ResponsalvelInfos.idfuncionario}&nome_funcionario=${ResponsalvelInfos.nome_responsavel}&datanasc=${responsalvelInfos.nascimento}&documento=${responsalvelInfos.documento}&email=${responsalvelInfos.email}&telefone=${responsalvelInfos.telefone}&login=${ResponsalvelInfos.login}&avisa_corresp=1&avisa_visita=1&avisa_delivery=1&avisa_encomendas=1&envia_avisos=1')
         .then((value) {
       setState(() {
         isLoading = false;
@@ -143,7 +143,10 @@ class _MeuPerfilScreenState extends State<MeuPerfilScreen> {
                 hintText: 'Ex: exemplo@exp.com',
                 onSaved: (text) =>
                     responsalvelInfos = responsalvelInfos.copyWith(email: text),
-                validator: Validatorless.email('Não é um email válido'),
+                validator: Validatorless.multiple([
+                  Validatorless.email('Não é um email válido'),
+                  Validatorless.required('Preencha')
+                ]),
               ),
               SizedBox(
                 height: size.height * 0.01,

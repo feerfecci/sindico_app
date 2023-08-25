@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:sindico_app/consts/consts.dart';
 import 'package:sindico_app/consts/consts_future.dart';
+import 'package:sindico_app/screens/colaboradores/loding_colab.dart';
 import 'package:sindico_app/screens/moradores/cadastro_morador.dart';
 import 'package:sindico_app/widgets/header.dart';
 import 'package:sindico_app/widgets/my_box_shadow.dart';
@@ -33,7 +34,7 @@ class _ListaMoradorState extends State<ListaMorador> {
       onRefresh: () async {
         setState(() {
           ConstsFuture.resquestApi(
-              '${Consts.sindicoApi}moradores/?fn=listarMoradores&idunidade=${widget.idunidade}&idcond=${ResponsalvelInfos.idcondominio}');
+              '${Consts.sindicoApi}moradores/?fn=listarMoradores&idunidade=${widget.idunidade}&idcond=${ResponsalvelInfos.idcondominio}&idfuncionario=${ResponsalvelInfos.idfuncionario}');
         });
       },
       child: buildScaffoldAll(
@@ -57,10 +58,10 @@ class _ListaMoradorState extends State<ListaMorador> {
             ),
             FutureBuilder<dynamic>(
               future: ConstsFuture.resquestApi(
-                  '${Consts.sindicoApi}moradores/?fn=listarMoradores&idunidade=${widget.idunidade}&idcond=${ResponsalvelInfos.idcondominio}'),
+                  '${Consts.sindicoApi}moradores/?fn=listarMoradores&idunidade=${widget.idunidade}&idcond=${ResponsalvelInfos.idcondominio}&idfuncionario=${ResponsalvelInfos.idfuncionario}'),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return CircularProgressIndicator();
+                  return LoadingColaboradores();
                 }
                 if (snapshot.hasData) {
                   if (!snapshot.data['erro']) {

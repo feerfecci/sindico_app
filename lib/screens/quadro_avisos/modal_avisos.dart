@@ -26,8 +26,9 @@ class _WidgetModalAvisosState extends State<WidgetModalAvisos> {
   final _keyForm = GlobalKey<FormState>();
   TextEditingController tituloCntl = TextEditingController();
   TextEditingController textoCntl = TextEditingController();
-  File? fileImage;
+
   bool isFile = false;
+  File? fileImage;
   List<String> listImage = [];
   String? nameImage = '';
   String? pathImage = '';
@@ -66,11 +67,13 @@ class _WidgetModalAvisosState extends State<WidgetModalAvisos> {
                 ),
                 buildMyTextFormObrigatorio(context, 'Título',
                     hintText: 'Exemplo: ',
+                    textCapitalization: TextCapitalization.words,
                     maxLength: 70,
                     controller: tituloCntl),
                 ConstsWidget.buildPadding001(
                   context,
                   child: buildMyTextFormObrigatorio(context, 'Descrição',
+                      textCapitalization: TextCapitalization.sentences,
                       minLines: 8,
                       maxLines: 8,
                       hintText:
@@ -85,9 +88,9 @@ class _WidgetModalAvisosState extends State<WidgetModalAvisos> {
                     final picker = ImagePicker();
                     final pickedFile =
                         await picker.pickImage(source: ImageSource.gallery);
-                    if (pickedFile == null) return;
+                    // if (pickedFile == null) return;
 
-                    if (!isFile) {
+                    if (pickedFile != null) {
                       final file = File(pickedFile.path);
                       nameImage = pickedFile.name;
                       pathImage = pickedFile.path;
@@ -189,7 +192,7 @@ class _WidgetModalAvisosState extends State<WidgetModalAvisos> {
   Future upload(
       {required String? nameImage, required String? pathImage}) async {
     var postUri = Uri.parse(
-        "https://a.portariaapp.com/portaria/api/quadro_avisos/?fn=enviarAviso");
+        "https://a.portariaapp.com/sindico/api/quadro_avisos/?fn=enviarAviso");
 
     http.MultipartRequest request = http.MultipartRequest("POST", postUri);
 
@@ -202,6 +205,7 @@ class _WidgetModalAvisosState extends State<WidgetModalAvisos> {
     }
     request.fields['tipo'] = '1';
     request.fields['idcond'] = '${ResponsalvelInfos.idcondominio}';
+    request.fields['idfuncionario'] = '${ResponsalvelInfos.idfuncionario}';
     request.fields['titulo'] = tituloCntl.text;
     request.fields['texto'] = textoCntl.text;
 

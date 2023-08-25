@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -11,13 +12,19 @@ import 'package:sindico_app/screens/home_page.dart/card_home.dart';
 import 'package:sindico_app/screens/home_page.dart/dropCond.dart';
 import 'package:sindico_app/screens/reservas/listar_reservar.dart';
 import 'package:sindico_app/widgets/custom_drawer/custom_drawer.dart';
+import 'package:sindico_app/widgets/page_vazia.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../consts/consts.dart';
+import '../../widgets/alert_dialogs/alertdialog_all.dart';
+import '../../widgets/my_box_shadow.dart';
+import '../../widgets/page_erro.dart';
 import '../colaboradores/lista_colaboradores.dart';
 import '../quadro_avisos/quadro_de_avisos.dart';
 import '../tarefas/tarefas_screen.dart';
 import '../unidade/lista_unidade.dart';
 import 'package:reorderable_grid_view/reorderable_grid_view.dart';
 import '../../screens/splash_screen/splash_screen.dart';
+import 'package:http/http.dart' as http;
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -27,6 +34,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  List telefonesList1 = [];
+  List telefonesList2 = [];
+  List telefonesList3 = [];
   DateTime timeBackPressed = DateTime.now();
   // late PageController _pageController;
   List<Models> models = [
@@ -83,7 +93,7 @@ class _HomePageState extends State<HomePage> {
       indexOrder: 7,
       pageRoute: TarefasScreen(),
       title: 'Lista | Tarefas',
-      iconApi: '${Consts.iconApiPort}cadastro-unidades.png',
+      iconApi: '${Consts.iconApiPort}tarefas.png',
     ),
   ];
 
@@ -108,6 +118,18 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  Future<dynamic> cliquePubli(String api) async {
+    var url = Uri.parse(api);
+    var resposta = await http.get(url);
+    if (resposta.statusCode == 200) {
+      try {
+        return json.decode(resposta.body);
+      } catch (e) {
+        return {'erro': true, 'mensagem': 'Tente Novamente'};
+      }
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -117,13 +139,24 @@ class _HomePageState extends State<HomePage> {
     // _pageController = PageController();
   }
 
+  Future<dynamic> apiPubli({required int local}) {
+    return ConstsFuture.resquestApi(
+        '${Consts.sindicoApi}publicidade/?fn=mostrarPublicidade&idcond=16&local=$local');
+  }
+
   static const String oneSignalAppId = "25709281-f6fc-4ac7-a90e-dac40989a182";
 
   Future<void> initPlatformState() async {
     OneSignal.shared.setAppId(oneSignalAppId);
     OneSignal.shared.promptUserForPushNotificationPermission().then((accepted) {
       // OneSignal.shared.setEmail(email: "${User.emailUser}");
-      OneSignal.shared.setExternalUserId('26');
+      OneSignal.shared.sendTags({
+        'idfuncionario': ResponsalvelInfos.idfuncionario.toString(),
+        'idfuncao': '2',
+        'idcond': ResponsalvelInfos.idcondominio.toString(),
+      });
+      OneSignal.shared
+          .setExternalUserId(ResponsalvelInfos.idfuncionario.toString());
       // OneSignal.shared
       //     .sendTags({'isAndroid': 1, 'idweb': logado.idCliente.toString()});
     });
@@ -131,9 +164,197 @@ class _HomePageState extends State<HomePage> {
 
   bool draggable = false;
 
+  lauchEmail(String email) {
+    launchUrl(Uri.parse('mailto:$email'), mode: LaunchMode.externalApplication);
+  }
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
+
+    Widget buildBanerPubli({required int local, required List usarList}) {
+      return ConstsWidget.buildPadding001(context,
+          child: FutureBuilder(
+            future: apiPubli(local: local),
+            builder: (context, snapshot) {
+              usarList.clear();
+              if (snapshot.hasData) {
+                // if (!snapshot.data!["erro"]) {
+                var apiPublicidade = snapshot.data['publicidade'][0];
+                var idpublidade = apiPublicidade['idpublidade'];
+                var idcondominio = apiPublicidade['idcondominio'];
+                var arquivo = apiPublicidade['arquivo'];
+                var email = apiPublicidade['email'];
+                var site = apiPublicidade['site'];
+                var whatsapp = apiPublicidade['whatsapp'];
+                var telefone = apiPublicidade['telefone'];
+                var telefone2 = apiPublicidade['telefone2'];
+                var impressoes = apiPublicidade['impressoes'];
+                var datahora = apiPublicidade['datahora'];
+                var ultima_atualizacao = apiPublicidade['ultima_atualizacao'];
+
+                bool hasWhats = false;
+
+                if (whatsapp != '') {
+                  usarList.add(whatsapp);
+                  hasWhats = true;
+                  print('whatsapp $usarList');
+                }
+                if (telefone != '') {
+                  if (telefone != whatsapp) {
+                    usarList.add(telefone);
+                    print('telefone $usarList');
+                  } else {
+                    hasWhats = true;
+                  }
+                }
+                if (telefone2 != '') {
+                  if (telefone2 != whatsapp && telefone2 != telefone) {
+                    usarList.add(telefone2);
+                  } else {
+                    hasWhats = true;
+                  }
+                }
+
+                return GestureDetector(
+                  onTap: () {
+                    cliquePubli(
+                        'https://a.portariaapp.com/unidade/api/publicidade/?fn=cliquePublicidade&idpublicidade=$idpublidade');
+                    if (usarList.length == 1 && email == '' && site == '') {
+                      if (hasWhats) {
+                        launchUrl(Uri.parse('https://wa.me/+55$whatsapp'),
+                            mode: LaunchMode.externalApplication);
+                      } else if (telefone != '') {
+                        launchUrl(Uri.parse('tel:$telefone'),
+                            mode: LaunchMode.externalApplication);
+                      } else {
+                        launchUrl(Uri.parse('tel:$telefone2'),
+                            mode: LaunchMode.externalApplication);
+                      }
+                    } else if (usarList.isEmpty && email == '' && site != '') {
+                      launchUrl(Uri.parse(site),
+                          mode: LaunchMode.externalApplication);
+                      print('Abrir link no google');
+                    } else if (usarList.isEmpty && site == '' && email != '') {
+                      lauchEmail(email);
+                    } else {
+                      showAllDialog(context,
+                          title: ConstsWidget.buildTextTitle(
+                              context, 'Entrar em contato'),
+                          barrierDismissible: true,
+                          children: [
+                            Column(
+                              children: usarList.map((e) {
+                                return GestureDetector(
+                                  onTap: hasWhats && e == whatsapp
+                                      ? () {
+                                          launchUrl(
+                                              Uri.parse(
+                                                  'https://wa.me/+55$whatsapp'),
+                                              mode: LaunchMode
+                                                  .externalApplication);
+                                        }
+                                      : whatsapp != null
+                                          ? () {
+                                              launchUrl(Uri.parse('tel:$e'));
+                                            }
+                                          : () {},
+                                  child: MyBoxShadow(
+                                    child: Row(
+                                      children: [
+                                        SizedBox(
+                                          width: size.width * 0.01,
+                                        ),
+                                        ConstsWidget.buildTextTitle(context, e),
+                                        Spacer(),
+                                        if (hasWhats && e == whatsapp)
+                                          IconButton(
+                                              onPressed: () {
+                                                launchUrl(
+                                                    Uri.parse(
+                                                        'https://wa.me/+55$whatsapp'),
+                                                    mode: LaunchMode
+                                                        .externalApplication);
+                                              },
+                                              icon: Icon(Icons.wechat_rounded)),
+                                        if (whatsapp != null)
+                                          IconButton(
+                                              onPressed: () {
+                                                launchUrl(Uri.parse('tel:$e'));
+                                              },
+                                              icon: Icon(Icons.call)),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              }).toList(),
+                            ),
+                            if (site != '')
+                              GestureDetector(
+                                onTap: () {
+                                  launchUrl(Uri.parse(site),
+                                      mode: LaunchMode.inAppWebView);
+                                },
+                                child: MyBoxShadow(
+                                    child: Row(
+                                  children: [
+                                    SizedBox(
+                                      width: size.width * 0.01,
+                                    ),
+                                    ConstsWidget.buildTextTitle(
+                                        context, 'Acesse o site'),
+                                    Spacer(),
+                                    ConstsWidget.buildPadding001(
+                                      context,
+                                      vertical: 0.015,
+                                      horizontal: 0.025,
+                                      child: Icon(Icons.wordpress_rounded),
+                                    ),
+                                  ],
+                                )),
+                              ),
+                            if (email != '')
+                              GestureDetector(
+                                onTap: () {
+                                  lauchEmail(email);
+                                },
+                                child: MyBoxShadow(
+                                    child: Row(
+                                  children: [
+                                    SizedBox(
+                                      width: size.width * 0.01,
+                                    ),
+                                    ConstsWidget.buildTextTitle(
+                                        context, 'Envie um email'),
+                                    Spacer(),
+                                    ConstsWidget.buildPadding001(
+                                      context,
+                                      vertical: 0.015,
+                                      horizontal: 0.025,
+                                      child: Icon(Icons.email),
+                                    ),
+                                  ],
+                                )),
+                              )
+                          ]);
+                    }
+                  },
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.all(Radius.circular(15)),
+                    child: ConstsWidget.buildFutureImage(context,
+                        /* title: 'Ver mais $idpublidade',*/ iconApi: arquivo),
+                  ),
+                );
+                // } else {
+                //   return PageVazia(
+                //       title: snapshot.data['mensagem']);
+                // }
+              } else {
+                return PageErro();
+              }
+            },
+          ));
+    }
 
     return WillPopScope(
       onWillPop: () async {
@@ -156,9 +377,9 @@ class _HomePageState extends State<HomePage> {
         context,
         onRefresh: () async {
           setState(() {
-            ConstsFuture.apiImage(
-              'https://a.portariaapp.com/img/logo_verde.png',
-            );
+            // ConstsFuture.apiImage(
+            //   'https://a.portariaapp.com/img/logo_verde.png',
+            // );
           });
         },
         child: Scaffold(
@@ -246,9 +467,23 @@ class _HomePageState extends State<HomePage> {
                   );
                 },
               ),
-              SizedBox(
-                height: size.height * 0.01,
-              )
+              // SizedBox(
+              //   height: size.height * 0.01,
+              // ),
+              if (ResponsalvelInfos.qtd_publicidade != 0)
+                buildBanerPubli(local: 1, usarList: telefonesList1),
+              if (ResponsalvelInfos.qtd_publicidade != 0)
+                GridView.count(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 5,
+                  childAspectRatio: 0.9,
+                  physics: ClampingScrollPhysics(),
+                  shrinkWrap: true,
+                  children: [
+                    buildBanerPubli(local: 2, usarList: telefonesList2),
+                    buildBanerPubli(local: 3, usarList: telefonesList3),
+                  ],
+                ),
             ],
           ),
         ),

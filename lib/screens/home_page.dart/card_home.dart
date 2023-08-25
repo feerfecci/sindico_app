@@ -1,10 +1,14 @@
+import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:sindico_app/screens/reservas/listar_reservar.dart';
+import 'package:sindico_app/screens/tarefas/tarefas_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../consts/const_widget.dart';
 import '../../consts/consts_future.dart';
 import '../../screens/splash_screen/splash_screen.dart';
 import '../../widgets/my_box_shadow.dart';
+import '../quadro_avisos/quadro_de_avisos.dart';
 
 Widget buildCardHome(BuildContext context,
     {required String title,
@@ -40,11 +44,33 @@ Widget buildCardHome(BuildContext context,
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            ConstsWidget.buildFutureImage(
+            ConstsWidget.buildBadge(
               context,
-              iconApi: iconApi,
-              width: SplashScreen.isSmall ? 0.12 : 0.14,
-              height: SplashScreen.isSmall ? 0.07 : 0.065,
+              position: BadgePosition.topEnd(
+                  end: -size.width * 0.15, top: -size.height * 0.02),
+              showBadge: title == "Quadro de Avisos" &&
+                      QuadroDeAvisos.qntAvisos.isNotEmpty
+                  ? true
+                  : title == "Reservas Solicitadas" &&
+                          ListaReservas.listIdReserva.isNotEmpty
+                      ? true
+                      : title == 'Lista | Tarefas' &&
+                              TarefasScreen.qntTarefas.isNotEmpty
+                          ? true
+                          : false,
+              title: title == "Quadro de Avisos"
+                  ? QuadroDeAvisos.qntAvisos.length.toString()
+                  : title == "Reservas Solicitadas"
+                      ? ListaReservas.listIdReserva.length.toString()
+                      : title == 'Lista | Tarefas'
+                          ? TarefasScreen.qntTarefas.length.toString()
+                          : '',
+              child: ConstsWidget.buildFutureImage(
+                context,
+                iconApi: iconApi,
+                width: SplashScreen.isSmall ? 0.12 : 0.14,
+                height: SplashScreen.isSmall ? 0.07 : 0.065,
+              ),
             ),
             // FutureBuilder(
             //     future: apiImage(),

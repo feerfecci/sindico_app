@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -13,12 +14,33 @@ import '../../consts/const_widget.dart';
 import '../../widgets/page_erro.dart';
 import '../../widgets/page_vazia.dart';
 import 'loading_reserva.dart';
+import 'package:http/http.dart' as http;
 
 class ListaReservas extends StatefulWidget {
+  static List listIdReserva = [];
   const ListaReservas({super.key});
 
   @override
   State<ListaReservas> createState() => _ListaReservasState();
+}
+
+Future apiResevas() async {
+  var resposta = await http.get(
+    Uri.parse(
+        '${Consts.sindicoApi}reserva_espacos/?fn=listarReservas&idcond=${ResponsalvelInfos.idcondominio}&idfuncionario=${ResponsalvelInfos.idfuncionario}&ativo=2'),
+  );
+  if (resposta.statusCode == 200) {
+    var respostaJson = json.decode(resposta.body);
+    if (!respostaJson['erro']) {
+      for (var i = 0; i <= (respostaJson['reserva_espacos'].length - 1); i++) {
+        int idReserva = respostaJson['reserva_espacos'][i]['idreserva'];
+
+        if (!ListaReservas.listIdReserva.contains(idReserva)) {
+          ListaReservas.listIdReserva.add(idReserva);
+        }
+      }
+    }
+  }
 }
 
 class _ListaReservasState extends State<ListaReservas> {
@@ -87,10 +109,11 @@ class _ListaReservasState extends State<ListaReservas> {
                       ElevatedButton(
                           onPressed: () {
                             ConstsFuture.resquestApi(
-                                    '${Consts.sindicoApi}reserva_espacos/?fn=atenderReserva&idcond=${ResponsalvelInfos.idcondominio}&idunidade=$idunidade&idmorador=$idmorador&idespaco=$idespaco&data_reserva=$data&idreserva=$idreserva&ativo=$tipo')
+                                    '${Consts.sindicoApi}reserva_espacos/?fn=atenderReserva&idcond=${ResponsalvelInfos.idcondominio}&idfuncionario=${ResponsalvelInfos.idfuncionario}&idunidade=$idunidade&idmorador=$idmorador&idespaco=$idespaco&data_reserva=$data&idreserva=$idreserva&ativo=$tipo')
                                 .then((value) {
                               if (!value['erro']) {
                                 Navigator.pop(context);
+                                ListaReservas.listIdReserva.remove(idreserva);
 
                                 setState(() {});
                                 buildMinhaSnackBar(context,
@@ -105,8 +128,9 @@ class _ListaReservasState extends State<ListaReservas> {
                             });
                           },
                           style: ElevatedButton.styleFrom(
-                              shape: StadiumBorder(),
-                              backgroundColor: Consts.kColorAzul),
+                            shape: StadiumBorder(),
+                            backgroundColor: Consts.kColorRed,
+                          ),
                           child: Padding(
                             padding: EdgeInsets.all(size.height * 0.019),
                             child: Text(
@@ -158,7 +182,8 @@ class _ListaReservasState extends State<ListaReservas> {
     Color amarelo = Color.fromARGB(255, 255, 193, 7);
 
     var apiListar = ConstsFuture.resquestApi(
-        '${Consts.sindicoApi}reserva_espacos/?fn=listarReservas&idcond=${ResponsalvelInfos.idcondominio}&ativo=$statusReserva');
+        '${Consts.sindicoApi}reserva_espacos/?fn=listarReservas&idcond=${ResponsalvelInfos.idcondominio}&idfuncionario=${ResponsalvelInfos.idfuncionario}&ativo=$statusReserva');
+
     return ConstsWidget.buildRefreshIndicator(
       context,
       onRefresh: () async {

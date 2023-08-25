@@ -18,7 +18,7 @@ class FuncoesScreen extends StatefulWidget {
 
 Future apiListarDivisoes() async {
   var uri = Uri.parse(
-      '${Consts.sindicoApi}funcoes/?fn=listarFuncoes&idcond=${ResponsalvelInfos.idcondominio}');
+      '${Consts.sindicoApi}funcoes/?fn=listarFuncoes&idcond=${ResponsalvelInfos.idcondominio}&idfuncionario=${ResponsalvelInfos.idfuncionario}');
 
   final response = await http.get(uri);
 

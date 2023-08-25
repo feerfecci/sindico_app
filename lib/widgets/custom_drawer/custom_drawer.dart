@@ -1,11 +1,14 @@
 // ignore_for_file: prefer_const_literals_to_create_immutables
 import 'package:flutter/material.dart';
 import 'package:sindico_app/consts/consts_future.dart';
+import 'package:sindico_app/screens/termodeuso/termo_de_uso.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../../consts/consts.dart';
 import '../../consts/const_widget.dart';
 import '../../repositories/shared_preferences.dart';
 import '../../screens/login/login_screen.dart';
 import '../../screens/meu_perfil/meu_perfil_screen.dart';
+import '../../screens/politica/politica_screen.dart';
 import 'change_theme_button.dart';
 import '../../screens/splash_screen/splash_screen.dart';
 
@@ -29,17 +32,19 @@ class _CustomDrawerState extends State<CustomDrawer> {
       return ConstsWidget.buildPadding001(
         context,
         vertical: SplashScreen.isSmall ? 0 : 0.01,
-        child: ListTile(
+        child: GestureDetector(
           onTap: onTap,
-          iconColor: Theme.of(context).iconTheme.color,
-          leading: Icon(
-            leading,
-            size: SplashScreen.isSmall ? 20 : 25,
-          ),
-          title: ConstsWidget.buildTextTitle(context, title),
-          trailing: Icon(
-            size: SplashScreen.isSmall ? 25 : 30,
-            Icons.keyboard_arrow_right_outlined,
+          child: ListTile(
+            iconColor: Theme.of(context).iconTheme.color,
+            leading: Icon(
+              leading,
+              size: SplashScreen.isSmall ? 20 : 25,
+            ),
+            title: ConstsWidget.buildTextTitle(context, title),
+            trailing: Icon(
+              size: SplashScreen.isSmall ? 25 : 30,
+              Icons.keyboard_arrow_right_outlined,
+            ),
           ),
         ),
       );
@@ -102,29 +107,58 @@ class _CustomDrawerState extends State<CustomDrawer> {
               // ),
               buidListTile(
                   title: 'Seja um representante',
+                  onTap: () => launchUrl(
+                      Uri.parse(
+                          'https://www.portariaapp.com/seja-um-representante'),
+                      mode: LaunchMode.externalNonBrowserApplication),
                   leading: Icons.business_center_outlined),
               buidListTile(
                   title: 'Política de privacidade',
+                  onTap: () =>
+                      ConstsFuture.navigatorPagePush(context, PoliticaScreen()),
                   leading: Icons.privacy_tip_outlined),
               buidListTile(
+                  title: 'Termos de uso',
+                  onTap: () => ConstsFuture.navigatorPagePush(
+                      context, TermoDeUsoScreen()),
+                  leading: Icons.supervised_user_circle),
+
+              buidListTile(
                   title: 'Indicar para amigos',
+                  onTap: () => launchUrl(
+                      Uri.parse(
+                          'https://www.portariaapp.com/indicar-para-amigos'),
+                      mode: LaunchMode.externalNonBrowserApplication),
                   leading: Icons.add_reaction_outlined),
-              buidListTile(title: 'Central de ajuda', leading: Icons.support),
+              buidListTile(
+                title: 'Central de ajuda',
+                leading: Icons.support,
+                onTap: () => launchUrl(
+                    Uri.parse('https://www.portariaapp.com/central-de-ajuda'),
+                    mode: LaunchMode.externalNonBrowserApplication),
+              ),
+              buidListTile(
+                title: 'Efetuar logoff',
+                leading: Icons.logout_outlined,
+                onTap: () {
+                  LocalInfos.removeCache();
+                  Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => LoginScreen(),
+                      ),
+                      (route) => false);
+                },
+              ),
               ChangeThemeButton(),
               Spacer(),
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
-                child: ConstsWidget.buildCustomButton(
+                child: ConstsWidget.buildOutlinedButton(
                   context,
-                  'Sair',
+                  title: 'Fechar Menu',
                   onPressed: () {
-                    LocalInfos.removeCache();
-                    Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => LoginScreen(),
-                        ),
-                        (route) => false);
+                    Navigator.pop(context);
                   },
                 ),
               )

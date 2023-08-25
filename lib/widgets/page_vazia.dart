@@ -21,7 +21,9 @@ class _PageVaziaState extends State<PageVazia> {
       child: Column(
         children: [
           Center(
-            child: Image.asset('assets/vazio.png'),
+            child: ConstsWidget.buildFutureImage(context,
+                iconApi:
+                    'https://a.portariaapp.com/img/ico-nao-encontrado.png'),
           ),
           Padding(
             padding: EdgeInsets.all(8.0),

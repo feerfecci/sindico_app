@@ -3,6 +3,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:sindico_app/consts/consts.dart';
 import 'package:sindico_app/consts/consts_future.dart';
@@ -14,17 +15,67 @@ import 'package:sindico_app/widgets/scaffold_all.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
 import '../../consts/const_widget.dart';
+import '../../repositories/shared_preferences.dart';
 import '../../widgets/page_erro.dart';
 import 'loading_avisos.dart';
 
 class QuadroDeAvisos extends StatefulWidget {
+  static List qntAvisos = [];
   const QuadroDeAvisos({super.key});
 
   @override
   State<QuadroDeAvisos> createState() => _QuadroDeAvisosState();
 }
 
+Future apiQuadroAvisos() async {
+  //print('listarAvisos');
+  var url = Uri.parse(
+      '${Consts.sindicoApi}quadro_avisos/index.php?fn=listarAvisos&idcond=${ResponsalvelInfos.idcondominio}&idfuncionario=${ResponsalvelInfos.idfuncionario}');
+  var resposta = await get(url);
+
+  if (resposta.statusCode == 200) {
+    var jsonResposta = json.decode(resposta.body);
+    if (!jsonResposta['erro']) {
+      comparaAvisos(jsonResposta);
+    }
+
+    return json.decode(resposta.body);
+  } else {
+    return false;
+  }
+}
+
+comparaAvisos(jsonResposta) {
+  List apiAvisos = jsonResposta['avisos'];
+  LocalInfos.getLoginDate().then((dateValue) {
+    for (var i = 0; i <= apiAvisos.length - 1; i++) {
+      if (dateValue != null) {
+        if (DateTime.parse(apiAvisos[i]['datahora'])
+                    .compareTo(DateTime.parse(dateValue)) >
+                0 &&
+            DateTime.parse(apiAvisos[i]['datahora']).compareTo(DateTime.now()) <
+                0) {
+          if (!QuadroDeAvisos.qntAvisos.contains(apiAvisos[i]['idaviso'])) {
+            QuadroDeAvisos.qntAvisos.add(apiAvisos[i]['idaviso']);
+          }
+        }
+        LocalInfos.setLoginDate();
+      } else {
+        QuadroDeAvisos.qntAvisos.add(apiAvisos[i]['idaviso']);
+
+        LocalInfos.setLoginDate();
+      }
+    }
+  });
+}
+
 class _QuadroDeAvisosState extends State<QuadroDeAvisos> {
+  @override
+  void initState() {
+    apiQuadroAvisos();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -32,8 +83,7 @@ class _QuadroDeAvisosState extends State<QuadroDeAvisos> {
       context,
       onRefresh: () async {
         setState(() {
-          ConstsFuture.resquestApi(
-              '${Consts.sindicoApi}quadro_avisos/index.php?fn=listarAvisos&idcond=${ResponsalvelInfos.idcondominio}');
+          // apiQuadroAvisos();
         });
       },
       child: buildScaffoldAll(
@@ -70,8 +120,7 @@ class _QuadroDeAvisosState extends State<QuadroDeAvisos> {
               ),
             ),
             FutureBuilder<dynamic>(
-              future: ConstsFuture.resquestApi(
-                  '${Consts.sindicoApi}quadro_avisos/index.php?fn=listarAvisos&idcond=${ResponsalvelInfos.idcondominio}'),
+              future: apiQuadroAvisos(),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return LoadingAvisos();
@@ -83,12 +132,18 @@ class _QuadroDeAvisosState extends State<QuadroDeAvisos> {
                       itemCount: snapshot.data['avisos'].length,
                       itemBuilder: (context, index) {
                         var apiAvisos = snapshot.data['avisos'][index];
+                        var idaviso = apiAvisos['idaviso'];
                         String txt_tipo = apiAvisos['txt_tipo'];
                         String titulo = apiAvisos['titulo'];
                         String texto = apiAvisos['texto'];
                         String datahora = DateFormat('dd/MM/yyyy - HH:mm')
                             .format(DateTime.parse(apiAvisos['datahora']));
                         var arquivo = apiAvisos['arquivo'];
+                        bool showBolinha = false;
+
+                        if (QuadroDeAvisos.qntAvisos.contains(idaviso)) {
+                          showBolinha = true;
+                        }
 
                         return ConstsWidget.buildPadding001(
                           context,
@@ -97,32 +152,57 @@ class _QuadroDeAvisosState extends State<QuadroDeAvisos> {
                               child: ConstsWidget.buildPadding001(
                             context,
                             horizontal: 0.02,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                ConstsWidget.buildTextTitle(context, titulo,
-                                    size: 18),
-                                ConstsWidget.buildPadding001(
-                                  context,
-                                  child: ConstsWidget.buildTextSubTitle(texto,
-                                      textAlign: TextAlign.center),
-                                ),
-                                ConstsWidget.buildTextSubTitle(datahora,
-                                    textAlign: TextAlign.center),
-                                SizedBox(
-                                  height: size.height * 0.01,
-                                ),
-                                if (arquivo != '')
-                                  ConstsWidget.buildOutlinedButton(
-                                    context,
-                                    title: 'Ver Anexo',
-                                    onPressed: () {
-                                      launchUrl(Uri.parse(arquivo),
-                                          mode: LaunchMode
-                                              .externalNonBrowserApplication);
-                                    },
+                            child: ConstsWidget.buildBadge(
+                              context,
+                              showBadge: showBolinha,
+                              child: Theme(
+                                data: Theme.of(context)
+                                    .copyWith(dividerColor: Colors.transparent),
+                                child: ExpansionTile(
+                                  onExpansionChanged: (value) {
+                                    if (QuadroDeAvisos.qntAvisos
+                                        .contains(idaviso)) {
+                                      QuadroDeAvisos.qntAvisos.remove(idaviso);
+                                      showBolinha = false;
+                                    }
+                                  },
+                                  title: Row(
+                                    children: [
+                                      SizedBox(
+                                        width: size.width * 0.65,
+                                        child: ConstsWidget.buildTextTitle(
+                                            context, titulo,
+                                            textAlign: TextAlign.center,
+                                            size: 18),
+                                      ),
+                                    ],
                                   ),
-                              ],
+                                  children: [
+                                    ConstsWidget.buildPadding001(
+                                      context,
+                                      child: ConstsWidget.buildTextSubTitle(
+                                        texto,
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ),
+                                    ConstsWidget.buildTextSubTitle(datahora,
+                                        textAlign: TextAlign.center),
+                                    SizedBox(
+                                      height: size.height * 0.01,
+                                    ),
+                                    if (arquivo != '')
+                                      ConstsWidget.buildOutlinedButton(
+                                        context,
+                                        title: 'Ver Anexo',
+                                        onPressed: () {
+                                          launchUrl(Uri.parse(arquivo),
+                                              mode: LaunchMode
+                                                  .externalNonBrowserApplication);
+                                        },
+                                      ),
+                                  ],
+                                ),
+                              ),
                             ),
                           )),
                         );

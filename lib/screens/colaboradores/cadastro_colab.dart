@@ -33,6 +33,7 @@ class CadastroColaborador extends StatefulWidget {
   final bool avisa_visita;
   final bool avisa_delivery;
   final bool avisa_encomendas;
+  final bool envia_avisos;
 
   const CadastroColaborador({
     this.ativo = 1,
@@ -50,6 +51,7 @@ class CadastroColaborador extends StatefulWidget {
     this.avisa_visita = false,
     this.avisa_delivery = false,
     this.avisa_encomendas = false,
+    this.envia_avisos = false,
     super.key,
   });
 
@@ -86,12 +88,14 @@ class _CadastroColaboradorState extends State<CadastroColaborador> {
         avisa_visita: widget.avisa_visita == true ? 1 : 0);
     formInfosFunc = formInfosFunc.copyWith(
         avisa_encomendas: widget.avisa_encomendas == true ? 1 : 0);
+    formInfosFunc = formInfosFunc.copyWith(
+        envia_avisos: widget.envia_avisos == true ? 1 : 0);
   }
 
   List categoryItemListFuncoes = [];
   Future apiListarFuncoes() async {
     var uri = Uri.parse(
-        '${Consts.sindicoApi}funcoes/?fn=listarFuncoes&idcond=${ResponsalvelInfos.idcondominio}');
+        '${Consts.sindicoApi}funcoes/?fn=listarFuncoes&idcond=${ResponsalvelInfos.idcondominio}&idfuncionariologado=${ResponsalvelInfos.idfuncionario}');
     final response = await http.get(uri);
     if (response.statusCode == 200) {
       final jsonResponse = json.decode(response.body);
@@ -111,44 +115,33 @@ class _CadastroColaboradorState extends State<CadastroColaborador> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     Widget buildDropdownButtonFuncoes() {
-      return Container(
-        width: double.infinity,
-        decoration: BoxDecoration(
-          color: Theme.of(context).canvasColor,
-          border: Border.all(color: Colors.black26),
-          borderRadius: BorderRadius.all(Radius.circular(16)),
-        ),
-        child: DropdownButtonHideUnderline(
-          child: ButtonTheme(
-            alignedDropdown: true,
-            shape: Border.all(color: Colors.black),
-            child: DropdownButton(
-              elevation: 24,
-              isExpanded: true,
-              icon: Icon(
-                Icons.arrow_downward,
-                color: Theme.of(context).iconTheme.color,
-              ),
-              borderRadius: BorderRadius.circular(16),
-              hint: Text('Selecione Uma Função'),
-              style: TextStyle(
-                  color: Theme.of(context).colorScheme.primary,
-                  fontWeight: FontWeight.w400,
-                  fontSize: SplashScreen.isSmall ? 16 : 18),
-              items: categoryItemListFuncoes.map((e) {
-                return DropdownMenuItem(
-                  value: e['idfuncao'],
-                  child: Text(e['funcao']),
-                );
-              }).toList(),
-              onChanged: (value) {
-                setState(() {
-                  formInfosFunc = formInfosFunc.copyWith(idfuncao: value);
-                });
-              },
-              value: formInfosFunc.idfuncao,
-            ),
+      return ConstsWidget.buildDecorationDrop(
+        context,
+        child: DropdownButton(
+          elevation: 24,
+          isExpanded: true,
+          icon: Icon(
+            Icons.arrow_downward,
+            color: Theme.of(context).iconTheme.color,
           ),
+          borderRadius: BorderRadius.circular(16),
+          hint: Text('Selecione Uma Função'),
+          style: TextStyle(
+              color: Theme.of(context).colorScheme.primary,
+              fontWeight: FontWeight.w400,
+              fontSize: SplashScreen.isSmall ? 16 : 18),
+          items: categoryItemListFuncoes.map((e) {
+            return DropdownMenuItem(
+              value: e['idfuncao'],
+              child: Text(e['funcao']),
+            );
+          }).toList(),
+          onChanged: (value) {
+            setState(() {
+              formInfosFunc = formInfosFunc.copyWith(idfuncao: value);
+            });
+          },
+          value: formInfosFunc.idfuncao,
         ),
       );
     }
@@ -180,6 +173,10 @@ class _CadastroColaboradorState extends State<CadastroColaborador> {
               case 3:
                 formInfosFunc =
                     formInfosFunc.copyWith(avisa_encomendas: isCheckedApi);
+                break;
+              case 4:
+                formInfosFunc =
+                    formInfosFunc.copyWith(envia_avisos: isCheckedApi);
 
                 break;
               default:
@@ -223,6 +220,7 @@ class _CadastroColaboradorState extends State<CadastroColaborador> {
                 buildMyTextFormObrigatorio(
                     context,
                     initialValue: widget.nomeFuncionario,
+                    textCapitalization: TextCapitalization.words,
                     'Nome Completo',
                     hintText: 'Joao da Silva Sousa', onSaved: (text) {
                   formInfosFunc =
@@ -317,6 +315,10 @@ class _CadastroColaboradorState extends State<CadastroColaborador> {
                   'Email',
                   hintText: 'exemplo@exp.com',
                   initialValue: widget.email,
+                  validator: Validatorless.multiple([
+                    Validatorless.required('Obrigatório'),
+                    Validatorless.email('Preencha com um email válido')
+                  ]),
                   onSaved: (text) =>
                       formInfosFunc = formInfosFunc.copyWith(email: text),
                 ),
@@ -368,7 +370,7 @@ class _CadastroColaboradorState extends State<CadastroColaborador> {
                                 'Alterar Senha',
                                 onPressed: () {
                                   showAllDialog(context, children: [
-                                    buildMyTextFormObrigatorio(
+                                    /*      buildMyTextFormObrigatorio(
                                       context,
                                       'Senha Atual',
                                       validator: Validatorless.multiple([
@@ -381,6 +383,7 @@ class _CadastroColaboradorState extends State<CadastroColaborador> {
                                       // onSaved: (text) => formInfosFunc =
                                       //     formInfosFunc.copyWith(senha: text),
                                     ),
+                               */
                                     buildMyTextFormObrigatorio(
                                       context,
                                       'Nova Senha',
@@ -397,6 +400,7 @@ class _CadastroColaboradorState extends State<CadastroColaborador> {
                                     buildMyTextFormObrigatorio(
                                       context,
                                       'Confirmar Senha',
+                                      readOnly: novaSenhaCtrl.text.isEmpty,
                                       validator: Validatorless.multiple([
                                         Validatorless.required(
                                             'Confirme a senha'),
@@ -430,6 +434,7 @@ class _CadastroColaboradorState extends State<CadastroColaborador> {
                                           ConstsWidget.buildCustomButton(
                                             context,
                                             'Salvar',
+                                            color: Consts.kColorRed,
                                             onPressed: () {
                                               var validSenha = _formkeySenha
                                                       .currentState
@@ -480,6 +485,8 @@ class _CadastroColaboradorState extends State<CadastroColaborador> {
                               buildTilePermissao(context, 'Avisos de Caixas',
                                   nomeCampo: 3,
                                   isChecked: widget.avisa_encomendas),
+                              buildTilePermissao(context, 'Avisos Gerais',
+                                  nomeCampo: 4, isChecked: widget.envia_avisos),
                             ],
                           ),
                         ),
@@ -520,7 +527,7 @@ class _CadastroColaboradorState extends State<CadastroColaborador> {
         : 'incluirFuncionario&senha=${formInfosFunc.senha}&';
 
     ConstsFuture.resquestApi(
-            '${Consts.sindicoApi}funcionarios/?fn=$apiEditarIncluir&idcond=${ResponsalvelInfos.idcondominio}&nomefuncionario=${formInfosFunc.nome_funcionario}&idfuncao=${formInfosFunc.idfuncao}&email=${formInfosFunc.email}&documento=${formInfosFunc.documento}&dddtelefone=${formInfosFunc.ddd}&telefone=${formInfosFunc.telefone}&datanasc=${formInfosFunc.nascimento}&login=${formInfosFunc.login}&avisa_corresp=${formInfosFunc.avisa_corresp}&avisa_visita=${formInfosFunc.avisa_visita}&avisa_delivery=${formInfosFunc.avisa_delivery}&avisa_encomendas=${formInfosFunc.avisa_encomendas}&ativo=${formInfosFunc.ativo}&senha=${novaSenhaCtrl.text}')
+            '${Consts.sindicoApi}funcionarios/?fn=$apiEditarIncluir&idcond=${ResponsalvelInfos.idcondominio}&idfuncionariologado=${ResponsalvelInfos.idfuncionario}&nome_funcionario=${formInfosFunc.nome_funcionario}&idfuncao=${formInfosFunc.idfuncao}&email=${formInfosFunc.email}&documento=${formInfosFunc.documento}&dddtelefone=${formInfosFunc.ddd}&telefone=${formInfosFunc.telefone}&datanasc=${formInfosFunc.nascimento}&login=${formInfosFunc.login}&avisa_corresp=${formInfosFunc.avisa_corresp}&avisa_visita=${formInfosFunc.avisa_visita}&avisa_delivery=${formInfosFunc.avisa_delivery}&avisa_encomendas=${formInfosFunc.avisa_encomendas}&envia_avisos=${formInfosFunc.envia_avisos}&ativo=${formInfosFunc.ativo}&senha=${novaSenhaCtrl.text}')
         .then((value) {
       setState(() {
         isLoading = false;
@@ -563,45 +570,35 @@ class _CadastroColaboradorState extends State<CadastroColaborador> {
     return ConstsWidget.buildPadding001(
       context,
       child: StatefulBuilder(builder: (context, setState) {
-        return Container(
-          width: double.infinity,
-          decoration: BoxDecoration(
-            color: Theme.of(context).canvasColor,
-            border: Border.all(color: Colors.black26),
-            borderRadius: BorderRadius.all(Radius.circular(16)),
-          ),
-          child: ButtonTheme(
-            alignedDropdown: true,
-            child: DropdownButtonHideUnderline(
-              child: DropdownButton(
-                value: dropdownValueAtivo = formInfosFunc.ativo,
-                icon: Padding(
-                  padding: EdgeInsets.only(right: size.height * 0.03),
-                  child: Icon(
-                    Icons.arrow_downward,
-                    color: Theme.of(context).iconTheme.color,
-                  ),
-                ),
-                elevation: 24,
-                style: TextStyle(
-                    color: Theme.of(context).colorScheme.primary,
-                    fontWeight: FontWeight.w400,
-                    fontSize: 18),
-                borderRadius: BorderRadius.circular(16),
-                onChanged: (value) {
-                  setState(() {
-                    dropdownValueAtivo = value!;
-                    formInfosFunc = formInfosFunc.copyWith(ativo: value);
-                  });
-                },
-                items: listAtivo.map<DropdownMenuItem>((value) {
-                  return DropdownMenuItem(
-                    value: value,
-                    child: value == 0 ? Text('Inativo') : Text('Ativo'),
-                  );
-                }).toList(),
+        return ConstsWidget.buildDecorationDrop(
+          context,
+          child: DropdownButton(
+            value: dropdownValueAtivo = formInfosFunc.ativo,
+            icon: Padding(
+              padding: EdgeInsets.only(right: size.height * 0.03),
+              child: Icon(
+                Icons.arrow_downward,
+                color: Theme.of(context).iconTheme.color,
               ),
             ),
+            elevation: 24,
+            style: TextStyle(
+                color: Theme.of(context).colorScheme.primary,
+                fontWeight: FontWeight.w400,
+                fontSize: 18),
+            borderRadius: BorderRadius.circular(16),
+            onChanged: (value) {
+              setState(() {
+                dropdownValueAtivo = value!;
+                formInfosFunc = formInfosFunc.copyWith(ativo: value);
+              });
+            },
+            items: listAtivo.map<DropdownMenuItem>((value) {
+              return DropdownMenuItem(
+                value: value,
+                child: value == 0 ? Text('Inativo') : Text('Ativo'),
+              );
+            }).toList(),
           ),
         );
       }),

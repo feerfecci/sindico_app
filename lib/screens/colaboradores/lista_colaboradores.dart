@@ -24,7 +24,7 @@ class ListaColaboradores extends StatefulWidget {
 
 listarFuncionario() async {
   var url = Uri.parse(
-      '${Consts.sindicoApi}funcionarios/?fn=listarFuncionarios&idcond=${ResponsalvelInfos.idcondominio}');
+      '${Consts.sindicoApi}funcionarios/?fn=listarFuncionarios&idcond=${ResponsalvelInfos.idcondominio}&idfuncionariologado=${ResponsalvelInfos.idfuncionario}');
   var resposta = await http.get(url);
 
   if (resposta.statusCode == 200) {
@@ -35,6 +35,13 @@ listarFuncionario() async {
 }
 
 class _ListaColaboradoresState extends State<ListaColaboradores> {
+  @override
+  void dispose() {
+    listarFuncionario();
+    // TODO: implement dispose
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -48,14 +55,15 @@ class _ListaColaboradoresState extends State<ListaColaboradores> {
       return ConstsWidget.buildPadding001(
         context,
         child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                  width: size.width * 0.4,
-                  child: ConstsWidget.buildTextSubTitle(titulo1)),
-              ConstsWidget.buildTextTitle(context, texto1),
-            ],
+          SizedBox(
+            width: size.width * 0.4,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ConstsWidget.buildTextSubTitle(titulo1),
+                ConstsWidget.buildTextTitle(context, texto1),
+              ],
+            ),
           ),
           Spacer(),
           Column(
@@ -148,6 +156,7 @@ class _ListaColaboradoresState extends State<ListaColaboradores> {
                             bool avisa_visita = api['avisa_visita'];
                             bool avisa_delivery = api['avisa_delivery'];
                             bool avisa_encomendas = api['avisa_encomendas'];
+                            bool envia_avisos = api['envia_avisos'];
                             String email = api['email'];
 
                             String documento = api['documento'];
@@ -265,6 +274,8 @@ class _ListaColaboradoresState extends State<ListaColaboradores> {
                                             ),
                                           ],
                                         ),
+                                      buildTilePermissaoSalvo('Avisos Gerais',
+                                          isChecked: envia_avisos),
                                       SizedBox(
                                         height: size.height * 0.02,
                                       ),
@@ -292,6 +303,7 @@ class _ListaColaboradoresState extends State<ListaColaboradores> {
                                                       avisa_delivery,
                                                   avisa_encomendas:
                                                       avisa_encomendas,
+                                                  envia_avisos: envia_avisos,
                                                   ativo: ativo ? 1 : 0));
                                         },
                                       )

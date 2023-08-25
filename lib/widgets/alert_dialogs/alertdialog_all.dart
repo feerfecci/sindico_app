@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 
 showAllDialog(BuildContext context,
-    {Widget? title, required List<Widget> children}) {
+    {Widget? title,
+    required List<Widget> children,
+    bool barrierDismissible = false}) {
   var size = MediaQuery.of(context).size;
   return showDialog(
     context: context,
+    barrierDismissible: barrierDismissible,
     builder: (context) {
       return AlertDialog(
         shape: RoundedRectangleBorder(

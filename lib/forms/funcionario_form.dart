@@ -16,6 +16,7 @@ class FormInfosFunc {
   final int avisa_visita;
   final int avisa_delivery;
   final int avisa_encomendas;
+  final int envia_avisos;
 
   FormInfosFunc({
     this.responsavel = '',
@@ -35,6 +36,7 @@ class FormInfosFunc {
     this.avisa_visita = 0,
     this.avisa_delivery = 0,
     this.avisa_encomendas = 0,
+    this.envia_avisos = 0,
   });
 
   FormInfosFunc copyWith({
@@ -55,6 +57,7 @@ class FormInfosFunc {
     int? avisa_visita,
     int? avisa_delivery,
     int? avisa_encomendas,
+    int? envia_avisos,
   }) {
     return FormInfosFunc(
       ativo: ativo ?? this.ativo,
@@ -74,6 +77,7 @@ class FormInfosFunc {
       avisa_visita: avisa_visita ?? this.avisa_visita,
       avisa_delivery: avisa_delivery ?? this.avisa_delivery,
       avisa_encomendas: avisa_encomendas ?? this.avisa_encomendas,
+      envia_avisos: envia_avisos ?? this.envia_avisos,
     );
   }
 }

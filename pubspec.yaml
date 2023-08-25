@@ -38,7 +38,7 @@ dependencies:
   flutter_platform_alert: ^0.3.0
   url_launcher: ^6.1.11
   mask_text_input_formatter: ^2.4.0
-  http: ^0.13.5
+  http: ^0.13.6
   onesignal_flutter: ^3.4.2
   flutter_local_notifications: ^14.0.0+1
   crypto: ^3.0.3
@@ -51,6 +51,8 @@ dependencies:
   shimmer: ^3.0.0
   reorderable_grid_view: ^2.2.6
   date_time_picker: ^2.1.0
+  badges: ^3.1.1
+  flutter_html: ^3.0.0-alpha.3
 
 
 flutter_icons:  

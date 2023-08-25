@@ -18,7 +18,7 @@ class DivisoesScreen extends StatefulWidget {
 
 Future apiListarDivisoes() async {
   var uri = Uri.parse(
-      '${Consts.sindicoApi}divisoes/?fn=listarDivisoes&idcond=${ResponsalvelInfos.idcondominio}');
+      '${Consts.sindicoApi}divisoes/?fn=listarDivisoes&idcond=${ResponsalvelInfos.idcondominio}&idfuncionario=${ResponsalvelInfos.idfuncionario}');
 
   final response = await http.get(uri);
 
@@ -61,7 +61,8 @@ class _DivisoesScreenState extends State<DivisoesScreen> {
                       ));
                     },
                   );
-                } else {return PageErro();
+                } else {
+                  return PageErro();
                 }
               }
               return PageErro();

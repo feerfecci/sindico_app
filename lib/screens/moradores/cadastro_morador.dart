@@ -9,6 +9,7 @@ import 'package:sindico_app/screens/moradores/lista_morador.dart';
 import 'package:http/http.dart' as http;
 import 'package:sindico_app/screens/splash_screen/splash_screen.dart';
 import 'package:sindico_app/widgets/alert_dialogs/alertdialog_all.dart';
+import 'package:validatorless/validatorless.dart';
 import '../../consts/const_widget.dart';
 import '../../consts/consts.dart';
 import '../../widgets/alert_dialogs/alert_trocar_senha.dart';
@@ -122,6 +123,7 @@ class _CadastroMoradorState extends State<CadastroMorador> {
                 context,
                 'Nome Completo',
                 initialValue: widget.nome_morador,
+                textCapitalization: TextCapitalization.words,
                 onSaved: (text) {
                   if (_formInfosMorador.nome_morador != text) {
                     setState(() {
@@ -211,8 +213,11 @@ class _CadastroMoradorState extends State<CadastroMorador> {
                 context,
                 'Email',
                 initialValue: widget.email,
-                keyboardType: TextInputType.number,
                 hintText: 'exemplo@exe.com',
+                validator: Validatorless.multiple([
+                  Validatorless.email('Preencha com um email válido'),
+                  Validatorless.required('Preencha')
+                ]),
                 onSaved: (text) =>
                     _formInfosMorador = _formInfosMorador.copyWith(email: text),
               ),
@@ -273,9 +278,19 @@ class _CadastroMoradorState extends State<CadastroMorador> {
                       buildMyTextFormObrigatorio(context, 'Senha Login',
                           onSaved: (text) => _formInfosMorador =
                               _formInfosMorador.copyWith(senhaLogin: text),
+                          validator: Validatorless.multiple([
+                            Validatorless.required('Preencha'),
+                            Validatorless.min(
+                                6, 'Necessário mais de 6 caracteres')
+                          ]),
                           initialValue: '123456'),
                     if (widget.idmorador == null)
                       buildMyTextFormObrigatorio(context, 'Senha Retirada',
+                          validator: Validatorless.multiple([
+                            Validatorless.required('Preencha'),
+                            Validatorless.min(
+                                6, 'Necessário mais de 6 caracteres')
+                          ]),
                           onSaved: (text) => _formInfosMorador =
                               _formInfosMorador.copyWith(senhaRetirada: text),
                           initialValue: '123456'),
@@ -342,7 +357,7 @@ class _CadastroMoradorState extends State<CadastroMorador> {
 
   Future apiListarDivisoes() async {
     var uri =
-        '${Consts.sindicoApi}divisoes/?fn=listarDivisoes&idcond=${ResponsalvelInfos.idcondominio}';
+        '${Consts.sindicoApi}divisoes/?fn=listarDivisoes&idcond=${ResponsalvelInfos.idcondominio}&idfuncionario=${ResponsalvelInfos.idfuncionario}';
 
     final response = await http.get(Uri.parse(uri));
     _formInfosMorador = _formInfosMorador.copyWith(acesso: widget.acesso);
@@ -369,8 +384,8 @@ class _CadastroMoradorState extends State<CadastroMorador> {
             'incluirMorador&senha=${_formInfosMorador.senhaLogin}&senha_retirada=${_formInfosMorador.senhaRetirada}'
         : restoApi = 'editarMorador&id=${widget.idmorador}';
     return ConstsFuture.resquestApi(
-      '${Consts.sindicoApi}moradores/?fn=$restoApi&idunidade=${widget.idunidade}&idcond=${ResponsalvelInfos.idcondominio}&iddivisao=${widget.iddivisao}&ativo=${_formInfosMorador.ativo}&nomeMorador=${_formInfosMorador.nome_morador}&login=$loginGerado&datanasc=${_formInfosMorador.nascimento}&documento=${_formInfosMorador.documento}&dddtelefone=${_formInfosMorador.ddd}&telefone=${_formInfosMorador.telefone}&email=${_formInfosMorador.email}&acessa_sistema=${_formInfosMorador.acesso}&responsavel=${_formInfosMorador.resposavel}',
-    ).then((value) {
+            '${Consts.sindicoApi}moradores/?fn=$restoApi&idunidade=${widget.idunidade}&idcond=${ResponsalvelInfos.idcondominio}&idfuncionario=${ResponsalvelInfos.idfuncionario}&iddivisao=${widget.iddivisao}&ativo=${_formInfosMorador.ativo}&nomeMorador=${_formInfosMorador.nome_morador}&login=$loginGerado&datanasc=${_formInfosMorador.nascimento}&documento=${_formInfosMorador.documento}&dddtelefone=${_formInfosMorador.ddd}&telefone=${_formInfosMorador.telefone}&email=${_formInfosMorador.email}&acessa_sistema=${_formInfosMorador.acesso}&responsavel=${_formInfosMorador.resposavel}')
+        .then((value) {
       setState(() {
         isLoading = false;
       });
@@ -410,47 +425,36 @@ class _CadastroMoradorState extends State<CadastroMorador> {
     return ConstsWidget.buildPadding001(
       context,
       child: StatefulBuilder(builder: (context, setState) {
-        return Container(
-          width: double.infinity,
-          decoration: BoxDecoration(
-            color: Theme.of(context).canvasColor,
-            border: Border.all(color: Colors.black26),
-            borderRadius: BorderRadius.all(Radius.circular(16)),
-          ),
-          child: ButtonTheme(
-            alignedDropdown: true,
-            child: DropdownButtonHideUnderline(
-              child: DropdownButton(
-                value: dropdownValueAtivo =
-                    widget.idmorador == null ? 1 : _formInfosMorador.ativo,
-                icon: Padding(
-                  padding: EdgeInsets.only(right: size.height * 0.03),
-                  child: Icon(
-                    Icons.arrow_downward,
-                    color: Theme.of(context).iconTheme.color,
-                  ),
-                ),
-                elevation: 24,
-                style: TextStyle(
-                    color: Theme.of(context).colorScheme.primary,
-                    fontWeight: FontWeight.w400,
-                    fontSize: SplashScreen.isSmall ? 16 : 18),
-                borderRadius: BorderRadius.circular(16),
-                onChanged: (value) {
-                  setState(() {
-                    dropdownValueAtivo = value!;
-                    _formInfosMorador =
-                        _formInfosMorador.copyWith(ativo: value);
-                  });
-                },
-                items: listAtivo.map<DropdownMenuItem>((value) {
-                  return DropdownMenuItem(
-                    value: value,
-                    child: value == 0 ? Text('Inativo') : Text('Ativo'),
-                  );
-                }).toList(),
+        return ConstsWidget.buildDecorationDrop(
+          context,
+          child: DropdownButton(
+            value: dropdownValueAtivo =
+                widget.idmorador == null ? 1 : _formInfosMorador.ativo,
+            icon: Padding(
+              padding: EdgeInsets.only(right: size.height * 0.03),
+              child: Icon(
+                Icons.arrow_downward,
+                color: Theme.of(context).iconTheme.color,
               ),
             ),
+            elevation: 24,
+            style: TextStyle(
+                color: Theme.of(context).colorScheme.primary,
+                fontWeight: FontWeight.w400,
+                fontSize: SplashScreen.isSmall ? 16 : 18),
+            borderRadius: BorderRadius.circular(16),
+            onChanged: (value) {
+              setState(() {
+                dropdownValueAtivo = value!;
+                _formInfosMorador = _formInfosMorador.copyWith(ativo: value);
+              });
+            },
+            items: listAtivo.map<DropdownMenuItem>((value) {
+              return DropdownMenuItem(
+                value: value,
+                child: value == 0 ? Text('Inativo') : Text('Ativo'),
+              );
+            }).toList(),
           ),
         );
       }),

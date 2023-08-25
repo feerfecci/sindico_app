@@ -68,7 +68,7 @@ class _CadastroUnidadesState extends State<CadastroUnidades> {
   // Object? dropdownValueDivisioes;
   Future apiListarDivisoes() async {
     var uri =
-        '${Consts.sindicoApi}divisoes/?fn=listarDivisoes&idcond=${ResponsalvelInfos.idcondominio}';
+        '${Consts.sindicoApi}divisoes/?fn=listarDivisoes&idcond=${ResponsalvelInfos.idcondominio}&idfuncionario=${ResponsalvelInfos.idfuncionario}';
 
     final response = await http.get(Uri.parse(uri));
 
@@ -85,7 +85,7 @@ class _CadastroUnidadesState extends State<CadastroUnidades> {
 
   Future apiListarDivididoPor() async {
     var uri =
-        '${Consts.sindicoApi}divisoes_unidades/?fn=listarDivisoesUnidades&idcond=${ResponsalvelInfos.idcondominio}';
+        '${Consts.sindicoApi}divisoes_unidades/?fn=listarDivisoesUnidades&idcond=${ResponsalvelInfos.idcondominio}&idfuncionario=${ResponsalvelInfos.idfuncionario}';
 
     final response = await http.get(Uri.parse(uri));
 
@@ -114,6 +114,126 @@ class _CadastroUnidadesState extends State<CadastroUnidades> {
     // List<String> listAtivo = <String>['Ativo', 'Inativo'];
     // var seAtivo = widget.ativo == true ? 'Ativo' : 'Inativo';
     // var dropdownValueAtivo = listAtivo.first;
+    Widget buildDropButtonDivisao() {
+      return ConstsWidget.buildPadding001(
+        context,
+        child: ConstsWidget.buildDecorationDrop(
+          context,
+          child: DropdownButton(
+            elevation: 24,
+            isExpanded: true,
+            hint: Text('Selecione uma Divisão'),
+            icon: Icon(
+              Icons.arrow_downward_outlined,
+            ),
+            borderRadius: BorderRadius.circular(16),
+            style: TextStyle(
+              // fontWeight: FontWeight.bold,
+              fontSize: Consts.fontTitulo,
+            ),
+            items: categoryItemListDivisoes.map((e) {
+              return DropdownMenuItem(
+                alignment: Alignment.center,
+                value: e['iddivisao'],
+                child: ConstsWidget.buildTextTitle(context, e['nome_divisao']),
+              );
+            }).toList(),
+            onChanged: (value) {
+              setState(() {
+                // dropdownValueDivisioes = value;
+                formInfosUnidade = formInfosUnidade.copyWith(iddivisao: value);
+              });
+            },
+            value: dropdownValueAtivo = formInfosUnidade.iddivisao,
+          ),
+        ),
+      );
+    }
+
+    Widget buildDropAtivo(
+      BuildContext context, {
+      int seEditando = 0,
+    }) {
+      var size = MediaQuery.of(context).size;
+      return ConstsWidget.buildPadding001(
+        context,
+        child: StatefulBuilder(builder: (context, setState) {
+          return ConstsWidget.buildDecorationDrop(
+            context,
+            child: DropdownButton(
+              isExpanded: true,
+              value: dropdownValueAtivo = formInfosUnidade.ativo,
+              icon: Icon(
+                Icons.arrow_downward_outlined,
+              ),
+              elevation: 24,
+              style: TextStyle(
+                  color: Theme.of(context).colorScheme.primary,
+                  fontWeight: FontWeight.w400,
+                  fontSize: 18),
+              borderRadius: BorderRadius.circular(16),
+              onChanged: (value) {
+                setState(() {
+                  dropdownValueAtivo = value!;
+                  formInfosUnidade = formInfosUnidade.copyWith(ativo: value);
+                });
+              },
+              items: listAtivo.map<DropdownMenuItem>((value) {
+                return DropdownMenuItem(
+                  alignment: Alignment.center,
+                  value: value,
+                  child: value == 0
+                      ? ConstsWidget.buildTextTitle(context, 'Inativo')
+                      : ConstsWidget.buildTextTitle(context, 'Ativo'),
+                );
+              }).toList(),
+            ),
+          );
+        }),
+      );
+    }
+
+    Widget buildDropButtonDividoPor() {
+      return ConstsWidget.buildDecorationDrop(
+        context,
+        child: DropdownButton(
+          elevation: 24,
+          isExpanded: true,
+          hint: Text('Selecione'),
+          icon: Icon(
+            Icons.arrow_downward_outlined,
+          ),
+          borderRadius: BorderRadius.circular(16),
+          style: TextStyle(
+            // fontWeight: FontWeight.bold,
+            fontSize: Consts.fontTitulo,
+          ),
+          items: categoryItemListDivididoPor.map((e) {
+            return DropdownMenuItem(
+              alignment: Alignment.center,
+              value: e['id_divisao_unidade'],
+              child: ConstsWidget.buildTextTitle(
+                  context, e['nome_divisao_unidade']),
+            );
+          }).toList(),
+          onChanged: (value) {
+            setState(() {
+              // dropdownValueDivisioes = value;
+              formInfosUnidade =
+                  formInfosUnidade.copyWith(id_divisao_unidade: value);
+              categoryItemListDivididoPor.map((e) {
+                if (value == e['id_divisao_unidade']) {
+                  setState(() {
+                    tipoSelec = e['nome_divisao_unidade'];
+                  });
+                }
+              }).toList();
+            });
+          },
+          value: formInfosUnidade.id_divisao_unidade,
+        ),
+      );
+    }
 
     return buildScaffoldAll(context,
         title: widget.isDrawer
@@ -148,9 +268,10 @@ class _CadastroUnidadesState extends State<CadastroUnidades> {
                                 ),
                       //infos resp
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           SizedBox(
-                            width: size.width * 0.4,
+                            width: size.width * 0.55,
                             child: buildDropButtonDividoPor(),
                           ),
                           Spacer(),
@@ -213,6 +334,7 @@ class _CadastroUnidadesState extends State<CadastroUnidades> {
                                   ConstsWidget.buildCustomButton(
                                     context,
                                     'Salvar',
+                                    color: Consts.kColorRed,
                                     onPressed: () {
                                       String incluindoEditando = widget
                                                   .idunidade ==
@@ -221,14 +343,16 @@ class _CadastroUnidadesState extends State<CadastroUnidades> {
                                           : 'editarUnidade&id=${widget.idunidade}&';
 
                                       ConstsFuture.resquestApi(
-                                              '${Consts.sindicoApi}unidades/?fn=${incluindoEditando}idcond=${ResponsalvelInfos.idcondominio}&iddivisao=${formInfosUnidade.iddivisao}&ativo=${formInfosUnidade.ativo}&numero=${"$tipoSelec${formInfosUnidade.numero}"}')
+                                              '${Consts.sindicoApi}unidades/?fn=${incluindoEditando}idcond=${ResponsalvelInfos.idcondominio}&idfuncionario=${ResponsalvelInfos.idfuncionario}&iddivisao=${formInfosUnidade.iddivisao}&ativo=${formInfosUnidade.ativo}&numero=${"$tipoSelec${formInfosUnidade.numero}"}')
                                           .then((value) {
                                         if (!value['erro']) {
                                           ConstsFuture.navigatorPopPush(
-                                              context, '/listaUnidade');
-                                          buildMinhaSnackBar(context,
-                                              title: 'Muito Bem',
-                                              subTitle: value['mensagem']);
+                                                  context, '/listaUnidade')
+                                              .whenComplete(() {
+                                            buildMinhaSnackBar(context,
+                                                title: 'Muito Bem',
+                                                subTitle: value['mensagem']);
+                                          });
                                         } else {
                                           buildMinhaSnackBar(context,
                                               title: 'Uma pena',
@@ -251,163 +375,4 @@ class _CadastroUnidadesState extends State<CadastroUnidades> {
   }
 
   String tipoSelec = '';
-
-  Widget buildDropButtonDividoPor() {
-    return ConstsWidget.buildPadding001(
-      context,
-      child: Container(
-        width: double.infinity,
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: Theme.of(context).canvasColor,
-          border: Border.all(color: Colors.black26),
-          borderRadius: BorderRadius.all(Radius.circular(16)),
-        ),
-        child: DropdownButtonHideUnderline(
-          child: ButtonTheme(
-            alignedDropdown: true,
-            shape: Border.all(color: Colors.black),
-            child: DropdownButton(
-              elevation: 24,
-              isExpanded: true,
-              hint: Text('Selecione'),
-              icon: Icon(
-                Icons.arrow_downward_outlined,
-              ),
-              borderRadius: BorderRadius.circular(16),
-              style: TextStyle(
-                // fontWeight: FontWeight.bold,
-                fontSize: Consts.fontTitulo,
-              ),
-              items: categoryItemListDivididoPor.map((e) {
-                return DropdownMenuItem(
-                  alignment: Alignment.center,
-                  value: e['id_divisao_unidade'],
-                  child: ConstsWidget.buildTextTitle(
-                      context, e['nome_divisao_unidade']),
-                );
-              }).toList(),
-              onChanged: (value) {
-                setState(() {
-                  // dropdownValueDivisioes = value;
-                  formInfosUnidade =
-                      formInfosUnidade.copyWith(id_divisao_unidade: value);
-                  categoryItemListDivididoPor.map((e) {
-                    if (value == e['id_divisao_unidade']) {
-                      setState(() {
-                        tipoSelec = e['nome_divisao_unidade'];
-                      });
-                    }
-                  }).toList();
-                });
-              },
-              value: formInfosUnidade.id_divisao_unidade,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget buildDropButtonDivisao() {
-    return ConstsWidget.buildPadding001(
-      context,
-      child: Container(
-        width: double.infinity,
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: Theme.of(context).canvasColor,
-          border: Border.all(color: Colors.black26),
-          borderRadius: BorderRadius.all(Radius.circular(16)),
-        ),
-        child: DropdownButtonHideUnderline(
-          child: ButtonTheme(
-            alignedDropdown: true,
-            shape: Border.all(color: Colors.black),
-            child: DropdownButton(
-              elevation: 24,
-              isExpanded: true,
-              hint: Text('Selecione uma Divisão'),
-              icon: Icon(
-                Icons.arrow_downward_outlined,
-              ),
-              borderRadius: BorderRadius.circular(16),
-              style: TextStyle(
-                // fontWeight: FontWeight.bold,
-                fontSize: Consts.fontTitulo,
-              ),
-              items: categoryItemListDivisoes.map((e) {
-                return DropdownMenuItem(
-                  alignment: Alignment.center,
-                  value: e['iddivisao'],
-                  child:
-                      ConstsWidget.buildTextTitle(context, e['nome_divisao']),
-                );
-              }).toList(),
-              onChanged: (value) {
-                setState(() {
-                  // dropdownValueDivisioes = value;
-                  formInfosUnidade =
-                      formInfosUnidade.copyWith(iddivisao: value);
-                });
-              },
-              value: dropdownValueAtivo = formInfosUnidade.iddivisao,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget buildDropAtivo(
-    BuildContext context, {
-    int seEditando = 0,
-  }) {
-    var size = MediaQuery.of(context).size;
-    return ConstsWidget.buildPadding001(
-      context,
-      child: StatefulBuilder(builder: (context, setState) {
-        return Container(
-          width: double.infinity,
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            color: Theme.of(context).canvasColor,
-            border: Border.all(color: Colors.black26),
-            borderRadius: BorderRadius.all(Radius.circular(16)),
-          ),
-          child: ButtonTheme(
-            alignedDropdown: true,
-            child: DropdownButtonHideUnderline(
-              child: DropdownButton(
-                value: dropdownValueAtivo = formInfosUnidade.ativo,
-                icon: Icon(
-                  Icons.arrow_downward_outlined,
-                ),
-                elevation: 24,
-                style: TextStyle(
-                    color: Theme.of(context).colorScheme.primary,
-                    fontWeight: FontWeight.w400,
-                    fontSize: 18),
-                borderRadius: BorderRadius.circular(16),
-                onChanged: (value) {
-                  setState(() {
-                    dropdownValueAtivo = value!;
-                    formInfosUnidade = formInfosUnidade.copyWith(ativo: value);
-                  });
-                },
-                items: listAtivo.map<DropdownMenuItem>((value) {
-                  return DropdownMenuItem(
-                    value: value,
-                    child: value == 0
-                        ? ConstsWidget.buildTextTitle(context, 'Inativo')
-                        : ConstsWidget.buildTextTitle(context, 'Ativo'),
-                  );
-                }).toList(),
-              ),
-            ),
-          ),
-        );
-      }),
-    );
-  }
 }

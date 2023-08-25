@@ -52,46 +52,35 @@ class _CadastroEspacosState extends State<CadastroEspacos> {
       return ConstsWidget.buildPadding001(
         context,
         child: StatefulBuilder(builder: (context, setState) {
-          return Container(
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: Theme.of(context).canvasColor,
-              border: Border.all(color: Colors.black26),
-              borderRadius: BorderRadius.all(Radius.circular(16)),
-            ),
-            child: ButtonTheme(
-              alignedDropdown: true,
-              child: DropdownButtonHideUnderline(
-                child: DropdownButton(
-                  value: dropdownValueAtivo = _formInfosEspacos.ativo,
-                  icon: Padding(
-                    padding: EdgeInsets.only(right: size.height * 0.03),
-                    child: Icon(
-                      Icons.arrow_downward,
-                      color: Theme.of(context).iconTheme.color,
-                    ),
-                  ),
-                  elevation: 24,
-                  style: TextStyle(
-                      color: Theme.of(context).colorScheme.primary,
-                      fontWeight: FontWeight.w400,
-                      fontSize: 18),
-                  borderRadius: BorderRadius.circular(16),
-                  onChanged: (value) {
-                    setState(() {
-                      dropdownValueAtivo = value!;
-                      _formInfosEspacos =
-                          _formInfosEspacos.copyWith(ativo: value);
-                    });
-                  },
-                  items: listAtivo.map<DropdownMenuItem>((value) {
-                    return DropdownMenuItem(
-                      value: value,
-                      child: value == 0 ? Text('Inativo') : Text('Ativo'),
-                    );
-                  }).toList(),
+          return ConstsWidget.buildDecorationDrop(
+            context,
+            child: DropdownButton(
+              value: dropdownValueAtivo = _formInfosEspacos.ativo,
+              icon: Padding(
+                padding: EdgeInsets.only(right: size.height * 0.03),
+                child: Icon(
+                  Icons.arrow_downward,
+                  color: Theme.of(context).iconTheme.color,
                 ),
               ),
+              elevation: 24,
+              style: TextStyle(
+                  color: Theme.of(context).colorScheme.primary,
+                  fontWeight: FontWeight.w400,
+                  fontSize: 18),
+              borderRadius: BorderRadius.circular(16),
+              onChanged: (value) {
+                setState(() {
+                  dropdownValueAtivo = value!;
+                  _formInfosEspacos = _formInfosEspacos.copyWith(ativo: value);
+                });
+              },
+              items: listAtivo.map<DropdownMenuItem>((value) {
+                return DropdownMenuItem(
+                  value: value,
+                  child: value == 0 ? Text('Inativo') : Text('Ativo'),
+                );
+              }).toList(),
             ),
           );
         }),
@@ -119,6 +108,7 @@ class _CadastroEspacosState extends State<CadastroEspacos> {
                           context,
                           'Nome Espaço',
                           hintText: 'Exemplo: Churrasqueira Bloco B',
+                          textCapitalization: TextCapitalization.words,
                           initialValue: widget.nome_espaco,
                           onSaved: (text) => _formInfosEspacos =
                               _formInfosEspacos.copyWith(nome_espaco: text),
@@ -150,7 +140,7 @@ class _CadastroEspacosState extends State<CadastroEspacos> {
                                 : 'fn=editarEspacos&idespaco=${widget.idespaco}';
 
                             ConstsFuture.resquestApi(
-                                    '${Consts.sindicoApi}espacos/index.php?$editaInlui&idcond=${ResponsalvelInfos.idcondominio}&ativo=${_formInfosEspacos.ativo}&nome_espaco=${_formInfosEspacos.nome_espaco}&descricao=${_formInfosEspacos.descricao}')
+                                    '${Consts.sindicoApi}espacos/index.php?$editaInlui&idcond=${ResponsalvelInfos.idcondominio}&idfuncionario=${ResponsalvelInfos.idfuncionario}&ativo=${_formInfosEspacos.ativo}&nome_espaco=${_formInfosEspacos.nome_espaco}&descricao=${_formInfosEspacos.descricao}')
                                 .then((value) {
                               if (!value['erro']) {
                                 Navigator.pop(context);

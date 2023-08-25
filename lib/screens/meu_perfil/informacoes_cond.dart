@@ -31,6 +31,7 @@ class _InformacoesCondState extends State<InformacoesCond> {
               ),
               buildMyTextFormObrigatorio(context, 'Logradouro',
                   initialValue: ResponsalvelInfos.endereco,
+                  textCapitalization: TextCapitalization.words,
                   hintText: 'Rua dos Alfineiros'),
               Row(
                 children: [
@@ -48,6 +49,7 @@ class _InformacoesCondState extends State<InformacoesCond> {
                     child: buildMyTextFormObrigatorio(context, 'Número',
                         initialValue: ResponsalvelInfos.numero,
                         hintText: 'Ex: 04',
+                        textCapitalization: TextCapitalization.words,
                         keyboardType: TextInputType.number),
                   ),
                   Spacer(),
@@ -55,6 +57,7 @@ class _InformacoesCondState extends State<InformacoesCond> {
               ),
               buildMyTextFormObrigatorio(context, 'Bairro',
                   initialValue: ResponsalvelInfos.bairro,
+                  textCapitalization: TextCapitalization.words,
                   hintText: 'Ex: Bairro do Limão'),
               Row(
                 children: [
@@ -63,6 +66,7 @@ class _InformacoesCondState extends State<InformacoesCond> {
                     child: buildMyTextFormObrigatorio(
                       context,
                       'Estado',
+                      textCapitalization: TextCapitalization.characters,
                       initialValue: ResponsalvelInfos.estado,
                       hintText: 'Ex: SP, RJ',
                     ),
@@ -74,6 +78,7 @@ class _InformacoesCondState extends State<InformacoesCond> {
                         context,
                         'Cidade',
                         initialValue: ResponsalvelInfos.cidade,
+                        textCapitalization: TextCapitalization.words,
                         hintText: 'Ex: São Paulo',
                       )),
                   Spacer(),

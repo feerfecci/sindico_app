@@ -18,7 +18,8 @@ import '../splash_screen/splash_screen.dart';
 // ignore: must_be_immutable
 class AdicionarTarefa extends StatefulWidget {
   int? idtarefa;
-  int? idtempo;
+  int? aviso_dias;
+  int? repetir_dias;
   String? initialDate;
   String? nomeTarefaCtrl;
 
@@ -26,45 +27,50 @@ class AdicionarTarefa extends StatefulWidget {
       {this.idtarefa,
       this.initialDate,
       this.nomeTarefaCtrl,
-      this.idtempo,
+      this.aviso_dias,
+      this.repetir_dias,
       super.key});
 
   @override
   State<AdicionarTarefa> createState() => _AdicionarTarefaState();
 }
 
-Object? dropdownValueAtivo;
+Object? dropdownValueLembrar;
+Object? dropdownValueRepetir;
 bool isLoading = false;
-List<Map<String, dynamic>> listLembretes = [
-  {
-    'idtempo': 30,
-    'nometempo': '30 Dias',
-  },
-  {
-    'idtempo': 15,
-    'nometempo': '15 Dias',
-  },
-  {
-    'idtempo': 7,
-    'nometempo': '7 Dias',
-  },
-  {
-    'idtempo': 5,
-    'nometempo': '5 Dias',
-  },
-  {
-    'idtempo': 2,
-    'nometempo': '2 Dias',
-  },
-  {
-    'idtempo': 1,
-    'nometempo': '1 Dia',
-  },
-  {
-    'idtempo': 0,
-    'nometempo': 'No dia',
-  },
+bool? isRepet;
+bool? isDayle;
+List<dynamic> listAviso_dias = [
+  // {
+  //   'idtempo': 30,
+  //   'nometempo': '30 Dias Antes',
+  // },
+  // {
+  //   'idtempo': 15,
+  //   'nometempo': '15 Dias Antes',
+  // },
+  // {
+  //   'idtempo': 7,
+  //   'nometempo': '7 Dias Antes',
+  // },
+  // {
+  //   'idtempo': 5,
+  //   'nometempo': '5 Dias Antes',
+  // },
+  // {
+  //   'idtempo': 2,
+  //   'nometempo': '2 Dias Antes',
+  // },
+  // {
+  //   'idtempo': 1,
+  //   'nometempo': '1 Dia Antes',
+  // },
+  // {
+  //   'idtempo': 0,
+  //   'nometempo': 'No dia',
+  // },
 ];
+List<dynamic> listRepetir = [];
 
 class _AdicionarTarefaState extends State<AdicionarTarefa> {
   final GlobalKey<FormState> keyTarefa = GlobalKey<FormState>();
@@ -72,15 +78,101 @@ class _AdicionarTarefaState extends State<AdicionarTarefa> {
   String nomeTarefaCtrl = '';
   int diferenca = 0;
 
+  apiListarDiasAvisar() {
+    ConstsFuture.resquestApi(
+            '${Consts.sindicoApi}tarefas_dias/?fn=listarDiasAvisar')
+        .then((value) {
+      if (value != null) {
+        setState(() {
+          listAviso_dias = value['listar_dias_avisar'];
+        });
+      }
+    });
+  }
+
+  apiListarDiasRepetir() {
+    ConstsFuture.resquestApi(
+            '${Consts.sindicoApi}tarefas_dias/?fn=listarDiasRepetir')
+        .then((value) {
+      if (value != null) {
+        setState(() {
+          listRepetir = value['listar_dias_repetir'];
+          print(listRepetir);
+        });
+      }
+    });
+  }
+
+  initDatas() {
+    if (widget.aviso_dias == 0 && widget.repetir_dias == 0 ||
+        widget.aviso_dias == null) {
+      isDayle = false;
+      isRepet = false;
+    } else {
+      isDayle = true;
+      isRepet = true;
+      dropdownValueLembrar = widget.aviso_dias;
+      dropdownValueRepetir = widget.repetir_dias;
+    }
+  }
+
   @override
   void initState() {
-    dropdownValueAtivo = widget.idtempo;
+    initDatas();
+    apiListarDiasRepetir();
+    apiListarDiasAvisar();
     MyDatePicker.dataSelected = widget.initialDate ?? '';
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    startSaveTarefa() {
+      setState(() {
+        isLoading = true;
+      });
+      String incluirEditar = widget.idtarefa == null
+          ? 'incluirTarefa'
+          : 'editarTarefa&idtarefa=${widget.idtarefa}';
+      // print(
+      //     'aviso_dias=$dropdownValueLembrar&repetirdias=$dropdownValueRepetir');
+      ConstsFuture.resquestApi(
+              '${Consts.sindicoApi}tarefas/?fn=$incluirEditar&idcond=${ResponsalvelInfos.idcondominio}&idfuncionario=${ResponsalvelInfos.idfuncionario}&descricao=$nomeTarefaCtrl&data_vencimento=${MyDatePicker.dataSelected}&aviso_dias=${isRepet! && isDayle! ? 0 : dropdownValueLembrar}&repetir_dias=${!isDayle! ? 0 : isDayle! ? 1 : dropdownValueRepetir}')
+          .then((value) {
+        setState(() {
+          isLoading = false;
+        });
+        if (!value['erro']) {
+          setState(() {
+            dropdownValueRepetir == null;
+            dropdownValueLembrar == null;
+          });
+          ConstsFuture.navigatorPopPush(context, '/tarefasScreen');
+
+          buildMinhaSnackBar(context,
+              title: 'Muito bem!', subTitle: value['mensagem']);
+        } else {
+          buildMinhaSnackBar(context,
+              title: 'Algo Saiu Mau', subTitle: value['mensagem']);
+        }
+      });
+    }
+
+    startTarefaSind(validForm) {
+      keyTarefa.currentState?.save();
+      if (validForm && MyDatePicker.dataSelected != '') {
+        if (isDayle!) {
+          startSaveTarefa();
+        } else if (dropdownValueRepetir != null &&
+            dropdownValueLembrar != null) {
+          startSaveTarefa();
+        } else {
+          buildMinhaSnackBar(context,
+              title: 'Cuidado!', subTitle: 'Complete as informações');
+        }
+      }
+    }
+
     DateTime? timeBackPressed = widget.initialDate == null
         ? DateTime.now()
         : DateTime.parse(widget.initialDate!);
@@ -104,9 +196,10 @@ class _AdicionarTarefaState extends State<AdicionarTarefa> {
               buildMyTextFormObrigatorio(
                 context,
                 'Descrição da Tarefa',
+                textCapitalization: TextCapitalization.sentences,
+                labelCenter: true,
                 hintText: 'Exemplo: Dedetização de todos os blocos',
                 readOnly: !isExpired,
-                labelCenter: true,
                 initialValue: widget.nomeTarefaCtrl,
                 onSaved: (text) {
                   setState(() {
@@ -125,156 +218,146 @@ class _AdicionarTarefaState extends State<AdicionarTarefa> {
                     hintText: initialDate ?? 'Escolha uma data',
                   ),
                 ),
-              ConstsWidget.buildTextSubTitle('Ser Notificado em', size: 14),
-              StatefulBuilder(builder: (context, setState) {
-                return Container(
-                  width: double.infinity,
-                  height: size.height * 0.066,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).canvasColor,
-                    border: Border.all(color: Colors.black26),
-                    borderRadius: BorderRadius.all(Radius.circular(16)),
-                  ),
-                  child: ButtonTheme(
-                    alignedDropdown: true,
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton(
-                        value: dropdownValueAtivo,
-                        icon: Icon(
-                          Icons.arrow_downward_outlined,
-                        ),
-                        elevation: 24,
-                        // style: TextStyle(
-                        //     // color: Theme.of(context)
-                        //     //     .colorScheme
-                        //     //     .primary,
-                        //     fontWeight: FontWeight.bold,
-                        //     fontSize: 18),
-                        borderRadius: BorderRadius.circular(16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Column(
+                    children: [
+                      ConstsWidget.buildTextSubTitle('Repetir tarefa',
+                          size: 14),
+                      Switch.adaptive(
+                        value: isRepet ?? true,
                         onChanged: (value) {
                           setState(() {
-                            dropdownValueAtivo = value!;
+                            isRepet = value;
                           });
                         },
-                        hint: ConstsWidget.buildTextTitle(context, 'Selecione',
-                            size: SplashScreen.isSmall ? 16 : 18),
-                        items: listLembretes.map((value) {
-                          return DropdownMenuItem(
-                              value: value['idtempo'],
-                              child: ConstsWidget.buildTextTitle(
-                                  context, value['nometempo'],
-                                  size: SplashScreen.isSmall ? 16 : 18));
-                        }).toList(),
                       ),
-                    ),
+                    ],
                   ),
-                );
-              }),
+                  Column(
+                    children: [
+                      ConstsWidget.buildTextSubTitle('Todos os dias', size: 14),
+                      Switch.adaptive(
+                        value: isDayle ?? true,
+                        onChanged: (value) {
+                          setState(() {
+                            isDayle = value;
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              if (isRepet! && !isDayle!)
+                Column(
+                  children: [
+                    ConstsWidget.buildTextSubTitle('Repetir tarefa', size: 14),
+                    StatefulBuilder(builder: (context, setState) {
+                      return ConstsWidget.buildDecorationDrop(
+                        context,
+                        child: DropdownButton(
+                          value: dropdownValueRepetir,
+                          isExpanded: true,
+                          alignment: Alignment.center,
+                          icon: Icon(
+                            Icons.arrow_downward_outlined,
+                          ),
+                          elevation: 24,
+                          // style: TextStyle(
+                          //     // color: Theme.of(context)
+                          //     //     .colorScheme
+                          //     //     .primary,
+                          //     fontWeight: FontWeight.bold,
+                          //     fontSize: 18),
+                          borderRadius: BorderRadius.circular(16),
+                          onChanged: (value) {
+                            setState(() {
+                              dropdownValueRepetir = value!;
+                            });
+                          },
+                          hint: ConstsWidget.buildTextSubTitle('Selecione',
+                              size: SplashScreen.isSmall ? 16 : 18),
+                          items: listRepetir.map((value) {
+                            return DropdownMenuItem(
+                                value: value['idtempo'],
+                                child: Center(
+                                  child: ConstsWidget.buildTextTitle(
+                                      context, value['nometempo'],
+                                      size: SplashScreen.isSmall ? 16 : 18),
+                                ));
+                          }).toList(),
+                        ),
+                      );
+                    }),
+                    SizedBox(
+                      height: size.height * 0.02,
+                    ),
+                    if (!isDayle!)
+                      Column(
+                        children: [
+                          ConstsWidget.buildTextSubTitle('Ser notificado',
+                              size: 14),
+                          StatefulBuilder(builder: (context, setState) {
+                            return ConstsWidget.buildDecorationDrop(
+                              context,
+                              child: DropdownButton(
+                                value: dropdownValueLembrar, isExpanded: true,
+                                alignment: Alignment.center,
+                                icon: Icon(
+                                  Icons.arrow_downward_outlined,
+                                ),
+                                elevation: 24,
+                                // style: TextStyle(
+                                //     // color: Theme.of(context)
+                                //     //     .colorScheme
+                                //     //     .primary,
+                                //     fontWeight: FontWeight.bold,
+                                //     fontSize: 18),
+                                borderRadius: BorderRadius.circular(16),
+                                onChanged: (value) {
+                                  setState(() {
+                                    dropdownValueLembrar = value!;
+                                  });
+                                },
+                                hint: ConstsWidget.buildTextSubTitle(
+                                    'Selecione',
+                                    size: SplashScreen.isSmall ? 16 : 18),
+                                items: listAviso_dias.map((value) {
+                                  return DropdownMenuItem(
+                                      value: value['idtempo'],
+                                      child: Center(
+                                        child: ConstsWidget.buildTextTitle(
+                                            context, value['nometempo'],
+                                            size:
+                                                SplashScreen.isSmall ? 16 : 18),
+                                      ));
+                                }).toList(),
+                              ),
+                            );
+                          }),
+                        ],
+                      ),
+                  ],
+                ),
               SizedBox(
                 height: size.height * 0.01,
               ),
-              ConstsWidget.buildTextSubTitle('Repitir em', size: 14),
-              StatefulBuilder(builder: (context, setState) {
-                return Container(
-                  width: double.infinity,
-                  height: size.height * 0.066,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: Theme.of(context).canvasColor,
-                    border: Border.all(color: Colors.black26),
-                    borderRadius: BorderRadius.all(Radius.circular(16)),
-                  ),
-                  child: ButtonTheme(
-                    alignedDropdown: true,
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton(
-                        value: dropdownValueAtivo,
-                        icon: Icon(
-                          Icons.arrow_downward_outlined,
-                        ),
-                        elevation: 24,
-                        // style: TextStyle(
-                        //     // color: Theme.of(context)
-                        //     //     .colorScheme
-                        //     //     .primary,
-                        //     fontWeight: FontWeight.bold,
-                        //     fontSize: 18),
-                        borderRadius: BorderRadius.circular(16),
-                        onChanged: (value) {
-                          setState(() {
-                            dropdownValueAtivo = value!;
-                          });
-                        },
-                        hint: ConstsWidget.buildTextTitle(context, 'Selecione',
-                            size: SplashScreen.isSmall ? 16 : 18),
-                        items: listLembretes.map((value) {
-                          return DropdownMenuItem(
-                              value: value['idtempo'],
-                              child: ConstsWidget.buildTextTitle(
-                                  context, value['nometempo'],
-                                  size: SplashScreen.isSmall ? 16 : 18));
-                        }).toList(),
-                      ),
-                    ),
-                  ),
-                );
-              }),
-              if (!isExpired)
-                ConstsWidget.buildPadding001(context,
-                    child: Column(
-                      children: [
-                        ConstsWidget.buildTextTitle(context,
-                            'Essa tarefa expirou em ${initialDate}. Inclua uma nova tarefa',
-                            color: Colors.red)
-                      ],
-                    )),
-              SizedBox(
-                height: size.height * 0.01,
-              ),
-              ConstsWidget.buildLoadingButton(
+              ConstsWidget.buildPadding001(
                 context,
-                title: 'Salvar',
-                isLoading: isLoading,
-                onPressed: () {
-                  var validForm = keyTarefa.currentState?.validate() ?? false;
-                  startTarefaSind(validForm);
-                },
+                child: ConstsWidget.buildLoadingButton(
+                  context,
+                  title: 'Salvar',
+                  isLoading: isLoading,
+                  onPressed: () {
+                    var validForm = keyTarefa.currentState?.validate() ?? false;
+                    startTarefaSind(validForm);
+                  },
+                ),
               ),
             ],
           )),
         ));
-  }
-
-  void startTarefaSind(validForm) {
-    keyTarefa.currentState?.save();
-    if (validForm &&
-        dropdownValueAtivo != null &&
-        MyDatePicker.dataSelected != '') {
-      setState(() {
-        isLoading = true;
-      });
-      String incluirEditar = widget.idtarefa == null
-          ? 'incluirTarefa'
-          : 'editarTarefa&idtarefa=${widget.idtarefa}';
-      ConstsFuture.resquestApi(
-              '${Consts.sindicoApi}tarefas/?fn=$incluirEditar&idcond=${ResponsalvelInfos.idcondominio}&descricao=$nomeTarefaCtrl&data_vencimento=${MyDatePicker.dataSelected}&aviso_dias=$dropdownValueAtivo')
-          .then((value) {
-        setState(() {
-          isLoading = false;
-        });
-        if (!value['erro']) {
-          ConstsFuture.navigatorPopPush(context, '/tarefasScreen');
-
-          buildMinhaSnackBar(context,
-              title: 'Muito bem!', subTitle: value['mensagem']);
-        } else {
-          buildMinhaSnackBar(context,
-              title: 'Algo Saiu Mau', subTitle: value['mensagem']);
-        }
-      });
-    } else {
-      buildMinhaSnackBar(context);
-    }
   }
 }

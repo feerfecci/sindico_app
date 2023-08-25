@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,9 @@ import 'package:sindico_app/screens/home_page.dart/home_page.dart';
 import '../items_bottom.dart';
 import '../screens/home_page.dart/dropCond.dart';
 import '../screens/login/login_screen.dart';
+import '../screens/quadro_avisos/quadro_de_avisos.dart';
+import '../screens/reservas/listar_reservar.dart';
+import '../screens/tarefas/tarefas_screen.dart';
 import '../widgets/snackbar/snack.dart';
 import 'consts.dart';
 import 'package:http/http.dart' as http;
@@ -47,7 +51,8 @@ class ConstsFuture {
     return senhacripto;
   }
 
-  static navigatorPopPush(BuildContext context, String Namedroute) {
+  static Future navigatorPopPush(
+      BuildContext context, String Namedroute) async {
     Navigator.pop(context);
     Navigator.popAndPushNamed(context, Namedroute);
   }
@@ -83,6 +88,7 @@ class ConstsFuture {
         ResponsalvelInfos.nome_condominio = loginInfos['nome_condominio'];
         ResponsalvelInfos.idcondominio = loginInfos['idcondominio'];
         ResponsalvelInfos.idfuncionario = loginInfos['idfuncionario'];
+        ResponsalvelInfos.qtd_publicidade = loginInfos['qtd_publicidade'];
         ResponsalvelInfos.dividido_por = loginInfos['dividido_por'];
         ResponsalvelInfos.nome_responsavel = loginInfos['nome_funcionario'];
         ResponsalvelInfos.login = loginInfos['login'];
@@ -98,8 +104,9 @@ class ConstsFuture {
         ResponsalvelInfos.cidade = loginInfos['cidade'];
         ResponsalvelInfos.estado = loginInfos['estado'];
         ResponsalvelInfos.temporespostas = loginInfos['temporespostas'];
-
-        navigatorPageReplace(context, HomePage());
+        apiQuadroAvisos().whenComplete(() => apiResevas().whenComplete(() =>
+            apiTarefas().whenComplete(
+                () => navigatorPageReplace(context, HomePage()))));
       } else {
         // navigatorPageReplace(context, LoginScreen()).then((value) {
 
@@ -140,7 +147,7 @@ class ConstsFuture {
       return resposta.statusCode == 200
           ? Image.network(iconApi)
           : Image.asset('assets/ico-error.png');
-    } on Exception catch (e) {
+    } catch (e) {
       return Image.asset('assets/ico-error.png');
     }
   }

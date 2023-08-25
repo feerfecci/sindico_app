@@ -29,7 +29,7 @@ class _ListaEspacosState extends State<ListaEspacos> {
         setState(
           () {
             ConstsFuture.resquestApi(
-                '${Consts.sindicoApi}espacos/index.php?fn=listarEspacos&idcond=${ResponsalvelInfos.idcondominio}');
+                '${Consts.sindicoApi}espacos/index.php?fn=listarEspacos&idcond=${ResponsalvelInfos.idcondominio}&idfuncionario=${ResponsalvelInfos.idfuncionario}');
           },
         );
       },
@@ -54,7 +54,7 @@ class _ListaEspacosState extends State<ListaEspacos> {
               ),
               FutureBuilder(
                 future: ConstsFuture.resquestApi(
-                    '${Consts.sindicoApi}espacos/index.php?fn=listarEspacos&idcond=${ResponsalvelInfos.idcondominio}'),
+                    '${Consts.sindicoApi}espacos/index.php?fn=listarEspacos&idcond=${ResponsalvelInfos.idcondominio}&idfuncionario=${ResponsalvelInfos.idfuncionario}'),
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
                     return LoadingEspacos();
@@ -84,9 +84,12 @@ class _ListaEspacosState extends State<ListaEspacos> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        ConstsWidget.buildTextTitle(
-                                            context, nome_espaco,
-                                            size: 18),
+                                        SizedBox(
+                                          width: size.width * 0.65,
+                                          child: ConstsWidget.buildTextTitle(
+                                              context, nome_espaco,
+                                              size: 18),
+                                        ),
                                         ConstsWidget.buildAtivoInativo(
                                             context, ativo),
                                       ],

@@ -9,6 +9,7 @@ class ResponsalvelInfos {
   static int qntCond = 0;
   static int idcondominio = 0;
   static int idfuncionario = 0;
+  static int qtd_publicidade = 0;
   static String nome_condominio = "";
   static String dividido_por = "";
   static String nome_responsavel = "";

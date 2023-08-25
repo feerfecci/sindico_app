@@ -33,7 +33,7 @@ class _ListaUnidadeStates extends State<ListaUnidades> {
 
   listarUnidades() async {
     var url = Uri.parse(
-        '${Consts.sindicoApi}unidades/?fn=listarUnidades&idcond=${ResponsalvelInfos.idcondominio}');
+        '${Consts.sindicoApi}unidades/?fn=listarUnidades&idcond=${ResponsalvelInfos.idcondominio}&idfuncionario=${ResponsalvelInfos.idfuncionario}');
     var resposta = await http.get(url);
 
     if (resposta.statusCode == 200) {

@@ -1,3 +1,4 @@
+import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
@@ -13,13 +14,37 @@ import '../../consts/consts.dart';
 import 'add_tarefa.dart';
 
 class TarefasScreen extends StatefulWidget {
+  static List qntTarefas = [];
   const TarefasScreen({super.key});
 
   @override
   State<TarefasScreen> createState() => _TarefasScreenState();
 }
 
+Future apiTarefas() async {
+  ConstsFuture.resquestApi(
+          '${Consts.sindicoApi}tarefas/?fn=listarTarefas&idcond=${ResponsalvelInfos.idcondominio}&idfuncionario=${ResponsalvelInfos.idfuncionario}')
+      .then((value) {
+    if (!value['erro']) {
+      for (var i = 0; i <= value['tarefas'].length - 1; i++) {
+        if (DateTime.parse(value['tarefas'][i]['data_vencimento']).day ==
+                DateTime.now().day &&
+            !TarefasScreen.qntTarefas
+                .contains(value['tarefas'][i]['idtarefa'])) {
+          TarefasScreen.qntTarefas.add(value['tarefas'][i]['idtarefa']);
+        }
+      }
+    }
+  });
+}
+
 class _TarefasScreenState extends State<TarefasScreen> {
+  @override
+  void initState() {
+    apiTarefas();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
@@ -45,7 +70,7 @@ class _TarefasScreenState extends State<TarefasScreen> {
             ),
             FutureBuilder(
               future: ConstsFuture.resquestApi(
-                  '${Consts.sindicoApi}tarefas/?fn=listarTarefas&idcond=${ResponsalvelInfos.idcondominio}'),
+                  '${Consts.sindicoApi}tarefas/?fn=listarTarefas&idcond=${ResponsalvelInfos.idcondominio}&idfuncionario=${ResponsalvelInfos.idfuncionario}'),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return ListView.builder(
@@ -85,48 +110,66 @@ class _TarefasScreenState extends State<TarefasScreen> {
                         var descricao = apiTarefas['descricao'];
                         var data_vencimento = apiTarefas['data_vencimento'];
                         var aviso_dias = apiTarefas['aviso_dias'];
+                        var repetir_dias = apiTarefas['repetir_dias'];
                         var datahora = apiTarefas['datahora'];
                         var ultima_atualizacao =
                             apiTarefas['ultima_atualizacao'];
-
+                        bool isToday = false;
+                        if (TarefasScreen.qntTarefas.contains(idtarefa)) {
+                          isToday = true;
+                        }
                         return MyBoxShadow(
-                            child: Column(
-                          children: [
-                            SizedBox(
-                              height: size.height * 0.01,
-                            ),
-                            ConstsWidget.buildTextTitle(context, 'Descrição'),
-                            ConstsWidget.buildTextSubTitle(descricao,
-                                textAlign: TextAlign.center),
-                            SizedBox(
-                              height: size.height * 0.01,
-                            ),
-                            ConstsWidget.buildTextTitle(
-                                context, 'Data de vencimento'),
-                            ConstsWidget.buildTextSubTitle(
+                            child: ConstsWidget.buildBadge(
+                          context,
+                          showBadge: isToday,
+                          position:
+                              BadgePosition.topEnd(end: size.width * 0.015),
+                          child: Column(
+                            children: [
+                              SizedBox(
+                                height: size.height * 0.01,
+                              ),
+                              ConstsWidget.buildTextTitle(context, 'Descrição'),
+                              ConstsWidget.buildTextSubTitle(descricao,
+                                  textAlign: TextAlign.center),
+                              SizedBox(
+                                height: size.height * 0.01,
+                              ),
+                              if (!isToday)
+                                ConstsWidget.buildTextTitle(
+                                    context, 'Data de vencimento'),
+                              if (isToday)
+                                ConstsWidget.buildTextTitle(
+                                    context, 'Vence Hoje',
+                                    color: Consts.kColorRed),
+                              ConstsWidget.buildTextSubTitle(
                                 DateFormat('dd/MM/yyyy')
                                     .format(DateTime.parse(data_vencimento))
-                                    .toString()),
-                            SizedBox(
-                              height: size.height * 0.01,
-                            ),
-                            ConstsWidget.buildPadding001(context,
-                                child: ConstsWidget.buildOutlinedButton(
-                                  context,
-                                  title: 'Editar Tarefa',
-                                  onPressed: () {
-                                    ConstsFuture.navigatorPagePush(
-                                      context,
-                                      AdicionarTarefa(
-                                        idtarefa: idtarefa,
-                                        nomeTarefaCtrl: descricao,
-                                        initialDate: data_vencimento,
-                                        idtempo: aviso_dias,
-                                      ),
-                                    );
-                                  },
-                                ))
-                          ],
+                                    .toString(),
+                                // color: isToday ? Consts.kColorRed : null,
+                              ),
+                              SizedBox(
+                                height: size.height * 0.01,
+                              ),
+                              ConstsWidget.buildPadding001(context,
+                                  child: ConstsWidget.buildOutlinedButton(
+                                    context,
+                                    title: 'Editar Tarefa',
+                                    onPressed: () {
+                                      ConstsFuture.navigatorPagePush(
+                                        context,
+                                        AdicionarTarefa(
+                                          idtarefa: idtarefa,
+                                          nomeTarefaCtrl: descricao,
+                                          initialDate: data_vencimento,
+                                          aviso_dias: aviso_dias,
+                                          repetir_dias: repetir_dias,
+                                        ),
+                                      );
+                                    },
+                                  ))
+                            ],
+                          ),
                         ));
                       },
                     );
