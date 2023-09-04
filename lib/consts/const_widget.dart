@@ -19,8 +19,15 @@ class ConstsWidget {
     );
   }
 
-  static Widget buildTextTitle(BuildContext context, String title,
-      {textAlign, Color? color, double size = 16, int maxLines = 2}) {
+  static Widget buildTextTitle(
+    BuildContext context,
+    String title, {
+    textAlign,
+    Color? color,
+    double fontSize = 16,
+    int maxLines = 2,
+  }) {
+    var size = MediaQuery.of(context).size;
     return Text(
       title,
       maxLines: maxLines,
@@ -28,7 +35,7 @@ class ConstsWidget {
       style: TextStyle(
         color: color ?? Theme.of(context).colorScheme.primary,
         overflow: TextOverflow.ellipsis,
-        fontSize: SplashScreen.isSmall ? (size - 2) : size,
+        fontSize: SplashScreen.isSmall ? (fontSize - 2) : fontSize,
         fontWeight: FontWeight.bold,
       ),
     );
@@ -60,7 +67,7 @@ class ConstsWidget {
       Color? color = Consts.kColorAzul,
       Color? textColor = Colors.white,
       Color? iconColor = Colors.white,
-      double? fontSize,
+      double fontSize = 18,
       required void Function()? onPressed}) {
     var size = MediaQuery.of(context).size;
     return ElevatedButton(
@@ -85,11 +92,7 @@ class ConstsWidget {
               style: TextStyle(
                 overflow: TextOverflow.ellipsis,
                 color: Colors.white,
-                fontSize: fontSize != null
-                    ? SplashScreen.isSmall
-                        ? (fontSize - 5)
-                        : fontSize
-                    : null,
+                fontSize: SplashScreen.isSmall ? (fontSize - 5) : fontSize,
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -233,14 +236,17 @@ class ConstsWidget {
   }
 
   static Widget buildOutlinedButton(BuildContext context,
-      {required String title, required void Function()? onPressed}) {
+      {required String title,
+      required void Function()? onPressed,
+      Color? color}) {
     var size = MediaQuery.of(context).size;
     return OutlinedButton(
       style: OutlinedButton.styleFrom(
         alignment: Alignment.center,
         padding: EdgeInsets.symmetric(
             vertical: size.height * 0.021, horizontal: size.width * 0.024),
-        side: BorderSide(width: size.width * 0.005, color: Colors.blue),
+        side:
+            BorderSide(width: size.width * 0.005, color: color ?? Colors.blue),
         shape: StadiumBorder(),
       ),
       onPressed: onPressed,
@@ -250,7 +256,7 @@ class ConstsWidget {
           ConstsWidget.buildTextSubTitle(
             title,
             size: SplashScreen.isSmall ? 16 : 18,
-            color: Colors.blue,
+            color: color ?? Colors.blue,
           ),
         ],
       ),

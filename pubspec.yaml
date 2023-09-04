@@ -57,11 +57,11 @@ dependencies:
 
 flutter_icons:  
   
-  image_path: "assets/logo-verde.png"
+  image_path: "assets/logo_verde.png"
   ios: true
   remove_alpha_ios: true
   android: "launch_icon"
-  adaptive_icon_foreground: "assets/logo-verde.png"
+  adaptive_icon_foreground: "assets/logo_verde.png"
 
 dev_dependencies:
   flutter_test:

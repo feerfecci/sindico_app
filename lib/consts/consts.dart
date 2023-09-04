@@ -25,6 +25,7 @@ class ResponsalvelInfos {
   static String cep = "";
   static String cidade = "";
   static int temporespostas = 0;
+  static bool aceitou_termos = false;
 }
 
 class Consts {

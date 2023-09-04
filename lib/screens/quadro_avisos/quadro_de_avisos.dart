@@ -36,7 +36,7 @@ Future apiQuadroAvisos() async {
   if (resposta.statusCode == 200) {
     var jsonResposta = json.decode(resposta.body);
     if (!jsonResposta['erro']) {
-      comparaAvisos(jsonResposta);
+      comparaAvisos(jsonResposta).whenComplete(() => LocalInfos.setLoginDate());
     }
 
     return json.decode(resposta.body);
@@ -45,7 +45,7 @@ Future apiQuadroAvisos() async {
   }
 }
 
-comparaAvisos(jsonResposta) {
+Future comparaAvisos(jsonResposta) async {
   List apiAvisos = jsonResposta['avisos'];
   LocalInfos.getLoginDate().then((dateValue) {
     for (var i = 0; i <= apiAvisos.length - 1; i++) {
@@ -59,11 +59,8 @@ comparaAvisos(jsonResposta) {
             QuadroDeAvisos.qntAvisos.add(apiAvisos[i]['idaviso']);
           }
         }
-        LocalInfos.setLoginDate();
       } else {
         QuadroDeAvisos.qntAvisos.add(apiAvisos[i]['idaviso']);
-
-        LocalInfos.setLoginDate();
       }
     }
   });
@@ -111,10 +108,14 @@ class _QuadroDeAvisosState extends State<QuadroDeAvisos> {
                       ),
                     ),
                     context: context,
-                    builder: (context) => SizedBox(
-                      height: size.height * 0.85,
-                      child: Scaffold(body: WidgetModalAvisos()),
-                    ),
+                    useSafeArea: true,
+                    builder:
+                        (context) => /*SizedBox(
+                      height: size.height * 0.9,
+                      child: */
+                            Scaffold(body: WidgetModalAvisos()
+                                /* ),*/
+                                ),
                   );
                 },
               ),
@@ -166,6 +167,7 @@ class _QuadroDeAvisosState extends State<QuadroDeAvisos> {
                                       showBolinha = false;
                                     }
                                   },
+                                  // trailing: Icon(Icons.arrow_drop_down),
                                   title: Row(
                                     children: [
                                       SizedBox(
@@ -173,7 +175,7 @@ class _QuadroDeAvisosState extends State<QuadroDeAvisos> {
                                         child: ConstsWidget.buildTextTitle(
                                             context, titulo,
                                             textAlign: TextAlign.center,
-                                            size: 18),
+                                            fontSize: 18),
                                       ),
                                     ],
                                   ),

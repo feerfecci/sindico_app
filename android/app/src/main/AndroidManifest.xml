@@ -8,6 +8,10 @@
         android:name="${applicationName}"
         android:requestLegacyExternalStorage="true"
         android:icon="@mipmap/launch_icon">
+
+        <meta-data
+    android:name="com.google.firebase.messaging.default_notification_icon"
+    android:resource="@drawable/logo_verde" />
         
         <activity
             android:name=".MainActivity"

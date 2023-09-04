@@ -199,8 +199,9 @@ class _AdicionarTarefaState extends State<AdicionarTarefa> {
                 textCapitalization: TextCapitalization.sentences,
                 labelCenter: true,
                 hintText: 'Exemplo: Dedetização de todos os blocos',
-                readOnly: !isExpired,
+                // readOnly: !isExpired,
                 initialValue: widget.nomeTarefaCtrl,
+                maxLength: 80,
                 onSaved: (text) {
                   setState(() {
                     nomeTarefaCtrl = text!;
@@ -285,7 +286,7 @@ class _AdicionarTarefaState extends State<AdicionarTarefa> {
                                 child: Center(
                                   child: ConstsWidget.buildTextTitle(
                                       context, value['nometempo'],
-                                      size: SplashScreen.isSmall ? 16 : 18),
+                                      fontSize: SplashScreen.isSmall ? 16 : 18),
                                 ));
                           }).toList(),
                         ),
@@ -330,7 +331,7 @@ class _AdicionarTarefaState extends State<AdicionarTarefa> {
                                       child: Center(
                                         child: ConstsWidget.buildTextTitle(
                                             context, value['nometempo'],
-                                            size:
+                                            fontSize:
                                                 SplashScreen.isSmall ? 16 : 18),
                                       ));
                                 }).toList(),

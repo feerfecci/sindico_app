@@ -149,14 +149,14 @@ class _HomePageState extends State<HomePage> {
   Future<void> initPlatformState() async {
     OneSignal.shared.setAppId(oneSignalAppId);
     OneSignal.shared.promptUserForPushNotificationPermission().then((accepted) {
+      OneSignal.shared
+          .setExternalUserId(ResponsalvelInfos.idfuncionario.toString());
       // OneSignal.shared.setEmail(email: "${User.emailUser}");
       OneSignal.shared.sendTags({
         'idfuncionario': ResponsalvelInfos.idfuncionario.toString(),
         'idfuncao': '2',
         'idcond': ResponsalvelInfos.idcondominio.toString(),
       });
-      OneSignal.shared
-          .setExternalUserId(ResponsalvelInfos.idfuncionario.toString());
       // OneSignal.shared
       //     .sendTags({'isAndroid': 1, 'idweb': logado.idCliente.toString()});
     });
@@ -391,7 +391,7 @@ class _HomePageState extends State<HomePage> {
             title: ConstsWidget.buildTextTitle(
                 context, ResponsalvelInfos.nome_responsavel,
                 textAlign: TextAlign.center,
-                size: SplashScreen.isSmall ? 18 : 20),
+                fontSize: SplashScreen.isSmall ? 18 : 20),
             iconTheme:
                 IconThemeData(color: Theme.of(context).colorScheme.primary),
             backgroundColor: Colors.transparent,
@@ -429,7 +429,7 @@ class _HomePageState extends State<HomePage> {
                       context,
                       child: ConstsWidget.buildTextTitle(
                           context, ResponsalvelInfos.nome_condominio,
-                          textAlign: TextAlign.center, size: 22),
+                          textAlign: TextAlign.center, fontSize: 22),
                     )
                   : DropCond(),
               StatefulBuilder(

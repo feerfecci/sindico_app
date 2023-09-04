@@ -6,7 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:sindico_app/forms/unidades_form.dart';
 import 'package:sindico_app/screens/moradores/lista_morador.dart';
 import 'package:sindico_app/screens/unidade/cadastro_unidade.dart';
+import 'package:sindico_app/screens/unidade/card_unidade.dart';
 import 'package:sindico_app/screens/unidade/loading_unidade.dart';
+import 'package:sindico_app/screens/unidade/search_unidades.dart';
 import 'package:sindico_app/screens/unidade/teste.dart';
 import 'package:sindico_app/widgets/header.dart';
 import 'package:sindico_app/widgets/page_vazia.dart';
@@ -99,6 +101,47 @@ class _ListaUnidadeStates extends State<ListaUnidades> {
                         context, CadastroUnidades()),
                     icon: Icons.add),
               ),
+              GestureDetector(
+                onTap: () =>
+                    showSearch(context: context, delegate: SearchUnidade()),
+                child: ConstsWidget.buildPadding001(
+                  context,
+                  horizontal: 0.01,
+                  child: Container(
+                    height: size.height * 0.085,
+                    width: double.maxFinite,
+                    decoration: BoxDecoration(
+                        color: Theme.of(context).cardColor,
+                        border: Border.all(
+                            color: Colors.blue, width: size.width * 0.007),
+                        borderRadius: BorderRadius.circular(16)),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Spacer(flex: 3),
+                        ConstsWidget.buildTextTitle(
+                            context, 'Localizar Unidade ',
+                            textAlign: TextAlign.center),
+                        Spacer(),
+                        Container(
+                          height: size.height * 0.3,
+                          width: size.width * 0.1,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.blue,
+                          ),
+                          child: Icon(
+                            Icons.search,
+                            color: Colors.white,
+                            fill: 1,
+                          ),
+                        ),
+                        Spacer(),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
               FutureBuilder<dynamic>(
                 future: listarUnidades(),
                 builder: (context, snapshot) {
@@ -120,41 +163,11 @@ class _ListaUnidadeStates extends State<ListaUnidades> {
                           var numero = itensUnidade['numero'];
 
                           bool ativoUnidade = itensUnidade['ativo'];
-                          return ConstsWidget.buildPadding001(
-                            context,
-                            vertical: 0.005,
-                            child: MyBoxShadow(
-                              child: ConstsWidget.buildPadding001(
-                                context,
-                                vertical: 0.005,
-                                horizontal: 0.02,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    ConstsWidget.buildTextTitle(context,
-                                        "$dividido_por $nome_divisao - $numero"),
-                                    SizedBox(
-                                      height: size.height * 0.01,
-                                    ),
-                                    ConstsWidget.buildCustomButton(
-                                      context,
-                                      'Listar Moradores',
-                                      onPressed: () {
-                                        ConstsFuture.navigatorPagePush(
-                                            context,
-                                            ListaMorador(
-                                              idunidade: idunidade,
-                                              idvisisao: iddivisao,
-                                              localizado:
-                                                  "$dividido_por $nome_divisao - $numero",
-                                            ));
-                                      },
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ),
-                          );
+                          return buildCardUnidade(context,
+                              idunidade: idunidade,
+                              iddivisao: iddivisao,
+                              localizado:
+                                  "$dividido_por $nome_divisao - $numero");
                         },
                       );
                     } else {

@@ -29,7 +29,7 @@ class _MeuPerfilScreenState extends State<MeuPerfilScreen> {
     });
 
     ConstsFuture.resquestApi(
-            '${Consts.sindicoApi}funcionarios/?fn=editarFuncionario&idcond=${ResponsalvelInfos.idcondominio}&idfuncao=2&idfuncionario=${ResponsalvelInfos.idfuncionario}&nome_funcionario=${ResponsalvelInfos.nome_responsavel}&datanasc=${responsalvelInfos.nascimento}&documento=${responsalvelInfos.documento}&email=${responsalvelInfos.email}&telefone=${responsalvelInfos.telefone}&login=${ResponsalvelInfos.login}&avisa_corresp=1&avisa_visita=1&avisa_delivery=1&avisa_encomendas=1&envia_avisos=1')
+            '${Consts.sindicoApi}funcionarios/?fn=editarFuncionario&idcond=${ResponsalvelInfos.idcondominio}&idfuncionariologado=${ResponsalvelInfos.idfuncionario}&idfuncao=2&idfuncionario=${ResponsalvelInfos.idfuncionario}&nome_funcionario=${ResponsalvelInfos.nome_responsavel}&datanasc=${responsalvelInfos.nascimento}&documento=${responsalvelInfos.documento}&email=${responsalvelInfos.email}&telefone=${responsalvelInfos.telefone}&login=${ResponsalvelInfos.login}&avisa_corresp=1&avisa_visita=1&avisa_delivery=1&avisa_encomendas=1&envia_avisos=1')
         .then((value) {
       setState(() {
         isLoading = false;
@@ -61,14 +61,14 @@ class _MeuPerfilScreenState extends State<MeuPerfilScreen> {
                     children: [
                       ConstsWidget.buildTextTitle(
                           context, ResponsalvelInfos.nome_responsavel,
-                          size: 18),
+                          fontSize: 18),
                       SizedBox(
                         height: size.height * 0.01,
                       ),
                       ConstsWidget.buildTextSubTitle('Meu Login'),
                       ConstsWidget.buildTextTitle(
                           context, ResponsalvelInfos.login,
-                          size: 20),
+                          fontSize: 20),
                     ],
                   ),
                 ),
@@ -108,7 +108,7 @@ class _MeuPerfilScreenState extends State<MeuPerfilScreen> {
               ),
               ConstsWidget.buildPadding001(context,
                   child: ConstsWidget.buildTextTitle(context, 'Contatos',
-                      size: 18)),
+                      fontSize: 18)),
               Row(
                 children: [
                   // SizedBox(
@@ -157,7 +157,7 @@ class _MeuPerfilScreenState extends State<MeuPerfilScreen> {
                 child:*/
               ConstsWidget.buildTextTitle(
                   context, 'Dados ${ResponsalvelInfos.nome_condominio}',
-                  size: 20),
+                  fontSize: 20),
               //     ),
               ConstsWidget.buildTextSubTitle(
                   'Aqui só pode ser alterados pela nossa equipe'),

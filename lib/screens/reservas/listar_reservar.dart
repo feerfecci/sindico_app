@@ -154,7 +154,7 @@ class _ListaReservasState extends State<ListaReservas> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           ConstsWidget.buildTextTitle(context, titulo,
-              size: SplashScreen.isSmall ? 16 : 18),
+              fontSize: SplashScreen.isSmall ? 16 : 18),
           ConstsWidget.buildTextSubTitle(texto,
               size: SplashScreen.isSmall ? 14 : 16),
         ],
@@ -201,9 +201,81 @@ class _ListaReservasState extends State<ListaReservas> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    buildFiltroReserv('Recusadas', 0, color: Colors.grey),
-                    buildFiltroReserv('Aprovadas', 1, color: verde),
-                    buildFiltroReserv('Pendentes', 2, color: amarelo),
+                    SizedBox(
+                      width: size.width * 0.315,
+                      child: statusReserva == 0
+                          ? ConstsWidget.buildCustomButton(
+                              context,
+                              color: statusReserva == 0 ? Colors.grey : null,
+                              'Recusadas',
+                              onPressed: () {
+                                setState(() {
+                                  statusReserva = 0;
+                                });
+                              },
+                            )
+                          : ConstsWidget.buildOutlinedButton(
+                              context, title: 'Recusadas',
+                              // fontSize: SplashScreen.isSmall ? 18 : 16,
+                              // color: statusReserva == 0 ? Colors.grey : null,
+                              onPressed: () {
+                                setState(() {
+                                  statusReserva = 0;
+                                });
+                              },
+                            ),
+                    ),
+                    SizedBox(
+                      width: size.width * 0.315,
+                      child: statusReserva == 1
+                          ? ConstsWidget.buildCustomButton(
+                              context,
+                              color: statusReserva == 1 ? verde : null,
+                              'Aprovadas',
+                              onPressed: () {
+                                setState(() {
+                                  statusReserva = 1;
+                                });
+                              },
+                            )
+                          : ConstsWidget.buildOutlinedButton(
+                              context, title: 'Aprovadas',
+                              // fontSize: SplashScreen.isSmall ? 18 : 16,
+                              color: statusReserva == 1 ? verde : null,
+                              onPressed: () {
+                                setState(() {
+                                  statusReserva = 1;
+                                });
+                              },
+                            ),
+                    ),
+                    SizedBox(
+                      width: size.width * 0.315,
+                      child: statusReserva == 2
+                          ? ConstsWidget.buildCustomButton(
+                              context,
+                              color: statusReserva == 2 ? amarelo : null,
+                              'Pendentes',
+                              onPressed: () {
+                                setState(() {
+                                  statusReserva = 2;
+                                });
+                              },
+                            )
+                          : ConstsWidget.buildOutlinedButton(
+                              context, title: 'Pendentes',
+                              // fontSize: SplashScreen.isSmall ? 18 : 16,
+                              color: statusReserva == 2 ? amarelo : null,
+                              onPressed: () {
+                                setState(() {
+                                  statusReserva = 2;
+                                });
+                              },
+                            ),
+                    ),
+                    // // buildFiltroReserv('Recusadas', 0, color: Colors.grey),
+                    // buildFiltroReserv('Aprovadas', 1, color: verde),
+                    // buildFiltroReserv('Pendentes', 2, color: amarelo),
                   ],
                 ),
               ),
@@ -224,6 +296,7 @@ class _ListaReservasState extends State<ListaReservas> {
                               snapshot.data['reserva_espacos'][index];
                           int idreserva = apiReservar['idreserva'];
                           int status = apiReservar['status'];
+                          int status_adm = apiReservar['status_adm'];
                           String texto_status = apiReservar['texto_status'];
                           int idespaco = apiReservar['idespaco'];
                           String nome_espaco = apiReservar['nome_espaco'];
@@ -243,7 +316,8 @@ class _ListaReservasState extends State<ListaReservas> {
                             return ConstsWidget.buildCustomButton(
                               context,
                               title,
-                              color: title == 'Aprovar' ? verde : Colors.grey,
+                              color:
+                                  title == '  Aprovar  ' ? verde : Colors.grey,
                               altura: 0.02,
                               largura: 0.07,
                               onPressed: () {
@@ -291,47 +365,99 @@ class _ListaReservasState extends State<ListaReservas> {
                                           titulo: 'Nome do Espaço',
                                           texto: nome_espaco.toString(),
                                         ),
-                                        Spacer(),
-                                        Container(
-                                          decoration: BoxDecoration(
-                                              color: status == 0
-                                                  ? Colors.grey
-                                                  : status == 1
-                                                      ? verde
-                                                      : amarelo,
-                                              borderRadius:
-                                                  BorderRadius.circular(16)),
-                                          child: ConstsWidget.buildPadding001(
-                                            context,
-                                            vertical: 0.012,
-                                            horizontal: 0.05,
-                                            child: ConstsWidget.buildTextTitle(
-                                              context,
-                                              texto_status,
-                                              color: Colors.white,
-                                            ),
-                                          ),
-                                        ),
+                                        // Spacer(),
+                                        // Container(
+                                        //   decoration: BoxDecoration(
+                                        //       border: Border.all(
+                                        //         color: status == 0
+                                        //             ? Colors.grey
+                                        //             : status == 1
+                                        //                 ? verde
+                                        //                 : amarelo,
+                                        //       ),
+                                        //       borderRadius:
+                                        //           BorderRadius.circular(16)),
+                                        //   child: ConstsWidget.buildPadding001(
+                                        //     context,
+                                        //     vertical: 0.012,
+                                        //     horizontal: 0.05,
+                                        //     child: ConstsWidget.buildTextTitle(
+                                        //       context,
+                                        //       texto_status,
+                                        //       color: status == 0
+                                        //           ? Colors.grey
+                                        //           : status == 1
+                                        //               ? verde
+                                        //               : amarelo,
+                                        //     ),
+                                        //   ),
+                                        // ),
                                       ],
                                     ),
                                     ConstsWidget.buildPadding001(
                                       context,
                                       vertical: 0.02,
-                                      child: Container(
-                                        alignment: Alignment.centerLeft,
-                                        width: double.maxFinite,
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            buildTextReserva(
-                                              titulo: 'Reservado por',
-                                              texto: '$unidade',
+                                      child: Row(
+                                        children: [
+                                          Container(
+                                            alignment: Alignment.centerLeft,
+                                            width: size.width * 0.6,
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                buildTextReserva(
+                                                  titulo: 'Reservado por',
+                                                  texto: unidade,
+                                                ),
+                                                ConstsWidget.buildTextSubTitle(
+                                                    nome_morador.toString())
+                                              ],
                                             ),
-                                            ConstsWidget.buildTextSubTitle(
-                                                nome_morador.toString())
-                                          ],
-                                        ),
+                                          ),
+                                          Column(
+                                            children: [
+                                              ConstsWidget.buildTextTitle(
+                                                  context, 'Administradora'),
+                                              SizedBox(
+                                                height: size.height * 0.005,
+                                              ),
+                                              Container(
+                                                decoration: BoxDecoration(
+                                                    border: Border.all(
+                                                      color: status_adm == 0
+                                                          ? Colors.grey
+                                                          : status_adm == 1
+                                                              ? verde
+                                                              : amarelo,
+                                                    ),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            16)),
+                                                child: ConstsWidget
+                                                    .buildPadding001(
+                                                  context,
+                                                  vertical: 0.012,
+                                                  horizontal: 0.05,
+                                                  child: ConstsWidget
+                                                      .buildTextTitle(
+                                                    context,
+                                                    status_adm == 0
+                                                        ? 'Recusado'
+                                                        : status_adm == 1
+                                                            ? 'Aprovada'
+                                                            : 'Pendente',
+                                                    color: status_adm == 0
+                                                        ? Colors.grey
+                                                        : status_adm == 1
+                                                            ? verde
+                                                            : amarelo,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
                                       ),
                                     ),
                                     // Row(
@@ -373,14 +499,15 @@ class _ListaReservasState extends State<ListaReservas> {
                                             top: size.height * 0.02),
                                         child: Row(
                                           mainAxisAlignment:
-                                              MainAxisAlignment.center,
+                                              MainAxisAlignment.spaceEvenly,
                                           children: [
-                                            buildAtendeReserva('Recusar', 0),
+                                            buildAtendeReserva(
+                                                '  Recusar  ', 0),
                                             SizedBox(
                                               width: size.width * 0.01,
                                             ),
                                             buildAtendeReserva(
-                                              'Aprovar',
+                                              '  Aprovar  ',
                                               1,
                                             ),
                                           ],

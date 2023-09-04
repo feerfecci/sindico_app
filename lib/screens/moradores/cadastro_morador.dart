@@ -58,6 +58,7 @@ class CadastroMorador extends StatefulWidget {
 }
 
 class _CadastroMoradorState extends State<CadastroMorador> {
+  bool isGerarSenha = false;
   Object? dropdownValueAtivo;
   List listAtivo = [1, 0];
   List categoryItemListDivisoes = [];
@@ -65,9 +66,9 @@ class _CadastroMoradorState extends State<CadastroMorador> {
   bool nomeDocAlterado = false;
   bool isLoading = false;
   var formkeySenha = GlobalKey<FormState>();
-  TextEditingController atualSenhaCtrl = TextEditingController();
-  TextEditingController novaSenhaCtrl = TextEditingController();
-  TextEditingController confirmSenhaCtrl = TextEditingController();
+  // TextEditingController atualSenhaCtrl = TextEditingController();
+  // TextEditingController novaSenhaCtrl = TextEditingController();
+  // TextEditingController confirmSenhaCtrl = TextEditingController();
 
   @override
   void initState() {
@@ -93,7 +94,7 @@ class _CadastroMoradorState extends State<CadastroMorador> {
         : widget.responsavel == 0
             ? false
             : true;
-    bool isChecked = widget.acesso == null
+    bool isCheckedPermitir = widget.acesso == null
         ? true
         : widget.acesso == 0
             ? false
@@ -115,7 +116,7 @@ class _CadastroMoradorState extends State<CadastroMorador> {
               ConstsWidget.buildPadding001(context,
                   child: ConstsWidget.buildTextTitle(
                       context, widget.localizado!,
-                      size: 20)),
+                      fontSize: 20)),
               buildAtivoInativo2(
                 context,
               ),
@@ -225,6 +226,7 @@ class _CadastroMoradorState extends State<CadastroMorador> {
                 context,
                 'Gerar Login',
                 onPressed: () {
+                  FocusManager.instance.primaryFocus?.unfocus();
                   var formValid =
                       _formKeyMorador.currentState?.validate() ?? false;
                   if (nomeDocAlterado) {
@@ -274,26 +276,26 @@ class _CadastroMoradorState extends State<CadastroMorador> {
                         ),
                       ),
                     ),
-                    if (widget.idmorador == null)
-                      buildMyTextFormObrigatorio(context, 'Senha Login',
-                          onSaved: (text) => _formInfosMorador =
-                              _formInfosMorador.copyWith(senhaLogin: text),
-                          validator: Validatorless.multiple([
-                            Validatorless.required('Preencha'),
-                            Validatorless.min(
-                                6, 'Necessário mais de 6 caracteres')
-                          ]),
-                          initialValue: '123456'),
-                    if (widget.idmorador == null)
-                      buildMyTextFormObrigatorio(context, 'Senha Retirada',
-                          validator: Validatorless.multiple([
-                            Validatorless.required('Preencha'),
-                            Validatorless.min(
-                                6, 'Necessário mais de 6 caracteres')
-                          ]),
-                          onSaved: (text) => _formInfosMorador =
-                              _formInfosMorador.copyWith(senhaRetirada: text),
-                          initialValue: '123456'),
+                    // if (widget.idmorador == null)
+                    //   buildMyTextFormObrigatorio(context, 'Senha Login',
+                    //       onSaved: (text) => _formInfosMorador =
+                    //           _formInfosMorador.copyWith(senhaLogin: text),
+                    //       validator: Validatorless.multiple([
+                    //         Validatorless.required('Preencha'),
+                    //         Validatorless.min(
+                    //             6, 'Necessário mais de 6 caracteres')
+                    //       ]),
+                    //       initialValue: '123456'),
+                    // if (widget.idmorador == null)
+                    //   buildMyTextFormObrigatorio(context, 'Senha Retirada',
+                    //       validator: Validatorless.multiple([
+                    //         Validatorless.required('Preencha'),
+                    //         Validatorless.min(
+                    //             6, 'Necessário mais de 6 caracteres')
+                    //       ]),
+                    //       onSaved: (text) => _formInfosMorador =
+                    //           _formInfosMorador.copyWith(senhaRetirada: text),
+                    //       initialValue: '123456'),
                     // widget.idmorador == null
                     //     ? buildMyTextFormObrigatorio(
                     //         context,
@@ -321,18 +323,28 @@ class _CadastroMoradorState extends State<CadastroMorador> {
                           _formInfosMorador = _formInfosMorador.copyWith(
                               resposavel: boolResponsavel ? 1 : 0);
                         });
-                      }, title: 'Resposável');
+                      }, title: 'Responsável');
                     }),
                     StatefulBuilder(builder: (context, setState) {
                       return ConstsWidget.buildCheckBox(context,
-                          isChecked: isChecked, onChanged: (bool? value) {
+                          isChecked: isCheckedPermitir,
+                          onChanged: (bool? value) {
                         setState(() {
-                          isChecked = value!;
+                          isCheckedPermitir = value!;
                           _formInfosMorador = _formInfosMorador.copyWith(
-                              acesso: isChecked == true ? 1 : 0);
+                              acesso: isCheckedPermitir == true ? 1 : 0);
                         });
-                      }, title: 'Permitir acesso ao sistema');
+                      }, title: 'Permitir Acesso ao Sistema');
                     }),
+                    if (widget.idmorador != null)
+                      StatefulBuilder(builder: (context, setState) {
+                        return ConstsWidget.buildCheckBox(context,
+                            isChecked: isGerarSenha, onChanged: (bool? value) {
+                          setState(() {
+                            isGerarSenha = value!;
+                          });
+                        }, title: 'Gerar Senha e Enviar Acesso');
+                      }),
                     ConstsWidget.buildLoadingButton(
                       context,
                       title: 'Salvar',
@@ -381,13 +393,14 @@ class _CadastroMoradorState extends State<CadastroMorador> {
     String restoApi = '';
     widget.idmorador == null
         ? restoApi =
-            'incluirMorador&senha=${_formInfosMorador.senhaLogin}&senha_retirada=${_formInfosMorador.senhaRetirada}'
-        : restoApi = 'editarMorador&id=${widget.idmorador}';
+            'incluirMorador' /*'&senha=${_formInfosMorador.senhaLogin}&senha_retirada=${_formInfosMorador.senhaRetirada}'*/
+        : restoApi =
+            'editarMorador&id=${widget.idmorador}&gerarsenha=${isGerarSenha ? 1 : 0}';
     return ConstsFuture.resquestApi(
             '${Consts.sindicoApi}moradores/?fn=$restoApi&idunidade=${widget.idunidade}&idcond=${ResponsalvelInfos.idcondominio}&idfuncionario=${ResponsalvelInfos.idfuncionario}&iddivisao=${widget.iddivisao}&ativo=${_formInfosMorador.ativo}&nomeMorador=${_formInfosMorador.nome_morador}&login=$loginGerado&datanasc=${_formInfosMorador.nascimento}&documento=${_formInfosMorador.documento}&dddtelefone=${_formInfosMorador.ddd}&telefone=${_formInfosMorador.telefone}&email=${_formInfosMorador.email}&acessa_sistema=${_formInfosMorador.acesso}&responsavel=${_formInfosMorador.resposavel}')
         .then((value) {
       setState(() {
-        isLoading = false;
+        isLoading == false;
       });
       if (!value['erro']) {
         Navigator.pop(context);
@@ -401,8 +414,8 @@ class _CadastroMoradorState extends State<CadastroMorador> {
             localizado: widget.localizado,
           ),
         );
-        // buildMinhaSnackBar(context,
-        //     title: 'Tudo Certo!', subTitle: value['Mensagem']);
+        buildMinhaSnackBar(context,
+            title: 'Tudo Certo!', subTitle: value['mensagem']);
         // buildMinhaSnackBar(context,
         //     title: 'Tudo Certo!', subTitle: value['Mensagem']);
       } else {

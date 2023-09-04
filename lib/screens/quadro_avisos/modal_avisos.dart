@@ -53,7 +53,7 @@ class _WidgetModalAvisosState extends State<WidgetModalAvisos> {
                       width: size.width * 0.13,
                     ),
                     ConstsWidget.buildTextTitle(context, 'Aviso Geral',
-                        size: 20),
+                        fontSize: 20),
                     Spacer(),
                     IconButton(
                         onPressed: () {
@@ -85,6 +85,7 @@ class _WidgetModalAvisosState extends State<WidgetModalAvisos> {
                   context,
                   title: 'Adicionar Arquivo',
                   onPressed: () async {
+                    FocusManager.instance.primaryFocus?.unfocus();
                     final picker = ImagePicker();
                     final pickedFile =
                         await picker.pickImage(source: ImageSource.gallery);
@@ -154,6 +155,7 @@ class _WidgetModalAvisosState extends State<WidgetModalAvisos> {
                       if (!value['erro']) {
                         Navigator.pop(context);
                         Navigator.pop(context);
+                        FocusManager.instance.primaryFocus?.unfocus();
                         ConstsFuture.navigatorPagePush(
                             context, QuadroDeAvisos());
                         buildMinhaSnackBar(context,

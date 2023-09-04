@@ -14,6 +14,7 @@ import '../screens/login/login_screen.dart';
 import '../screens/quadro_avisos/quadro_de_avisos.dart';
 import '../screens/reservas/listar_reservar.dart';
 import '../screens/tarefas/tarefas_screen.dart';
+import '../screens/termodeuso/aceitar_alert.dart';
 import '../widgets/snackbar/snack.dart';
 import 'consts.dart';
 import 'package:http/http.dart' as http;
@@ -104,9 +105,16 @@ class ConstsFuture {
         ResponsalvelInfos.cidade = loginInfos['cidade'];
         ResponsalvelInfos.estado = loginInfos['estado'];
         ResponsalvelInfos.temporespostas = loginInfos['temporespostas'];
-        apiQuadroAvisos().whenComplete(() => apiResevas().whenComplete(() =>
-            apiTarefas().whenComplete(
-                () => navigatorPageReplace(context, HomePage()))));
+        ResponsalvelInfos.aceitou_termos = loginInfos['aceitou_termos'];
+        apiQuadroAvisos().whenComplete(
+            () => apiResevas().whenComplete(() => apiTarefas().whenComplete(() {
+                  if (!ResponsalvelInfos.aceitou_termos) {
+                    return showDialogAceitar(
+                      context,
+                    );
+                  }
+                  navigatorPageReplace(context, HomePage());
+                })));
       } else {
         // navigatorPageReplace(context, LoginScreen()).then((value) {
 

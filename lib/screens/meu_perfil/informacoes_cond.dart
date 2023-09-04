@@ -27,7 +27,7 @@ class _InformacoesCondState extends State<InformacoesCond> {
                 context,
                 child: ConstsWidget.buildTextTitle(
                     context, 'Dados ${ResponsalvelInfos.nome_condominio}',
-                    size: 20),
+                    fontSize: 20),
               ),
               buildMyTextFormObrigatorio(context, 'Logradouro',
                   initialValue: ResponsalvelInfos.endereco,

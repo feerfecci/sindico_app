@@ -18,8 +18,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final _formKeyLogin = GlobalKey<FormState>();
   final TextEditingController userController = TextEditingController();
-  final TextEditingController senhaController =
-      TextEditingController(text: '123456');
+  final TextEditingController senhaController = TextEditingController();
   bool obscure = true;
   bool isChecked = false;
   bool isLoading = false;
@@ -167,7 +166,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             top: size.height * 0.025),
                         child: ConstsWidget.buildTextTitle(
                             context, 'Portaria App | Síndico',
-                            size: 19),
+                            fontSize: 19),
                       ),
                       buildTextFormEmail(),
                       SizedBox(

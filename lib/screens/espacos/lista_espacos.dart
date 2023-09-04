@@ -88,7 +88,7 @@ class _ListaEspacosState extends State<ListaEspacos> {
                                           width: size.width * 0.65,
                                           child: ConstsWidget.buildTextTitle(
                                               context, nome_espaco,
-                                              size: 18),
+                                              fontSize: 18),
                                         ),
                                         ConstsWidget.buildAtivoInativo(
                                             context, ativo),

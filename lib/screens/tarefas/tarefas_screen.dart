@@ -5,6 +5,7 @@ import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:intl/intl.dart';
 import 'package:sindico_app/consts/const_widget.dart';
 import 'package:sindico_app/consts/consts_future.dart';
+import 'package:sindico_app/widgets/alert_dialogs/alertdialog_all.dart';
 import 'package:sindico_app/widgets/my_box_shadow.dart';
 import 'package:sindico_app/widgets/page_vazia.dart';
 import 'package:sindico_app/widgets/scaffold_all.dart';
@@ -129,9 +130,87 @@ class _TarefasScreenState extends State<TarefasScreen> {
                               SizedBox(
                                 height: size.height * 0.01,
                               ),
-                              ConstsWidget.buildTextTitle(context, 'Descrição'),
-                              ConstsWidget.buildTextSubTitle(descricao,
-                                  textAlign: TextAlign.center),
+                              Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  SizedBox(
+                                    width: double.maxFinite,
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () {
+                                            showAllDialog(context,
+                                                title:
+                                                    ConstsWidget.buildTextTitle(
+                                                        context,
+                                                        'Excluir tarefa'),
+                                                children: [
+                                                  ConstsWidget.buildTextTitle(
+                                                      context,
+                                                      'Ao continuar você não recebará mais aviso sobre está terafa',
+                                                      textAlign:
+                                                          TextAlign.center),
+                                                  SizedBox(
+                                                    height: size.height * 0.01,
+                                                  ),
+                                                  ConstsWidget.buildPadding001(
+                                                    context,
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceEvenly,
+                                                      children: [
+                                                        ConstsWidget
+                                                            .buildOutlinedButton(
+                                                          context,
+                                                          title: '  Cancelar  ',
+                                                          onPressed: () {
+                                                            Navigator.pop(
+                                                                context);
+                                                          },
+                                                        ),
+                                                        ConstsWidget
+                                                            .buildCustomButton(
+                                                          context,
+                                                          '  Excluir  ',
+                                                          color:
+                                                              Consts.kColorRed,
+                                                          onPressed: () {
+                                                            ConstsFuture.resquestApi(
+                                                                    '${Consts.sindicoApi}tarefas/?fn=excluirTarefa&idtarefa=$idtarefa&idfuncionario=${ResponsalvelInfos.idfuncionario}')
+                                                                .then((value) {
+                                                              if (!value[
+                                                                  'erro']) {
+                                                                Navigator.pop(
+                                                                    context);
+                                                                setState(() {});
+                                                              }
+                                                            });
+                                                          },
+                                                        )
+                                                      ],
+                                                    ),
+                                                  )
+                                                ]);
+                                          },
+                                          child: Icon(
+                                            Icons.delete_outlined,
+                                            color: Colors.red,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    width: size.width * 0.77,
+                                    child: ConstsWidget.buildTextTitle(
+                                        context, descricao,
+                                        textAlign: TextAlign.center),
+                                  ),
+                                ],
+                              ),
                               SizedBox(
                                 height: size.height * 0.01,
                               ),

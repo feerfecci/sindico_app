@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:sindico_app/repositories/themes_provider.dart';
 import 'package:sindico_app/screens/colaboradores/lista_colaboradores.dart';
+import 'package:sindico_app/screens/home_page.dart/home_page.dart';
 import 'package:sindico_app/screens/quadro_avisos/quadro_de_avisos.dart';
 import 'package:sindico_app/screens/tarefas/tarefas_screen.dart';
 import 'package:sindico_app/screens/unidade/lista_unidade.dart';
@@ -38,6 +39,7 @@ class MyApp extends StatelessWidget {
             '/listaUnidade': (context) => ListaUnidades(),
             '/quadroDeAvisos': (context) => QuadroDeAvisos(),
             '/tarefasScreen': (context) => TarefasScreen(),
+            '/homePage': (context) => HomePage(),
           },
           localizationsDelegates: const [
             GlobalMaterialLocalizations.delegate,
