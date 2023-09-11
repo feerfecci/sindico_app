@@ -79,13 +79,14 @@ class _ListaColaboradoresState extends State<ListaColaboradores> {
       );
     }
 
-    Widget buildTilePermissaoSalvo(String title, {bool isChecked = false}) {
+    Widget buildTilePermissaoSalvo(String title,
+        {bool isChecked = false, double width = 0.43}) {
       return ConstsWidget.buildPadding001(
         context,
         vertical: 0.005,
         child: Container(
           height: size.height * 0.05,
-          width: size.width * 0.43,
+          width: size.width * width,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(13),
             color: isChecked ? Consts.kColorVerde : Colors.grey,
@@ -238,46 +239,48 @@ class _ListaColaboradoresState extends State<ListaColaboradores> {
                                           funcao != 'Administrador')
                                         Column(
                                           children: [
-                                            ConstsWidget.buildPadding001(
-                                              context,
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceEvenly,
-                                                children: [
-                                                  Column(
-                                                    children: [
-                                                      buildTilePermissaoSalvo(
-                                                          'Cartas',
-                                                          isChecked:
-                                                              avisa_corresp),
-                                                      buildTilePermissaoSalvo(
-                                                          'Delivery',
-                                                          isChecked:
-                                                              avisa_delivery),
-                                                    ],
-                                                  ),
-                                                  Column(
-                                                    children: [
-                                                      buildTilePermissaoSalvo(
-                                                          'Visitas',
-                                                          isChecked:
-                                                              avisa_visita),
-                                                      buildTilePermissaoSalvo(
-                                                          'Caixas',
-                                                          isChecked:
-                                                              avisa_encomendas),
-                                                    ],
-                                                  ),
-                                                ],
-                                              ),
+                                            SizedBox(
+                                              height: size.height * 0.01,
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceEvenly,
+                                              children: [
+                                                Column(
+                                                  children: [
+                                                    buildTilePermissaoSalvo(
+                                                        'Cartas',
+                                                        isChecked:
+                                                            avisa_corresp),
+                                                    buildTilePermissaoSalvo(
+                                                        'Delivery',
+                                                        isChecked:
+                                                            avisa_delivery),
+                                                  ],
+                                                ),
+                                                Column(
+                                                  children: [
+                                                    buildTilePermissaoSalvo(
+                                                        'Visitas',
+                                                        isChecked:
+                                                            avisa_visita),
+                                                    buildTilePermissaoSalvo(
+                                                        'Caixas',
+                                                        isChecked:
+                                                            avisa_encomendas),
+                                                  ],
+                                                ),
+                                              ],
                                             ),
                                           ],
                                         ),
-                                      buildTilePermissaoSalvo('Avisos Gerais',
-                                          isChecked: envia_avisos),
                                       SizedBox(
-                                        height: size.height * 0.02,
+                                        height: size.height * 0.01,
+                                      ),
+                                      buildTilePermissaoSalvo('Avisos Gerais',
+                                          width: 0.9, isChecked: envia_avisos),
+                                      SizedBox(
+                                        height: size.height * 0.01,
                                       ),
                                       ConstsWidget.buildOutlinedButton(
                                         context,

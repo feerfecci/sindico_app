@@ -228,6 +228,39 @@ class _TarefasScreenState extends State<TarefasScreen> {
                                 // color: isToday ? Consts.kColorRed : null,
                               ),
                               SizedBox(
+                                height: size.height * 0.02,
+                              ),
+                              if ((aviso_dias == 0 && repetir_dias != 1) ||
+                                  (aviso_dias != 0 && repetir_dias != 1))
+                                Column(
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        ConstsWidget.buildTextSubTitle(
+                                            'Será avisado '),
+                                        ConstsWidget.buildTextTitle(
+                                            context, '$aviso_dias '),
+                                        ConstsWidget.buildTextSubTitle('antes'),
+                                      ],
+                                    ),
+                                    SizedBox(
+                                      height: size.height * 0.01,
+                                    ),
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        ConstsWidget.buildTextSubTitle(
+                                            'Repetir a cada '),
+                                        ConstsWidget.buildTextTitle(
+                                            context, '$repetir_dias '),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              SizedBox(
                                 height: size.height * 0.01,
                               ),
                               ConstsWidget.buildPadding001(context,

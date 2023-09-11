@@ -11,6 +11,7 @@ import 'package:sindico_app/screens/espacos/lista_espacos.dart';
 import 'package:sindico_app/screens/home_page.dart/card_home.dart';
 import 'package:sindico_app/screens/home_page.dart/dropCond.dart';
 import 'package:sindico_app/screens/reservas/listar_reservar.dart';
+import 'package:sindico_app/screens/termodeuso/aceitar_alert.dart';
 import 'package:sindico_app/widgets/custom_drawer/custom_drawer.dart';
 import 'package:sindico_app/widgets/page_vazia.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -141,7 +142,7 @@ class _HomePageState extends State<HomePage> {
 
   Future<dynamic> apiPubli({required int local}) {
     return ConstsFuture.resquestApi(
-        '${Consts.sindicoApi}publicidade/?fn=mostrarPublicidade&idcond=16&local=$local');
+        '${Consts.sindicoApi}publicidade/?fn=mostrarPublicidade&idcond=${ResponsalvelInfos.idcondominio}&local=$local');
   }
 
   static const String oneSignalAppId = "25709281-f6fc-4ac7-a90e-dac40989a182";

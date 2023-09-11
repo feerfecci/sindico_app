@@ -236,8 +236,8 @@ class _CadastroColaboradorState extends State<CadastroColaborador> {
                   children: [
                     SizedBox(
                       width: size.width * 0.4,
-                      child: buildMyTextFormObrigatorio(
-                          context, 'Data de nascimento',
+                      child: buildMyTextFormField(context,
+                          title: 'Data de nascimento',
                           initialValue: widget.nascimento, onSaved: (text) {
                         if (text!.length >= 6) {
                           var ano = text.substring(6);
@@ -287,9 +287,9 @@ class _CadastroColaboradorState extends State<CadastroColaborador> {
                   children: [
                     SizedBox(
                       width: size.width * 0.2,
-                      child: buildMyTextFormObrigatorio(
+                      child: buildMyTextFormField(
                         context,
-                        'DDD',
+                        title: 'DDD',
                         hintText: '11',
                         initialValue: widget.ddd,
                         mask: '##',
@@ -300,7 +300,8 @@ class _CadastroColaboradorState extends State<CadastroColaborador> {
                     Spacer(),
                     SizedBox(
                       width: size.width * 0.4,
-                      child: buildMyTextFormObrigatorio(context, 'Telefone',
+                      child: buildMyTextFormField(context,
+                          title: 'Telefone',
                           onSaved: (text) => formInfosFunc =
                               formInfosFunc.copyWith(telefone: text),
                           initialValue: widget.telefone,
@@ -547,19 +548,19 @@ class _CadastroColaboradorState extends State<CadastroColaborador> {
       buildMinhaSnackBar(context,
           title: 'Dados alterados', subTitle: 'Alteramos o login');
     }
-    if (formInfosFunc.nascimento.length >= 6) {
-      List nomeEmLista = formInfosFunc.nome_funcionario.split(' ');
-      List listaNome = nomeEmLista;
+    List<String> nomeEmLista = formInfosFunc.nome_funcionario.split(' ');
+    List<String> listaNome = [];
+    nomeEmLista.map((e) {
+      if (e != '') {
+        listaNome.add(e);
+      }
+    }).toSet();
 
-      setState(() {
-        loginGerado =
-            '${listaNome.first.toString().toLowerCase()}${listaNome.last.toString().toLowerCase()}${formInfosFunc.documento!.substring(0, 4)}';
-        formInfosFunc = formInfosFunc.copyWith(login: loginGerado);
-      });
-    } else {
-      buildMinhaSnackBar(context,
-          title: 'Cuidado', subTitle: 'Complete a data');
-    }
+    setState(() {
+      loginGerado =
+          '${listaNome.first.toLowerCase()}${listaNome.last.toLowerCase()}${formInfosFunc.documento!.substring(0, 4)}';
+      formInfosFunc = formInfosFunc.copyWith(login: loginGerado);
+    });
   }
 
   Widget buildDropAtivo(

@@ -24,7 +24,7 @@ class CadastroMorador extends StatefulWidget {
   bool? ativo;
   String? nome_morador;
   String? login;
-  String nascimento;
+  String? nascimento;
   String? telefone;
   String? ddd;
   String? documento;
@@ -58,6 +58,8 @@ class CadastroMorador extends StatefulWidget {
 }
 
 class _CadastroMoradorState extends State<CadastroMorador> {
+  final _formKeyMorador = GlobalKey<FormState>();
+  // final formkeySenha = GlobalKey<FormState>();
   bool isGerarSenha = false;
   Object? dropdownValueAtivo;
   List listAtivo = [1, 0];
@@ -65,7 +67,6 @@ class _CadastroMoradorState extends State<CadastroMorador> {
   String loginGerado = '';
   bool nomeDocAlterado = false;
   bool isLoading = false;
-  var formkeySenha = GlobalKey<FormState>();
   // TextEditingController atualSenhaCtrl = TextEditingController();
   // TextEditingController novaSenhaCtrl = TextEditingController();
   // TextEditingController confirmSenhaCtrl = TextEditingController();
@@ -79,10 +80,9 @@ class _CadastroMoradorState extends State<CadastroMorador> {
         _formInfosMorador.copyWith(ativo: widget.ativo == true ? 1 : 0);
     _formInfosMorador = _formInfosMorador.copyWith(acesso: widget.acesso);
     _formInfosMorador =
-        _formInfosMorador.copyWith(resposavel: widget.responsavel);
+        _formInfosMorador.copyWith(responsavel: widget.responsavel);
   }
 
-  final _formKeyMorador = GlobalKey<FormState>();
   FormInfosMorador _formInfosMorador = FormInfosMorador();
 
   @override
@@ -140,21 +140,21 @@ class _CadastroMoradorState extends State<CadastroMorador> {
                 children: [
                   SizedBox(
                     width: size.width * 0.37,
-                    child: buildMyTextFormObrigatorio(
-                        context,
+                    child: buildMyTextFormField(context,
                         initialValue: dataParsed,
-                        'Data de Nascimento',
+                        title: 'Data de Nascimento',
                         keyboardType: TextInputType.number,
                         mask: '##/##/####',
                         hintText: '##/##/####', onSaved: (text) {
                       // var replace = text!.replaceAll('/', '-');
+                      if (text != '') {
+                        var ano = text!.substring(6);
+                        var mes = text.substring(3, 5);
+                        var dia = text.substring(0, 2);
 
-                      var ano = text!.substring(6);
-                      var mes = text.substring(3, 5);
-                      var dia = text.substring(0, 2);
-
-                      _formInfosMorador = _formInfosMorador.copyWith(
-                          nascimento: '$ano-$mes-$dia');
+                        _formInfosMorador = _formInfosMorador.copyWith(
+                            nascimento: '$ano-$mes-$dia');
+                      }
                     }),
                   ),
                   SizedBox(
@@ -163,7 +163,6 @@ class _CadastroMoradorState extends State<CadastroMorador> {
                       context,
                       'Documento',
                       initialValue: widget.documento,
-                      keyboardType: TextInputType.number,
                       hintText: 'RG, CPF',
                       onSaved: (text) {
                         if (_formInfosMorador.nome_morador != text) {
@@ -182,12 +181,11 @@ class _CadastroMoradorState extends State<CadastroMorador> {
                 children: [
                   SizedBox(
                     width: size.width * 0.18,
-                    child: buildMyTextFormObrigatorio(
-                        context,
+                    child: buildMyTextFormField(context,
                         initialValue: widget.ddd,
                         onSaved: (text) => _formInfosMorador =
                             _formInfosMorador.copyWith(ddd: text),
-                        'DDD',
+                        title: 'DDD',
                         keyboardType: TextInputType.number,
                         mask: '##',
                         hintText: '11'),
@@ -197,9 +195,9 @@ class _CadastroMoradorState extends State<CadastroMorador> {
                   ),
                   SizedBox(
                     width: size.width * 0.5,
-                    child: buildMyTextFormObrigatorio(
+                    child: buildMyTextFormField(
                       context,
-                      'Telefone',
+                      title: 'Telefone',
                       initialValue: widget.telefone,
                       keyboardType: TextInputType.number,
                       mask: '# ########',
@@ -210,11 +208,12 @@ class _CadastroMoradorState extends State<CadastroMorador> {
                   ),
                 ],
               ),
-              buildMyTextFormObrigatorio(
+              buildMyTextFormField(
                 context,
-                'Email',
+                title: 'Email',
                 initialValue: widget.email,
                 hintText: 'exemplo@exe.com',
+                keyboardType: TextInputType.emailAddress,
                 validator: Validatorless.multiple([
                   Validatorless.email('Preencha com um email válido'),
                   Validatorless.required('Preencha')
@@ -222,38 +221,36 @@ class _CadastroMoradorState extends State<CadastroMorador> {
                 onSaved: (text) =>
                     _formInfosMorador = _formInfosMorador.copyWith(email: text),
               ),
-              ConstsWidget.buildCustomButton(
-                context,
-                'Gerar Login',
-                onPressed: () {
-                  FocusManager.instance.primaryFocus?.unfocus();
-                  var formValid =
-                      _formKeyMorador.currentState?.validate() ?? false;
+              ConstsWidget.buildCustomButton(context, 'Gerar Login',
+                  onPressed: () {
+                FocusManager.instance.primaryFocus?.unfocus();
+                var formValid =
+                    _formKeyMorador.currentState?.validate() ?? false;
+
+                if (formValid) {
+                  _formKeyMorador.currentState?.save();
+                  List<String> nomeEmLista =
+                      _formInfosMorador.nome_morador!.split(' ');
+                  List<String> listaNome = [];
+
                   if (nomeDocAlterado) {
                     buildMinhaSnackBar(context,
                         title: 'Dados alterados',
                         subTitle: 'Alteramos o login');
                   }
-                  if (formValid) {
-                    _formKeyMorador.currentState?.save();
-                    if (_formInfosMorador.nascimento!.length >= 6) {
-                      List nomeEmLista =
-                          _formInfosMorador.nome_morador!.split(' ');
-                      List listaNome = nomeEmLista;
-
-                      setState(() {
-                        loginGerado =
-                            '${listaNome.first.toString().toLowerCase()}${listaNome.last.toString().toLowerCase()}${_formInfosMorador.documento!.substring(0, 4)}';
-                        _formInfosMorador =
-                            _formInfosMorador.copyWith(login: loginGerado);
-                      });
-                    } else {
-                      buildMinhaSnackBar(context,
-                          title: 'Cuidado', subTitle: 'Complete a data');
+                  for (var i = 0; i <= nomeEmLista.length - 1; i++) {
+                    if (nomeEmLista[i] != '') {
+                      listaNome.add(nomeEmLista[i]);
                     }
                   }
-                },
-              ),
+                  setState(() {
+                    loginGerado =
+                        '${listaNome.first.toString().toLowerCase()}${listaNome.last.toString().toLowerCase()}${_formInfosMorador.documento!.substring(0, 4)}';
+                    _formInfosMorador =
+                        _formInfosMorador.copyWith(login: loginGerado);
+                  });
+                }
+              }),
               if (loginGerado != '')
                 Column(
                   children: [
@@ -321,7 +318,7 @@ class _CadastroMoradorState extends State<CadastroMorador> {
                         setState(() {
                           boolResponsavel = !boolResponsavel;
                           _formInfosMorador = _formInfosMorador.copyWith(
-                              resposavel: boolResponsavel ? 1 : 0);
+                              responsavel: boolResponsavel ? 1 : 0);
                         });
                       }, title: 'Responsável');
                     }),
@@ -351,11 +348,7 @@ class _CadastroMoradorState extends State<CadastroMorador> {
                       isLoading: isLoading,
                       color: Consts.kColorRed,
                       onPressed: () {
-                        var formValid =
-                            _formKeyMorador.currentState?.validate() ?? false;
-                        if (formValid && !widget.isDrawer) {
-                          salvarMorador();
-                        }
+                        salvarMorador();
                       },
                     )
                   ],
@@ -386,48 +379,60 @@ class _CadastroMoradorState extends State<CadastroMorador> {
   }
 
   salvarMorador() async {
-    setState(() {
-      isLoading = true;
-    });
-    _formKeyMorador.currentState?.save();
-    String restoApi = '';
-    widget.idmorador == null
-        ? restoApi =
-            'incluirMorador' /*'&senha=${_formInfosMorador.senhaLogin}&senha_retirada=${_formInfosMorador.senhaRetirada}'*/
-        : restoApi =
-            'editarMorador&id=${widget.idmorador}&gerarsenha=${isGerarSenha ? 1 : 0}';
-    return ConstsFuture.resquestApi(
-            '${Consts.sindicoApi}moradores/?fn=$restoApi&idunidade=${widget.idunidade}&idcond=${ResponsalvelInfos.idcondominio}&idfuncionario=${ResponsalvelInfos.idfuncionario}&iddivisao=${widget.iddivisao}&ativo=${_formInfosMorador.ativo}&nomeMorador=${_formInfosMorador.nome_morador}&login=$loginGerado&datanasc=${_formInfosMorador.nascimento}&documento=${_formInfosMorador.documento}&dddtelefone=${_formInfosMorador.ddd}&telefone=${_formInfosMorador.telefone}&email=${_formInfosMorador.email}&acessa_sistema=${_formInfosMorador.acesso}&responsavel=${_formInfosMorador.resposavel}')
-        .then((value) {
+    if (_formKeyMorador.currentState!.validate() && !widget.isDrawer) {
       setState(() {
-        isLoading == false;
+        isLoading = true;
       });
-      if (!value['erro']) {
-        Navigator.pop(context);
-        Navigator.pop(context);
+      _formKeyMorador.currentState?.save();
+      String restoApi = '';
+      widget.idmorador == null
+          ? restoApi =
+              'incluirMorador' /*'&senha=${_formInfosMorador.senhaLogin}&senha_retirada=${_formInfosMorador.senhaRetirada}'*/
+          : restoApi =
+              'editarMorador&id=${widget.idmorador}&gerarsenha=${isGerarSenha ? 1 : 0}';
 
-        ConstsFuture.navigatorPagePush(
-          context,
-          ListaMorador(
-            idunidade: widget.idunidade,
-            idvisisao: widget.iddivisao,
-            localizado: widget.localizado,
-          ),
-        );
-        buildMinhaSnackBar(context,
-            title: 'Tudo Certo!', subTitle: value['mensagem']);
-        // buildMinhaSnackBar(context,
-        //     title: 'Tudo Certo!', subTitle: value['Mensagem']);
-      } else {
-        return buildMinhaSnackBar(context, subTitle: value['Mensagem']);
-      }
-    });
+      String datanasc = _formInfosMorador.nascimento != ''
+          ? '&datanasc=${_formInfosMorador.nascimento}'
+          : '';
+      String dddtelefone = _formInfosMorador.ddd != ''
+          ? '&dddtelefone=${_formInfosMorador.ddd}'
+          : '';
+      String telefone = _formInfosMorador.telefone != ''
+          ? '&telefone=${_formInfosMorador.telefone}'
+          : '';
+      ConstsFuture.resquestApi(
+              '${Consts.sindicoApi}moradores/?fn=$restoApi&idunidade=${widget.idunidade}&idcond=${ResponsalvelInfos.idcondominio}&idfuncionario=${ResponsalvelInfos.idfuncionario}&iddivisao=${widget.iddivisao}&ativo=${_formInfosMorador.ativo}&nomeMorador=${_formInfosMorador.nome_morador}&login=$loginGerado$datanasc&documento=${_formInfosMorador.documento}$dddtelefone$telefone&email=${_formInfosMorador.email}&acessa_sistema=${_formInfosMorador.acesso}&responsavel=${_formInfosMorador.responsavel}')
+          .then((value) {
+        setState(() {
+          isLoading == false;
+        });
+        if (!value['erro']) {
+          Navigator.pop(context);
+          Navigator.pop(context);
 
-    // ConstsFuture.navigatorPageReplace(
-    //     context,
-    //     ListaMorador(
-    //       idunidade: widget.idunidade,
-    //     ));
+          ConstsFuture.navigatorPagePush(
+            context,
+            ListaMorador(
+              idunidade: widget.idunidade,
+              idvisisao: widget.iddivisao,
+              localizado: widget.localizado,
+            ),
+          );
+          buildMinhaSnackBar(context,
+              title: 'Tudo Certo!', subTitle: value['mensagem']);
+          // buildMinhaSnackBar(context,
+          //     title: 'Tudo Certo!', subTitle: value['Mensagem']);
+        } else {
+          return buildMinhaSnackBar(context, subTitle: value['Mensagem']);
+        }
+      });
+
+      // ConstsFuture.navigatorPageReplace(
+      //     context,
+      //     ListaMorador(
+      //       idunidade: widget.idunidade,
+      //     ));
+    }
   }
 
   Widget buildAtivoInativo2(
