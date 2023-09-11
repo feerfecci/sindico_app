@@ -1,5 +1,6 @@
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
+import 'package:sindico_app/screens/home_page.dart/home_page.dart';
 import '../../screens/splash_screen/splash_screen.dart';
 import '../widgets/shimmer_widget.dart';
 import 'consts.dart';
@@ -290,7 +291,7 @@ class ConstsWidget {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return ShimmerWidget(
                     height: SplashScreen.isSmall
-                        ? size.height * 0.08
+                        ? size.height * 0.055
                         : size.height * 0.068,
                     width: SplashScreen.isSmall
                         ? size.width * 0.14
@@ -322,7 +323,7 @@ class ConstsWidget {
       {required Widget child}) {
     var size = MediaQuery.of(context).size;
     return Container(
-      height: size.height * 0.0725,
+      height: SplashScreen.isSmall ? size.height * 0.055 : size.height * 0.0725,
       width: double.infinity,
       alignment: Alignment.center,
       decoration: BoxDecoration(

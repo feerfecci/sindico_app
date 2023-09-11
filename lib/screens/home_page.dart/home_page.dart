@@ -85,7 +85,7 @@ class _HomePageState extends State<HomePage> {
     Models(
       indexOrder: 7,
       title: 'Ligar Portaria',
-      isWhats: true,
+      //isWhats: true,
       numberCall: ResponsalvelInfos.telefone_portaria,
       iconApi: '${Consts.iconApiPort}ligar.png',
     ),
@@ -153,9 +153,9 @@ class _HomePageState extends State<HomePage> {
           .setExternalUserId(ResponsalvelInfos.idfuncionario.toString());
       // OneSignal.shared.setEmail(email: "${User.emailUser}");
       OneSignal.shared.sendTags({
-        'idfuncionario': ResponsalvelInfos.idfuncionario.toString(),
+        'idfuncionario': '${ResponsalvelInfos.idfuncionario}',
         'idfuncao': '2',
-        'idcond': ResponsalvelInfos.idcondominio.toString(),
+        'idcond': '${ResponsalvelInfos.idcondominio}',
       });
       // OneSignal.shared
       //     .sendTags({'isAndroid': 1, 'idweb': logado.idCliente.toString()});
@@ -173,187 +173,185 @@ class _HomePageState extends State<HomePage> {
     var size = MediaQuery.of(context).size;
 
     Widget buildBanerPubli({required int local, required List usarList}) {
-      return ConstsWidget.buildPadding001(context,
-          child: FutureBuilder(
-            future: apiPubli(local: local),
-            builder: (context, snapshot) {
-              usarList.clear();
-              if (snapshot.hasData) {
-                // if (!snapshot.data!["erro"]) {
-                var apiPublicidade = snapshot.data['publicidade'][0];
-                var idpublidade = apiPublicidade['idpublidade'];
-                var idcondominio = apiPublicidade['idcondominio'];
-                var arquivo = apiPublicidade['arquivo'];
-                var email = apiPublicidade['email'];
-                var site = apiPublicidade['site'];
-                var whatsapp = apiPublicidade['whatsapp'];
-                var telefone = apiPublicidade['telefone'];
-                var telefone2 = apiPublicidade['telefone2'];
-                var impressoes = apiPublicidade['impressoes'];
-                var datahora = apiPublicidade['datahora'];
-                var ultima_atualizacao = apiPublicidade['ultima_atualizacao'];
+      return FutureBuilder(
+        future: apiPubli(local: local),
+        builder: (context, snapshot) {
+          usarList.clear();
+          if (snapshot.hasData) {
+            // if (!snapshot.data!["erro"]) {
+            var apiPublicidade = snapshot.data['publicidade'][0];
+            var idpublidade = apiPublicidade['idpublidade'];
+            var idcondominio = apiPublicidade['idcondominio'];
+            var arquivo = apiPublicidade['arquivo'];
+            var email = apiPublicidade['email'];
+            var site = apiPublicidade['site'];
+            var whatsapp = apiPublicidade['whatsapp'];
+            var telefone = apiPublicidade['telefone'];
+            var telefone2 = apiPublicidade['telefone2'];
+            var impressoes = apiPublicidade['impressoes'];
+            var datahora = apiPublicidade['datahora'];
+            var ultima_atualizacao = apiPublicidade['ultima_atualizacao'];
 
-                bool hasWhats = false;
+            bool hasWhats = false;
 
-                if (whatsapp != '') {
-                  usarList.add(whatsapp);
-                  hasWhats = true;
-                  print('whatsapp $usarList');
-                }
-                if (telefone != '') {
-                  if (telefone != whatsapp) {
-                    usarList.add(telefone);
-                    print('telefone $usarList');
-                  } else {
-                    hasWhats = true;
-                  }
-                }
-                if (telefone2 != '') {
-                  if (telefone2 != whatsapp && telefone2 != telefone) {
-                    usarList.add(telefone2);
-                  } else {
-                    hasWhats = true;
-                  }
-                }
-
-                return GestureDetector(
-                  onTap: () {
-                    cliquePubli(
-                        'https://a.portariaapp.com/unidade/api/publicidade/?fn=cliquePublicidade&idpublicidade=$idpublidade');
-                    if (usarList.length == 1 && email == '' && site == '') {
-                      if (hasWhats) {
-                        launchUrl(Uri.parse('https://wa.me/+55$whatsapp'),
-                            mode: LaunchMode.externalApplication);
-                      } else if (telefone != '') {
-                        launchUrl(Uri.parse('tel:$telefone'),
-                            mode: LaunchMode.externalApplication);
-                      } else {
-                        launchUrl(Uri.parse('tel:$telefone2'),
-                            mode: LaunchMode.externalApplication);
-                      }
-                    } else if (usarList.isEmpty && email == '' && site != '') {
-                      launchUrl(Uri.parse(site),
-                          mode: LaunchMode.externalApplication);
-                      print('Abrir link no google');
-                    } else if (usarList.isEmpty && site == '' && email != '') {
-                      lauchEmail(email);
-                    } else {
-                      showAllDialog(context,
-                          title: ConstsWidget.buildTextTitle(
-                              context, 'Entrar em contato'),
-                          barrierDismissible: true,
-                          children: [
-                            Column(
-                              children: usarList.map((e) {
-                                return GestureDetector(
-                                  onTap: hasWhats && e == whatsapp
-                                      ? () {
-                                          launchUrl(
-                                              Uri.parse(
-                                                  'https://wa.me/+55$whatsapp'),
-                                              mode: LaunchMode
-                                                  .externalApplication);
-                                        }
-                                      : whatsapp != null
-                                          ? () {
-                                              launchUrl(Uri.parse('tel:$e'));
-                                            }
-                                          : () {},
-                                  child: MyBoxShadow(
-                                    child: Row(
-                                      children: [
-                                        SizedBox(
-                                          width: size.width * 0.01,
-                                        ),
-                                        ConstsWidget.buildTextTitle(context, e),
-                                        Spacer(),
-                                        if (hasWhats && e == whatsapp)
-                                          IconButton(
-                                              onPressed: () {
-                                                launchUrl(
-                                                    Uri.parse(
-                                                        'https://wa.me/+55$whatsapp'),
-                                                    mode: LaunchMode
-                                                        .externalApplication);
-                                              },
-                                              icon: Icon(Icons.wechat_rounded)),
-                                        if (whatsapp != null)
-                                          IconButton(
-                                              onPressed: () {
-                                                launchUrl(Uri.parse('tel:$e'));
-                                              },
-                                              icon: Icon(Icons.call)),
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              }).toList(),
-                            ),
-                            if (site != '')
-                              GestureDetector(
-                                onTap: () {
-                                  launchUrl(Uri.parse(site),
-                                      mode: LaunchMode.inAppWebView);
-                                },
-                                child: MyBoxShadow(
-                                    child: Row(
-                                  children: [
-                                    SizedBox(
-                                      width: size.width * 0.01,
-                                    ),
-                                    ConstsWidget.buildTextTitle(
-                                        context, 'Acesse o site'),
-                                    Spacer(),
-                                    ConstsWidget.buildPadding001(
-                                      context,
-                                      vertical: 0.015,
-                                      horizontal: 0.025,
-                                      child: Icon(Icons.wordpress_rounded),
-                                    ),
-                                  ],
-                                )),
-                              ),
-                            if (email != '')
-                              GestureDetector(
-                                onTap: () {
-                                  lauchEmail(email);
-                                },
-                                child: MyBoxShadow(
-                                    child: Row(
-                                  children: [
-                                    SizedBox(
-                                      width: size.width * 0.01,
-                                    ),
-                                    ConstsWidget.buildTextTitle(
-                                        context, 'Envie um email'),
-                                    Spacer(),
-                                    ConstsWidget.buildPadding001(
-                                      context,
-                                      vertical: 0.015,
-                                      horizontal: 0.025,
-                                      child: Icon(Icons.email),
-                                    ),
-                                  ],
-                                )),
-                              )
-                          ]);
-                    }
-                  },
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.all(Radius.circular(15)),
-                    child: ConstsWidget.buildFutureImage(context,
-                        /* title: 'Ver mais $idpublidade',*/ iconApi: arquivo),
-                  ),
-                );
-                // } else {
-                //   return PageVazia(
-                //       title: snapshot.data['mensagem']);
-                // }
+            if (whatsapp != '') {
+              usarList.add(whatsapp);
+              hasWhats = true;
+              print('whatsapp $usarList');
+            }
+            if (telefone != '') {
+              if (telefone != whatsapp) {
+                usarList.add(telefone);
+                print('telefone $usarList');
               } else {
-                return PageErro();
+                hasWhats = true;
               }
-            },
-          ));
+            }
+            if (telefone2 != '') {
+              if (telefone2 != whatsapp && telefone2 != telefone) {
+                usarList.add(telefone2);
+              } else {
+                hasWhats = true;
+              }
+            }
+
+            return GestureDetector(
+              onTap: () {
+                cliquePubli(
+                    'https://a.portariaapp.com/unidade/api/publicidade/?fn=cliquePublicidade&idpublicidade=$idpublidade');
+                if (usarList.length == 1 && email == '' && site == '') {
+                  if (hasWhats) {
+                    launchUrl(Uri.parse('https://wa.me/+55$whatsapp'),
+                        mode: LaunchMode.externalApplication);
+                  } else if (telefone != '') {
+                    launchUrl(Uri.parse('tel:$telefone'),
+                        mode: LaunchMode.externalApplication);
+                  } else {
+                    launchUrl(Uri.parse('tel:$telefone2'),
+                        mode: LaunchMode.externalApplication);
+                  }
+                } else if (usarList.isEmpty && email == '' && site != '') {
+                  launchUrl(Uri.parse(site),
+                      mode: LaunchMode.externalApplication);
+                  print('Abrir link no google');
+                } else if (usarList.isEmpty && site == '' && email != '') {
+                  lauchEmail(email);
+                } else {
+                  showAllDialog(context,
+                      title: ConstsWidget.buildTextTitle(
+                          context, 'Entrar em contato'),
+                      barrierDismissible: true,
+                      children: [
+                        Column(
+                          children: usarList.map((e) {
+                            return GestureDetector(
+                              onTap: hasWhats && e == whatsapp
+                                  ? () {
+                                      launchUrl(
+                                          Uri.parse(
+                                              'https://wa.me/+55$whatsapp'),
+                                          mode: LaunchMode.externalApplication);
+                                    }
+                                  : whatsapp != null
+                                      ? () {
+                                          launchUrl(Uri.parse('tel:$e'));
+                                        }
+                                      : () {},
+                              child: MyBoxShadow(
+                                child: Row(
+                                  children: [
+                                    SizedBox(
+                                      width: size.width * 0.01,
+                                    ),
+                                    ConstsWidget.buildTextTitle(context, e),
+                                    Spacer(),
+                                    if (hasWhats && e == whatsapp)
+                                      IconButton(
+                                          onPressed: () {
+                                            launchUrl(
+                                                Uri.parse(
+                                                    'https://wa.me/+55$whatsapp'),
+                                                mode: LaunchMode
+                                                    .externalApplication);
+                                          },
+                                          icon: Icon(Icons.wechat_rounded)),
+                                    if (whatsapp != null)
+                                      IconButton(
+                                          onPressed: () {
+                                            launchUrl(Uri.parse('tel:$e'));
+                                          },
+                                          icon: Icon(Icons.call)),
+                                  ],
+                                ),
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                        if (site != '')
+                          GestureDetector(
+                            onTap: () {
+                              launchUrl(Uri.parse(site),
+                                  mode: LaunchMode.inAppWebView);
+                            },
+                            child: MyBoxShadow(
+                                child: Row(
+                              children: [
+                                SizedBox(
+                                  width: size.width * 0.01,
+                                ),
+                                ConstsWidget.buildTextTitle(
+                                    context, 'Acesse o site'),
+                                Spacer(),
+                                ConstsWidget.buildPadding001(
+                                  context,
+                                  vertical: 0.015,
+                                  horizontal: 0.025,
+                                  child: Icon(Icons.wordpress_rounded),
+                                ),
+                              ],
+                            )),
+                          ),
+                        if (email != '')
+                          GestureDetector(
+                            onTap: () {
+                              lauchEmail(email);
+                            },
+                            child: MyBoxShadow(
+                                child: Row(
+                              children: [
+                                SizedBox(
+                                  width: size.width * 0.01,
+                                ),
+                                ConstsWidget.buildTextTitle(
+                                    context, 'Envie um email'),
+                                Spacer(),
+                                ConstsWidget.buildPadding001(
+                                  context,
+                                  vertical: 0.015,
+                                  horizontal: 0.025,
+                                  child: Icon(Icons.email),
+                                ),
+                              ],
+                            )),
+                          )
+                      ]);
+                }
+              },
+              child: ClipRRect(
+                borderRadius: BorderRadius.all(Radius.circular(15)),
+                child: ConstsWidget.buildFutureImage(context,
+                    /* title: 'Ver mais $idpublidade',*/ iconApi: arquivo),
+              ),
+            );
+            // } else {
+            //   return PageVazia(
+            //       title: snapshot.data['mensagem']);
+            // }
+          } else {
+            return PageErro();
+          }
+        },
+      );
     }
 
     return WillPopScope(
@@ -439,7 +437,7 @@ class _HomePageState extends State<HomePage> {
                     mainAxisSpacing: 0.5,
                     crossAxisCount: 2,
                     shrinkWrap: true,
-                    childAspectRatio: SplashScreen.isSmall ? 1.7 : 1.4,
+                    childAspectRatio: SplashScreen.isSmall ? 1.5 : 1.4,
                     physics: ClampingScrollPhysics(),
                     onReorder: (oldIndex, newIndex) {
                       var card = models.removeAt(oldIndex);

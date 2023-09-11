@@ -38,7 +38,7 @@ class AceitarTermosScreen extends StatefulWidget {
 
 politicaApi() async {
   final url = Uri.parse(
-      '${Consts.sindicoApi}politica_privacidade/?fn=mostrarTermo&idcond=${ResponsalvelInfos.idcondominio}');
+      '${Consts.sindicoApi}termo_uso/?fn=mostrarTermo&idcond=${ResponsalvelInfos.idcondominio}');
   var resposta = await http.get(url);
 
   if (resposta.statusCode == 200) {
@@ -68,7 +68,7 @@ class _AceitarTermosScreenState extends State<AceitarTermosScreen> {
                 );
               } else if (snapshot.hasData) {
                 if (!snapshot.data['erro']) {
-                  var texto = snapshot.data['politica_privacidade'][0]['texto'];
+                  var texto = snapshot.data['termo_uso'][0]['texto'];
                   return SafeArea(
                     child: SingleChildScrollView(
                       child: StatefulBuilder(builder: (context, setState) {
