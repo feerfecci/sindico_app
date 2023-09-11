@@ -82,8 +82,11 @@ class _ListaMoradorState extends State<ListaMorador> {
                         var nome_morador = apiMorador['nome_morador'];
                         var login = apiMorador['login'];
                         var documento = apiMorador['documento'];
-                        var data_nascimento = DateFormat('dd/MM/yyy').format(
-                            DateTime.parse(apiMorador['data_nascimento']));
+                        var data_nascimento = apiMorador['data_nascimento'] !=
+                                '0000-00-00'
+                            ? DateFormat('dd/MM/yyy').format(
+                                DateTime.parse(apiMorador['data_nascimento']))
+                            : null;
                         var ddd = apiMorador['ddd'];
                         var telefone = apiMorador['telefone'];
                         var email = apiMorador['email'];
@@ -136,16 +139,17 @@ class _ListaMoradorState extends State<ListaMorador> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      ConstsWidget.buildTextSubTitle(
-                                          'Data Nascimento'),
-                                      ConstsWidget.buildTextTitle(
-                                          context, data_nascimento),
-                                    ],
-                                  ),
+                                  if (data_nascimento != null)
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        ConstsWidget.buildTextSubTitle(
+                                            'Data Nascimento'),
+                                        ConstsWidget.buildTextTitle(
+                                            context, data_nascimento),
+                                      ],
+                                    ),
                                   SizedBox(
                                     width: size.width * 0.1,
                                   ),
@@ -162,32 +166,38 @@ class _ListaMoradorState extends State<ListaMorador> {
                                 ],
                               ),
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    ConstsWidget.buildTextSubTitle('Telefone'),
-                                    Row(
-                                      children: [
-                                        ConstsWidget.buildTextTitle(
-                                            context, '($ddd) '),
-                                        ConstsWidget.buildTextTitle(
-                                            context, telefone),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    ConstsWidget.buildTextSubTitle('Login'),
-                                    ConstsWidget.buildTextTitle(context, login),
-                                  ],
-                                ),
-                              ],
-                            ),
+                            if (telefone != '' && ddd != '')
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      ConstsWidget.buildTextSubTitle(
+                                          'Telefone'),
+                                      Row(
+                                        children: [
+                                          ConstsWidget.buildTextTitle(
+                                              context, '($ddd) '),
+                                          ConstsWidget.buildTextTitle(
+                                              context, telefone),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      ConstsWidget.buildTextSubTitle('Login'),
+                                      ConstsWidget.buildTextTitle(
+                                          context, login),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ConstsWidget.buildPadding001(context,
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,

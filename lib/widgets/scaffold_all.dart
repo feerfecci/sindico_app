@@ -12,7 +12,7 @@ Widget buildScaffoldAll(BuildContext context,
     appBar: AppBar(
       centerTitle: true,
       title: ConstsWidget.buildTextTitle(context, title,
-          fontSize: SplashScreen.isSmall ? 20 : 24),
+          fontSize: SplashScreen.isSmall ? 18 : 22),
       iconTheme: IconThemeData(color: Theme.of(context).colorScheme.primary),
       elevation: 0,
       backgroundColor: Colors.transparent,

@@ -35,8 +35,8 @@ class AdicionarTarefa extends StatefulWidget {
   State<AdicionarTarefa> createState() => _AdicionarTarefaState();
 }
 
-Object? dropdownValueLembrar;
-Object? dropdownValueRepetir;
+Object? dropdownAvisoDias;
+Object? dropdownRepetirDias;
 bool isLoading = false;
 bool? isRepet;
 bool? isDayle;
@@ -104,15 +104,18 @@ class _AdicionarTarefaState extends State<AdicionarTarefa> {
   }
 
   initDatas() {
-    if (widget.aviso_dias == 0 && widget.repetir_dias == 0 ||
+    if (widget.aviso_dias == 0 && widget.repetir_dias == 1 ||
         widget.aviso_dias == null) {
-      isDayle = false;
-      isRepet = false;
-    } else {
       isDayle = true;
       isRepet = true;
-      dropdownValueLembrar = widget.aviso_dias;
-      dropdownValueRepetir = widget.repetir_dias;
+      dropdownAvisoDias = null;
+      dropdownRepetirDias = null;
+    } else if (widget.aviso_dias == 0 && widget.repetir_dias != 0 ||
+        widget.aviso_dias != 0 && widget.repetir_dias != 0) {
+      isDayle = false;
+      isRepet = true;
+      dropdownAvisoDias = widget.aviso_dias;
+      dropdownRepetirDias = widget.repetir_dias;
     }
   }
 
@@ -134,19 +137,17 @@ class _AdicionarTarefaState extends State<AdicionarTarefa> {
       String incluirEditar = widget.idtarefa == null
           ? 'incluirTarefa'
           : 'editarTarefa&idtarefa=${widget.idtarefa}';
-      // print(
-      //     'aviso_dias=$dropdownValueLembrar&repetirdias=$dropdownValueRepetir');
       ConstsFuture.resquestApi(
-              '${Consts.sindicoApi}tarefas/?fn=$incluirEditar&idcond=${ResponsalvelInfos.idcondominio}&idfuncionario=${ResponsalvelInfos.idfuncionario}&descricao=$nomeTarefaCtrl&data_vencimento=${MyDatePicker.dataSelected}&aviso_dias=${isRepet! && isDayle! ? 0 : dropdownValueLembrar}&repetir_dias=${!isDayle! ? 0 : isDayle! ? 1 : dropdownValueRepetir}')
+              '${Consts.sindicoApi}tarefas/?fn=$incluirEditar&idcond=${ResponsalvelInfos.idcondominio}&idfuncionario=${ResponsalvelInfos.idfuncionario}&descricao=$nomeTarefaCtrl&data_vencimento=${MyDatePicker.dataSelected}&aviso_dias=${isRepet! && isDayle! ? '0' : dropdownAvisoDias.toString()}&repetir_dias=${isDayle! ? 1 : dropdownRepetirDias.toString()}')
           .then((value) {
         setState(() {
           isLoading = false;
         });
         if (!value['erro']) {
-          setState(() {
-            dropdownValueRepetir == null;
-            dropdownValueLembrar == null;
-          });
+          // setState(() {
+          //   dropdownRepetirDias == null;
+          //   dropdownAvisoDias == null;
+          // });
           ConstsFuture.navigatorPopPush(context, '/tarefasScreen');
 
           buildMinhaSnackBar(context,
@@ -163,8 +164,7 @@ class _AdicionarTarefaState extends State<AdicionarTarefa> {
       if (validForm && MyDatePicker.dataSelected != '') {
         if (isDayle!) {
           startSaveTarefa();
-        } else if (dropdownValueRepetir != null &&
-            dropdownValueLembrar != null) {
+        } else if (dropdownRepetirDias != null && dropdownAvisoDias != null) {
           startSaveTarefa();
         } else {
           buildMinhaSnackBar(context,
@@ -212,6 +212,7 @@ class _AdicionarTarefaState extends State<AdicionarTarefa> {
                 ConstsWidget.buildPadding001(
                   context,
                   child: MyDatePicker(
+                    type: DateTimePickerType.dateTime,
                     dataSelected: dataSelected,
                     initialDate: initialDate != null
                         ? DateTime.parse(widget.initialDate!)
@@ -236,19 +237,21 @@ class _AdicionarTarefaState extends State<AdicionarTarefa> {
                       ),
                     ],
                   ),
-                  Column(
-                    children: [
-                      ConstsWidget.buildTextSubTitle('Todos os dias', size: 14),
-                      Switch.adaptive(
-                        value: isDayle ?? true,
-                        onChanged: (value) {
-                          setState(() {
-                            isDayle = value;
-                          });
-                        },
-                      ),
-                    ],
-                  ),
+                  if (isRepet!)
+                    Column(
+                      children: [
+                        ConstsWidget.buildTextSubTitle('Todos os dias',
+                            size: 14),
+                        Switch.adaptive(
+                          value: isDayle ?? true,
+                          onChanged: (value) {
+                            setState(() {
+                              isDayle = value;
+                            });
+                          },
+                        ),
+                      ],
+                    ),
                 ],
               ),
               if (isRepet! && !isDayle!)
@@ -259,7 +262,7 @@ class _AdicionarTarefaState extends State<AdicionarTarefa> {
                       return ConstsWidget.buildDecorationDrop(
                         context,
                         child: DropdownButton(
-                          value: dropdownValueRepetir,
+                          value: dropdownRepetirDias,
                           isExpanded: true,
                           alignment: Alignment.center,
                           icon: Icon(
@@ -275,7 +278,7 @@ class _AdicionarTarefaState extends State<AdicionarTarefa> {
                           borderRadius: BorderRadius.circular(16),
                           onChanged: (value) {
                             setState(() {
-                              dropdownValueRepetir = value!;
+                              dropdownRepetirDias = value!;
                             });
                           },
                           hint: ConstsWidget.buildTextSubTitle('Selecione',
@@ -304,7 +307,7 @@ class _AdicionarTarefaState extends State<AdicionarTarefa> {
                             return ConstsWidget.buildDecorationDrop(
                               context,
                               child: DropdownButton(
-                                value: dropdownValueLembrar, isExpanded: true,
+                                value: dropdownAvisoDias, isExpanded: true,
                                 alignment: Alignment.center,
                                 icon: Icon(
                                   Icons.arrow_downward_outlined,
@@ -319,7 +322,7 @@ class _AdicionarTarefaState extends State<AdicionarTarefa> {
                                 borderRadius: BorderRadius.circular(16),
                                 onChanged: (value) {
                                   setState(() {
-                                    dropdownValueLembrar = value!;
+                                    dropdownAvisoDias = value!;
                                   });
                                 },
                                 hint: ConstsWidget.buildTextSubTitle(
