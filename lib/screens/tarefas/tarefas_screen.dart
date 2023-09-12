@@ -111,7 +111,10 @@ class _TarefasScreenState extends State<TarefasScreen> {
                         var descricao = apiTarefas['descricao'];
                         var data_vencimento = apiTarefas['data_vencimento'];
                         var aviso_dias = apiTarefas['aviso_dias'];
+                        var txt_aviso_dias = apiTarefas['txt_aviso_dias'];
                         var repetir_dias = apiTarefas['repetir_dias'];
+                        var texto_repetir_dias =
+                            apiTarefas['texto_repetir_dias'];
                         var datahora = apiTarefas['datahora'];
                         var ultima_atualizacao =
                             apiTarefas['ultima_atualizacao'];
@@ -222,7 +225,7 @@ class _TarefasScreenState extends State<TarefasScreen> {
                                     context, 'Vence Hoje',
                                     color: Consts.kColorRed),
                               ConstsWidget.buildTextSubTitle(
-                                DateFormat('dd/MM/yyyy')
+                                DateFormat('dd/MM/yyyy HH:mm')
                                     .format(DateTime.parse(data_vencimento))
                                     .toString(),
                                 // color: isToday ? Consts.kColorRed : null,
@@ -230,7 +233,17 @@ class _TarefasScreenState extends State<TarefasScreen> {
                               SizedBox(
                                 height: size.height * 0.02,
                               ),
-                              if ((aviso_dias == 0 && repetir_dias != 1) ||
+                              if (aviso_dias == 0 && repetir_dias == 1)
+                                ConstsWidget.buildTextTitle(
+                                    context, 'Tarefa Diária',
+                                    color: Colors.red),
+                              // if (aviso_dias == 0 && repetir_dias == 0)
+                              //   ConstsWidget.buildTextTitle(
+                              //       context, 'Apenas Hoje',
+                              //       color: Colors.red),
+                              if ((aviso_dias == 0 &&
+                                      repetir_dias != 1 &&
+                                      repetir_dias != 0) ||
                                   (aviso_dias != 0 && repetir_dias != 1))
                                 Column(
                                   children: [
@@ -241,8 +254,10 @@ class _TarefasScreenState extends State<TarefasScreen> {
                                         ConstsWidget.buildTextSubTitle(
                                             'Será avisado '),
                                         ConstsWidget.buildTextTitle(
-                                            context, '$aviso_dias '),
-                                        ConstsWidget.buildTextSubTitle('antes'),
+                                            context, '$txt_aviso_dias '),
+                                        if (aviso_dias != 0)
+                                          ConstsWidget.buildTextSubTitle(
+                                              'antes'),
                                       ],
                                     ),
                                     SizedBox(
@@ -255,7 +270,7 @@ class _TarefasScreenState extends State<TarefasScreen> {
                                         ConstsWidget.buildTextSubTitle(
                                             'Repetir a cada '),
                                         ConstsWidget.buildTextTitle(
-                                            context, '$repetir_dias '),
+                                            context, '$texto_repetir_dias '),
                                       ],
                                     ),
                                   ],

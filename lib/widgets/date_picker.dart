@@ -59,8 +59,10 @@ class _MyDatePickerState extends State<MyDatePicker> {
           ? 'dd MMMM, yyyy HH:mm'
           : 'dd MMMM, yyyy',
       //initialValue: _initialValue,
-      firstDate: DateTime.now(),
+      firstDate:
+          widget.type == DateTimePickerType.dateTime ? DateTime.now() : null,
       lastDate: DateTime(2100),
+
       //icon: Icon(Icons.event),
       style: TextStyle(
         fontSize: 20,
@@ -72,11 +74,22 @@ class _MyDatePickerState extends State<MyDatePicker> {
       dateLabelText: 'Date Time', initialDate: widget.initialDate,
       locale: Locale('pt', 'BR'),
       use24HourFormat: true,
+
       calendarTitle: 'Selecione uma data e hora',
       onChanged: (val) {
-        setState(() {
-          MyDatePicker.dataSelected = val;
-        });
+        DateTime datetime = DateTime.parse(val);
+        var diferent = datetime.difference(DateTime.now());
+
+        if (!diferent.isNegative) {
+          setState(() {
+            MyDatePicker.dataSelected = val;
+          });
+        } else {
+          setState(() {
+            MyDatePicker.dataSelected = DateTime.now().toIso8601String();
+            print(diferent);
+          });
+        }
       },
       enabled: enabled,
       // validator: (val) {

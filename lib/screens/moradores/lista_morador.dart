@@ -136,8 +136,9 @@ class _ListaMoradorState extends State<ListaMorador> {
                               context,
                               vertical: 0.015,
                               child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: data_nascimento == null
+                                    ? MainAxisAlignment.start
+                                    : MainAxisAlignment.spaceBetween,
                                 children: [
                                   if (data_nascimento != null)
                                     Column(
@@ -150,9 +151,10 @@ class _ListaMoradorState extends State<ListaMorador> {
                                             context, data_nascimento),
                                       ],
                                     ),
-                                  SizedBox(
-                                    width: size.width * 0.1,
-                                  ),
+                                  if (data_nascimento != null)
+                                    SizedBox(
+                                      width: size.width * 0.1,
+                                    ),
                                   Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
@@ -166,11 +168,12 @@ class _ListaMoradorState extends State<ListaMorador> {
                                 ],
                               ),
                             ),
-                            if (telefone != '' && ddd != '')
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
+                            Row(
+                              mainAxisAlignment: telefone == null
+                                  ? MainAxisAlignment.start
+                                  : MainAxisAlignment.spaceBetween,
+                              children: [
+                                if (telefone != '' && ddd != '')
                                   Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
@@ -187,17 +190,15 @@ class _ListaMoradorState extends State<ListaMorador> {
                                       ),
                                     ],
                                   ),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      ConstsWidget.buildTextSubTitle('Login'),
-                                      ConstsWidget.buildTextTitle(
-                                          context, login),
-                                    ],
-                                  ),
-                                ],
-                              ),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    ConstsWidget.buildTextSubTitle('Login'),
+                                    ConstsWidget.buildTextTitle(context, login),
+                                  ],
+                                ),
+                              ],
+                            ),
                             ConstsWidget.buildPadding001(context,
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,

@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:crypto/crypto.dart';
+import 'package:diacritic/diacritic.dart';
 import 'package:flutter/material.dart';
 import 'package:sindico_app/repositories/shared_preferences.dart';
 import 'package:sindico_app/screens/home_page.dart/home_page.dart';
@@ -64,6 +65,31 @@ class ConstsFuture {
           builder: (context) => route,
         ),
         (route) => false);
+  }
+
+  static Future gerarLogin(BuildContext context,
+      {required String nomeUsado,
+      required bool nomeDocAlterado,
+      required String documento}) async {
+    FocusManager.instance.primaryFocus?.unfocus();
+
+    List<String> nomeEmLista = nomeUsado.split(' ');
+    List<String> listaNome = [];
+
+    if (nomeDocAlterado) {
+      buildMinhaSnackBar(context,
+          title: 'Dados alterados', subTitle: 'Alteramos o login');
+    }
+    nomeEmLista.map((e) {
+      if (e != '') {
+        listaNome.add(removeDiacritics(e).toLowerCase());
+      }
+    }).toSet();
+
+    String loginGerado =
+        '${listaNome.first}${listaNome.last}${documento.substring(0, 4)}';
+
+    return loginGerado;
   }
 
   static Future fazerLogin(BuildContext context, String usuario, String senha,

@@ -23,7 +23,11 @@ Widget buildMyTextFormField(BuildContext context,
     context,
     child: TextFormField(
       autovalidateMode: AutovalidateMode.onUserInteraction,
-      inputFormatters: [MaskTextInputFormatter(mask: mask)],
+      inputFormatters: [
+        MaskTextInputFormatter(
+          mask: mask,
+        )
+      ],
       initialValue: initialValue,
       onSaved: onSaved,
       validator: validator,

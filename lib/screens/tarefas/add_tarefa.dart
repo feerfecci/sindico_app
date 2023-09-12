@@ -138,7 +138,7 @@ class _AdicionarTarefaState extends State<AdicionarTarefa> {
           ? 'incluirTarefa'
           : 'editarTarefa&idtarefa=${widget.idtarefa}';
       ConstsFuture.resquestApi(
-              '${Consts.sindicoApi}tarefas/?fn=$incluirEditar&idcond=${ResponsalvelInfos.idcondominio}&idfuncionario=${ResponsalvelInfos.idfuncionario}&descricao=$nomeTarefaCtrl&data_vencimento=${MyDatePicker.dataSelected}&aviso_dias=${isRepet! && isDayle! ? '0' : dropdownAvisoDias.toString()}&repetir_dias=${isDayle! ? 1 : dropdownRepetirDias.toString()}')
+              '${Consts.sindicoApi}tarefas/?fn=$incluirEditar&idcond=${ResponsalvelInfos.idcondominio}&idfuncionario=${ResponsalvelInfos.idfuncionario}&descricao=$nomeTarefaCtrl&data_vencimento=${MyDatePicker.dataSelected}&aviso_dias=${isRepet! && isDayle! ? '0' : !isRepet! && !isDayle! ? '0' : dropdownAvisoDias.toString()}&repetir_dias=${isDayle! ? 1 : !isRepet! && !isDayle! ? '0' : dropdownRepetirDias.toString()}')
           .then((value) {
         setState(() {
           isLoading = false;
@@ -166,6 +166,8 @@ class _AdicionarTarefaState extends State<AdicionarTarefa> {
           startSaveTarefa();
         } else if (dropdownRepetirDias != null && dropdownAvisoDias != null) {
           startSaveTarefa();
+        } else if (!isRepet!) {
+          startSaveTarefa();
         } else {
           buildMinhaSnackBar(context,
               title: 'Cuidado!', subTitle: 'Complete as informações');
@@ -182,7 +184,8 @@ class _AdicionarTarefaState extends State<AdicionarTarefa> {
     String? initialDate;
     if (widget.initialDate != null) {
       initialDate = widget.initialDate != null
-          ? DateFormat('dd/MM/yyyy').format(DateTime.parse(widget.initialDate!))
+          ? DateFormat('dd/MM/yyyy HH:mm')
+              .format(DateTime.parse(widget.initialDate!))
           : null;
     }
     var size = MediaQuery.of(context).size;
@@ -232,6 +235,7 @@ class _AdicionarTarefaState extends State<AdicionarTarefa> {
                         onChanged: (value) {
                           setState(() {
                             isRepet = value;
+                            isDayle = value;
                           });
                         },
                       ),

@@ -163,8 +163,11 @@ class _ListaColaboradoresState extends State<ListaColaboradores> {
                             String documento = api['documento'];
                             String ddd = api['dddtelefone'];
                             String telefone = api['telefone'];
-                            String data_nascimento = DateFormat('dd/MM/yyyy')
-                                .format(DateTime.parse(api['datanasc']));
+                            String? data_nascimento =
+                                api['datanasc'] != "0000-00-00"
+                                    ? DateFormat('dd/MM/yyyy')
+                                        .format(DateTime.parse(api['datanasc']))
+                                    : null;
 
                             return ConstsWidget.buildPadding001(
                               context,
@@ -196,11 +199,43 @@ class _ListaColaboradoresState extends State<ListaColaboradores> {
                                           texto1: login_funcionario,
                                           titulo2: 'Cargo',
                                           texto2: funcao),
-                                      buildRowInfos(
-                                          titulo1: 'Nascimento',
-                                          texto1: data_nascimento,
-                                          titulo2: 'Documento',
-                                          texto2: documento),
+                                      ConstsWidget.buildPadding001(
+                                        context,
+                                        child: Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            mainAxisAlignment:
+                                                data_nascimento == null
+                                                    ? MainAxisAlignment.start
+                                                    : MainAxisAlignment
+                                                        .spaceBetween,
+                                            children: [
+                                              if (data_nascimento != null)
+                                                Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    ConstsWidget
+                                                        .buildTextSubTitle(
+                                                            'Nascimento'),
+                                                    ConstsWidget.buildTextTitle(
+                                                        context,
+                                                        data_nascimento),
+                                                  ],
+                                                ),
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  ConstsWidget
+                                                      .buildTextSubTitle(
+                                                          'Documento'),
+                                                  ConstsWidget.buildTextTitle(
+                                                      context, documento),
+                                                ],
+                                              ),
+                                            ]),
+                                      ),
 
                                       /*     buildRowInfos(
                                           titulo1: 'Telefone',
@@ -212,16 +247,18 @@ class _ListaColaboradoresState extends State<ListaColaboradores> {
                                           texto1: email,
                                           titulo2: 'Nascimento',
                                           texto2: data_nascimento),*/
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          ConstsWidget.buildTextSubTitle(
-                                              'Telefone'),
-                                          ConstsWidget.buildTextTitle(
-                                              context, '($ddd) $telefone'),
-                                        ],
-                                      ),
+
+                                      if (telefone != '')
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            ConstsWidget.buildTextSubTitle(
+                                                'Telefone'),
+                                            ConstsWidget.buildTextTitle(
+                                                context, '($ddd) $telefone'),
+                                          ],
+                                        ),
                                       SizedBox(
                                         height: size.height * 0.01,
                                       ),
@@ -236,6 +273,7 @@ class _ListaColaboradoresState extends State<ListaColaboradores> {
                                         ],
                                       ),
                                       if (funcao != 'Síndico' &&
+                                          funcao != 'Subsíndico' &&
                                           funcao != 'Administrador')
                                         Column(
                                           children: [

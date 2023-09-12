@@ -1,6 +1,8 @@
 // ignore_for_file: must_be_immutable
 
 import 'dart:convert';
+import 'dart:math';
+import 'package:diacritic/diacritic.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:sindico_app/consts/consts_future.dart';
@@ -60,6 +62,8 @@ class CadastroMorador extends StatefulWidget {
 class _CadastroMoradorState extends State<CadastroMorador> {
   final _formKeyMorador = GlobalKey<FormState>();
   // final formkeySenha = GlobalKey<FormState>();
+  bool isLoadingLogin = false;
+  bool isLoadingSalvar = false;
   bool isGerarSenha = false;
   Object? dropdownValueAtivo;
   List listAtivo = [1, 0];
@@ -126,7 +130,7 @@ class _CadastroMoradorState extends State<CadastroMorador> {
                 initialValue: widget.nome_morador,
                 textCapitalization: TextCapitalization.words,
                 onSaved: (text) {
-                  if (_formInfosMorador.nome_morador != text) {
+                  if (text != widget.nome_morador) {
                     setState(() {
                       nomeDocAlterado = true;
                     });
@@ -154,6 +158,9 @@ class _CadastroMoradorState extends State<CadastroMorador> {
 
                         _formInfosMorador = _formInfosMorador.copyWith(
                             nascimento: '$ano-$mes-$dia');
+                      } else {
+                        _formInfosMorador =
+                            _formInfosMorador.copyWith(nascimento: "");
                       }
                     }),
                   ),
@@ -165,7 +172,7 @@ class _CadastroMoradorState extends State<CadastroMorador> {
                       initialValue: widget.documento,
                       hintText: 'RG, CPF',
                       onSaved: (text) {
-                        if (_formInfosMorador.nome_morador != text) {
+                        if (text != widget.documento) {
                           setState(() {
                             nomeDocAlterado = true;
                           });
@@ -221,34 +228,43 @@ class _CadastroMoradorState extends State<CadastroMorador> {
                 onSaved: (text) =>
                     _formInfosMorador = _formInfosMorador.copyWith(email: text),
               ),
-              ConstsWidget.buildCustomButton(context, 'Gerar Login',
-                  onPressed: () {
-                FocusManager.instance.primaryFocus?.unfocus();
+              ConstsWidget.buildLoadingButton(context,
+                  isLoading: isLoadingLogin,
+                  title: 'Gerar Login', onPressed: () {
+                setState(() {
+                  isLoadingLogin = true;
+                });
                 var formValid =
                     _formKeyMorador.currentState?.validate() ?? false;
 
                 if (formValid) {
                   _formKeyMorador.currentState?.save();
-                  List<String> nomeEmLista =
-                      _formInfosMorador.nome_morador!.split(' ');
-                  List<String> listaNome = [];
-
-                  if (nomeDocAlterado) {
-                    buildMinhaSnackBar(context,
-                        title: 'Dados alterados',
-                        subTitle: 'Alteramos o login');
-                  }
-                  for (var i = 0; i <= nomeEmLista.length - 1; i++) {
-                    if (nomeEmLista[i] != '') {
-                      listaNome.add(nomeEmLista[i]);
+                  ConstsFuture.gerarLogin(context,
+                          nomeUsado: _formInfosMorador.nome_morador!,
+                          nomeDocAlterado: nomeDocAlterado,
+                          documento: _formInfosMorador.documento!)
+                      .then((value) {
+                    setState(() {
+                      isLoadingLogin = false;
+                    });
+                    if (value != '') {
+                      setState(() {
+                        loginGerado = value;
+                        _formInfosMorador =
+                            _formInfosMorador.copyWith(login: loginGerado);
+                      });
+                    } else {
+                      buildMinhaSnackBar(context,
+                          title: 'Algo Saiu Mal',
+                          subTitle: 'O login não foi gerado');
                     }
-                  }
-                  setState(() {
-                    loginGerado =
-                        '${listaNome.first.toString().toLowerCase()}${listaNome.last.toString().toLowerCase()}${_formInfosMorador.documento!.substring(0, 4)}';
-                    _formInfosMorador =
-                        _formInfosMorador.copyWith(login: loginGerado);
                   });
+                } else {
+                  setState(() {
+                    isLoadingLogin = false;
+                  });
+                  buildMinhaSnackBar(context,
+                      title: 'Cuidado', subTitle: 'Complete as Informações');
                 }
               }),
               if (loginGerado != '')
