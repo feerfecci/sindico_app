@@ -19,7 +19,8 @@ Widget buildCardHome(BuildContext context,
   var size = MediaQuery.of(context).size;
 
   launchNumber(number) async {
-    await launchUrl(Uri.parse('tel:$number'));
+    await launchUrl(Uri.parse('tel:$number'),
+        mode: LaunchMode.externalApplication);
   }
 
   return ConstsWidget.buildPadding001(
@@ -37,6 +38,7 @@ Widget buildCardHome(BuildContext context,
                   launchUrl(Uri.parse('https://wa.me/+55$numberCall'),
                       mode: LaunchMode.externalApplication);
                 } else {
+                  print(numberCall);
                   launchNumber(numberCall);
                 }
               },
@@ -68,8 +70,8 @@ Widget buildCardHome(BuildContext context,
               child: ConstsWidget.buildFutureImage(
                 context,
                 iconApi: iconApi,
-                width: SplashScreen.isSmall ? 0.12 : 0.14,
-                height: SplashScreen.isSmall ? 0.07 : 0.065,
+                width: SplashScreen.isSmall ? 0.13 : 0.14,
+                height: SplashScreen.isSmall ? 0.06 : 0.065,
               ),
             ),
             // FutureBuilder(
