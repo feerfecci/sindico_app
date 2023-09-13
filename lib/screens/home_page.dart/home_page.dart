@@ -438,7 +438,7 @@ class _HomePageState extends State<HomePage> {
                     mainAxisSpacing: 0.5,
                     crossAxisCount: 2,
                     shrinkWrap: true,
-                    childAspectRatio: SplashScreen.isSmall ? 1.5 : 1.4,
+                    childAspectRatio: SplashScreen.isSmall ? 1.5 : 1.5,
                     physics: ClampingScrollPhysics(),
                     onReorder: (oldIndex, newIndex) {
                       var card = models.removeAt(oldIndex);
@@ -466,16 +466,15 @@ class _HomePageState extends State<HomePage> {
                   );
                 },
               ),
-              // SizedBox(
-              //   height: size.height * 0.01,
-              // ),
               if (ResponsalvelInfos.qtd_publicidade != 0)
-                buildBanerPubli(local: 1, usarList: telefonesList1),
+                ConstsWidget.buildPadding001(context,
+                    vertical: 0.02,
+                    child: buildBanerPubli(local: 1, usarList: telefonesList1)),
               if (ResponsalvelInfos.qtd_publicidade != 0)
                 GridView.count(
                   crossAxisCount: 2,
-                  crossAxisSpacing: 5,
-                  childAspectRatio: 0.9,
+                  crossAxisSpacing: 10,
+                  childAspectRatio: 1,
                   physics: ClampingScrollPhysics(),
                   shrinkWrap: true,
                   children: [
@@ -483,6 +482,9 @@ class _HomePageState extends State<HomePage> {
                     buildBanerPubli(local: 3, usarList: telefonesList3),
                   ],
                 ),
+              SizedBox(
+                height: size.height * 0.01,
+              ),
             ],
           ),
         ),

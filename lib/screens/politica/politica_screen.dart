@@ -18,7 +18,7 @@ class PoliticaScreen extends StatefulWidget {
 class _PoliticaScreenState extends State<PoliticaScreen> {
   politicaApi() async {
     final url = Uri.parse(
-        '${Consts.sindicoApi}politica_privacidade/?fn=mostrarPolitica&idcond=16');
+        '${Consts.sindicoApi}politica_privacidade/?fn=mostrarPolitica&idcond=${ResponsalvelInfos.idcondominio}');
     var resposta = await http.get(url);
 
     if (resposta.statusCode == 200) {

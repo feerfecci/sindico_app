@@ -76,10 +76,10 @@ class ConstsFuture {
     List<String> nomeEmLista = nomeUsado.split(' ');
     List<String> listaNome = [];
 
-    if (nomeDocAlterado) {
-      buildMinhaSnackBar(context,
-          title: 'Dados alterados', subTitle: 'Alteramos o login');
-    }
+    // if (nomeDocAlterado) {
+    //   buildMinhaSnackBar(context,
+    //       title: 'Dados alterados', subTitle: 'Alteramos o login');
+    // }
     nomeEmLista.map((e) {
       if (e != '') {
         listaNome.add(removeDiacritics(e).toLowerCase());
@@ -132,15 +132,18 @@ class ConstsFuture {
         ResponsalvelInfos.estado = loginInfos['estado'];
         ResponsalvelInfos.temporespostas = loginInfos['temporespostas'];
         ResponsalvelInfos.aceitou_termos = loginInfos['aceitou_termos'];
-        apiQuadroAvisos().whenComplete(
-            () => apiResevas().whenComplete(() => apiTarefas().whenComplete(() {
-                  if (!ResponsalvelInfos.aceitou_termos) {
-                    return showDialogAceitar(
-                      context,
-                    );
-                  }
-                  navigatorPageReplace(context, HomePage());
-                })));
+        apiQuadroAvisos().whenComplete(() {
+          apiResevas().whenComplete(() {
+            apiTarefas().whenComplete(() {
+              if (!ResponsalvelInfos.aceitou_termos) {
+                return showDialogAceitar(
+                  context,
+                );
+              }
+              navigatorPageReplace(context, HomePage());
+            });
+          });
+        });
       } else {
         // navigatorPageReplace(context, LoginScreen()).then((value) {
 

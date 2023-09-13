@@ -70,8 +70,8 @@ Widget buildCardHome(BuildContext context,
               child: ConstsWidget.buildFutureImage(
                 context,
                 iconApi: iconApi,
-                width: SplashScreen.isSmall ? 0.13 : 0.14,
-                height: SplashScreen.isSmall ? 0.06 : 0.065,
+                width: SplashScreen.isSmall ? 0.13 : 0.141,
+                height: SplashScreen.isSmall ? 0.06 : 0.0641,
               ),
             ),
             // FutureBuilder(

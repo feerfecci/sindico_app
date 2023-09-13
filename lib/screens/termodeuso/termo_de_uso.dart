@@ -16,8 +16,8 @@ class TermoDeUsoScreen extends StatefulWidget {
 
 class _TermoDeUsoScreenState extends State<TermoDeUsoScreen> {
   termoUsoApi() async {
-    final url =
-        Uri.parse('${Consts.sindicoApi}termo_uso/?fn=mostrarTermo&idcond=16');
+    final url = Uri.parse(
+        '${Consts.sindicoApi}termo_uso/?fn=mostrarTermo&idcond=${ResponsalvelInfos.idcondominio}');
     var resposta = await http.get(url);
 
     if (resposta.statusCode == 200) {

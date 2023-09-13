@@ -350,8 +350,7 @@ class ConstsWidget {
         badgeAnimation: badges.BadgeAnimation.fade(toAnimate: false),
         badgeContent: Text(
           title,
-          style: TextStyle(
-              color: Theme.of(context).cardColor, fontWeight: FontWeight.bold),
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         position: position,
         badgeStyle: badges.BadgeStyle(

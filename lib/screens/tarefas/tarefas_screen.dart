@@ -10,6 +10,7 @@ import 'package:sindico_app/widgets/my_box_shadow.dart';
 import 'package:sindico_app/widgets/page_vazia.dart';
 import 'package:sindico_app/widgets/scaffold_all.dart';
 import 'package:sindico_app/widgets/shimmer_widget.dart';
+import 'package:sindico_app/widgets/snackbar/snack.dart';
 
 import '../../consts/consts.dart';
 import 'add_tarefa.dart';
@@ -28,8 +29,11 @@ Future apiTarefas() async {
       .then((value) {
     if (!value['erro']) {
       for (var i = 0; i <= value['tarefas'].length - 1; i++) {
-        if (DateTime.parse(value['tarefas'][i]['data_vencimento']).day ==
-                DateTime.now().day &&
+        Duration diferencia =
+            DateTime.parse(value['tarefas'][i]['data_vencimento'])
+                .difference(DateTime.now());
+
+        if (diferencia.inDays == 0 &&
             !TarefasScreen.qntTarefas
                 .contains(value['tarefas'][i]['idtarefa'])) {
           TarefasScreen.qntTarefas.add(value['tarefas'][i]['idtarefa']);
@@ -107,6 +111,7 @@ class _TarefasScreenState extends State<TarefasScreen> {
                         var apiTarefas = snapshot.data['tarefas'][index];
 
                         var idtarefa = apiTarefas['idtarefa'];
+                        var concluida = apiTarefas['concluida'];
                         var idcondominio = apiTarefas['idcondominio'];
                         var descricao = apiTarefas['descricao'];
                         var data_vencimento = apiTarefas['data_vencimento'];
@@ -140,7 +145,7 @@ class _TarefasScreenState extends State<TarefasScreen> {
                                     width: double.maxFinite,
                                     child: Row(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.start,
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
                                         GestureDetector(
                                           onTap: () {
@@ -152,7 +157,7 @@ class _TarefasScreenState extends State<TarefasScreen> {
                                                 children: [
                                                   ConstsWidget.buildTextTitle(
                                                       context,
-                                                      'Ao continuar você não recebará mais aviso sobre está terafa',
+                                                      'Ao continuar você não recebará mais aviso sobre está tarefa',
                                                       textAlign:
                                                           TextAlign.center),
                                                   SizedBox(
@@ -201,6 +206,70 @@ class _TarefasScreenState extends State<TarefasScreen> {
                                           child: Icon(
                                             Icons.delete_outlined,
                                             color: Colors.red,
+                                            size: 30,
+                                          ),
+                                        ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            showAllDialog(context,
+                                                barrierDismissible: true,
+                                                title:
+                                                    ConstsWidget.buildTextTitle(
+                                                        context,
+                                                        !concluida
+                                                            ? 'Concluir Tarefa'
+                                                            : 'Reativar Tarefa'),
+                                                children: [
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceEvenly,
+                                                    children: [
+                                                      ConstsWidget
+                                                          .buildOutlinedButton(
+                                                        context,
+                                                        title: '  Cancelar  ',
+                                                        onPressed: () {
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
+                                                      ),
+                                                      ConstsWidget
+                                                          .buildCustomButton(
+                                                        context,
+                                                        !concluida
+                                                            ? ' Concluir '
+                                                            : ' Reativar ',
+                                                        onPressed: () {
+                                                          ConstsFuture.resquestApi(
+                                                                  '${Consts.sindicoApi}tarefas/?fn=editarTarefa&idcond=${ResponsalvelInfos.idcondominio}&idfuncionario=${ResponsalvelInfos.idfuncionario}&idtarefa=$idtarefa&concluida=${concluida ? 0 : 1}&descricao=$descricao&data_vencimento=$data_vencimento&aviso_dias=$aviso_dias&repetir_dias=$repetir_dias')
+                                                              .then((value) {
+                                                            if (!value[
+                                                                'erro']) {
+                                                              Navigator.pop(
+                                                                  context);
+                                                              setState(() {});
+                                                            } else {
+                                                              return buildMinhaSnackBar(
+                                                                  context,
+                                                                  title:
+                                                                      'Algo Saiu Mau',
+                                                                  subTitle: value[
+                                                                      'mensagem']);
+                                                            }
+                                                          });
+                                                        },
+                                                      ),
+                                                    ],
+                                                  )
+                                                ]);
+                                          },
+                                          child: Icon(
+                                            Icons.check_circle_outline_outlined,
+                                            color: concluida
+                                                ? Colors.blue
+                                                : Colors.grey,
+                                            size: 30,
                                           ),
                                         ),
                                       ],
