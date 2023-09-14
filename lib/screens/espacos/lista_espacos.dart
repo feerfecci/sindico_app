@@ -1,10 +1,10 @@
+// ignore_for_file: unused_local_variable
+
 import 'package:flutter/material.dart';
 import 'package:sindico_app/consts/const_widget.dart';
 import 'package:sindico_app/consts/consts.dart';
 import 'package:sindico_app/consts/consts_future.dart';
 import 'package:sindico_app/screens/espacos/cadastro_espaco.dart';
-import 'package:sindico_app/screens/quadro_avisos/loading_avisos.dart';
-import 'package:sindico_app/widgets/header.dart';
 import 'package:sindico_app/widgets/my_box_shadow.dart';
 import 'package:sindico_app/widgets/page_vazia.dart';
 import 'package:sindico_app/widgets/scaffold_all.dart';

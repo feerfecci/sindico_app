@@ -1,6 +1,6 @@
-import 'dart:convert';
-import 'dart:io';
+// ignore_for_file: unused_local_variable
 
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:onesignal_flutter/onesignal_flutter.dart';
@@ -9,11 +9,9 @@ import 'package:sindico_app/consts/consts_future.dart';
 import 'package:sindico_app/repositories/shared_preferences.dart';
 import 'package:sindico_app/screens/espacos/lista_espacos.dart';
 import 'package:sindico_app/screens/home_page.dart/card_home.dart';
-import 'package:sindico_app/screens/home_page.dart/dropCond.dart';
+import 'package:sindico_app/screens/home_page.dart/drop_cond.dart';
 import 'package:sindico_app/screens/reservas/listar_reservar.dart';
-import 'package:sindico_app/screens/termodeuso/aceitar_alert.dart';
 import 'package:sindico_app/widgets/custom_drawer/custom_drawer.dart';
-import 'package:sindico_app/widgets/page_vazia.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../consts/consts.dart';
 import '../../widgets/alert_dialogs/alertdialog_all.dart';
@@ -198,12 +196,10 @@ class _HomePageState extends State<HomePage> {
             if (whatsapp != '') {
               usarList.add(whatsapp);
               hasWhats = true;
-              print('whatsapp $usarList');
             }
             if (telefone != '') {
               if (telefone != whatsapp) {
                 usarList.add(telefone);
-                print('telefone $usarList');
               } else {
                 hasWhats = true;
               }
@@ -234,7 +230,6 @@ class _HomePageState extends State<HomePage> {
                 } else if (usarList.isEmpty && email == '' && site != '') {
                   launchUrl(Uri.parse(site),
                       mode: LaunchMode.externalApplication);
-                  print('Abrir link no google');
                 } else if (usarList.isEmpty && site == '' && email != '') {
                   lauchEmail(email);
                 } else {

@@ -1,11 +1,8 @@
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:intl/intl.dart';
 import 'package:sindico_app/consts/const_widget.dart';
 import 'package:sindico_app/consts/consts_future.dart';
-import 'package:sindico_app/screens/tarefas/tarefas_screen.dart';
 import 'package:sindico_app/widgets/date_picker.dart';
 import 'package:sindico_app/widgets/my_box_shadow.dart';
 import 'package:sindico_app/widgets/my_text_form_field.dart';
@@ -97,7 +94,6 @@ class _AdicionarTarefaState extends State<AdicionarTarefa> {
       if (value != null) {
         setState(() {
           listRepetir = value['listar_dias_repetir'];
-          print(listRepetir);
         });
       }
     });

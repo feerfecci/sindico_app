@@ -1,21 +1,14 @@
 // ignore_for_file: must_be_immutable
-
 import 'dart:convert';
-import 'dart:math';
-import 'package:diacritic/diacritic.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:sindico_app/consts/consts_future.dart';
 import 'package:sindico_app/forms/morador_form.dart';
 import 'package:sindico_app/screens/moradores/lista_morador.dart';
 import 'package:http/http.dart' as http;
 import 'package:sindico_app/screens/splash_screen/splash_screen.dart';
-import 'package:sindico_app/widgets/alert_dialogs/alertdialog_all.dart';
 import 'package:validatorless/validatorless.dart';
 import '../../consts/const_widget.dart';
 import '../../consts/consts.dart';
-import '../../widgets/alert_dialogs/alert_trocar_senha.dart';
-import '../../widgets/header.dart';
 import '../../widgets/my_box_shadow.dart';
 import '../../widgets/my_text_form_field.dart';
 import '../../widgets/scaffold_all.dart';

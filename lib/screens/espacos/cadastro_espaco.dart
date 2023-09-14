@@ -1,15 +1,15 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:sindico_app/consts/const_widget.dart';
 import 'package:sindico_app/consts/consts.dart';
 import 'package:sindico_app/consts/consts_future.dart';
 import 'package:sindico_app/forms/espacos_form.dart';
 import 'package:sindico_app/screens/espacos/lista_espacos.dart';
-import 'package:sindico_app/widgets/header.dart';
 import 'package:sindico_app/widgets/my_box_shadow.dart';
 import 'package:sindico_app/widgets/my_text_form_field.dart';
 import 'package:sindico_app/widgets/scaffold_all.dart';
 import 'package:sindico_app/widgets/snackbar/snack.dart';
-import 'package:validatorless/validatorless.dart';
 
 class CadastroEspacos extends StatefulWidget {
   bool ativo;

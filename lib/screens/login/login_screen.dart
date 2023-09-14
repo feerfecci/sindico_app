@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sindico_app/repositories/shared_preferences.dart';
-import 'package:sindico_app/widgets/snackbar/snack.dart';
 import 'package:validatorless/validatorless.dart';
-
 import '../../consts/const_widget.dart';
-import '../../consts/consts.dart';
 import '../../consts/consts_future.dart';
 
 class LoginScreen extends StatefulWidget {

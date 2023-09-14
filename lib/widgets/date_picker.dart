@@ -1,11 +1,8 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
-import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
-import '../consts/consts.dart';
 import '../screens/splash_screen/splash_screen.dart';
 
 class MyDatePicker extends StatefulWidget {
@@ -87,7 +84,6 @@ class _MyDatePickerState extends State<MyDatePicker> {
         } else {
           setState(() {
             MyDatePicker.dataSelected = DateTime.now().toIso8601String();
-            print(diferent);
           });
         }
       },

@@ -3,12 +3,10 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:sindico_app/screens/colaboradores/cadastro_colab.dart';
-import 'package:sindico_app/widgets/header.dart';
 import 'package:sindico_app/widgets/my_box_shadow.dart';
 import 'package:sindico_app/widgets/page_vazia.dart';
 import 'package:sindico_app/widgets/scaffold_all.dart';
 import 'package:http/http.dart' as http;
-import 'package:sindico_app/widgets/shimmer_widget.dart';
 import '../../consts/consts.dart';
 import '../../consts/const_widget.dart';
 import '../../consts/consts_future.dart';
@@ -38,7 +36,6 @@ class _ListaColaboradoresState extends State<ListaColaboradores> {
   @override
   void dispose() {
     listarFuncionario();
-    // TODO: implement dispose
     super.dispose();
   }
 

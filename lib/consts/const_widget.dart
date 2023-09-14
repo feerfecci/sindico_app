@@ -1,6 +1,5 @@
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
-import 'package:sindico_app/screens/home_page.dart/home_page.dart';
 import '../../screens/splash_screen/splash_screen.dart';
 import '../widgets/shimmer_widget.dart';
 import 'consts.dart';
@@ -28,7 +27,7 @@ class ConstsWidget {
     double fontSize = 16,
     int maxLines = 2,
   }) {
-    var size = MediaQuery.of(context).size;
+    //var size = MediaQuery.of(context).size;
     return Text(
       title,
       maxLines: maxLines,
@@ -214,7 +213,7 @@ class ConstsWidget {
       required void Function(bool?)? onChanged,
       required String title,
       MainAxisAlignment mainAxisAlignment = MainAxisAlignment.center}) {
-    var size = MediaQuery.of(context).size;
+    //var size = MediaQuery.of(context).size;
     return ConstsWidget.buildPadding001(
       context,
       vertical: 0.005,

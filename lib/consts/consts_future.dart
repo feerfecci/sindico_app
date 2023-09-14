@@ -1,17 +1,12 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:convert';
-import 'dart:io';
-
 import 'package:crypto/crypto.dart';
 import 'package:diacritic/diacritic.dart';
 import 'package:flutter/material.dart';
 import 'package:sindico_app/repositories/shared_preferences.dart';
 import 'package:sindico_app/screens/home_page.dart/home_page.dart';
-
-import '../items_bottom.dart';
-import '../screens/home_page.dart/dropCond.dart';
-import '../screens/login/login_screen.dart';
+import '../screens/home_page.dart/drop_cond.dart';
 import '../screens/quadro_avisos/quadro_de_avisos.dart';
 import '../screens/reservas/listar_reservar.dart';
 import '../screens/tarefas/tarefas_screen.dart';

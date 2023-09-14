@@ -1,7 +1,7 @@
+// ignore_for_file: unused_local_variable
+
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:intl/intl.dart';
 import 'package:sindico_app/consts/const_widget.dart';
 import 'package:sindico_app/consts/consts_future.dart';

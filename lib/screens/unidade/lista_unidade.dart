@@ -4,23 +4,17 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:sindico_app/forms/unidades_form.dart';
-import 'package:sindico_app/screens/moradores/lista_morador.dart';
 import 'package:sindico_app/screens/unidade/cadastro_unidade.dart';
 import 'package:sindico_app/screens/unidade/card_unidade.dart';
 import 'package:sindico_app/screens/unidade/loading_unidade.dart';
 import 'package:sindico_app/screens/unidade/search_unidades.dart';
-import 'package:sindico_app/screens/unidade/teste.dart';
-import 'package:sindico_app/widgets/header.dart';
 import 'package:sindico_app/widgets/page_vazia.dart';
 import 'package:sindico_app/widgets/scaffold_all.dart';
 import 'package:http/http.dart' as http;
-import 'package:intl/intl.dart';
 import '../../consts/consts.dart';
 import '../../consts/const_widget.dart';
 import '../../consts/consts_future.dart';
-import '../../widgets/my_box_shadow.dart';
 import '../../widgets/page_erro.dart';
-import '../../widgets/shimmer_widget.dart';
 
 class ListaUnidades extends StatefulWidget {
   const ListaUnidades({super.key});
@@ -48,38 +42,6 @@ class _ListaUnidadeStates extends State<ListaUnidades> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    buildRowUnidade(
-        {required String title1,
-        required String subTitle1,
-        required String title2,
-        required String subTitle2}) {
-      return ConstsWidget.buildPadding001(
-        context,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ConstsWidget.buildTextSubTitle(title1),
-                Row(
-                  children: [
-                    ConstsWidget.buildTextTitle(context, subTitle1),
-                  ],
-                ),
-              ],
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ConstsWidget.buildTextSubTitle(title2),
-                ConstsWidget.buildTextTitle(context, subTitle2),
-              ],
-            )
-          ],
-        ),
-      );
-    }
 
     return ConstsWidget.buildRefreshIndicator(
       context,

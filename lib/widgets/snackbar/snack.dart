@@ -81,7 +81,7 @@ buildMinhaSnackBar(
             onPressed: (() {
               try {
                 ScaffoldMessenger.of(context).clearSnackBars();
-              } on FlutterError catch (e) {
+              } on FlutterError {
                 // ignore: avoid_print
               }
             })),

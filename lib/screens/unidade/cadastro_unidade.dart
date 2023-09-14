@@ -1,9 +1,7 @@
 import 'dart:convert';
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:sindico_app/forms/unidades_form.dart';
 import 'package:sindico_app/widgets/alert_dialogs/alertdialog_all.dart';
-import 'package:sindico_app/widgets/header.dart';
 import 'package:sindico_app/widgets/scaffold_all.dart';
 import 'package:sindico_app/widgets/snackbar/snack.dart';
 import '../../consts/consts.dart';
@@ -154,7 +152,7 @@ class _CadastroUnidadesState extends State<CadastroUnidades> {
       BuildContext context, {
       int seEditando = 0,
     }) {
-      var size = MediaQuery.of(context).size;
+      //var size = MediaQuery.of(context).size;
       return ConstsWidget.buildPadding001(
         context,
         child: StatefulBuilder(builder: (context, setState) {
@@ -308,7 +306,7 @@ class _CadastroUnidadesState extends State<CadastroUnidades> {
                                 context, 'Deseja continuar?'),
                             children: [
                               RichText(
-                                  text: TextSpan(children: [
+                                  text: TextSpan(children: const [
                                 TextSpan(
                                     text:
                                         'Confira as informações antes de prosseguir. Após salvar os dados, eles não poderão ser editados',

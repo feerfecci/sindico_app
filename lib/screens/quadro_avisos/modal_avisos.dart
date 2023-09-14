@@ -1,8 +1,5 @@
-import 'dart:convert';
 import 'dart:io';
-import 'package:excel/excel.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:sindico_app/consts/consts.dart';
 import 'package:sindico_app/consts/consts_future.dart';
@@ -10,9 +7,7 @@ import 'package:sindico_app/screens/quadro_avisos/quadro_de_avisos.dart';
 import 'package:sindico_app/widgets/my_box_shadow.dart';
 import 'package:sindico_app/widgets/my_text_form_field.dart';
 import 'package:sindico_app/widgets/snackbar/snack.dart';
-import 'package:validatorless/validatorless.dart';
 import '../../consts/const_widget.dart';
-import 'package:path/path.dart';
 import 'package:http/http.dart' as http;
 
 class WidgetModalAvisos extends StatefulWidget {
@@ -100,6 +95,7 @@ class _WidgetModalAvisosState extends State<WidgetModalAvisos> {
                           listImage.add(file.uri.toString());
                         });
                       } else {
+                        // ignore: use_build_context_synchronously
                         buildMinhaSnackBar(context,
                             title: 'Cuidado!',
                             subTitle: 'Permitido apenas um arquivo');

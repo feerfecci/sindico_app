@@ -1,9 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_html/flutter_html.dart';
-
 import 'package:http/http.dart' as http;
 import 'package:sindico_app/widgets/shimmer_widget.dart';
 import 'package:sindico_app/widgets/snackbar/snack.dart';

@@ -1,6 +1,6 @@
-import 'dart:convert';
-import 'dart:io';
+// ignore_for_file: unused_local_variable
 
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:sindico_app/consts/consts.dart';
@@ -9,7 +9,6 @@ import 'package:sindico_app/widgets/my_box_shadow.dart';
 import 'package:sindico_app/widgets/scaffold_all.dart';
 import 'package:sindico_app/widgets/snackbar/snack.dart';
 import '../../screens/splash_screen/splash_screen.dart';
-
 import '../../consts/const_widget.dart';
 import '../../widgets/page_erro.dart';
 import '../../widgets/page_vazia.dart';
@@ -124,7 +123,6 @@ class _ListaReservasState extends State<ListaReservas> {
                                     title: 'Algo saiu mal',
                                     subTitle: value['mensagem']);
                               }
-                              ;
                             });
                           },
                           style: ElevatedButton.styleFrom(
@@ -161,22 +159,22 @@ class _ListaReservasState extends State<ListaReservas> {
       );
     }
 
-    Widget buildFiltroReserv(String title, int ativo, {Color? color}) {
-      return SizedBox(
-        width: size.width * 0.315,
-        child: ConstsWidget.buildCustomButton(
-          context,
-          title,
-          fontSize: SplashScreen.isSmall ? 18 : 16,
-          color: color,
-          onPressed: () {
-            setState(() {
-              statusReserva = ativo;
-            });
-          },
-        ),
-      );
-    }
+    // Widget buildFiltroReserv(String title, int ativo, {Color? color}) {
+    //   return SizedBox(
+    //     width: size.width * 0.315,
+    //     child: ConstsWidget.buildCustomButton(
+    //       context,
+    //       title,
+    //       fontSize: SplashScreen.isSmall ? 18 : 16,
+    //       color: color,
+    //       onPressed: () {
+    //         setState(() {
+    //           statusReserva = ativo;
+    //         });
+    //       },
+    //     ),
+    //   );
+    // }
 
     Color verde = Color.fromARGB(255, 44, 201, 104);
     Color amarelo = Color.fromARGB(255, 255, 193, 7);

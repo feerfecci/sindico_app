@@ -1,9 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:sindico_app/screens/colaboradores/lista_colaboradores.dart';
 import 'package:sindico_app/screens/splash_screen/splash_screen.dart';
-import 'package:sindico_app/widgets/header.dart';
 import 'package:sindico_app/widgets/scaffold_all.dart';
 import 'package:sindico_app/widgets/snackbar/snack.dart';
 import 'package:http/http.dart' as http;
@@ -13,10 +11,8 @@ import '../../consts/consts.dart';
 import '../../consts/const_widget.dart';
 import '../../consts/consts_future.dart';
 import '../../forms/funcionario_form.dart';
-import '../../widgets/alert_dialogs/alertdialog_all.dart';
 import '../../widgets/my_box_shadow.dart';
 import '../../widgets/my_text_form_field.dart';
-import 'package:diacritic/diacritic.dart';
 
 class CadastroColaborador extends StatefulWidget {
   final int? idfuncionario;
@@ -66,7 +62,6 @@ class _CadastroColaboradorState extends State<CadastroColaborador> {
   Object? dropdownValueAtivo;
   bool isLoadingLogin = false;
   final _formkeyFuncionario = GlobalKey<FormState>();
-  final _formkeySenha = GlobalKey<FormState>();
   FormInfosFunc formInfosFunc = FormInfosFunc();
   final TextEditingController atualSenhaCtrl = TextEditingController();
   final TextEditingController novaSenhaCtrl = TextEditingController();

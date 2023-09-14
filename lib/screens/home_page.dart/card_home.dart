@@ -1,6 +1,5 @@
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:sindico_app/screens/reservas/listar_reservar.dart';
 import 'package:sindico_app/screens/tarefas/tarefas_screen.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -38,7 +37,6 @@ Widget buildCardHome(BuildContext context,
                   launchUrl(Uri.parse('https://wa.me/+55$numberCall'),
                       mode: LaunchMode.externalApplication);
                 } else {
-                  print(numberCall);
                   launchNumber(numberCall);
                 }
               },

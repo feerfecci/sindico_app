@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
-import 'package:sindico_app/screens/home_page.dart/home_page.dart';
 import 'package:validatorless/validatorless.dart';
 
 import '../consts/const_widget.dart';
