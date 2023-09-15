@@ -10,7 +10,7 @@ import 'package:sindico_app/widgets/my_box_shadow.dart';
 import 'package:sindico_app/widgets/page_vazia.dart';
 import 'package:sindico_app/widgets/scaffold_all.dart';
 import 'package:sindico_app/widgets/shimmer_widget.dart';
-import 'package:sindico_app/widgets/snackbar/snack.dart';
+import 'package:sindico_app/widgets/snack.dart';
 
 import '../../consts/consts.dart';
 import 'add_tarefa.dart';
@@ -66,6 +66,7 @@ class _TarefasScreenState extends State<TarefasScreen> {
               context,
               'Adicionar Tarefa',
               icon: Icons.add,
+              color: Consts.kColorRed,
               onPressed: () {
                 ConstsFuture.navigatorPagePush(context, AdicionarTarefa());
               },
@@ -228,7 +229,8 @@ class _TarefasScreenState extends State<TarefasScreen> {
                                                       ConstsWidget
                                                           .buildOutlinedButton(
                                                         context,
-                                                        title: '  Cancelar  ',
+                                                        title:
+                                                            '    Cancelar    ',
                                                         onPressed: () {
                                                           Navigator.pop(
                                                               context);
@@ -238,8 +240,9 @@ class _TarefasScreenState extends State<TarefasScreen> {
                                                           .buildCustomButton(
                                                         context,
                                                         !concluida
-                                                            ? ' Concluir '
-                                                            : ' Reativar ',
+                                                            ? '   Concluir   '
+                                                            : '   Reativar   ',
+                                                        color: Consts.kColorRed,
                                                         onPressed: () {
                                                           ConstsFuture.resquestApi(
                                                                   '${Consts.sindicoApi}tarefas/?fn=editarTarefa&idcond=${ResponsalvelInfos.idcondominio}&idfuncionario=${ResponsalvelInfos.idfuncionario}&idtarefa=$idtarefa&concluida=${concluida ? 0 : 1}&descricao=$descricao&data_vencimento=$data_vencimento&aviso_dias=$aviso_dias&repetir_dias=$repetir_dias')
@@ -267,20 +270,18 @@ class _TarefasScreenState extends State<TarefasScreen> {
                                           child: Icon(
                                             Icons.check_circle_outline_outlined,
                                             color: concluida
-                                                ? Colors.blue
-                                                : Colors.grey,
+                                                ? Color.fromARGB(
+                                                    255, 78, 227, 83)
+                                                : Colors.grey[300],
                                             size: 30,
                                           ),
                                         ),
                                       ],
                                     ),
                                   ),
-                                  SizedBox(
-                                    width: size.width * 0.77,
-                                    child: ConstsWidget.buildTextTitle(
-                                        context, descricao,
-                                        textAlign: TextAlign.center),
-                                  ),
+                                  ConstsWidget.buildTextTitle(
+                                      context, descricao,
+                                      width: 0.77, textAlign: TextAlign.center),
                                 ],
                               ),
                               SizedBox(
@@ -294,6 +295,7 @@ class _TarefasScreenState extends State<TarefasScreen> {
                                     context, 'Vence Hoje',
                                     color: Consts.kColorRed),
                               ConstsWidget.buildTextSubTitle(
+                                context,
                                 DateFormat('dd/MM/yyyy HH:mm')
                                     .format(DateTime.parse(data_vencimento))
                                     .toString(),
@@ -306,10 +308,6 @@ class _TarefasScreenState extends State<TarefasScreen> {
                                 ConstsWidget.buildTextTitle(
                                     context, 'Tarefa Diária',
                                     color: Colors.red),
-                              // if (aviso_dias == 0 && repetir_dias == 0)
-                              //   ConstsWidget.buildTextTitle(
-                              //       context, 'Apenas Hoje',
-                              //       color: Colors.red),
                               if ((aviso_dias == 0 &&
                                       repetir_dias != 1 &&
                                       repetir_dias != 0) ||
@@ -321,12 +319,12 @@ class _TarefasScreenState extends State<TarefasScreen> {
                                           MainAxisAlignment.center,
                                       children: [
                                         ConstsWidget.buildTextSubTitle(
-                                            'Será avisado '),
+                                            context, 'Será avisado '),
                                         ConstsWidget.buildTextTitle(
                                             context, '$txt_aviso_dias '),
                                         if (aviso_dias != 0)
                                           ConstsWidget.buildTextSubTitle(
-                                              'antes'),
+                                              context, 'antes'),
                                       ],
                                     ),
                                     SizedBox(
@@ -337,7 +335,7 @@ class _TarefasScreenState extends State<TarefasScreen> {
                                           MainAxisAlignment.center,
                                       children: [
                                         ConstsWidget.buildTextSubTitle(
-                                            'Repetir a cada '),
+                                            context, 'Repetir a cada '),
                                         ConstsWidget.buildTextTitle(
                                             context, '$texto_repetir_dias '),
                                       ],

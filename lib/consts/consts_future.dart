@@ -11,7 +11,7 @@ import '../screens/quadro_avisos/quadro_de_avisos.dart';
 import '../screens/reservas/listar_reservar.dart';
 import '../screens/tarefas/tarefas_screen.dart';
 import '../screens/termodeuso/aceitar_alert.dart';
-import '../widgets/snackbar/snack.dart';
+import '../widgets/snack.dart';
 import 'consts.dart';
 import 'package:http/http.dart' as http;
 
@@ -146,11 +146,13 @@ class ConstsFuture {
         LocalInfos.removeCache();
         buildMinhaSnackBar(context,
             icon: Icons.warning_amber,
+            hasError: apiBody['erro'],
             subTitle: apiBody['mensagem'],
             title: 'Algo Deu Errado!');
       }
     } else {
-      return buildMinhaSnackBar(context, icon: Icons.warning_amber);
+      return buildMinhaSnackBar(context,
+          icon: Icons.warning_amber, hasError: true);
     }
   }
 

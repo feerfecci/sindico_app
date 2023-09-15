@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:sindico_app/consts/consts.dart';
 import 'package:validatorless/validatorless.dart';
 
 import '../consts/const_widget.dart';
@@ -75,7 +76,6 @@ Widget buildMyTextFormObrigatorio(BuildContext context, String title,
     String? Function(String?)? validator,
     TextCapitalization textCapitalization = TextCapitalization.none,
     bool readOnly = false,
-    bool labelCenter = false,
     int? maxLength,
     int? maxLines,
     int? minLines,
@@ -110,24 +110,31 @@ Widget buildMyTextFormObrigatorio(BuildContext context, String title,
                 : size.height * 0.023),
         filled: true,
         fillColor: Theme.of(context).canvasColor,
-        label: labelCenter
-            ? Center(
-                child: Text(
-                  title,
-                  style: TextStyle(fontSize: SplashScreen.isSmall ? 14 : 16),
-                ),
-              )
-            : Text(
-                title,
-                style: TextStyle(fontSize: SplashScreen.isSmall ? 14 : 16),
+        label: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              title,
+              style: TextStyle(
+                fontSize: SplashScreen.isSmall ? 14 : 16,
               ),
+            ),
+            Text(
+              ' *',
+              style: TextStyle(
+                color: Consts.kColorRed,
+                fontSize: SplashScreen.isSmall ? 14 : 16,
+              ),
+            ),
+          ],
+        ),
         hintText: hintText,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(16),
-          borderSide: BorderSide(color: Colors.black26),
+          borderSide: BorderSide(color: Colors.black12),
         ),
       ),
     ),

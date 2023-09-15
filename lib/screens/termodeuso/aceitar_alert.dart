@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:http/http.dart' as http;
 import 'package:sindico_app/widgets/shimmer_widget.dart';
-import 'package:sindico_app/widgets/snackbar/snack.dart';
+import 'package:sindico_app/widgets/snack.dart';
 import '../../consts/const_widget.dart';
 import '../../consts/consts.dart';
 import '../../consts/consts_future.dart';
@@ -141,6 +141,7 @@ class _AceitarTermosScreenState extends State<AceitarTermosScreen> {
                                   } else {
                                     buildMinhaSnackBar(context,
                                         title: 'Algo Saiu Mau!',
+                                        hasError: value['erro'],
                                         subTitle: value['mensagem']);
                                   }
                                 });

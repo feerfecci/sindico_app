@@ -9,7 +9,7 @@ import 'package:sindico_app/screens/espacos/lista_espacos.dart';
 import 'package:sindico_app/widgets/my_box_shadow.dart';
 import 'package:sindico_app/widgets/my_text_form_field.dart';
 import 'package:sindico_app/widgets/scaffold_all.dart';
-import 'package:sindico_app/widgets/snackbar/snack.dart';
+import 'package:sindico_app/widgets/snack.dart';
 
 class CadastroEspacos extends StatefulWidget {
   bool ativo;
@@ -150,10 +150,12 @@ class _CadastroEspacosState extends State<CadastroEspacos> {
 
                                 buildMinhaSnackBar(context,
                                     title: 'Muito Obrigado',
+                                    hasError: value['erro'],
                                     subTitle: value['mensagem']);
                               } else {
                                 buildMinhaSnackBar(context,
                                     title: 'Algo Saiu Mau',
+                                    hasError: value['erro'],
                                     subTitle: value['mensagem']);
                               }
                             });

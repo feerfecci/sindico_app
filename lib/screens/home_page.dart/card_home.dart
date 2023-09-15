@@ -47,7 +47,7 @@ Widget buildCardHome(BuildContext context,
             ConstsWidget.buildBadge(
               context,
               position: BadgePosition.topEnd(
-                  end: -size.width * 0.15, top: -size.height * 0.02),
+                  end: -size.width * 0.14, top: -size.height * 0.013),
               showBadge: title == "Quadro de Avisos" &&
                       QuadroDeAvisos.qntAvisos.isNotEmpty
                   ? true
@@ -59,12 +59,12 @@ Widget buildCardHome(BuildContext context,
                           ? true
                           : false,
               title: title == "Quadro de Avisos"
-                  ? QuadroDeAvisos.qntAvisos.length.toString()
+                  ? QuadroDeAvisos.qntAvisos.length
                   : title == "Reservas Solicitadas"
-                      ? ListaReservas.listIdReserva.length.toString()
+                      ? ListaReservas.listIdReserva.length
                       : title == 'Lista | Tarefas'
-                          ? TarefasScreen.qntTarefas.length.toString()
-                          : '',
+                          ? TarefasScreen.qntTarefas.length
+                          : 0,
               child: ConstsWidget.buildFutureImage(
                 context,
                 iconApi: iconApi,

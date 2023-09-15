@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:sindico_app/forms/unidades_form.dart';
 import 'package:sindico_app/widgets/alert_dialogs/alertdialog_all.dart';
 import 'package:sindico_app/widgets/scaffold_all.dart';
-import 'package:sindico_app/widgets/snackbar/snack.dart';
+import 'package:sindico_app/widgets/snack.dart';
 import '../../consts/consts.dart';
 import '../../consts/const_widget.dart';
 import '../../consts/consts_future.dart';
@@ -349,11 +349,13 @@ class _CadastroUnidadesState extends State<CadastroUnidades> {
                                               .whenComplete(() {
                                             buildMinhaSnackBar(context,
                                                 title: 'Muito Bem',
+                                                hasError: value['erro'],
                                                 subTitle: value['mensagem']);
                                           });
                                         } else {
                                           buildMinhaSnackBar(context,
                                               title: 'Uma pena',
+                                              hasError: value['erro'],
                                               subTitle: value['mensagem']);
                                         }
                                       });

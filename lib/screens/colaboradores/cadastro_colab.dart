@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:sindico_app/screens/splash_screen/splash_screen.dart';
 import 'package:sindico_app/widgets/scaffold_all.dart';
-import 'package:sindico_app/widgets/snackbar/snack.dart';
+import 'package:sindico_app/widgets/snack.dart';
 import 'package:http/http.dart' as http;
 import 'package:validatorless/validatorless.dart';
 
@@ -270,6 +270,7 @@ class _CadastroColaboradorState extends State<CadastroColaborador> {
                           } else {
                             buildMinhaSnackBar(context,
                                 title: 'Cuidado',
+                                hasError: true,
                                 subTitle: 'Complete o documento');
                           }
                         },
@@ -355,6 +356,7 @@ class _CadastroColaboradorState extends State<CadastroColaborador> {
                         } else {
                           buildMinhaSnackBar(context,
                               title: 'Algo Saiu Mal',
+                              hasError: true,
                               subTitle: 'O login não foi gerado');
                         }
                       });
@@ -364,6 +366,7 @@ class _CadastroColaboradorState extends State<CadastroColaborador> {
                       });
                       buildMinhaSnackBar(context,
                           title: 'Cuidado',
+                          hasError: true,
                           subTitle: 'Complete as Informações');
                     }
                   },
@@ -382,7 +385,8 @@ class _CadastroColaboradorState extends State<CadastroColaborador> {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  ConstsWidget.buildTextSubTitle('Login'),
+                                  ConstsWidget.buildTextSubTitle(
+                                      context, 'Login'),
                                   ConstsWidget.buildTextTitle(
                                       context, loginGerado2),
                                 ],
@@ -443,6 +447,7 @@ class _CadastroColaboradorState extends State<CadastroColaborador> {
                               loadingSalvar();
                             } else {
                               buildMinhaSnackBar(context,
+                                  hasError: true,
                                   subTitle: 'Selecione uma Função');
                             }
                           },
@@ -485,10 +490,14 @@ class _CadastroColaboradorState extends State<CadastroColaborador> {
       if (!value['erro']) {
         ConstsFuture.navigatorPopPush(context, '/listaColaboradores');
         return buildMinhaSnackBar(context,
-            title: 'Parabéns', subTitle: value['mensagem']);
+            hasError: value['erro'],
+            title: 'Parabéns',
+            subTitle: value['mensagem']);
       }
       return buildMinhaSnackBar(context,
-          title: 'Algo deu errado!', subTitle: value['mensagem']);
+          hasError: value['erro'],
+          title: 'Algo deu errado!',
+          subTitle: value['mensagem']);
     });
   }
 

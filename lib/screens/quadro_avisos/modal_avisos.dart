@@ -6,7 +6,7 @@ import 'package:sindico_app/consts/consts_future.dart';
 import 'package:sindico_app/screens/quadro_avisos/quadro_de_avisos.dart';
 import 'package:sindico_app/widgets/my_box_shadow.dart';
 import 'package:sindico_app/widgets/my_text_form_field.dart';
-import 'package:sindico_app/widgets/snackbar/snack.dart';
+import 'package:sindico_app/widgets/snack.dart';
 import '../../consts/const_widget.dart';
 import 'package:http/http.dart' as http;
 
@@ -98,6 +98,7 @@ class _WidgetModalAvisosState extends State<WidgetModalAvisos> {
                         // ignore: use_build_context_synchronously
                         buildMinhaSnackBar(context,
                             title: 'Cuidado!',
+                            hasError: true,
                             subTitle: 'Permitido apenas um arquivo');
                       }
                     }
@@ -156,6 +157,7 @@ class _WidgetModalAvisosState extends State<WidgetModalAvisos> {
                             context, QuadroDeAvisos());
                         buildMinhaSnackBar(context,
                             title: 'Muito Obrigado!',
+                            hasError: value['erro'],
                             subTitle: value['mensagem']);
                       } else {
                         buildMinhaSnackBar(context);

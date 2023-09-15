@@ -12,6 +12,7 @@ import 'package:sindico_app/screens/home_page.dart/card_home.dart';
 import 'package:sindico_app/screens/home_page.dart/drop_cond.dart';
 import 'package:sindico_app/screens/reservas/listar_reservar.dart';
 import 'package:sindico_app/widgets/custom_drawer/custom_drawer.dart';
+import 'package:sindico_app/widgets/snack.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../consts/consts.dart';
 import '../../widgets/alert_dialogs/alertdialog_all.dart';
@@ -155,6 +156,19 @@ class _HomePageState extends State<HomePage> {
         'idfuncionario': '${ResponsalvelInfos.idfuncionario}',
         'idfuncao': '2',
         'idcond': '${ResponsalvelInfos.idcondominio}',
+      });
+      OneSignal.shared.setNotificationOpenedHandler((openedResult) {
+        print(openedResult.notification.additionalData!.values.last);
+        if (openedResult.notification.additionalData!.values.last ==
+            'reserva_espacos') {
+          ConstsFuture.navigatorPagePush(context, ListaReservas());
+        } else if (openedResult.notification.additionalData!.values.last ==
+            'aviso') {
+          ConstsFuture.navigatorPagePush(context, QuadroDeAvisos());
+        } else if (openedResult.notification.additionalData!.values.last ==
+            'tarefa') {
+          ConstsFuture.navigatorPagePush(context, TarefasScreen());
+        }
       });
       // OneSignal.shared
       //     .sendTags({'isAndroid': 1, 'idweb': logado.idCliente.toString()});
@@ -462,23 +476,35 @@ class _HomePageState extends State<HomePage> {
                 },
               ),
               if (ResponsalvelInfos.qtd_publicidade != 0)
-                ConstsWidget.buildPadding001(context,
-                    vertical: 0.02,
-                    child: buildBanerPubli(local: 1, usarList: telefonesList1)),
-              if (ResponsalvelInfos.qtd_publicidade != 0)
-                GridView.count(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 10,
-                  childAspectRatio: 1,
-                  physics: ClampingScrollPhysics(),
-                  shrinkWrap: true,
+                Column(
                   children: [
-                    buildBanerPubli(local: 2, usarList: telefonesList2),
-                    buildBanerPubli(local: 3, usarList: telefonesList3),
+                    SizedBox(
+                      height: size.height * 0.01,
+                    ),
+                    buildBanerPubli(local: 1, usarList: telefonesList1)
+                  ],
+                ),
+              if (ResponsalvelInfos.qtd_publicidade != 0)
+                Column(
+                  children: [
+                    SizedBox(
+                      height: size.height * 0.018,
+                    ),
+                    GridView.count(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 12,
+                      childAspectRatio: 1,
+                      physics: ClampingScrollPhysics(),
+                      shrinkWrap: true,
+                      children: [
+                        buildBanerPubli(local: 2, usarList: telefonesList2),
+                        buildBanerPubli(local: 3, usarList: telefonesList3),
+                      ],
+                    ),
                   ],
                 ),
               SizedBox(
-                height: size.height * 0.01,
+                height: size.height * 0.02,
               ),
             ],
           ),

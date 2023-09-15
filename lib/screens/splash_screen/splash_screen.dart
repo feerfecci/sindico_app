@@ -8,7 +8,7 @@ import '../../consts/consts.dart';
 import '../../consts/const_widget.dart';
 import '../../consts/consts_future.dart';
 import '../../repositories/biometrics_auth.dart';
-import '../../widgets/snackbar/snack.dart';
+import '../../widgets/snack.dart';
 
 class SplashScreen extends StatefulWidget {
   static bool isSmall = false;

@@ -103,7 +103,8 @@ class _ListaMoradorState extends State<ListaMorador> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 ConstsWidget.buildTextTitle(
-                                    context, nome_morador),
+                                    context, nome_morador,
+                                    width: 0.7),
                                 Container(
                                   child: ConstsWidget.buildAtivoInativo(
                                       context, ativo),
@@ -117,9 +118,10 @@ class _ListaMoradorState extends State<ListaMorador> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     ConstsWidget.buildTextSubTitle(
-                                        'Localizado em'),
+                                        context, 'Localizado em'),
                                     ConstsWidget.buildTextTitle(context,
-                                        '$dividido_por $nome_divisao - $numero'),
+                                        '$dividido_por $nome_divisao - $numero',
+                                        maxLines: 3, width: 0.55),
                                   ],
                                 ),
                                 ConstsWidget.buildCheckBox(
@@ -144,7 +146,7 @@ class _ListaMoradorState extends State<ListaMorador> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         ConstsWidget.buildTextSubTitle(
-                                            'Data Nascimento'),
+                                            context, 'Data Nascimento'),
                                         ConstsWidget.buildTextTitle(
                                             context, data_nascimento),
                                       ],
@@ -158,7 +160,7 @@ class _ListaMoradorState extends State<ListaMorador> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       ConstsWidget.buildTextSubTitle(
-                                          'Documento'),
+                                          context, 'Documento'),
                                       ConstsWidget.buildTextTitle(
                                           context, documento),
                                     ],
@@ -177,7 +179,7 @@ class _ListaMoradorState extends State<ListaMorador> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       ConstsWidget.buildTextSubTitle(
-                                          'Telefone'),
+                                          context, 'Telefone'),
                                       Row(
                                         children: [
                                           ConstsWidget.buildTextTitle(
@@ -191,7 +193,8 @@ class _ListaMoradorState extends State<ListaMorador> {
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    ConstsWidget.buildTextSubTitle('Login'),
+                                    ConstsWidget.buildTextSubTitle(
+                                        context, 'Login'),
                                     ConstsWidget.buildTextTitle(context, login),
                                   ],
                                 ),
@@ -201,8 +204,10 @@ class _ListaMoradorState extends State<ListaMorador> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    ConstsWidget.buildTextSubTitle('Email'),
-                                    ConstsWidget.buildTextTitle(context, email),
+                                    ConstsWidget.buildTextSubTitle(
+                                        context, 'Email'),
+                                    ConstsWidget.buildTextTitle(context, email,
+                                        maxLines: 2, width: 1),
                                   ],
                                 )),
                             Row(

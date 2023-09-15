@@ -12,7 +12,7 @@ import '../../consts/consts.dart';
 import '../../widgets/my_box_shadow.dart';
 import '../../widgets/my_text_form_field.dart';
 import '../../widgets/scaffold_all.dart';
-import '../../widgets/snackbar/snack.dart';
+import '../../widgets/snack.dart';
 
 class CadastroMorador extends StatefulWidget {
   int? idmorador;
@@ -113,7 +113,7 @@ class _CadastroMoradorState extends State<CadastroMorador> {
               ConstsWidget.buildPadding001(context,
                   child: ConstsWidget.buildTextTitle(
                       context, widget.localizado!,
-                      fontSize: 20)),
+                      textAlign: TextAlign.center, width: 1, fontSize: 20)),
               buildAtivoInativo2(
                 context,
               ),
@@ -249,6 +249,7 @@ class _CadastroMoradorState extends State<CadastroMorador> {
                     } else {
                       buildMinhaSnackBar(context,
                           title: 'Algo Saiu Mal',
+                          hasError: value['erro'],
                           subTitle: 'O login não foi gerado');
                     }
                   });
@@ -257,7 +258,9 @@ class _CadastroMoradorState extends State<CadastroMorador> {
                     isLoadingLogin = false;
                   });
                   buildMinhaSnackBar(context,
-                      title: 'Cuidado', subTitle: 'Complete as Informações');
+                      hasError: true,
+                      title: 'Cuidado',
+                      subTitle: 'Complete as Informações');
                 }
               }),
               if (loginGerado != '')
@@ -271,7 +274,8 @@ class _CadastroMoradorState extends State<CadastroMorador> {
                           children: [
                             Column(
                               children: [
-                                ConstsWidget.buildTextSubTitle('Login'),
+                                ConstsWidget.buildTextSubTitle(
+                                    context, 'Login'),
                                 ConstsWidget.buildTextTitle(
                                   context,
                                   loginGerado,
@@ -428,11 +432,14 @@ class _CadastroMoradorState extends State<CadastroMorador> {
             ),
           );
           buildMinhaSnackBar(context,
-              title: 'Tudo Certo!', subTitle: value['mensagem']);
+              hasError: value['erro'],
+              title: 'Tudo Certo!',
+              subTitle: value['mensagem']);
           // buildMinhaSnackBar(context,
           //     title: 'Tudo Certo!', subTitle: value['Mensagem']);
         } else {
-          return buildMinhaSnackBar(context, subTitle: value['Mensagem']);
+          return buildMinhaSnackBar(context,
+              hasError: value['erro'], subTitle: value['Mensagem']);
         }
       });
 

@@ -7,7 +7,7 @@ import 'package:sindico_app/widgets/date_picker.dart';
 import 'package:sindico_app/widgets/my_box_shadow.dart';
 import 'package:sindico_app/widgets/my_text_form_field.dart';
 import 'package:sindico_app/widgets/scaffold_all.dart';
-import 'package:sindico_app/widgets/snackbar/snack.dart';
+import 'package:sindico_app/widgets/snack.dart';
 
 import '../../consts/consts.dart';
 import '../splash_screen/splash_screen.dart';
@@ -147,10 +147,14 @@ class _AdicionarTarefaState extends State<AdicionarTarefa> {
           ConstsFuture.navigatorPopPush(context, '/tarefasScreen');
 
           buildMinhaSnackBar(context,
-              title: 'Muito bem!', subTitle: value['mensagem']);
+              hasError: value['erro'],
+              title: 'Muito bem!',
+              subTitle: value['mensagem']);
         } else {
           buildMinhaSnackBar(context,
-              title: 'Algo Saiu Mau', subTitle: value['mensagem']);
+              hasError: value['erro'],
+              title: 'Algo Saiu Mau',
+              subTitle: value['mensagem']);
         }
       });
     }
@@ -166,7 +170,9 @@ class _AdicionarTarefaState extends State<AdicionarTarefa> {
           startSaveTarefa();
         } else {
           buildMinhaSnackBar(context,
-              title: 'Cuidado!', subTitle: 'Complete as informações');
+              hasError: true,
+              title: 'Cuidado!',
+              subTitle: 'Complete as informações');
         }
       }
     }
@@ -196,7 +202,6 @@ class _AdicionarTarefaState extends State<AdicionarTarefa> {
                 context,
                 'Descrição da Tarefa',
                 textCapitalization: TextCapitalization.sentences,
-                labelCenter: true,
                 hintText: 'Exemplo: Dedetização de todos os blocos',
                 // readOnly: !isExpired,
                 initialValue: widget.nomeTarefaCtrl,
@@ -224,7 +229,7 @@ class _AdicionarTarefaState extends State<AdicionarTarefa> {
                 children: [
                   Column(
                     children: [
-                      ConstsWidget.buildTextSubTitle('Repetir tarefa',
+                      ConstsWidget.buildTextSubTitle(context, 'Repetir tarefa',
                           size: 14),
                       Switch.adaptive(
                         value: isRepet ?? true,
@@ -240,7 +245,7 @@ class _AdicionarTarefaState extends State<AdicionarTarefa> {
                   if (isRepet!)
                     Column(
                       children: [
-                        ConstsWidget.buildTextSubTitle('Todos os dias',
+                        ConstsWidget.buildTextSubTitle(context, 'Todos os dias',
                             size: 14),
                         Switch.adaptive(
                           value: isDayle ?? true,
@@ -257,7 +262,8 @@ class _AdicionarTarefaState extends State<AdicionarTarefa> {
               if (isRepet! && !isDayle!)
                 Column(
                   children: [
-                    ConstsWidget.buildTextSubTitle('Repetir tarefa', size: 14),
+                    ConstsWidget.buildTextSubTitle(context, 'Repetir tarefa',
+                        size: 14),
                     StatefulBuilder(builder: (context, setState) {
                       return ConstsWidget.buildDecorationDrop(
                         context,
@@ -281,7 +287,8 @@ class _AdicionarTarefaState extends State<AdicionarTarefa> {
                               dropdownRepetirDias = value!;
                             });
                           },
-                          hint: ConstsWidget.buildTextSubTitle('Selecione',
+                          hint: ConstsWidget.buildTextSubTitle(
+                              context, 'Selecione',
                               size: SplashScreen.isSmall ? 16 : 18),
                           items: listRepetir.map((value) {
                             return DropdownMenuItem(
@@ -301,7 +308,8 @@ class _AdicionarTarefaState extends State<AdicionarTarefa> {
                     if (!isDayle!)
                       Column(
                         children: [
-                          ConstsWidget.buildTextSubTitle('Ser notificado',
+                          ConstsWidget.buildTextSubTitle(
+                              context, 'Ser notificado',
                               size: 14),
                           StatefulBuilder(builder: (context, setState) {
                             return ConstsWidget.buildDecorationDrop(
@@ -326,7 +334,7 @@ class _AdicionarTarefaState extends State<AdicionarTarefa> {
                                   });
                                 },
                                 hint: ConstsWidget.buildTextSubTitle(
-                                    'Selecione',
+                                    context, 'Selecione',
                                     size: SplashScreen.isSmall ? 16 : 18),
                                 items: listAviso_dias.map((value) {
                                   return DropdownMenuItem(

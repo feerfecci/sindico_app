@@ -7,7 +7,7 @@ import 'package:sindico_app/consts/consts.dart';
 import 'package:sindico_app/consts/consts_future.dart';
 import 'package:sindico_app/widgets/my_box_shadow.dart';
 import 'package:sindico_app/widgets/scaffold_all.dart';
-import 'package:sindico_app/widgets/snackbar/snack.dart';
+import 'package:sindico_app/widgets/snack.dart';
 import '../../screens/splash_screen/splash_screen.dart';
 import '../../consts/const_widget.dart';
 import '../../widgets/page_erro.dart';
@@ -117,9 +117,11 @@ class _ListaReservasState extends State<ListaReservas> {
                                 setState(() {});
                                 buildMinhaSnackBar(context,
                                     title: 'Muito Obrigado',
+                                    hasError: value['erro'],
                                     subTitle: value['mensagem']);
                               } else {
                                 buildMinhaSnackBar(context,
+                                    hasError: value['erro'],
                                     title: 'Algo saiu mal',
                                     subTitle: value['mensagem']);
                               }
@@ -146,16 +148,19 @@ class _ListaReservasState extends State<ListaReservas> {
       );
     }
 
-    Widget buildTextReserva({required titulo, required texto}) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          ConstsWidget.buildTextTitle(context, titulo,
-              fontSize: SplashScreen.isSmall ? 16 : 18),
-          ConstsWidget.buildTextSubTitle(texto,
-              size: SplashScreen.isSmall ? 14 : 16),
-        ],
+    Widget buildTextReserva({required titulo, required texto, double? width}) {
+      return SizedBox(
+        width: width != null ? size.width * width : null,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            ConstsWidget.buildTextTitle(context, titulo,
+                fontSize: SplashScreen.isSmall ? 16 : 18),
+            ConstsWidget.buildTextSubTitle(context, texto,
+                size: SplashScreen.isSmall ? 14 : 16),
+          ],
+        ),
       );
     }
 
@@ -299,6 +304,7 @@ class _ListaReservasState extends State<ListaReservas> {
                           int idespaco = apiReservar['idespaco'];
                           String nome_espaco = apiReservar['nome_espaco'];
                           int idcondominio = apiReservar['idcondominio'];
+                          bool temadm = apiReservar['temadm'];
                           String nome_condominio =
                               apiReservar['nome_condominio'];
                           int idmorador = apiReservar['idmorador'];
@@ -309,6 +315,54 @@ class _ListaReservasState extends State<ListaReservas> {
                               DateTime.parse(apiReservar['data_reserva']));
                           String datahora = DateFormat('dd/MM/yyyy HH:mm')
                               .format(DateTime.parse(apiReservar['datahora']));
+
+                          Widget buildStatusTarefa(
+                              {required int status, required String title}) {
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                ConstsWidget.buildTextTitle(context, title),
+                                SizedBox(
+                                  height: size.height * 0.005,
+                                ),
+                                Container(
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: !temadm && title != 'Síndico'
+                                            ? Colors.black12
+                                            : status == 0
+                                                ? Colors.grey
+                                                : status == 1
+                                                    ? verde
+                                                    : amarelo,
+                                      ),
+                                      borderRadius: BorderRadius.circular(16)),
+                                  child: ConstsWidget.buildPadding001(
+                                    context,
+                                    vertical: 0.012,
+                                    horizontal: 0.05,
+                                    child: ConstsWidget.buildTextTitle(
+                                      context,
+                                      !temadm && title != 'Síndico'
+                                          ? 'Desativado'
+                                          : status == 0
+                                              ? 'Recusado'
+                                              : status == 1
+                                                  ? 'Aprovada'
+                                                  : 'Pendente',
+                                      color: !temadm && title != 'Síndico'
+                                          ? Colors.black12
+                                          : status == 0
+                                              ? Colors.grey
+                                              : status == 1
+                                                  ? verde
+                                                  : amarelo,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            );
+                          }
 
                           Widget buildAtendeReserva(String title, int tipo) {
                             return ConstsWidget.buildCustomButton(
@@ -361,35 +415,13 @@ class _ListaReservasState extends State<ListaReservas> {
                                       children: [
                                         buildTextReserva(
                                           titulo: 'Nome do Espaço',
+                                          width: 0.6,
                                           texto: nome_espaco.toString(),
                                         ),
-                                        // Spacer(),
-                                        // Container(
-                                        //   decoration: BoxDecoration(
-                                        //       border: Border.all(
-                                        //         color: status == 0
-                                        //             ? Colors.grey
-                                        //             : status == 1
-                                        //                 ? verde
-                                        //                 : amarelo,
-                                        //       ),
-                                        //       borderRadius:
-                                        //           BorderRadius.circular(16)),
-                                        //   child: ConstsWidget.buildPadding001(
-                                        //     context,
-                                        //     vertical: 0.012,
-                                        //     horizontal: 0.05,
-                                        //     child: ConstsWidget.buildTextTitle(
-                                        //       context,
-                                        //       texto_status,
-                                        //       color: status == 0
-                                        //           ? Colors.grey
-                                        //           : status == 1
-                                        //               ? verde
-                                        //               : amarelo,
-                                        //     ),
-                                        //   ),
-                                        // ),
+                                        Spacer(),
+                                        // if (temadm)
+                                        buildStatusTarefa(
+                                            status: status, title: 'Síndico'),
                                       ],
                                     ),
                                     ConstsWidget.buildPadding001(
@@ -409,74 +441,17 @@ class _ListaReservasState extends State<ListaReservas> {
                                                   texto: unidade,
                                                 ),
                                                 ConstsWidget.buildTextSubTitle(
+                                                    context,
                                                     nome_morador.toString())
                                               ],
                                             ),
                                           ),
-                                          Column(
-                                            children: [
-                                              ConstsWidget.buildTextTitle(
-                                                  context, 'Administradora'),
-                                              SizedBox(
-                                                height: size.height * 0.005,
-                                              ),
-                                              Container(
-                                                decoration: BoxDecoration(
-                                                    border: Border.all(
-                                                      color: status_adm == 0
-                                                          ? Colors.grey
-                                                          : status_adm == 1
-                                                              ? verde
-                                                              : amarelo,
-                                                    ),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            16)),
-                                                child: ConstsWidget
-                                                    .buildPadding001(
-                                                  context,
-                                                  vertical: 0.012,
-                                                  horizontal: 0.05,
-                                                  child: ConstsWidget
-                                                      .buildTextTitle(
-                                                    context,
-                                                    status_adm == 0
-                                                        ? 'Recusado'
-                                                        : status_adm == 1
-                                                            ? 'Aprovada'
-                                                            : 'Pendente',
-                                                    color: status_adm == 0
-                                                        ? Colors.grey
-                                                        : status_adm == 1
-                                                            ? verde
-                                                            : amarelo,
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
+                                          buildStatusTarefa(
+                                              status: status_adm,
+                                              title: 'Administradora'),
                                         ],
                                       ),
                                     ),
-                                    // Row(
-                                    //   children: [
-                                    //     Container(
-                                    //       alignment: Alignment.centerLeft,
-                                    //       width: size.width * 0.5,
-                                    //       child: buildTextReserva(
-                                    //         titulo: 'Reservado por',
-                                    //         texto:
-                                    //             '${nome_morador.toString()} - ',
-                                    //       ),
-                                    //     ),
-                                    //     Spacer(),
-                                    //     buildTextReserva(
-                                    //       titulo: 'Unidade',
-                                    //       texto: unidade,
-                                    //     ),
-                                    //   ],
-                                    // ),
-
                                     Row(
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,

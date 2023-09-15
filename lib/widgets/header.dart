@@ -37,7 +37,7 @@ Widget buildHeaderPage(
                       titulo,
                       fontSize: 24,
                     ),
-                    ConstsWidget.buildTextSubTitle(subTitulo),
+                    ConstsWidget.buildTextSubTitle(context, subTitulo),
                   ],
                 ),
               ),

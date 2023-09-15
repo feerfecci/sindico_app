@@ -84,12 +84,9 @@ class _ListaEspacosState extends State<ListaEspacos> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        SizedBox(
-                                          width: size.width * 0.65,
-                                          child: ConstsWidget.buildTextTitle(
-                                              context, nome_espaco,
-                                              fontSize: 18),
-                                        ),
+                                        ConstsWidget.buildTextTitle(
+                                            context, nome_espaco,
+                                            width: 0.65, fontSize: 18),
                                         ConstsWidget.buildAtivoInativo(
                                             context, ativo),
                                       ],
@@ -98,7 +95,7 @@ class _ListaEspacosState extends State<ListaEspacos> {
                                       context,
                                       vertical: 0.015,
                                       child: ConstsWidget.buildTextSubTitle(
-                                          descricao),
+                                          context, descricao),
                                     ),
                                     Padding(
                                       padding: EdgeInsets.only(

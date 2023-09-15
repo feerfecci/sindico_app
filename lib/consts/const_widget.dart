@@ -5,6 +5,7 @@ import '../widgets/shimmer_widget.dart';
 import 'consts.dart';
 import 'package:badges/badges.dart' as badges;
 import 'consts_future.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 class ConstsWidget {
   static Widget buildPadding001(BuildContext context,
@@ -26,36 +27,50 @@ class ConstsWidget {
     Color? color,
     double fontSize = 16,
     int maxLines = 2,
+    double? width,
+    double? height,
   }) {
-    //var size = MediaQuery.of(context).size;
-    return Text(
-      title,
-      maxLines: maxLines,
-      textAlign: textAlign,
-      style: TextStyle(
-        color: color ?? Theme.of(context).colorScheme.primary,
-        overflow: TextOverflow.ellipsis,
-        fontSize: SplashScreen.isSmall ? (fontSize - 2) : fontSize,
-        fontWeight: FontWeight.bold,
+    var size = MediaQuery.of(context).size;
+    return SizedBox(
+      width: width != null ? size.width * width : null,
+      height: height != null ? size.height * height : null,
+      child: Text(
+        title,
+        maxLines: maxLines,
+        textAlign: textAlign,
+        style: TextStyle(
+          color: color ?? Theme.of(context).colorScheme.primary,
+          overflow: TextOverflow.ellipsis,
+          fontSize: SplashScreen.isSmall ? (fontSize - 2) : fontSize,
+          fontWeight: FontWeight.bold,
+        ),
       ),
     );
   }
 
   static Widget buildTextSubTitle(
+    BuildContext context,
     String title, {
     color,
     TextAlign? textAlign,
     double size = 14,
+    double? width,
+    double? height,
   }) {
-    return Text(
-      title,
-      maxLines: 20,
-      textAlign: textAlign,
-      style: TextStyle(
-        height: 1.4,
-        color: color,
-        fontSize: SplashScreen.isSmall ? (size - 2) : size,
-        fontWeight: FontWeight.normal,
+    var sizeMedia = MediaQuery.of(context).size;
+    return SizedBox(
+      width: width != null ? sizeMedia.width * width : null,
+      height: height != null ? sizeMedia.height * height : null,
+      child: Text(
+        title,
+        maxLines: 20,
+        textAlign: textAlign,
+        style: TextStyle(
+          height: 1.4,
+          color: color,
+          fontSize: SplashScreen.isSmall ? (size - 2) : size,
+          fontWeight: FontWeight.normal,
+        ),
       ),
     );
   }
@@ -254,6 +269,7 @@ class ConstsWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           ConstsWidget.buildTextSubTitle(
+            context,
             title,
             size: SplashScreen.isSmall ? 16 : 18,
             color: color ?? Colors.blue,
@@ -284,36 +300,20 @@ class ConstsWidget {
     return Stack(
       alignment: Alignment.bottomCenter,
       children: [
-        FutureBuilder(
-            future: ConstsFuture.apiImage(iconApi),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return ShimmerWidget(
-                    height: SplashScreen.isSmall
-                        ? size.height * 0.055
-                        : size.height * 0.068,
-                    width: SplashScreen.isSmall
-                        ? size.width * 0.14
-                        : size.width * 0.15);
-              } else if (snapshot.hasData) {
-                return SizedBox(
-                  width: width != null ? size.width * width : null,
-                  height: height != null ? size.height * height : null,
-                  child: Image.network(
-                    iconApi,
-                    fit: BoxFit.fill,
-                  ),
-                );
-              } else {
-                return Image.asset('assets/ico-error.png');
-              }
-            }),
-        if (title != null)
-          ConstsWidget.buildTextTitle(
-            context,
-            title,
-            color: Colors.white,
-          )
+        CachedNetworkImage(
+          imageUrl: iconApi,
+          height: height != null ? size.height * height : null,
+          width: width != null ? size.width * width : null,
+          fit: BoxFit.fill,
+          fadeInDuration: Duration.zero,
+          fadeOutDuration: Duration.zero,
+          placeholder: (context, url) => ShimmerWidget(
+              height: SplashScreen.isSmall
+                  ? size.height * 0.06
+                  : size.height * 0.068,
+              width: size.width * 0.15),
+          errorWidget: (context, url, error) => Image.asset('ico-error.png'),
+        )
       ],
     );
   }
@@ -340,7 +340,7 @@ class ConstsWidget {
   }
 
   static Widget buildBadge(BuildContext context,
-      {String title = '',
+      {int title = 0,
       required bool showBadge,
       required Widget? child,
       BadgePosition? position}) {
@@ -348,8 +348,15 @@ class ConstsWidget {
         showBadge: showBadge,
         badgeAnimation: badges.BadgeAnimation.fade(toAnimate: false),
         badgeContent: Text(
-          title,
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          title > 99
+              ? '+99'
+              : title == 0
+                  ? ''
+                  : title.toString(),
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         position: position,
         badgeStyle: badges.BadgeStyle(

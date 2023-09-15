@@ -6,7 +6,7 @@ import 'package:sindico_app/consts/consts_future.dart';
 import 'package:sindico_app/widgets/my_box_shadow.dart';
 import 'package:sindico_app/widgets/my_text_form_field.dart';
 import 'package:sindico_app/widgets/scaffold_all.dart';
-import 'package:sindico_app/widgets/snackbar/snack.dart';
+import 'package:sindico_app/widgets/snack.dart';
 import 'package:validatorless/validatorless.dart';
 
 import '../../forms/responsavel_form.dart';
@@ -37,9 +37,12 @@ class _MeuPerfilScreenState extends State<MeuPerfilScreen> {
       if (!value['erro']) {
         Navigator.pop(context);
         buildMinhaSnackBar(context,
-            title: 'Muito bem!', subTitle: value['mensagem']);
+            hasError: value['erro'],
+            title: 'Muito bem!',
+            subTitle: value['mensagem']);
       } else {
-        buildMinhaSnackBar(context, subTitle: value['mensagem']);
+        buildMinhaSnackBar(context,
+            subTitle: value['mensagem'], hasError: value['erro']);
       }
     });
   }
@@ -65,7 +68,7 @@ class _MeuPerfilScreenState extends State<MeuPerfilScreen> {
                       SizedBox(
                         height: size.height * 0.01,
                       ),
-                      ConstsWidget.buildTextSubTitle('Meu Login'),
+                      ConstsWidget.buildTextSubTitle(context, 'Meu Login'),
                       ConstsWidget.buildTextTitle(
                           context, ResponsalvelInfos.login,
                           fontSize: 20),
@@ -160,7 +163,7 @@ class _MeuPerfilScreenState extends State<MeuPerfilScreen> {
                   fontSize: 20),
               //     ),
               ConstsWidget.buildTextSubTitle(
-                  'Aqui só pode ser alterados pela nossa equipe'),
+                  context, 'Aqui só pode ser alterados pela nossa equipe'),
               SizedBox(
                 height: size.height * 0.01,
               ),
@@ -175,9 +178,11 @@ class _MeuPerfilScreenState extends State<MeuPerfilScreen> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              ConstsWidget.buildTextSubTitle('Logradouro'),
+                              ConstsWidget.buildTextSubTitle(
+                                  context, 'Logradouro'),
                               ConstsWidget.buildTextTitle(
-                                  context, ResponsalvelInfos.endereco),
+                                  context, ResponsalvelInfos.endereco,
+                                  width: 0.8, maxLines: 2),
                             ],
                           ),
                         ],
@@ -189,7 +194,7 @@ class _MeuPerfilScreenState extends State<MeuPerfilScreen> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            ConstsWidget.buildTextSubTitle('Numero'),
+                            ConstsWidget.buildTextSubTitle(context, 'Numero'),
                             ConstsWidget.buildTextTitle(
                                 context, ResponsalvelInfos.numero),
                           ],
@@ -197,7 +202,7 @@ class _MeuPerfilScreenState extends State<MeuPerfilScreen> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            ConstsWidget.buildTextSubTitle('CEP'),
+                            ConstsWidget.buildTextSubTitle(context, 'CEP'),
                             ConstsWidget.buildTextTitle(
                                 context, ResponsalvelInfos.cep),
                           ],
@@ -213,15 +218,17 @@ class _MeuPerfilScreenState extends State<MeuPerfilScreen> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            ConstsWidget.buildTextSubTitle('Bairro'),
+                            ConstsWidget.buildTextSubTitle(context, 'Bairro'),
                             ConstsWidget.buildTextTitle(
-                                context, ResponsalvelInfos.bairro),
+                              context,
+                              ResponsalvelInfos.bairro,
+                            ),
                           ],
                         ),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            ConstsWidget.buildTextSubTitle('Estado'),
+                            ConstsWidget.buildTextSubTitle(context, 'Estado'),
                             ConstsWidget.buildTextTitle(
                                 context, ResponsalvelInfos.estado),
                           ],
@@ -229,9 +236,10 @@ class _MeuPerfilScreenState extends State<MeuPerfilScreen> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            ConstsWidget.buildTextSubTitle('Cidade'),
+                            ConstsWidget.buildTextSubTitle(context, 'Cidade'),
                             ConstsWidget.buildTextTitle(
-                                context, ResponsalvelInfos.cidade),
+                                context, ResponsalvelInfos.cidade,
+                                width: 0.3),
                           ],
                         ),
                       ],
@@ -245,7 +253,7 @@ class _MeuPerfilScreenState extends State<MeuPerfilScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               ConstsWidget.buildTextSubTitle(
-                                  'Resposta do morador para portaria'),
+                                  context, 'Resposta do morador para portaria'),
                               ConstsWidget.buildTextTitle(context,
                                   '${ResponsalvelInfos.temporespostas} minutos'),
                             ],

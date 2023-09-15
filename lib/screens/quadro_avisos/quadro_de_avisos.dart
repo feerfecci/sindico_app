@@ -2,6 +2,7 @@
 
 import 'dart:convert';
 
+import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
@@ -153,6 +154,9 @@ class _QuadroDeAvisosState extends State<QuadroDeAvisos> {
                             child: ConstsWidget.buildBadge(
                               context,
                               showBadge: showBolinha,
+                              position: BadgePosition.topEnd(
+                                  top: size.height * 0.018,
+                                  end: size.width * 0.0025),
                               child: Theme(
                                 data: Theme.of(context)
                                     .copyWith(dividerColor: Colors.transparent),
@@ -167,24 +171,24 @@ class _QuadroDeAvisosState extends State<QuadroDeAvisos> {
                                   // trailing: Icon(Icons.arrow_drop_down),
                                   title: Row(
                                     children: [
-                                      SizedBox(
-                                        width: size.width * 0.65,
-                                        child: ConstsWidget.buildTextTitle(
-                                            context, titulo,
-                                            textAlign: TextAlign.center,
-                                            fontSize: 18),
-                                      ),
+                                      ConstsWidget.buildTextTitle(
+                                          context, titulo,
+                                          width: 0.65,
+                                          textAlign: TextAlign.center,
+                                          fontSize: 18),
                                     ],
                                   ),
                                   children: [
                                     ConstsWidget.buildPadding001(
                                       context,
                                       child: ConstsWidget.buildTextSubTitle(
+                                        context,
                                         texto,
                                         textAlign: TextAlign.center,
                                       ),
                                     ),
-                                    ConstsWidget.buildTextSubTitle(datahora,
+                                    ConstsWidget.buildTextSubTitle(
+                                        context, datahora,
                                         textAlign: TextAlign.center),
                                     SizedBox(
                                       height: size.height * 0.01,

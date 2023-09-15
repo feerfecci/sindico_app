@@ -57,7 +57,7 @@ class _ListaColaboradoresState extends State<ListaColaboradores> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                ConstsWidget.buildTextSubTitle(titulo1),
+                ConstsWidget.buildTextSubTitle(context, titulo1),
                 ConstsWidget.buildTextTitle(context, texto1),
               ],
             ),
@@ -66,7 +66,7 @@ class _ListaColaboradoresState extends State<ListaColaboradores> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ConstsWidget.buildTextSubTitle(titulo2),
+              ConstsWidget.buildTextSubTitle(context, titulo2),
               SizedBox(
                   width: size.width * 0.4,
                   child: ConstsWidget.buildTextTitle(context, texto2)),
@@ -180,12 +180,10 @@ class _ListaColaboradoresState extends State<ListaColaboradores> {
                                       Row(
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
-                                          SizedBox(
-                                              width: size.width * 0.6,
-                                              child:
-                                                  ConstsWidget.buildTextTitle(
-                                                      context,
-                                                      '$nome_funcionario')),
+                                          ConstsWidget.buildTextTitle(
+                                              context,
+                                              width: 0.6,
+                                              '$nome_funcionario'),
                                           Spacer(),
                                           ConstsWidget.buildAtivoInativo(
                                               context, ativo),
@@ -214,6 +212,7 @@ class _ListaColaboradoresState extends State<ListaColaboradores> {
                                                   children: [
                                                     ConstsWidget
                                                         .buildTextSubTitle(
+                                                            context,
                                                             'Nascimento'),
                                                     ConstsWidget.buildTextTitle(
                                                         context,
@@ -226,7 +225,7 @@ class _ListaColaboradoresState extends State<ListaColaboradores> {
                                                 children: [
                                                   ConstsWidget
                                                       .buildTextSubTitle(
-                                                          'Documento'),
+                                                          context, 'Documento'),
                                                   ConstsWidget.buildTextTitle(
                                                       context, documento),
                                                 ],
@@ -251,7 +250,7 @@ class _ListaColaboradoresState extends State<ListaColaboradores> {
                                               CrossAxisAlignment.start,
                                           children: [
                                             ConstsWidget.buildTextSubTitle(
-                                                'Telefone'),
+                                                context, 'Telefone'),
                                             ConstsWidget.buildTextTitle(
                                                 context, '($ddd) $telefone'),
                                           ],
@@ -264,9 +263,10 @@ class _ListaColaboradoresState extends State<ListaColaboradores> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           ConstsWidget.buildTextSubTitle(
-                                              'Email'),
+                                              context, 'Email'),
                                           ConstsWidget.buildTextTitle(
-                                              context, email),
+                                              context, email,
+                                              maxLines: 2, width: 1),
                                         ],
                                       ),
                                       if (funcao != 'Síndico' &&
