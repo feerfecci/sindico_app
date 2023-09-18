@@ -169,15 +169,12 @@ class _QuadroDeAvisosState extends State<QuadroDeAvisos> {
                                     }
                                   },
                                   // trailing: Icon(Icons.arrow_drop_down),
-                                  title: Row(
-                                    children: [
-                                      ConstsWidget.buildTextTitle(
-                                          context, titulo,
-                                          width: 0.65,
-                                          textAlign: TextAlign.center,
-                                          fontSize: 18),
-                                    ],
-                                  ),
+                                  title: ConstsWidget.buildTextTitle(
+                                      context, titulo,
+                                      width: 0.65,
+                                      maxLines: 5,
+                                      textAlign: TextAlign.center,
+                                      fontSize: 18),
                                   children: [
                                     ConstsWidget.buildPadding001(
                                       context,

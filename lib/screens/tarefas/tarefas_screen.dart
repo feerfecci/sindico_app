@@ -13,6 +13,7 @@ import 'package:sindico_app/widgets/shimmer_widget.dart';
 import 'package:sindico_app/widgets/snack.dart';
 
 import '../../consts/consts.dart';
+import '../splash_screen/splash_screen.dart';
 import 'add_tarefa.dart';
 
 class TarefasScreen extends StatefulWidget {
@@ -129,11 +130,11 @@ class _TarefasScreenState extends State<TarefasScreen> {
                           isToday = true;
                         }
                         return MyBoxShadow(
-                            child: ConstsWidget.buildBadge(
+                          /*  child: ConstsWidget.buildBadge(
                           context,
                           showBadge: isToday,
                           position:
-                              BadgePosition.topEnd(end: size.width * 0.015),
+                              BadgePosition.topEnd(end: size.width * 0.015),*/
                           child: Column(
                             children: [
                               SizedBox(
@@ -212,15 +213,83 @@ class _TarefasScreenState extends State<TarefasScreen> {
                                         ),
                                         GestureDetector(
                                           onTap: () {
+                                            String acaoTarefa = !concluida
+                                                ? 'Concluir Tarefa'
+                                                : 'Reativar Tarefa';
+
+                                            TextSpan buildBoldSpan(textBold) {
+                                              return TextSpan(
+                                                  text: textBold,
+                                                  style: TextStyle(
+                                                    color: Consts.kColorRed,
+
+                                                    // Theme.of(context)
+                                                    //     .colorScheme
+                                                    //     .primary,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    fontSize:
+                                                        SplashScreen.isSmall
+                                                            ? 16
+                                                            : 18,
+                                                    fontWeight: FontWeight.bold,
+                                                  ));
+                                            }
+
+                                            TextSpan buildNormalSpan(
+                                                textNormal) {
+                                              return TextSpan(
+                                                  text: textNormal,
+                                                  style: TextStyle(
+                                                      color: Theme.of(context)
+                                                          .colorScheme
+                                                          .primary,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      fontSize:
+                                                          SplashScreen.isSmall
+                                                              ? 14
+                                                              : 16));
+                                            }
+
                                             showAllDialog(context,
                                                 barrierDismissible: true,
                                                 title:
                                                     ConstsWidget.buildTextTitle(
-                                                        context,
-                                                        !concluida
-                                                            ? 'Concluir Tarefa'
-                                                            : 'Reativar Tarefa'),
+                                                        context, acaoTarefa,
+                                                        fontSize: 18),
                                                 children: [
+                                                  RichText(
+                                                    textAlign: TextAlign.center,
+                                                    text: TextSpan(
+                                                      text: 'Ao ',
+                                                      style: TextStyle(
+                                                        color: Theme.of(context)
+                                                            .colorScheme
+                                                            .primary,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        fontSize:
+                                                            SplashScreen.isSmall
+                                                                ? 16
+                                                                : 18,
+                                                      ),
+                                                      children: [
+                                                        buildBoldSpan(
+                                                            acaoTarefa),
+                                                        buildNormalSpan(
+                                                            ' você '),
+                                                        buildBoldSpan(concluida
+                                                            ? 'voltará a receber '
+                                                            : 'não receberá '),
+                                                        buildNormalSpan(
+                                                            'avisos sobre esta terefa'),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    height: size.height * 0.03,
+                                                  ),
                                                   Row(
                                                     mainAxisAlignment:
                                                         MainAxisAlignment
@@ -306,8 +375,9 @@ class _TarefasScreenState extends State<TarefasScreen> {
                               ),
                               if (aviso_dias == 0 && repetir_dias == 1)
                                 ConstsWidget.buildTextTitle(
-                                    context, 'Tarefa Diária',
-                                    color: Colors.red),
+                                  context,
+                                  'Tarefa Diária',
+                                ),
                               if ((aviso_dias == 0 &&
                                       repetir_dias != 1 &&
                                       repetir_dias != 0) ||
@@ -364,7 +434,8 @@ class _TarefasScreenState extends State<TarefasScreen> {
                                   ))
                             ],
                           ),
-                        ));
+                          /*  )*/
+                        );
                       },
                     );
                   } else {

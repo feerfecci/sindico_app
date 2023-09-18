@@ -294,7 +294,7 @@ class ConstsWidget {
         child: child);
   }
 
-  static Widget buildFutureImage(BuildContext context,
+  static Widget buildCachedImage(BuildContext context,
       {required String iconApi, double? width, double? height, String? title}) {
     var size = MediaQuery.of(context).size;
     return Stack(

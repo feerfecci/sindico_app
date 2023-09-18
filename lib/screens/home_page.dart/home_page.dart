@@ -12,6 +12,7 @@ import 'package:sindico_app/screens/home_page.dart/card_home.dart';
 import 'package:sindico_app/screens/home_page.dart/drop_cond.dart';
 import 'package:sindico_app/screens/reservas/listar_reservar.dart';
 import 'package:sindico_app/widgets/custom_drawer/custom_drawer.dart';
+import 'package:sindico_app/widgets/shimmer_widget.dart';
 import 'package:sindico_app/widgets/snack.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../consts/consts.dart';
@@ -190,7 +191,9 @@ class _HomePageState extends State<HomePage> {
         future: apiPubli(local: local),
         builder: (context, snapshot) {
           usarList.clear();
-          if (snapshot.hasData) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return ShimmerWidget(height: size.height * 0.25);
+          } else if (snapshot.hasData) {
             // if (!snapshot.data!["erro"]) {
             var apiPublicidade = snapshot.data['publicidade'][0];
             var idpublidade = apiPublicidade['idpublidade'];
@@ -349,7 +352,7 @@ class _HomePageState extends State<HomePage> {
               },
               child: ClipRRect(
                 borderRadius: BorderRadius.all(Radius.circular(15)),
-                child: ConstsWidget.buildFutureImage(context,
+                child: ConstsWidget.buildCachedImage(context,
                     /* title: 'Ver mais $idpublidade',*/ iconApi: arquivo),
               ),
             );
@@ -412,7 +415,7 @@ class _HomePageState extends State<HomePage> {
                   bottom: SplashScreen.isSmall
                       ? size.height * 0.005
                       : size.height * 0.01),
-              child: ConstsWidget.buildFutureImage(
+              child: ConstsWidget.buildCachedImage(
                 context,
                 iconApi: 'https://a.portariaapp.com/img/logo_verde.png',
               ),

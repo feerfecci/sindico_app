@@ -65,7 +65,7 @@ Widget buildCardHome(BuildContext context,
                       : title == 'Lista | Tarefas'
                           ? TarefasScreen.qntTarefas.length
                           : 0,
-              child: ConstsWidget.buildFutureImage(
+              child: ConstsWidget.buildCachedImage(
                 context,
                 iconApi: iconApi,
                 width: SplashScreen.isSmall ? 0.13 : 0.141,

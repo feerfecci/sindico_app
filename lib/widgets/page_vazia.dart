@@ -22,7 +22,7 @@ class _PageVaziaState extends State<PageVazia> {
       child: Column(
         children: [
           Center(
-            child: ConstsWidget.buildFutureImage(context,
+            child: ConstsWidget.buildCachedImage(context,
                 iconApi:
                     'https://a.portariaapp.com/img/ico-nao-encontrado.png'),
           ),

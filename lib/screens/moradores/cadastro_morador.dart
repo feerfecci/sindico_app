@@ -208,9 +208,9 @@ class _CadastroMoradorState extends State<CadastroMorador> {
                   ),
                 ],
               ),
-              buildMyTextFormField(
+              buildMyTextFormObrigatorio(
                 context,
-                title: 'Email',
+                'Email',
                 initialValue: widget.email,
                 hintText: 'exemplo@exe.com',
                 keyboardType: TextInputType.emailAddress,
