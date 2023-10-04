@@ -58,7 +58,7 @@ class SearchUnidade extends SearchDelegate<String> {
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     fontWeight: FontWeight.bold,
-                    color: Theme.of(context).colorScheme.primary,
+                    color: Theme.of(context).textTheme.bodyLarge!.color,
                     height: 1.5,
                     fontSize: 18),
               ),

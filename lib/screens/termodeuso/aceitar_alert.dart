@@ -10,22 +10,7 @@ import '../../consts/consts_future.dart';
 import '../../widgets/page_erro.dart';
 import '../../widgets/page_vazia.dart';
 import '../home_page.dart/home_page.dart';
-
-showDialogAceitar(
-  BuildContext context,
-  // {
-  //   required String title,
-  // required List<Widget> children,
-  // bool barrierDismissible = false
-  // }
-) {
-  return showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) {
-        return AceitarTermosScreen();
-      });
-}
+import '../splash_screen/splash_screen.dart';
 
 class AceitarTermosScreen extends StatefulWidget {
   const AceitarTermosScreen({super.key});
@@ -70,16 +55,21 @@ class _AceitarTermosScreenState extends State<AceitarTermosScreen> {
                     if (!snapshot.data['erro']) {
                       var texto = snapshot.data['termo_uso'][0]['texto'];
                       return SizedBox(
-                        height: size.height * 0.64,
+                        height: SplashScreen.isSmall
+                            ? size.height * 0.57
+                            : size.height * 0.63,
                         child: ListView(
                           children: [
                             Html(
                               data: texto,
                               style: {
                                 'p': Style(
-                                    fontSize: FontSize(16),
-                                    color:
-                                        Theme.of(context).colorScheme.primary),
+                                  fontSize: FontSize(16),
+                                  color: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge!
+                                      .color,
+                                ),
                                 'i': Style(
                                     fontSize: FontSize(16),
                                     fontStyle: FontStyle.italic),
@@ -124,7 +114,8 @@ class _AceitarTermosScreenState extends State<AceitarTermosScreen> {
                     children: [
                       ConstsWidget.buildCustomButton(
                         context,
-                        '    Aceitar    ',
+                        rowSpacing: 0.13,
+                        'Aceitar',
                         color: isChecked ? Consts.kColorRed : Colors.grey,
                         onPressed: isChecked
                             ? () {
@@ -140,7 +131,7 @@ class _AceitarTermosScreenState extends State<AceitarTermosScreen> {
                                         (route) => false);
                                   } else {
                                     buildMinhaSnackBar(context,
-                                        title: 'Algo Saiu Mau!',
+                                        title: 'algo saiu mal!',
                                         hasError: value['erro'],
                                         subTitle: value['mensagem']);
                                   }

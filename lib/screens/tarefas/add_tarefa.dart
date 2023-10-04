@@ -17,12 +17,12 @@ class AdicionarTarefa extends StatefulWidget {
   int? idtarefa;
   int? aviso_dias;
   int? repetir_dias;
-  String? initialDate;
+  String? dateSelected;
   String? nomeTarefaCtrl;
 
   AdicionarTarefa(
       {this.idtarefa,
-      this.initialDate,
+      this.dateSelected,
       this.nomeTarefaCtrl,
       this.aviso_dias,
       this.repetir_dias,
@@ -35,8 +35,8 @@ class AdicionarTarefa extends StatefulWidget {
 Object? dropdownAvisoDias;
 Object? dropdownRepetirDias;
 bool isLoading = false;
-bool? isRepet;
-bool? isDayle;
+bool isRepet = false;
+bool isDayle = false;
 List<dynamic> listAviso_dias = [
   // {
   //   'idtempo': 30,
@@ -120,7 +120,7 @@ class _AdicionarTarefaState extends State<AdicionarTarefa> {
     initDatas();
     apiListarDiasRepetir();
     apiListarDiasAvisar();
-    MyDatePicker.dataSelected = widget.initialDate ?? '';
+    MyDatePicker.dataSelected = widget.dateSelected ?? '';
     super.initState();
   }
 
@@ -133,8 +133,11 @@ class _AdicionarTarefaState extends State<AdicionarTarefa> {
       String incluirEditar = widget.idtarefa == null
           ? 'incluirTarefa'
           : 'editarTarefa&idtarefa=${widget.idtarefa}';
+
+      String dateTarefa = DateFormat('yyyy-MM-dd HH:mm:ss')
+          .format(DateTime.parse(MyDatePicker.dataSelected));
       ConstsFuture.resquestApi(
-              '${Consts.sindicoApi}tarefas/?fn=$incluirEditar&idcond=${ResponsalvelInfos.idcondominio}&idfuncionario=${ResponsalvelInfos.idfuncionario}&descricao=$nomeTarefaCtrl&data_vencimento=${MyDatePicker.dataSelected}&aviso_dias=${isRepet! && isDayle! ? '0' : !isRepet! && !isDayle! ? '0' : dropdownAvisoDias.toString()}&repetir_dias=${isDayle! ? 1 : !isRepet! && !isDayle! ? '0' : dropdownRepetirDias.toString()}')
+              '${Consts.sindicoApi}tarefas/?fn=$incluirEditar&idcond=${ResponsalvelInfos.idcondominio}&idfuncionario=${ResponsalvelInfos.idfuncionario}&descricao=$nomeTarefaCtrl&data_vencimento=$dateTarefa&aviso_dias=${isRepet && isDayle ? '0' : !isRepet && !isDayle ? '0' : dropdownAvisoDias.toString()}&repetir_dias=${isDayle ? 1 : !isRepet && !isDayle ? '0' : dropdownRepetirDias.toString()}')
           .then((value) {
         setState(() {
           isLoading = false;
@@ -153,7 +156,7 @@ class _AdicionarTarefaState extends State<AdicionarTarefa> {
         } else {
           buildMinhaSnackBar(context,
               hasError: value['erro'],
-              title: 'Algo Saiu Mau',
+              title: 'algo saiu mal',
               subTitle: value['mensagem']);
         }
       });
@@ -162,11 +165,11 @@ class _AdicionarTarefaState extends State<AdicionarTarefa> {
     startTarefaSind(validForm) {
       keyTarefa.currentState?.save();
       if (validForm && MyDatePicker.dataSelected != '') {
-        if (isDayle!) {
+        if (isDayle) {
           startSaveTarefa();
         } else if (dropdownRepetirDias != null && dropdownAvisoDias != null) {
           startSaveTarefa();
-        } else if (!isRepet!) {
+        } else if (!isRepet) {
           startSaveTarefa();
         } else {
           buildMinhaSnackBar(context,
@@ -177,27 +180,25 @@ class _AdicionarTarefaState extends State<AdicionarTarefa> {
       }
     }
 
-    DateTime? timeBackPressed = widget.initialDate == null
-        ? DateTime.now()
-        : DateTime.parse(widget.initialDate!);
-
-    final differenceBack = DateTime.now().difference(timeBackPressed);
-    final isExpired = differenceBack < Duration(days: 1);
-    String? initialDate;
-    if (widget.initialDate != null) {
-      initialDate = widget.initialDate != null
-          ? DateFormat('dd/MM/yyyy HH:mm')
-              .format(DateTime.parse(widget.initialDate!))
-          : null;
-    }
+    // String? initialDate;
+    // if (widget.dateSelected != null) {
+    //   initialDate = widget.dateSelected != null
+    //       ? DateFormat('dd/MM/yyyy HH:mm')
+    //           .format(DateTime.parse(widget.dateSelected!))
+    //       : null;
+    // }
     var size = MediaQuery.of(context).size;
     return buildScaffoldAll(context,
-        title: 'Adicionar Tarefa',
+        title: widget.idtarefa == null ? 'Adicionar Tarefa' : 'Editar Tarefa',
         body: Form(
           key: keyTarefa,
           child: MyBoxShadow(
               child: Column(
             children: [
+              ConstsWidget.buildPadding001(
+                context,
+                child: ConstsWidget.buildCamposObrigatorios(context),
+              ),
               buildMyTextFormObrigatorio(
                 context,
                 'Descrição da Tarefa',
@@ -212,18 +213,29 @@ class _AdicionarTarefaState extends State<AdicionarTarefa> {
                   });
                 },
               ),
-              if (isExpired)
-                ConstsWidget.buildPadding001(
-                  context,
-                  child: MyDatePicker(
-                    type: DateTimePickerType.dateTime,
-                    dataSelected: dataSelected,
-                    initialDate: initialDate != null
-                        ? DateTime.parse(widget.initialDate!)
-                        : null,
-                    hintText: initialDate ?? 'Escolha uma data',
-                  ),
+              // if (!isExpired)
+              ConstsWidget.buildPadding001(
+                context,
+                child: MyDatePicker(
+                  type: DateTimePickerType.dateTime,
+                  dataSelected: widget.dateSelected != '0000-00-00' &&
+                          widget.dateSelected != '' &&
+                          widget.dateSelected != null
+                      ? DateFormat('dd/MM/yyyy')
+                          .format(DateTime.parse(widget.dateSelected!))
+                      : DateTime.now(),
+                  hintText: widget.dateSelected != '0000-00-00' &&
+                          widget.dateSelected != '' &&
+                          widget.dateSelected != null
+                      ? DateFormat('dd/MM/yyyy HH:mm')
+                          .format(DateTime.parse(MyDatePicker.dataSelected))
+                          .toString()
+                      : 'Selecione uma data',
+                  // initialDate: initialDate != null
+                  //     ? DateTime.parse(widget.initialDate!)
+                  //     : null,
                 ),
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -232,7 +244,7 @@ class _AdicionarTarefaState extends State<AdicionarTarefa> {
                       ConstsWidget.buildTextSubTitle(context, 'Repetir tarefa',
                           size: 14),
                       Switch.adaptive(
-                        value: isRepet ?? true,
+                        value: isRepet,
                         onChanged: (value) {
                           setState(() {
                             isRepet = value;
@@ -242,13 +254,13 @@ class _AdicionarTarefaState extends State<AdicionarTarefa> {
                       ),
                     ],
                   ),
-                  if (isRepet!)
+                  if (isRepet)
                     Column(
                       children: [
                         ConstsWidget.buildTextSubTitle(context, 'Todos os dias',
                             size: 14),
                         Switch.adaptive(
-                          value: isDayle ?? true,
+                          value: isDayle,
                           onChanged: (value) {
                             setState(() {
                               isDayle = value;
@@ -259,7 +271,7 @@ class _AdicionarTarefaState extends State<AdicionarTarefa> {
                     ),
                 ],
               ),
-              if (isRepet! && !isDayle!)
+              if (isRepet && !isDayle)
                 Column(
                   children: [
                     ConstsWidget.buildTextSubTitle(context, 'Repetir tarefa',
@@ -305,7 +317,7 @@ class _AdicionarTarefaState extends State<AdicionarTarefa> {
                     SizedBox(
                       height: size.height * 0.02,
                     ),
-                    if (!isDayle!)
+                    if (!isDayle)
                       Column(
                         children: [
                           ConstsWidget.buildTextSubTitle(
@@ -362,8 +374,11 @@ class _AdicionarTarefaState extends State<AdicionarTarefa> {
                   context,
                   title: 'Salvar',
                   isLoading: isLoading,
+                  color: Consts.kColorRed,
                   onPressed: () {
                     var validForm = keyTarefa.currentState?.validate() ?? false;
+
+                    FocusManager.instance.primaryFocus!.unfocus();
                     startTarefaSind(validForm);
                   },
                 ),

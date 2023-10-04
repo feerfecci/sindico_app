@@ -1,5 +1,6 @@
 // ignore_for_file: unused_local_variable
 
+import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -10,6 +11,7 @@ import 'package:sindico_app/repositories/shared_preferences.dart';
 import 'package:sindico_app/screens/espacos/lista_espacos.dart';
 import 'package:sindico_app/screens/home_page.dart/card_home.dart';
 import 'package:sindico_app/screens/home_page.dart/drop_cond.dart';
+import 'package:sindico_app/screens/meu_perfil/meu_perfil_screen.dart';
 import 'package:sindico_app/screens/reservas/listar_reservar.dart';
 import 'package:sindico_app/widgets/custom_drawer/custom_drawer.dart';
 import 'package:sindico_app/widgets/shimmer_widget.dart';
@@ -131,6 +133,42 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  alertSenhaPadrao() {
+    if (!ResponsalvelInfos.senha_alterada) {
+      return showAllDialog(context,
+          title: Stack(
+            alignment: Alignment.center,
+            children: [
+              ConstsWidget.buildTextTitle(context, 'Senha Padrão',
+                  textAlign: TextAlign.center),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  IconButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      icon: Icon(Icons.close)),
+                ],
+              )
+            ],
+          ),
+          children: [
+            ConstsWidget.buildTextTitle(context,
+                'Sua senha é a padrão. Acesse seu Perfil para trocar para uma senha personalizada e garantir sua segurança',
+                maxLines: 8, textAlign: TextAlign.center),
+            SizedBox(
+              height: 10,
+            ),
+            ConstsWidget.buildCustomButton(context, 'Trocar Senha',
+                onPressed: () {
+              Navigator.pop(context);
+              ConstsFuture.navigatorPagePush(context, MeuPerfilScreen());
+            }),
+          ]);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -145,34 +183,40 @@ class _HomePageState extends State<HomePage> {
         '${Consts.sindicoApi}publicidade/?fn=mostrarPublicidade&idcond=${ResponsalvelInfos.idcondominio}&local=$local');
   }
 
-  static const String oneSignalAppId = "25709281-f6fc-4ac7-a90e-dac40989a182";
-
   Future<void> initPlatformState() async {
-    OneSignal.shared.setAppId(oneSignalAppId);
-    OneSignal.shared.promptUserForPushNotificationPermission().then((accepted) {
-      OneSignal.shared
-          .setExternalUserId(ResponsalvelInfos.idfuncionario.toString());
-      // OneSignal.shared.setEmail(email: "${User.emailUser}");
-      OneSignal.shared.sendTags({
-        'idfuncionario': '${ResponsalvelInfos.idfuncionario}',
-        'idfuncao': '2',
-        'idcond': '${ResponsalvelInfos.idcondominio}',
-      });
-      OneSignal.shared.setNotificationOpenedHandler((openedResult) {
-        print(openedResult.notification.additionalData!.values.last);
-        if (openedResult.notification.additionalData!.values.last ==
-            'reserva_espacos') {
-          ConstsFuture.navigatorPagePush(context, ListaReservas());
-        } else if (openedResult.notification.additionalData!.values.last ==
-            'aviso') {
-          ConstsFuture.navigatorPagePush(context, QuadroDeAvisos());
-        } else if (openedResult.notification.additionalData!.values.last ==
-            'tarefa') {
-          ConstsFuture.navigatorPagePush(context, TarefasScreen());
-        }
-      });
-      // OneSignal.shared
-      //     .sendTags({'isAndroid': 1, 'idweb': logado.idCliente.toString()});
+    OneSignal.shared.setAppId('efbab610-a64a-41ea-ac83-df2d674b81a2');
+    OneSignal.shared.deleteTags(['idcond', 'idmorador', 'idunidade']);
+
+    OneSignal.shared.promptUserForPushNotificationPermission().then((value) {
+      for (var i = 0; i <= (ResponsalvelInfos.listIdCond.length - 1); i++) {
+        OneSignal.shared.deleteTags([
+          'idcond${ResponsalvelInfos.listIdCond[i]}',
+          'idfuncionario${ResponsalvelInfos.listIdFuncionario[i]}',
+          'idfuncao${ResponsalvelInfos.listIdFuncao[i]}'
+        ]);
+
+        OneSignal.shared.sendTags({
+          'idcond${ResponsalvelInfos.listIdCond[i]}':
+              ResponsalvelInfos.listIdCond[i],
+          'idfuncionario${ResponsalvelInfos.listIdFuncionario[i]}':
+              ResponsalvelInfos.listIdFuncionario[i],
+          'idfuncao${ResponsalvelInfos.listIdFuncao[i]}':
+              ResponsalvelInfos.listIdFuncao[i],
+        });
+      }
+    });
+
+    OneSignal.shared.setNotificationOpenedHandler((openedResult) {
+      if (openedResult.notification.additionalData!['idcond'] != null) {
+        ConstsFuture.fazerLogin(
+            context, ResponsalvelInfos.login, ResponsalvelInfos.senhacripto,
+            idCondominio:
+                int.parse(openedResult.notification.additionalData!['idcond']),
+            openedResult: openedResult);
+      }
+    });
+    Timer(Duration(seconds: 3), () {
+      alertSenhaPadrao();
     });
   }
 
@@ -194,174 +238,182 @@ class _HomePageState extends State<HomePage> {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return ShimmerWidget(height: size.height * 0.25);
           } else if (snapshot.hasData) {
-            // if (!snapshot.data!["erro"]) {
-            var apiPublicidade = snapshot.data['publicidade'][0];
-            var idpublidade = apiPublicidade['idpublidade'];
-            var idcondominio = apiPublicidade['idcondominio'];
-            var arquivo = apiPublicidade['arquivo'];
-            var email = apiPublicidade['email'];
-            var site = apiPublicidade['site'];
-            var whatsapp = apiPublicidade['whatsapp'];
-            var telefone = apiPublicidade['telefone'];
-            var telefone2 = apiPublicidade['telefone2'];
-            var impressoes = apiPublicidade['impressoes'];
-            var datahora = apiPublicidade['datahora'];
-            var ultima_atualizacao = apiPublicidade['ultima_atualizacao'];
+            if (!snapshot.data!["erro"]) {
+              if (snapshot.data['publicidade'][0] != null) {
+                var apiPublicidade = snapshot.data['publicidade'][0];
+                var idpublidade = apiPublicidade['idpublidade'];
+                var idcondominio = apiPublicidade['idcondominio'];
+                var arquivo = apiPublicidade['arquivo'];
+                var email = apiPublicidade['email'];
+                var site = apiPublicidade['site'];
+                var whatsapp = apiPublicidade['whatsapp'];
+                var telefone = apiPublicidade['telefone'];
+                var telefone2 = apiPublicidade['telefone2'];
+                var impressoes = apiPublicidade['impressoes'];
+                var datahora = apiPublicidade['datahora'];
+                var ultima_atualizacao = apiPublicidade['ultima_atualizacao'];
 
-            bool hasWhats = false;
+                bool hasWhats = false;
 
-            if (whatsapp != '') {
-              usarList.add(whatsapp);
-              hasWhats = true;
-            }
-            if (telefone != '') {
-              if (telefone != whatsapp) {
-                usarList.add(telefone);
-              } else {
-                hasWhats = true;
-              }
-            }
-            if (telefone2 != '') {
-              if (telefone2 != whatsapp && telefone2 != telefone) {
-                usarList.add(telefone2);
-              } else {
-                hasWhats = true;
-              }
-            }
-
-            return GestureDetector(
-              onTap: () {
-                cliquePubli(
-                    'https://a.portariaapp.com/unidade/api/publicidade/?fn=cliquePublicidade&idpublicidade=$idpublidade');
-                if (usarList.length == 1 && email == '' && site == '') {
-                  if (hasWhats) {
-                    launchUrl(Uri.parse('https://wa.me/+55$whatsapp'),
-                        mode: LaunchMode.externalApplication);
-                  } else if (telefone != '') {
-                    launchUrl(Uri.parse('tel:$telefone'),
-                        mode: LaunchMode.externalApplication);
+                if (whatsapp != '') {
+                  usarList.add(whatsapp);
+                  hasWhats = true;
+                }
+                if (telefone != '') {
+                  if (telefone != whatsapp) {
+                    usarList.add(telefone);
                   } else {
-                    launchUrl(Uri.parse('tel:$telefone2'),
-                        mode: LaunchMode.externalApplication);
+                    hasWhats = true;
                   }
-                } else if (usarList.isEmpty && email == '' && site != '') {
-                  launchUrl(Uri.parse(site),
-                      mode: LaunchMode.externalApplication);
-                } else if (usarList.isEmpty && site == '' && email != '') {
-                  lauchEmail(email);
-                } else {
-                  showAllDialog(context,
-                      title: ConstsWidget.buildTextTitle(
-                          context, 'Entrar em contato'),
-                      barrierDismissible: true,
-                      children: [
-                        Column(
-                          children: usarList.map((e) {
-                            return GestureDetector(
-                              onTap: hasWhats && e == whatsapp
-                                  ? () {
-                                      launchUrl(
-                                          Uri.parse(
-                                              'https://wa.me/+55$whatsapp'),
-                                          mode: LaunchMode.externalApplication);
-                                    }
-                                  : whatsapp != null
+                }
+                if (telefone2 != '') {
+                  if (telefone2 != whatsapp && telefone2 != telefone) {
+                    usarList.add(telefone2);
+                  } else {
+                    hasWhats = true;
+                  }
+                }
+
+                return GestureDetector(
+                  onTap: () {
+                    cliquePubli(
+                        'https://a.portariaapp.com/unidade/api/publicidade/?fn=cliquePublicidade&idpublicidade=$idpublidade');
+                    if (usarList.length == 1 && email == '' && site == '') {
+                      if (hasWhats) {
+                        launchUrl(Uri.parse('https://wa.me/+55$whatsapp'),
+                            mode: LaunchMode.externalApplication);
+                      } else if (telefone != '') {
+                        launchUrl(Uri.parse('tel:$telefone'),
+                            mode: LaunchMode.externalApplication);
+                      } else {
+                        launchUrl(Uri.parse('tel:$telefone2'),
+                            mode: LaunchMode.externalApplication);
+                      }
+                    } else if (usarList.isEmpty && email == '' && site != '') {
+                      launchUrl(Uri.parse(site),
+                          mode: LaunchMode.externalApplication);
+                    } else if (usarList.isEmpty && site == '' && email != '') {
+                      lauchEmail(email);
+                    } else {
+                      showAllDialog(context,
+                          title: ConstsWidget.buildTextTitle(
+                              context, 'Entrar em contato',
+                              fontSize: 18),
+                          barrierDismissible: true,
+                          children: [
+                            Column(
+                              children: usarList.map((e) {
+                                return GestureDetector(
+                                  onTap: hasWhats && e == whatsapp
                                       ? () {
-                                          launchUrl(Uri.parse('tel:$e'));
+                                          launchUrl(
+                                              Uri.parse(
+                                                  'https://wa.me/+55$whatsapp'),
+                                              mode: LaunchMode
+                                                  .externalApplication);
                                         }
-                                      : () {},
-                              child: MyBoxShadow(
-                                child: Row(
+                                      : whatsapp != null
+                                          ? () {
+                                              launchUrl(Uri.parse('tel:$e'));
+                                            }
+                                          : () {},
+                                  child: MyBoxShadow(
+                                    child: Row(
+                                      children: [
+                                        SizedBox(
+                                          width: size.width * 0.01,
+                                        ),
+                                        ConstsWidget.buildTextTitle(context, e),
+                                        Spacer(),
+                                        if (hasWhats && e == whatsapp)
+                                          IconButton(
+                                              onPressed: () {
+                                                launchUrl(
+                                                    Uri.parse(
+                                                        'https://wa.me/+55$whatsapp'),
+                                                    mode: LaunchMode
+                                                        .externalApplication);
+                                              },
+                                              icon: Icon(Icons.wechat_rounded)),
+                                        if (whatsapp != null)
+                                          IconButton(
+                                              onPressed: () {
+                                                launchUrl(Uri.parse('tel:$e'));
+                                              },
+                                              icon: Icon(Icons.call)),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              }).toList(),
+                            ),
+                            if (site != '')
+                              GestureDetector(
+                                onTap: () {
+                                  launchUrl(Uri.parse(site),
+                                      mode: LaunchMode.inAppWebView);
+                                },
+                                child: MyBoxShadow(
+                                    child: Row(
                                   children: [
                                     SizedBox(
                                       width: size.width * 0.01,
                                     ),
-                                    ConstsWidget.buildTextTitle(context, e),
+                                    ConstsWidget.buildTextTitle(
+                                        context, 'Acesse o site'),
                                     Spacer(),
-                                    if (hasWhats && e == whatsapp)
-                                      IconButton(
-                                          onPressed: () {
-                                            launchUrl(
-                                                Uri.parse(
-                                                    'https://wa.me/+55$whatsapp'),
-                                                mode: LaunchMode
-                                                    .externalApplication);
-                                          },
-                                          icon: Icon(Icons.wechat_rounded)),
-                                    if (whatsapp != null)
-                                      IconButton(
-                                          onPressed: () {
-                                            launchUrl(Uri.parse('tel:$e'));
-                                          },
-                                          icon: Icon(Icons.call)),
+                                    ConstsWidget.buildPadding001(
+                                      context,
+                                      vertical: 0.015,
+                                      horizontal: 0.025,
+                                      child: Icon(Icons.wordpress_rounded),
+                                    ),
                                   ],
-                                ),
+                                )),
                               ),
-                            );
-                          }).toList(),
-                        ),
-                        if (site != '')
-                          GestureDetector(
-                            onTap: () {
-                              launchUrl(Uri.parse(site),
-                                  mode: LaunchMode.inAppWebView);
-                            },
-                            child: MyBoxShadow(
-                                child: Row(
-                              children: [
-                                SizedBox(
-                                  width: size.width * 0.01,
-                                ),
-                                ConstsWidget.buildTextTitle(
-                                    context, 'Acesse o site'),
-                                Spacer(),
-                                ConstsWidget.buildPadding001(
-                                  context,
-                                  vertical: 0.015,
-                                  horizontal: 0.025,
-                                  child: Icon(Icons.wordpress_rounded),
-                                ),
-                              ],
-                            )),
-                          ),
-                        if (email != '')
-                          GestureDetector(
-                            onTap: () {
-                              lauchEmail(email);
-                            },
-                            child: MyBoxShadow(
-                                child: Row(
-                              children: [
-                                SizedBox(
-                                  width: size.width * 0.01,
-                                ),
-                                ConstsWidget.buildTextTitle(
-                                    context, 'Envie um email'),
-                                Spacer(),
-                                ConstsWidget.buildPadding001(
-                                  context,
-                                  vertical: 0.015,
-                                  horizontal: 0.025,
-                                  child: Icon(Icons.email),
-                                ),
-                              ],
-                            )),
-                          )
-                      ]);
-                }
-              },
-              child: ClipRRect(
-                borderRadius: BorderRadius.all(Radius.circular(15)),
-                child: ConstsWidget.buildCachedImage(context,
-                    /* title: 'Ver mais $idpublidade',*/ iconApi: arquivo),
-              ),
-            );
-            // } else {
-            //   return PageVazia(
-            //       title: snapshot.data['mensagem']);
-            // }
+                            if (email != '')
+                              GestureDetector(
+                                onTap: () {
+                                  lauchEmail(email);
+                                },
+                                child: MyBoxShadow(
+                                    child: Row(
+                                  children: [
+                                    SizedBox(
+                                      width: size.width * 0.01,
+                                    ),
+                                    ConstsWidget.buildTextTitle(
+                                        context, 'Envie um email'),
+                                    Spacer(),
+                                    ConstsWidget.buildPadding001(
+                                      context,
+                                      vertical: 0.015,
+                                      horizontal: 0.025,
+                                      child: Icon(Icons.email),
+                                    ),
+                                  ],
+                                )),
+                              )
+                          ]);
+                    }
+                  },
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.all(Radius.circular(15)),
+                    child: ConstsWidget.buildCachedImage(context,
+                        /* title: 'Ver mais $idpublidade',*/ iconApi: arquivo),
+                  ),
+                );
+              } else {
+                ResponsalvelInfos.qtd_publicidade == 0;
+                return SizedBox();
+              }
+            } else {
+              ResponsalvelInfos.qtd_publicidade == 0;
+              return SizedBox();
+            }
           } else {
-            return PageErro();
+            ResponsalvelInfos.qtd_publicidade == 0;
+            return SizedBox();
           }
         },
       );
@@ -403,8 +455,9 @@ class _HomePageState extends State<HomePage> {
                 context, ResponsalvelInfos.nome_responsavel,
                 textAlign: TextAlign.center,
                 fontSize: SplashScreen.isSmall ? 18 : 20),
-            iconTheme:
-                IconThemeData(color: Theme.of(context).colorScheme.primary),
+            iconTheme: IconThemeData(
+              color: Theme.of(context).textTheme.bodyLarge!.color,
+            ),
             backgroundColor: Colors.transparent,
             leading: Padding(
               padding: EdgeInsets.only(
@@ -438,6 +491,7 @@ class _HomePageState extends State<HomePage> {
               ResponsalvelInfos.qntCond == 1
                   ? ConstsWidget.buildPadding001(
                       context,
+                      vertical: 0.02,
                       child: ConstsWidget.buildTextTitle(
                           context, ResponsalvelInfos.nome_condominio,
                           textAlign: TextAlign.center, fontSize: 22),
@@ -450,7 +504,7 @@ class _HomePageState extends State<HomePage> {
                     mainAxisSpacing: 0.5,
                     crossAxisCount: 2,
                     shrinkWrap: true,
-                    childAspectRatio: SplashScreen.isSmall ? 1.5 : 1.5,
+                    childAspectRatio: SplashScreen.isSmall ? 1.6 : 1.45,
                     physics: ClampingScrollPhysics(),
                     onReorder: (oldIndex, newIndex) {
                       var card = models.removeAt(oldIndex);

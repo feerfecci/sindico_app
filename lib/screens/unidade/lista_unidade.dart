@@ -57,11 +57,12 @@ class _ListaUnidadeStates extends State<ListaUnidades> {
               ConstsWidget.buildPadding001(
                 context,
                 child: ConstsWidget.buildCustomButton(
-                    context, 'Adicionar Unidade',
-                    color: Consts.kColorRed,
-                    onPressed: () => ConstsFuture.navigatorPagePush(
-                        context, CadastroUnidades()),
-                    icon: Icons.add),
+                  context,
+                  'Adicionar Unidade',
+                  color: Consts.kColorRed,
+                  onPressed: () => ConstsFuture.navigatorPagePush(
+                      context, CadastroUnidades()),
+                ),
               ),
               GestureDetector(
                 onTap: () =>

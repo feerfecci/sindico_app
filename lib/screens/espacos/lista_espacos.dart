@@ -41,11 +41,9 @@ class _ListaEspacosState extends State<ListaEspacos> {
             children: [
               ConstsWidget.buildPadding001(
                 context,
-                vertical: 0.02,
                 child: ConstsWidget.buildCustomButton(
                   context,
                   'Adicionar Espaço',
-                  icon: Icons.add,
                   color: Consts.kColorRed,
                   onPressed: () {
                     ConstsFuture.navigatorPagePush(context, CadastroEspacos());
@@ -78,7 +76,7 @@ class _ListaEspacosState extends State<ListaEspacos> {
                                   child: ConstsWidget.buildPadding001(
                                 context,
                                 child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Row(
                                       mainAxisAlignment:
@@ -86,7 +84,9 @@ class _ListaEspacosState extends State<ListaEspacos> {
                                       children: [
                                         ConstsWidget.buildTextTitle(
                                             context, nome_espaco,
-                                            width: 0.65, fontSize: 18),
+                                            textAlign: TextAlign.center,
+                                            width: 0.65,
+                                            fontSize: 18),
                                         ConstsWidget.buildAtivoInativo(
                                             context, ativo),
                                       ],
@@ -95,7 +95,8 @@ class _ListaEspacosState extends State<ListaEspacos> {
                                       context,
                                       vertical: 0.015,
                                       child: ConstsWidget.buildTextSubTitle(
-                                          context, descricao),
+                                          context, descricao,
+                                          textAlign: TextAlign.center),
                                     ),
                                     Padding(
                                       padding: EdgeInsets.only(

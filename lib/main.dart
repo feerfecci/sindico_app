@@ -9,7 +9,6 @@ import 'package:sindico_app/screens/tarefas/tarefas_screen.dart';
 import 'package:sindico_app/screens/unidade/lista_unidade.dart';
 import 'repositories/themes_model.dart';
 import 'screens/splash_screen/splash_screen.dart';
-// ignore: depend_on_referenced_packages
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() async {

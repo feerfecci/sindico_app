@@ -30,7 +30,6 @@ class CadastroEspacos extends StatefulWidget {
 class _CadastroEspacosState extends State<CadastroEspacos> {
   final formKey = GlobalKey<FormState>();
   FormInfosEspacos _formInfosEspacos = FormInfosEspacos();
-  List listAtivo = [1, 0];
   Object? dropdownValueAtivo;
   @override
   void initState() {
@@ -45,47 +44,47 @@ class _CadastroEspacosState extends State<CadastroEspacos> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
-    Widget buildDropAtivoInativo(
-      BuildContext context, {
-      int seEditando = 0,
-    }) {
-      return ConstsWidget.buildPadding001(
-        context,
-        child: StatefulBuilder(builder: (context, setState) {
-          return ConstsWidget.buildDecorationDrop(
-            context,
-            child: DropdownButton(
-              value: dropdownValueAtivo = _formInfosEspacos.ativo,
-              icon: Padding(
-                padding: EdgeInsets.only(right: size.height * 0.03),
-                child: Icon(
-                  Icons.arrow_downward,
-                  color: Theme.of(context).iconTheme.color,
-                ),
-              ),
-              elevation: 24,
-              style: TextStyle(
-                  color: Theme.of(context).colorScheme.primary,
-                  fontWeight: FontWeight.w400,
-                  fontSize: 18),
-              borderRadius: BorderRadius.circular(16),
-              onChanged: (value) {
-                setState(() {
-                  dropdownValueAtivo = value!;
-                  _formInfosEspacos = _formInfosEspacos.copyWith(ativo: value);
-                });
-              },
-              items: listAtivo.map<DropdownMenuItem>((value) {
-                return DropdownMenuItem(
-                  value: value,
-                  child: value == 0 ? Text('Inativo') : Text('Ativo'),
-                );
-              }).toList(),
-            ),
-          );
-        }),
-      );
-    }
+    // Widget buildDropAtivoInativo(
+    //   BuildContext context, {
+    //   int seEditando = 0,
+    // }) {
+    //   return ConstsWidget.buildPadding001(
+    //     context,
+    //     child: StatefulBuilder(builder: (context, setState) {
+    //       return ConstsWidget.buildDecorationDrop(
+    //         context,
+    //         child: DropdownButton(
+    //           value: dropdownValueAtivo = _formInfosEspacos.ativo,
+    //           icon: Padding(
+    //             padding: EdgeInsets.only(right: size.height * 0.03),
+    //             child: Icon(
+    //               Icons.arrow_downward,
+    //               color: Theme.of(context).iconTheme.color,
+    //             ),
+    //           ),
+    //           elevation: 24,
+    //           style: TextStyle(
+    //               color: Theme.of(context).textTheme.bodyLarge!.color,
+    //               fontWeight: FontWeight.w400,
+    //               fontSize: 18),
+    //           borderRadius: BorderRadius.circular(16),
+    //           onChanged: (value) {
+    //             setState(() {
+    //               dropdownValueAtivo = value!;
+    //               _formInfosEspacos = _formInfosEspacos.copyWith(ativo: value);
+    //             });
+    //           },
+    //           items: listAtivo.map<DropdownMenuItem>((value) {
+    //             return DropdownMenuItem(
+    //               value: value,
+    //               child: value == 0 ? Text('Inativo') : Text('Ativo'),
+    //             );
+    //           }).toList(),
+    //         ),
+    //       );
+    //     }),
+    //   );
+    // }
 
     return buildScaffoldAll(context,
         title: widget.idespaco == null ? 'Adicionar Espaço' : 'Editar Espaço',
@@ -101,18 +100,27 @@ class _CadastroEspacosState extends State<CadastroEspacos> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      buildDropAtivoInativo(context),
-                      Padding(
-                        padding: EdgeInsets.only(top: size.height * 0.01),
-                        child: buildMyTextFormObrigatorio(
-                          context,
-                          'Nome Espaço',
-                          hintText: 'Exemplo: Churrasqueira Bloco B',
-                          textCapitalization: TextCapitalization.words,
-                          initialValue: widget.nome_espaco,
-                          onSaved: (text) => _formInfosEspacos =
-                              _formInfosEspacos.copyWith(nome_espaco: text),
-                        ),
+                      ConstsWidget.buildCamposObrigatorios(context),
+                      ConstsWidget.buildDropAtivoInativo(
+                        context,
+                        dropdownValue: dropdownValueAtivo =
+                            _formInfosEspacos.ativo,
+                        onChanged: (value) {
+                          setState(() {
+                            dropdownValueAtivo = value!;
+                            _formInfosEspacos =
+                                _formInfosEspacos.copyWith(ativo: value);
+                          });
+                        },
+                      ),
+                      buildMyTextFormObrigatorio(
+                        context,
+                        'Nome Espaço',
+                        hintText: 'Exemplo: Churrasqueira Bloco B',
+                        textCapitalization: TextCapitalization.words,
+                        initialValue: widget.nome_espaco,
+                        onSaved: (text) => _formInfosEspacos =
+                            _formInfosEspacos.copyWith(nome_espaco: text),
                       ),
                       ConstsWidget.buildPadding001(
                         context,
@@ -133,6 +141,9 @@ class _CadastroEspacosState extends State<CadastroEspacos> {
                         onPressed: () {
                           var keyForm =
                               formKey.currentState?.validate() ?? false;
+                          FocusManager.instance.primaryFocus!.unfocus();
+
+                          FocusManager.instance.primaryFocus!.unfocus();
                           if (keyForm) {
                             formKey.currentState?.save();
                             String editaInlui = widget.idespaco == null
@@ -154,7 +165,7 @@ class _CadastroEspacosState extends State<CadastroEspacos> {
                                     subTitle: value['mensagem']);
                               } else {
                                 buildMinhaSnackBar(context,
-                                    title: 'Algo Saiu Mau',
+                                    title: 'algo saiu mal',
                                     hasError: value['erro'],
                                     subTitle: value['mensagem']);
                               }

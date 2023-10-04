@@ -1,7 +1,10 @@
 import 'dart:convert';
 
+import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:sindico_app/screens/splash_screen/splash_screen.dart';
+import 'package:sindico_app/widgets/date_picker.dart';
 import 'package:sindico_app/widgets/scaffold_all.dart';
 import 'package:sindico_app/widgets/snack.dart';
 import 'package:http/http.dart' as http;
@@ -71,6 +74,7 @@ class _CadastroColaboradorState extends State<CadastroColaborador> {
     super.initState();
     apiListarFuncoes();
     salvarFuncaoForm();
+    MyDatePicker.dataSelected = widget.nascimento ?? '';
   }
 
   salvarFuncaoForm() {
@@ -121,11 +125,12 @@ class _CadastroColaboradorState extends State<CadastroColaborador> {
           icon: Icon(
             Icons.arrow_downward,
             color: Theme.of(context).iconTheme.color,
+            size: SplashScreen.isSmall ? 20 : 30,
           ),
           borderRadius: BorderRadius.circular(16),
           hint: Text('Selecione Uma Função'),
           style: TextStyle(
-              color: Theme.of(context).colorScheme.primary,
+              color: Theme.of(context).textTheme.bodyLarge!.color,
               fontWeight: FontWeight.w400,
               fontSize: SplashScreen.isSmall ? 16 : 18),
           items: categoryItemListFuncoes.map((e) {
@@ -212,9 +217,21 @@ class _CadastroColaboradorState extends State<CadastroColaborador> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                buildDropAtivo(
-                  context,
+                Center(
+                  child: ConstsWidget.buildCamposObrigatorios(
+                    context,
+                  ),
                 ),
+                ConstsWidget.buildDropAtivoInativo(context, onChanged: (value) {
+                  setState(() {
+                    dropdownValueAtivo = value!;
+                    formInfosFunc = formInfosFunc.copyWith(ativo: value);
+                    print(formInfosFunc.ativo);
+                  });
+                }, dropdownValue: dropdownValueAtivo = formInfosFunc.ativo),
+                // buildDropAtivo(
+                //   context,
+                // ),
                 buildMyTextFormObrigatorio(
                     context,
                     initialValue: widget.nomeFuncionario,
@@ -232,31 +249,52 @@ class _CadastroColaboradorState extends State<CadastroColaborador> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    SizedBox(
-                      width: size.width * 0.4,
-                      child: buildMyTextFormField(context,
-                          title: 'Data de nascimento',
-                          initialValue: widget.nascimento, onSaved: (text) {
-                        if (text != '') {
-                          if (text!.length >= 6) {
-                            var ano = text.substring(6);
-                            var mes = text.substring(3, 5);
-                            var dia = text.substring(0, 2);
-                            formInfosFunc = formInfosFunc.copyWith(
-                                nascimento: '$ano-$mes-$dia');
-                          }
-                        } else {
-                          formInfosFunc =
-                              formInfosFunc.copyWith(nascimento: "");
-                        }
-                      }, hintText: '25/09/1997', mask: '##/##/####'),
-                    ),
+                    ConstsWidget.buildAniversarioField(
+                        context, widget.nascimento,
+                        width: 0.4),
+                    // SizedBox(
+                    //   width: size.width * 0.4,
+                    //   child: MyDatePicker(
+                    //       dataSelected: widget.nascimento != '0000-00-00' &&
+                    //               widget.nascimento != '' &&
+                    //               widget.nascimento != null
+                    //           ? DateFormat('dd/MM/yyyy').format(
+                    //               DateTime.parse(MyDatePicker.dataSelected))
+                    //           : DateTime.now(),
+                    //       type: DateTimePickerType.date,
+                    //       hintText: MyDatePicker.dataSelected != '0000-00-00' &&
+                    //               MyDatePicker.dataSelected != ''
+                    //           ? DateFormat('dd/MM/yyyy')
+                    //               .format(
+                    //                   DateTime.parse(MyDatePicker.dataSelected))
+                    //               .toString()
+                    //           : MyDatePicker.dataSelected,
+                    //       aniversario: true),
+                    // ),
+
+                    // buildMyTextFormField(context,
+                    //     title: 'Data de nascimento',
+                    //     initialValue: widget.nascimento, onSaved: (text) {
+                    //   if (text != '') {
+                    //     if (text!.length >= 6) {
+                    //       var ano = text.substring(6);
+                    //       var mes = text.substring(3, 5);
+                    //       var dia = text.substring(0, 2);
+                    //       formInfosFunc = formInfosFunc.copyWith(
+                    //           nascimento: '$ano-$mes-$dia');
+                    //     }
+                    //   } else {
+                    //     formInfosFunc =
+                    //         formInfosFunc.copyWith(nascimento: "");
+                    //   }
+                    // }, hintText: '25/09/1997', mask: '##/##/####'),
+                    // ),
                     SizedBox(
                       width: size.width * 0.5,
                       child: buildMyTextFormObrigatorio(
                         context,
                         'Documento',
-                        hintText: 'Exemplo: RG, CPF',
+                        hintText: 'Exemplo: CPF',
                         initialValue: widget.documento,
                         onSaved: (text) {
                           if (text!.length >= 4) {
@@ -303,7 +341,7 @@ class _CadastroColaboradorState extends State<CadastroColaborador> {
                     ),
                     Spacer(),
                     SizedBox(
-                      width: size.width * 0.4,
+                      width: size.width * 0.65,
                       child: buildMyTextFormField(context,
                           title: 'Telefone',
                           onSaved: (text) => formInfosFunc =
@@ -312,7 +350,6 @@ class _CadastroColaboradorState extends State<CadastroColaborador> {
                           mask: '#########',
                           hintText: '911112222'),
                     ),
-                    Spacer(),
                   ],
                 ),
                 buildMyTextFormObrigatorio(
@@ -327,16 +364,21 @@ class _CadastroColaboradorState extends State<CadastroColaborador> {
                   onSaved: (text) =>
                       formInfosFunc = formInfosFunc.copyWith(email: text),
                 ),
+                SizedBox(
+                  height: size.height * 0.01,
+                ),
                 ConstsWidget.buildLoadingButton(
                   context,
                   title: 'Gerar Login',
                   isLoading: isLoadingLogin,
+                  color: Consts.kColorVerde,
                   onPressed: () {
                     setState(() {
                       isLoadingLogin = true;
                     });
                     var formValid =
                         _formkeyFuncionario.currentState?.validate() ?? false;
+                    FocusManager.instance.primaryFocus!.unfocus();
                     if (formValid) {
                       _formkeyFuncionario.currentState?.save();
                       ConstsFuture.gerarLogin(context,
@@ -445,6 +487,8 @@ class _CadastroColaboradorState extends State<CadastroColaborador> {
                                 formInfosFunc.idfuncao != null) {
                               _formkeyFuncionario.currentState!.save();
                               loadingSalvar();
+
+                              FocusManager.instance.primaryFocus!.unfocus();
                             } else {
                               buildMinhaSnackBar(context,
                                   hasError: true,
@@ -472,8 +516,9 @@ class _CadastroColaboradorState extends State<CadastroColaborador> {
         ? 'editarFuncionario&idfuncionario=${widget.idfuncionario}&gerarsenha=${isGerarSenha ? 1 : 0}'
         : 'incluirFuncionario';
 
-    String datanasc = formInfosFunc.nascimento != ''
-        ? '&datanasc=${formInfosFunc.nascimento}'
+    String datanasc = MyDatePicker.dataSelected != '' &&
+            MyDatePicker.dataSelected != '0000-00-00'
+        ? '&datanasc=${DateFormat('yyyy-MM-dd').format(DateTime.parse(MyDatePicker.dataSelected))}'
         : '';
     String dddtelefone =
         formInfosFunc.ddd != '' ? '&dddtelefone=${formInfosFunc.ddd}' : '';
@@ -489,9 +534,10 @@ class _CadastroColaboradorState extends State<CadastroColaborador> {
       });
       if (!value['erro']) {
         ConstsFuture.navigatorPopPush(context, '/listaColaboradores');
+        MyDatePicker.dataSelected = '';
         return buildMinhaSnackBar(context,
             hasError: value['erro'],
-            title: 'Parabéns',
+            title: 'Sucesso',
             subTitle: value['mensagem']);
       }
       return buildMinhaSnackBar(context,
@@ -501,46 +547,46 @@ class _CadastroColaboradorState extends State<CadastroColaborador> {
     });
   }
 
-  Widget buildDropAtivo(
-    BuildContext context, {
-    int seEditando = 0,
-  }) {
-    var size = MediaQuery.of(context).size;
-    return ConstsWidget.buildPadding001(
-      context,
-      child: StatefulBuilder(builder: (context, setState) {
-        return ConstsWidget.buildDecorationDrop(
-          context,
-          child: DropdownButton(
-            value: dropdownValueAtivo = formInfosFunc.ativo,
-            icon: Padding(
-              padding: EdgeInsets.only(right: size.height * 0.03),
-              child: Icon(
-                Icons.arrow_downward,
-                color: Theme.of(context).iconTheme.color,
-              ),
-            ),
-            elevation: 24,
-            style: TextStyle(
-                color: Theme.of(context).colorScheme.primary,
-                fontWeight: FontWeight.w400,
-                fontSize: 18),
-            borderRadius: BorderRadius.circular(16),
-            onChanged: (value) {
-              setState(() {
-                dropdownValueAtivo = value!;
-                formInfosFunc = formInfosFunc.copyWith(ativo: value);
-              });
-            },
-            items: listAtivo.map<DropdownMenuItem>((value) {
-              return DropdownMenuItem(
-                value: value,
-                child: value == 0 ? Text('Inativo') : Text('Ativo'),
-              );
-            }).toList(),
-          ),
-        );
-      }),
-    );
-  }
+  // Widget buildDropAtivo(
+  //   BuildContext context, {
+  //   int seEditando = 0,
+  // }) {
+  //   var size = MediaQuery.of(context).size;
+  //   return ConstsWidget.buildPadding001(
+  //     context,
+  //     child: StatefulBuilder(builder: (context, setState) {
+  //       return ConstsWidget.buildDecorationDrop(
+  //         context,
+  //         child: DropdownButton(
+  //           value: dropdownValueAtivo = formInfosFunc.ativo,
+  //           icon: Padding(
+  //             padding: EdgeInsets.only(right: size.height * 0.03),
+  //             child: Icon(
+  //               Icons.arrow_downward,
+  //               color: Theme.of(context).iconTheme.color,
+  //             ),
+  //           ),
+  //           elevation: 24,
+  //           style: TextStyle(
+  //               color: Theme.of(context).textTheme.bodyLarge!.color,
+  //               fontWeight: FontWeight.w400,
+  //               fontSize: 18),
+  //           borderRadius: BorderRadius.circular(16),
+  //           onChanged: (value) {
+  //             setState(() {
+  //               dropdownValueAtivo = value!;
+  //               formInfosFunc = formInfosFunc.copyWith(ativo: value);
+  //             });
+  //           },
+  //           items: listAtivo.map<DropdownMenuItem>((value) {
+  //             return DropdownMenuItem(
+  //               value: value,
+  //               child: value == 0 ? Text('Inativo') : Text('Ativo'),
+  //             );
+  //           }).toList(),
+  //         ),
+  //       );
+  //     }),
+  //   );
+  // }
 }

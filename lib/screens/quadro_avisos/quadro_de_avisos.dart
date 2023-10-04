@@ -7,7 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:intl/intl.dart';
 import 'package:sindico_app/consts/consts.dart';
-import 'package:sindico_app/screens/quadro_avisos/modal_avisos.dart';
+import 'package:sindico_app/consts/consts_future.dart';
+import 'package:sindico_app/screens/quadro_avisos/add_avisos_screen.dart';
 import 'package:sindico_app/widgets/my_box_shadow.dart';
 import 'package:sindico_app/widgets/page_vazia.dart';
 import 'package:sindico_app/widgets/scaffold_all.dart';
@@ -26,6 +27,7 @@ class QuadroDeAvisos extends StatefulWidget {
 }
 
 Future apiQuadroAvisos() async {
+  QuadroDeAvisos.qntAvisos.clear();
   //print('listarAvisos');
   var url = Uri.parse(
       '${Consts.sindicoApi}quadro_avisos/index.php?fn=listarAvisos&idcond=${ResponsalvelInfos.idcondominio}&idfuncionario=${ResponsalvelInfos.idfuncionario}');
@@ -92,29 +94,29 @@ class _QuadroDeAvisosState extends State<QuadroDeAvisos> {
               context,
               child: ConstsWidget.buildCustomButton(
                 context,
-                'Adicionar Aviso',
+                'Enviar Aviso',
                 color: Consts.kColorRed,
-                icon: Icons.add,
                 onPressed: () {
-                  showModalBottomSheet(
-                    enableDrag: false,
-                    isScrollControlled: true,
-                    isDismissible: false,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.vertical(
-                        top: Radius.circular(20),
-                      ),
-                    ),
-                    context: context,
-                    useSafeArea: true,
-                    builder:
-                        (context) => /*SizedBox(
-                      height: size.height * 0.9,
-                      child: */
-                            Scaffold(body: WidgetModalAvisos()
-                                /* ),*/
-                                ),
-                  );
+                  ConstsFuture.navigatorPagePush(context, AddAvisosScreen());
+                  // showModalBottomSheet(
+                  //   enableDrag: false,
+                  //   isScrollControlled: true,
+                  //   isDismissible: false,
+                  //   shape: RoundedRectangleBorder(
+                  //     borderRadius: BorderRadius.vertical(
+                  //       top: Radius.circular(20),
+                  //     ),
+                  //   ),
+                  //   context: context,
+                  //   useSafeArea: true,
+                  //   builder:
+                  //       (context) => /*SizedBox(
+                  //     height: size.height * 0.9,
+                  //     child: */
+                  //           Scaffold(body: AddAvisosScreen()
+                  //               /* ),*/
+                  //               ),
+                  // );
                 },
               ),
             ),
@@ -161,6 +163,10 @@ class _QuadroDeAvisosState extends State<QuadroDeAvisos> {
                                 data: Theme.of(context)
                                     .copyWith(dividerColor: Colors.transparent),
                                 child: ExpansionTile(
+                                  collapsedIconColor: Theme.of(context)
+                                      .textTheme
+                                      .bodyLarge!
+                                      .color,
                                   onExpansionChanged: (value) {
                                     if (QuadroDeAvisos.qntAvisos
                                         .contains(idaviso)) {
@@ -169,37 +175,54 @@ class _QuadroDeAvisosState extends State<QuadroDeAvisos> {
                                     }
                                   },
                                   // trailing: Icon(Icons.arrow_drop_down),
-                                  title: ConstsWidget.buildTextTitle(
-                                      context, titulo,
-                                      width: 0.65,
-                                      maxLines: 5,
-                                      textAlign: TextAlign.center,
-                                      fontSize: 18),
+                                  title: Column(
+                                    children: [
+                                      ConstsWidget.buildTextTitle(
+                                          context, titulo,
+                                          width: 0.65,
+                                          maxLines: 5,
+                                          textAlign: TextAlign.center,
+                                          fontSize: 18),
+                                      SizedBox(
+                                        height: size.height * 0.005,
+                                      ),
+                                      ConstsWidget.buildTextSubTitle(
+                                          context, datahora,
+                                          textAlign: TextAlign.center),
+                                    ],
+                                  ),
+
                                   children: [
-                                    ConstsWidget.buildPadding001(
-                                      context,
-                                      child: ConstsWidget.buildTextSubTitle(
-                                        context,
-                                        texto,
-                                        textAlign: TextAlign.center,
+                                    Padding(
+                                      padding: EdgeInsets.only(
+                                          right: size.width * 0.06),
+                                      child: Column(
+                                        children: [
+                                          ConstsWidget.buildPadding001(
+                                            context,
+                                            child:
+                                                ConstsWidget.buildTextSubTitle(
+                                              context,
+                                              texto,
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            height: size.height * 0.01,
+                                          ),
+                                          if (arquivo != '')
+                                            ConstsWidget.buildOutlinedButton(
+                                              context,
+                                              title: 'Ver Anexo',
+                                              onPressed: () {
+                                                launchUrl(Uri.parse(arquivo),
+                                                    mode: LaunchMode
+                                                        .externalNonBrowserApplication);
+                                              },
+                                            ),
+                                        ],
                                       ),
                                     ),
-                                    ConstsWidget.buildTextSubTitle(
-                                        context, datahora,
-                                        textAlign: TextAlign.center),
-                                    SizedBox(
-                                      height: size.height * 0.01,
-                                    ),
-                                    if (arquivo != '')
-                                      ConstsWidget.buildOutlinedButton(
-                                        context,
-                                        title: 'Ver Anexo',
-                                        onPressed: () {
-                                          launchUrl(Uri.parse(arquivo),
-                                              mode: LaunchMode
-                                                  .externalNonBrowserApplication);
-                                        },
-                                      ),
                                   ],
                                 ),
                               ),

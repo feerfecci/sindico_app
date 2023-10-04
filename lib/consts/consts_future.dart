@@ -1,17 +1,23 @@
 // ignore_for_file: use_build_context_synchronously
 
+import 'dart:async';
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:diacritic/diacritic.dart';
 import 'package:flutter/material.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:sindico_app/repositories/shared_preferences.dart';
 import 'package:sindico_app/screens/home_page.dart/home_page.dart';
+import 'package:sindico_app/screens/login/login_screen.dart';
+import 'package:sindico_app/screens/meu_perfil/meu_perfil_screen.dart';
+import 'package:sindico_app/widgets/alert_dialogs/alertdialog_all.dart';
 import '../screens/home_page.dart/drop_cond.dart';
 import '../screens/quadro_avisos/quadro_de_avisos.dart';
 import '../screens/reservas/listar_reservar.dart';
 import '../screens/tarefas/tarefas_screen.dart';
 import '../screens/termodeuso/aceitar_alert.dart';
 import '../widgets/snack.dart';
+import 'const_widget.dart';
 import 'consts.dart';
 import 'package:http/http.dart' as http;
 
@@ -43,10 +49,10 @@ class ConstsFuture {
   //     },
   //   );
   // }
-  static Future criptoSenha(String senha) async {
-    String senhacripto = md5.convert(utf8.encode(senha)).toString();
-    return senhacripto;
-  }
+  // static Future criptoSenha(String senha) async {
+  //   String senhacripto = md5.convert(utf8.encode(senha)).toString();
+  //   return senhacripto;
+  // }
 
   static Future navigatorPopPush(
       BuildContext context, String Namedroute) async {
@@ -88,7 +94,7 @@ class ConstsFuture {
   }
 
   static Future fazerLogin(BuildContext context, String usuario, String senha,
-      {int? idCondominio}) async {
+      {int? idCondominio, OSNotificationOpenedResult? openedResult}) async {
     var senhaCripto = md5.convert(utf8.encode(senha)).toString();
 
     ResponsalvelInfos.senhacripto = idCondominio == null ? senhaCripto : senha;
@@ -105,6 +111,17 @@ class ConstsFuture {
         if (idCondominio == null) {
           ResponsalvelInfos.qntCond = apiBody['login'].length;
           DropCond.listCond = apiBody['login'];
+          ResponsalvelInfos.listIdCond.clear();
+          ResponsalvelInfos.listIdFuncionario.clear();
+          ResponsalvelInfos.listIdFuncao.clear();
+          for (var i = 0; i < ResponsalvelInfos.qntCond; i++) {
+            ResponsalvelInfos.listIdCond
+                .add(apiBody['login'][i]['idcondominio'].toString());
+            ResponsalvelInfos.listIdFuncionario
+                .add(apiBody['login'][i]['idfuncionario'].toString());
+            ResponsalvelInfos.listIdFuncao
+                .add(apiBody['login'][i]['idfuncao'].toString());
+          }
         }
         var loginInfos = apiBody['login'][0];
         ResponsalvelInfos.nome_condominio = loginInfos['nome_condominio'];
@@ -127,15 +144,32 @@ class ConstsFuture {
         ResponsalvelInfos.estado = loginInfos['estado'];
         ResponsalvelInfos.temporespostas = loginInfos['temporespostas'];
         ResponsalvelInfos.aceitou_termos = loginInfos['aceitou_termos'];
+        ResponsalvelInfos.idfuncao = loginInfos['idfuncao'];
+        ResponsalvelInfos.senha_alterada = loginInfos['senha_alterada'];
         apiQuadroAvisos().whenComplete(() {
           apiResevas().whenComplete(() {
             apiTarefas().whenComplete(() {
               if (!ResponsalvelInfos.aceitou_termos) {
-                return showDialogAceitar(
-                  context,
-                );
+                return showDialog(
+                    context: context,
+                    barrierDismissible: false,
+                    builder: (context) {
+                      return AceitarTermosScreen();
+                    });
               }
               navigatorPageReplace(context, HomePage());
+              if (openedResult != null) {
+                if (openedResult.notification.additionalData!['rota'] ==
+                    'reserva_espacos') {
+                  ConstsFuture.navigatorPagePush(context, ListaReservas());
+                } else if (openedResult.notification.additionalData!['rota'] ==
+                    'aviso') {
+                  ConstsFuture.navigatorPagePush(context, QuadroDeAvisos());
+                } else if (openedResult.notification.additionalData!['rota'] ==
+                    'tarefa') {
+                  ConstsFuture.navigatorPagePush(context, TarefasScreen());
+                }
+              }
             });
           });
         });
@@ -144,6 +178,9 @@ class ConstsFuture {
 
         // });
         LocalInfos.removeCache();
+        if (idCondominio != null) {
+          navigatorPageReplace(context, LoginScreen());
+        }
         buildMinhaSnackBar(context,
             icon: Icons.warning_amber,
             hasError: apiBody['erro'],
@@ -151,8 +188,7 @@ class ConstsFuture {
             title: 'Algo Deu Errado!');
       }
     } else {
-      return buildMinhaSnackBar(context,
-          icon: Icons.warning_amber, hasError: true);
+      buildMinhaSnackBar(context, icon: Icons.warning_amber, hasError: true);
     }
   }
 

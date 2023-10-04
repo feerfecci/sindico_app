@@ -24,6 +24,7 @@ class ListaReservas extends StatefulWidget {
 }
 
 Future apiResevas() async {
+  ListaReservas.listIdReserva.clear();
   var resposta = await http.get(
     Uri.parse(
         '${Consts.sindicoApi}reserva_espacos/?fn=listarReservas&idcond=${ResponsalvelInfos.idcondominio}&idfuncionario=${ResponsalvelInfos.idfuncionario}&ativo=2'),
@@ -70,7 +71,7 @@ class _ListaReservasState extends State<ListaReservas> {
             insetPadding: EdgeInsets.symmetric(
                 horizontal: size.width * 0.05, vertical: size.height * 0.01),
             title: Text(
-              'Tem certeza?',
+              'Atenção',
               textAlign: TextAlign.center,
             ),
             content: SizedBox(
@@ -80,64 +81,73 @@ class _ListaReservasState extends State<ListaReservas> {
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    'Você deseja $title essa solicitação?',
-                    textAlign: TextAlign.center,
-                  ),
+                  // Text(
+                  //   'Você deseja $title essa solicitação?',
+                  //   textAlign: TextAlign.center,
+                  //   style: TextStyle(height: 1.5),
+                  // ),
+                  RichText(
+                      text: TextSpan(
+                          text: 'Você deseja ',
+                          style: TextStyle(
+                            color: Theme.of(context).textTheme.bodyLarge!.color,
+                            overflow: TextOverflow.ellipsis,
+                            fontSize: SplashScreen.isSmall ? 14 : 16,
+                          ),
+                          children: [
+                        ConstsWidget.builRichTextTitle(context,
+                            textBold: title,
+                            color: tipo == 0
+                                ? Consts.kColorRed
+                                : Consts.kColorVerde),
+                        ConstsWidget.builRichTextSubTitle(context,
+                            subTitle: ' essa solicitação?')
+                      ])),
                   SizedBox(
                     height: size.height * 0.025,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      TextButton(
-                          style: OutlinedButton.styleFrom(
-                            shape: StadiumBorder(
-                                side: BorderSide(color: Consts.kColorAzul)),
-                          ),
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: Padding(
-                            padding: EdgeInsets.all(size.height * 0.01),
-                            child: Text(
-                              'Cancelar',
-                              style: TextStyle(color: Consts.kColorAzul),
-                            ),
-                          )),
-                      ElevatedButton(
-                          onPressed: () {
-                            ConstsFuture.resquestApi(
-                                    '${Consts.sindicoApi}reserva_espacos/?fn=atenderReserva&idcond=${ResponsalvelInfos.idcondominio}&idfuncionario=${ResponsalvelInfos.idfuncionario}&idunidade=$idunidade&idmorador=$idmorador&idespaco=$idespaco&data_reserva=$data&idreserva=$idreserva&ativo=$tipo')
-                                .then((value) {
-                              if (!value['erro']) {
-                                Navigator.pop(context);
-                                ListaReservas.listIdReserva.remove(idreserva);
+                      ConstsWidget.buildOutlinedButton(
+                        context,
+                        title: 'Cancelar',
+                        rowSpacing: 0.08,
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                      ),
+                      Spacer(),
+                      ConstsWidget.buildCustomButton(
+                        context,
+                        'Continuar',
+                        rowSpacing: 0.04,
+                        color: Consts.kColorRed,
+                        onPressed: () {
+                          FocusManager.instance.primaryFocus!.unfocus();
+                          ConstsFuture.resquestApi(
+                                  '${Consts.sindicoApi}reserva_espacos/?fn=atenderReserva&idcond=${ResponsalvelInfos.idcondominio}&idfuncionario=${ResponsalvelInfos.idfuncionario}&idunidade=$idunidade&idmorador=$idmorador&idespaco=$idespaco&data_reserva=$data&idreserva=$idreserva&ativo=$tipo')
+                              .then((value) {
+                            if (!value['erro']) {
+                              Navigator.pop(context);
 
-                                setState(() {});
-                                buildMinhaSnackBar(context,
-                                    title: 'Muito Obrigado',
-                                    hasError: value['erro'],
-                                    subTitle: value['mensagem']);
-                              } else {
-                                buildMinhaSnackBar(context,
-                                    hasError: value['erro'],
-                                    title: 'Algo saiu mal',
-                                    subTitle: value['mensagem']);
-                              }
-                            });
-                          },
-                          style: ElevatedButton.styleFrom(
-                            shape: StadiumBorder(),
-                            backgroundColor: Consts.kColorRed,
-                          ),
-                          child: Padding(
-                            padding: EdgeInsets.all(size.height * 0.019),
-                            child: Text(
-                              'Continuar',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          )),
+                              setState(() {
+                                ListaReservas.listIdReserva.remove(idreserva);
+                                ListaReservas.listIdReserva.length;
+                              });
+                              buildMinhaSnackBar(context,
+                                  title: 'Muito Obrigado',
+                                  hasError: value['erro'],
+                                  subTitle: value['mensagem']);
+                            } else {
+                              buildMinhaSnackBar(context,
+                                  hasError: value['erro'],
+                                  title: 'Algo saiu mal',
+                                  subTitle: value['mensagem']);
+                            }
+                          });
+                        },
+                      )
                     ],
                   )
                 ],
@@ -155,10 +165,10 @@ class _ListaReservasState extends State<ListaReservas> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            ConstsWidget.buildTextTitle(context, titulo,
-                fontSize: SplashScreen.isSmall ? 16 : 18),
-            ConstsWidget.buildTextSubTitle(context, texto,
+            ConstsWidget.buildTextSubTitle(context, titulo,
                 size: SplashScreen.isSmall ? 14 : 16),
+            ConstsWidget.buildTextTitle(context, texto,
+                fontSize: SplashScreen.isSmall ? 16 : 18),
           ],
         ),
       );
@@ -181,9 +191,6 @@ class _ListaReservasState extends State<ListaReservas> {
     //   );
     // }
 
-    Color verde = Color.fromARGB(255, 44, 201, 104);
-    Color amarelo = Color.fromARGB(255, 255, 193, 7);
-
     var apiListar = ConstsFuture.resquestApi(
         '${Consts.sindicoApi}reserva_espacos/?fn=listarReservas&idcond=${ResponsalvelInfos.idcondominio}&idfuncionario=${ResponsalvelInfos.idfuncionario}&ativo=$statusReserva');
 
@@ -205,7 +212,9 @@ class _ListaReservasState extends State<ListaReservas> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     SizedBox(
-                      width: size.width * 0.315,
+                      width: SplashScreen.isSmall
+                          ? size.width * 0.32
+                          : size.width * 0.315,
                       child: statusReserva == 0
                           ? ConstsWidget.buildCustomButton(
                               context,
@@ -233,7 +242,9 @@ class _ListaReservasState extends State<ListaReservas> {
                       child: statusReserva == 1
                           ? ConstsWidget.buildCustomButton(
                               context,
-                              color: statusReserva == 1 ? verde : null,
+                              color: statusReserva == 1
+                                  ? Consts.kColorVerde
+                                  : null,
                               'Aprovadas',
                               onPressed: () {
                                 setState(() {
@@ -244,7 +255,9 @@ class _ListaReservasState extends State<ListaReservas> {
                           : ConstsWidget.buildOutlinedButton(
                               context, title: 'Aprovadas',
                               // fontSize: SplashScreen.isSmall ? 18 : 16,
-                              color: statusReserva == 1 ? verde : null,
+                              color: statusReserva == 1
+                                  ? Consts.kColorVerde
+                                  : null,
                               onPressed: () {
                                 setState(() {
                                   statusReserva = 1;
@@ -257,7 +270,9 @@ class _ListaReservasState extends State<ListaReservas> {
                       child: statusReserva == 2
                           ? ConstsWidget.buildCustomButton(
                               context,
-                              color: statusReserva == 2 ? amarelo : null,
+                              color: statusReserva == 2
+                                  ? Consts.kColorAmarelo
+                                  : null,
                               'Pendentes',
                               onPressed: () {
                                 setState(() {
@@ -268,7 +283,9 @@ class _ListaReservasState extends State<ListaReservas> {
                           : ConstsWidget.buildOutlinedButton(
                               context, title: 'Pendentes',
                               // fontSize: SplashScreen.isSmall ? 18 : 16,
-                              color: statusReserva == 2 ? amarelo : null,
+                              color: statusReserva == 2
+                                  ? Consts.kColorAmarelo
+                                  : null,
                               onPressed: () {
                                 setState(() {
                                   statusReserva = 2;
@@ -277,8 +294,8 @@ class _ListaReservasState extends State<ListaReservas> {
                             ),
                     ),
                     // // buildFiltroReserv('Recusadas', 0, color: Colors.grey),
-                    // buildFiltroReserv('Aprovadas', 1, color: verde),
-                    // buildFiltroReserv('Pendentes', 2, color: amarelo),
+                    // buildFiltroReserv('Aprovadas', 1, color: Consts.kColorVerde),
+                    // buildFiltroReserv('Pendentes', 2, color: Consts.kColorAmarelo),
                   ],
                 ),
               ),
@@ -311,8 +328,9 @@ class _ListaReservasState extends State<ListaReservas> {
                           String nome_morador = apiReservar['nome_morador'];
                           int idunidade = apiReservar['idunidade'];
                           String unidade = apiReservar['unidade'];
-                          String data_reserva = DateFormat('dd/MM/yyyy').format(
-                              DateTime.parse(apiReservar['data_reserva']));
+                          String data_reserva = DateFormat('dd/MM/yyyy HH:mm')
+                              .format(
+                                  DateTime.parse(apiReservar['data_reserva']));
                           String datahora = DateFormat('dd/MM/yyyy HH:mm')
                               .format(DateTime.parse(apiReservar['datahora']));
 
@@ -329,12 +347,16 @@ class _ListaReservasState extends State<ListaReservas> {
                                   decoration: BoxDecoration(
                                       border: Border.all(
                                         color: !temadm && title != 'Síndico'
-                                            ? Colors.black12
+                                            ? Theme.of(context)
+                                                .colorScheme
+                                                .primary
                                             : status == 0
-                                                ? Colors.grey
+                                                ? Theme.of(context)
+                                                    .colorScheme
+                                                    .primary
                                                 : status == 1
-                                                    ? verde
-                                                    : amarelo,
+                                                    ? Consts.kColorVerde
+                                                    : Consts.kColorAmarelo,
                                       ),
                                       borderRadius: BorderRadius.circular(16)),
                                   child: ConstsWidget.buildPadding001(
@@ -351,12 +373,16 @@ class _ListaReservasState extends State<ListaReservas> {
                                                   ? 'Aprovada'
                                                   : 'Pendente',
                                       color: !temadm && title != 'Síndico'
-                                          ? Colors.black12
+                                          ? Theme.of(context)
+                                              .colorScheme
+                                              .primary
                                           : status == 0
-                                              ? Colors.grey
+                                              ? Theme.of(context)
+                                                  .colorScheme
+                                                  .primary
                                               : status == 1
-                                                  ? verde
-                                                  : amarelo,
+                                                  ? Consts.kColorVerde
+                                                  : Consts.kColorAmarelo,
                                     ),
                                   ),
                                 ),
@@ -368,10 +394,11 @@ class _ListaReservasState extends State<ListaReservas> {
                             return ConstsWidget.buildCustomButton(
                               context,
                               title,
-                              color:
-                                  title == '  Aprovar  ' ? verde : Colors.grey,
+                              color: tipo == 1
+                                  ? Consts.kColorVerde
+                                  : Consts.kColorRed,
                               altura: 0.02,
-                              largura: 0.07,
+                              largura: 0.1,
                               onPressed: () {
                                 alertAtender(
                                     idespaco: idespaco,
@@ -413,11 +440,14 @@ class _ListaReservasState extends State<ListaReservas> {
                                   children: [
                                     Row(
                                       children: [
-                                        buildTextReserva(
-                                          titulo: 'Nome do Espaço',
-                                          width: 0.6,
-                                          texto: nome_espaco.toString(),
-                                        ),
+                                        // buildTextReserva(
+                                        //   titulo: 'Nome do Espaço',
+                                        //   width: 0.6,
+                                        //   texto: nome_espaco.toString(),
+                                        // ),
+                                        ConstsWidget.buildTextTitle(
+                                            context, nome_espaco.toString(),
+                                            fontSize: 18, width: 0.6),
                                         Spacer(),
                                         // if (temadm)
                                         buildStatusTarefa(
@@ -428,10 +458,12 @@ class _ListaReservasState extends State<ListaReservas> {
                                       context,
                                       vertical: 0.02,
                                       child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
                                         children: [
                                           Container(
                                             alignment: Alignment.centerLeft,
-                                            width: size.width * 0.6,
+                                            width: size.width * 0.55,
                                             child: Column(
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.start,
@@ -474,13 +506,12 @@ class _ListaReservasState extends State<ListaReservas> {
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceEvenly,
                                           children: [
-                                            buildAtendeReserva(
-                                                '  Recusar  ', 0),
+                                            buildAtendeReserva('Recusar', 0),
                                             SizedBox(
                                               width: size.width * 0.01,
                                             ),
                                             buildAtendeReserva(
-                                              '  Aprovar  ',
+                                              'Aprovar',
                                               1,
                                             ),
                                           ],

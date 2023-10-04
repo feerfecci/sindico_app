@@ -9,6 +9,7 @@ import '../../repositories/shared_preferences.dart';
 import '../../screens/login/login_screen.dart';
 import '../../screens/meu_perfil/meu_perfil_screen.dart';
 import '../../screens/politica/politica_screen.dart';
+import '../alert_dialogs/alert_trocar_senha.dart';
 import 'change_theme_button.dart';
 import '../../screens/splash_screen/splash_screen.dart';
 
@@ -31,16 +32,16 @@ class _CustomDrawerState extends State<CustomDrawer> {
     }) {
       return ConstsWidget.buildPadding001(
         context,
-        vertical: SplashScreen.isSmall ? 0 : 0.01,
+        vertical: SplashScreen.isSmall ? 0 : 0.008,
         child: GestureDetector(
           onTap: onTap,
           child: ListTile(
             iconColor: Theme.of(context).iconTheme.color,
             leading: Icon(
               leading,
-              size: SplashScreen.isSmall ? 20 : 25,
+              size: SplashScreen.isSmall ? 25 : 30,
             ),
-            title: ConstsWidget.buildTextTitle(context, title),
+            title: ConstsWidget.buildTextTitle(context, title, fontSize: 16),
             trailing: Icon(
               size: SplashScreen.isSmall ? 25 : 30,
               Icons.keyboard_arrow_right_outlined,
@@ -53,7 +54,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
     return SafeArea(
       child: SizedBox(
         height: size.height * 0.95,
-        width: SplashScreen.isSmall ? size.width * 0.9 : size.width * 0.85,
+        // width: SplashScreen.isSmall ? size.width * 0.9 : size.width * 0.85,
         child: Drawer(
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           shape: RoundedRectangleBorder(
@@ -62,18 +63,18 @@ class _CustomDrawerState extends State<CustomDrawer> {
               bottomLeft: Radius.circular(SplashScreen.isSmall ? 30 : 30),
             ),
           ),
-          child: Column(
+          child: ListView(
             // physics: ClampingScrollPhysics(),
             // shrinkWrap: true,
             children: [
               SizedBox(
                 height: SplashScreen.isSmall
-                    ? size.width * 0.2
+                    ? size.width * 0.12
                     : size.height * 0.08,
                 width: double.maxFinite,
                 child: DrawerHeader(
                   padding: EdgeInsets.symmetric(
-                    vertical: size.height * 0.015,
+                    vertical: size.height * 0.02,
                     horizontal: size.width * 0.03,
                   ),
                   decoration: BoxDecoration(
@@ -85,7 +86,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     'Menu',
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontSize: 30,
+                      fontSize: 24,
                       color: Colors.white,
                     ),
                   ),
@@ -98,13 +99,15 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   ConstsFuture.navigatorPagePush(context, MeuPerfilScreen());
                 },
               ),
-              // buidListTile(
-              //   title: 'Informações Condomínio',
-              //   leading: Icons.person_outline_rounded,
-              //   onTap: () {
-              //     ConstsFuture.navigatorPagePush(context, InformacoesCond());
-              //   },
-              // ),
+              buidListTile(
+                title: 'Unificar Condomínios',
+                leading: Icons.lock_person_outlined,
+                onTap: () {
+                  alertTrocarSenha(
+                    context,
+                  );
+                },
+              ),
               buidListTile(
                   title: 'Seja um representante',
                   onTap: () => launchUrl(
@@ -121,8 +124,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   title: 'Termos de uso',
                   onTap: () => ConstsFuture.navigatorPagePush(
                       context, TermoDeUsoScreen()),
-                  leading: Icons.supervised_user_circle),
-
+                  leading: Icons.assignment_outlined),
               buidListTile(
                   title: 'Indicar para amigos',
                   onTap: () => launchUrl(
@@ -150,10 +152,19 @@ class _CustomDrawerState extends State<CustomDrawer> {
                       (route) => false);
                 },
               ),
-              ChangeThemeButton(),
-              Spacer(),
+              ConstsWidget.buildPadding001(context, child: ChangeThemeButton()),
+              SizedBox(
+                height: SplashScreen.isSmall
+                    ? size.height * 0.01
+                    : size.height * 0.00,
+              ),
               Padding(
-                padding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+                padding: EdgeInsets.only(
+                    top: SplashScreen.isSmall
+                        ? size.height * 0.01
+                        : size.height * 0.00,
+                    right: size.width * 0.02,
+                    left: size.width * 0.02),
                 child: ConstsWidget.buildOutlinedButton(
                   context,
                   title: 'Fechar Menu',

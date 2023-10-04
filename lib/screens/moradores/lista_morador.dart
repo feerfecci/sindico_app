@@ -6,6 +6,7 @@ import 'package:sindico_app/consts/consts.dart';
 import 'package:sindico_app/consts/consts_future.dart';
 import 'package:sindico_app/screens/colaboradores/loding_colab.dart';
 import 'package:sindico_app/screens/moradores/cadastro_morador.dart';
+import 'package:sindico_app/screens/splash_screen/splash_screen.dart';
 import 'package:sindico_app/widgets/my_box_shadow.dart';
 import 'package:sindico_app/widgets/page_vazia.dart';
 import 'package:sindico_app/widgets/scaffold_all.dart';
@@ -43,8 +44,8 @@ class _ListaMoradorState extends State<ListaMorador> {
             ConstsWidget.buildPadding001(
               context,
               child: ConstsWidget.buildCustomButton(
-                  context, 'Adicionar Morador',
-                  color: Consts.kColorRed, icon: Icons.add, onPressed: () {
+                  context, 'Adicionar Morador', color: Consts.kColorRed,
+                  onPressed: () {
                 ConstsFuture.navigatorPagePush(
                     context,
                     CadastroMorador(
@@ -96,220 +97,176 @@ class _ListaMoradorState extends State<ListaMorador> {
                             child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            SizedBox(
-                              height: size.height * 0.01,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                ConstsWidget.buildTextTitle(
-                                    context, nome_morador,
-                                    width: 0.7),
-                                Container(
-                                  child: ConstsWidget.buildAtivoInativo(
-                                      context, ativo),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    ConstsWidget.buildTextSubTitle(
-                                        context, 'Localizado em'),
-                                    ConstsWidget.buildTextTitle(context,
-                                        '$dividido_por $nome_divisao - $numero',
-                                        maxLines: 3, width: 0.55),
-                                  ],
-                                ),
-                                ConstsWidget.buildCheckBox(
-                                  context,
-                                  isChecked: responsavel == 0 ? false : true,
-                                  onChanged: (p0) {},
-                                  title: 'Resposável',
-                                ),
-                              ],
-                            ),
                             ConstsWidget.buildPadding001(
                               context,
-                              vertical: 0.015,
-                              child: Row(
-                                mainAxisAlignment: data_nascimento == null
-                                    ? MainAxisAlignment.start
-                                    : MainAxisAlignment.spaceBetween,
+                              horizontal: 0.01,
+                              child: Column(
                                 children: [
-                                  if (data_nascimento != null)
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                  SizedBox(
+                                    height: size.height * 0.01,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      ConstsWidget.buildTextTitle(
+                                          context, nome_morador,
+                                          width: 0.7),
+                                      Container(
+                                        child: ConstsWidget.buildAtivoInativo(
+                                            context, ativo),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: size.height * 0.01,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          ConstsWidget.buildTextSubTitle(
+                                              context, 'Localizado em'),
+                                          ConstsWidget.buildTextTitle(context,
+                                              '$dividido_por $nome_divisao - $numero',
+                                              maxLines: 3, width: 0.55),
+                                        ],
+                                      ),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          ConstsWidget.buildTextSubTitle(
+                                              context, 'Responsável'),
+                                          ConstsWidget.buildTextTitle(context,
+                                              responsavel == 0 ? 'Não' : 'Sim'),
+                                        ],
+                                      ),
+                                      // ConstsWidget.buildCheckBox(
+                                      //   context,
+                                      //   isChecked: responsavel == 0 ? false : true,
+                                      //   onChanged: (p0) {},
+                                      //   title: 'Responsável',
+                                      // ),
+                                    ],
+                                  ),
+                                  ConstsWidget.buildPadding001(
+                                    context,
+                                    vertical: 0.015,
+                                    child: Row(
+                                      mainAxisAlignment: data_nascimento == null
+                                          ? MainAxisAlignment.start
+                                          : MainAxisAlignment.spaceBetween,
                                       children: [
-                                        ConstsWidget.buildTextSubTitle(
-                                            context, 'Data Nascimento'),
-                                        ConstsWidget.buildTextTitle(
-                                            context, data_nascimento),
+                                        if (data_nascimento != null)
+                                          Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              ConstsWidget.buildTextSubTitle(
+                                                  context, 'Data Nascimento'),
+                                              ConstsWidget.buildTextTitle(
+                                                  context, data_nascimento),
+                                            ],
+                                          ),
+                                        if (data_nascimento != null)
+                                          SizedBox(
+                                            width: size.width * 0.1,
+                                          ),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            ConstsWidget.buildTextSubTitle(
+                                                context, 'Documento'),
+                                            ConstsWidget.buildTextTitle(
+                                                context, documento),
+                                          ],
+                                        )
                                       ],
                                     ),
-                                  if (data_nascimento != null)
-                                    SizedBox(
-                                      width: size.width * 0.1,
-                                    ),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment: telefone == null
+                                        ? MainAxisAlignment.start
+                                        : MainAxisAlignment.spaceBetween,
                                     children: [
-                                      ConstsWidget.buildTextSubTitle(
-                                          context, 'Documento'),
-                                      ConstsWidget.buildTextTitle(
-                                          context, documento),
-                                    ],
-                                  )
-                                ],
-                              ),
-                            ),
-                            Row(
-                              mainAxisAlignment: telefone == null
-                                  ? MainAxisAlignment.start
-                                  : MainAxisAlignment.spaceBetween,
-                              children: [
-                                if (telefone != '' && ddd != '')
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      ConstsWidget.buildTextSubTitle(
-                                          context, 'Telefone'),
-                                      Row(
+                                      if (telefone != '' && ddd != '')
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            ConstsWidget.buildTextSubTitle(
+                                                context, 'Telefone'),
+                                            Row(
+                                              children: [
+                                                ConstsWidget.buildTextTitle(
+                                                    context, '($ddd) '),
+                                                ConstsWidget.buildTextTitle(
+                                                    context, telefone),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
+                                          ConstsWidget.buildTextSubTitle(
+                                              context, 'Login'),
                                           ConstsWidget.buildTextTitle(
-                                              context, '($ddd) '),
-                                          ConstsWidget.buildTextTitle(
-                                              context, telefone),
+                                              context, login),
                                         ],
                                       ),
                                     ],
                                   ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    ConstsWidget.buildTextSubTitle(
-                                        context, 'Login'),
-                                    ConstsWidget.buildTextTitle(context, login),
-                                  ],
-                                ),
-                              ],
-                            ),
-                            ConstsWidget.buildPadding001(context,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    ConstsWidget.buildTextSubTitle(
-                                        context, 'Email'),
-                                    ConstsWidget.buildTextTitle(context, email,
-                                        maxLines: 2, width: 1),
-                                  ],
-                                )),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                SizedBox(
-                                  width: size.width * 0.6,
-                                  child: ConstsWidget.buildCheckBox(
-                                    context,
-                                    title: 'Acesso ao sistema',
-                                    isChecked: acessa_sistema,
-                                    onChanged: (value) {},
+                                  ConstsWidget.buildPadding001(context,
+                                      vertical: 0.02,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          ConstsWidget.buildTextSubTitle(
+                                              context, 'Email'),
+                                          ConstsWidget.buildTextTitle(
+                                              context, email,
+                                              maxLines: 2, width: 1),
+                                        ],
+                                      )),
+                                  Center(
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        ConstsWidget.buildTextTitle(
+                                            context, 'Acessa Sistema'),
+                                        SizedBox(
+                                          height: size.height * 0.005,
+                                        ),
+                                        SizedBox(
+                                          width: SplashScreen.isSmall
+                                              ? size.width * 0.205
+                                              : size.width * 0.195,
+                                          child: ConstsWidget.buildAtivoInativo(
+                                            context,
+                                            acessa_sistema,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              ],
+                                  SizedBox(
+                                    height: size.height * 0.02,
+                                  ),
+                                ],
+                              ),
                             ),
                             ConstsWidget.buildCustomButton(
                                 context, 'Editar Morador', onPressed: () {
-                              // Navigator.pushReplacement(
-                              //   context,
-                              //   MaterialPageRoute(
-                              //     builder: (context) => CadastroMorador(
-                              //         idmorador: idmorador,
-                              //         iddivisao: iddivisao,
-                              //         idunidade: idunidade,
-                              //         localizado: widget.localizado,
-                              //         nome_morador: nome_morador,
-                              //         login: login,
-                              //         documento: documento,
-                              //         nascimento: data_nascimento,
-                              //         telefone: telefone,
-                              //         ddd: ddd,
-                              //         acesso: acesso,
-                              //         ativo: ativo,
-                              //         responsavel: responsavel,
-                              //         email: email),
-                              //   ),
-                              // );
-                              // Navigator.replace(
-                              //   context,
-                              //   oldRoute: MaterialPageRoute(
-                              //     builder: (context) =>
-                              //         ListaMorador(idunidade: widget.idunidade),
-                              //   ),
-                              // newRoute: MaterialPageRoute(
-                              //   builder: (context) => CadastroMorador(
-                              //       idmorador: idmorador,
-                              //       iddivisao: iddivisao,
-                              //       idunidade: idunidade,
-                              //       localizado: widget.localizado,
-                              //       nome_morador: nome_morador,
-                              //       login: login,
-                              //       documento: documento,
-                              //       nascimento: data_nascimento,
-                              //       telefone: telefone,
-                              //       ddd: ddd,
-                              //       acesso: acesso,
-                              //       ativo: ativo,
-                              //       responsavel: responsavel,
-                              //       email: email),
-                              // ),
-                              // );
-                              // Navigator.pushAndRemoveUntil(
-                              //     context,
-                              //     MaterialPageRoute(
-                              //       builder: (context) => CadastroMorador(
-                              //           idmorador: idmorador,
-                              //           iddivisao: iddivisao,
-                              //           idunidade: idunidade,
-                              //           localizado: widget.localizado,
-                              //           nome_morador: nome_morador,
-                              //           login: login,
-                              //           documento: documento,
-                              //           nascimento: data_nascimento,
-                              //           telefone: telefone,
-                              //           ddd: ddd,
-                              //           acesso: acesso,
-                              //           ativo: ativo,
-                              //           responsavel: responsavel,
-                              //           email: email),
-                              //     ),
-                              //     (route) => false
-                              // ConstsFuture.navigatorPageReplace(
-                              //   context,
-                              //   CadastroMorador(
-                              //       idmorador: idmorador,
-                              //       iddivisao: iddivisao,
-                              //       idunidade: idunidade,
-                              //       localizado: widget.localizado,
-                              //       nome_morador: nome_morador,
-                              //       login: login,
-                              //       documento: documento,
-                              //       nascimento: data_nascimento,
-                              //       telefone: telefone,
-                              //       ddd: ddd,
-                              //       acesso: acesso,
-                              //       ativo: ativo,
-                              //       responsavel: responsavel,
-                              //       email: email),
-                              // );
-                              // Navigator.pop(context);
-
                               ConstsFuture.navigatorPagePush(
                                 context,
                                 CadastroMorador(
@@ -320,7 +277,7 @@ class _ListaMoradorState extends State<ListaMorador> {
                                     nome_morador: nome_morador,
                                     login: login,
                                     documento: documento,
-                                    nascimento: data_nascimento,
+                                    nascimento: apiMorador['data_nascimento'],
                                     telefone: telefone,
                                     ddd: ddd,
                                     acesso: acesso,

@@ -9,6 +9,7 @@ class ResponsalvelInfos {
   static int idcondominio = 0;
   static int idfuncionario = 0;
   static int qtd_publicidade = 0;
+  static int idfuncao = 0;
   static String nome_condominio = "";
   static String dividido_por = "";
   static String nome_responsavel = "";
@@ -25,16 +26,20 @@ class ResponsalvelInfos {
   static String cidade = "";
   static int temporespostas = 0;
   static bool aceitou_termos = false;
+  static bool senha_alterada = false;
+  static List listIdCond = [];
+  static List listIdFuncionario = [];
+  static List listIdFuncao = [];
 }
 
 class Consts {
   static double fontTitulo = SplashScreen.isSmall ? 18 : 20;
   static double fontSubTitulo = SplashScreen.isSmall ? 16 : 18;
-  static const double borderButton = 60;
+  static double borderButton = SplashScreen.isSmall ? 40 : 60;
 
   static const kBackPageColor = Color.fromARGB(255, 245, 245, 255);
-  // static const kButtonColor = Color.fromARGB(255, 0, 134, 252);
-  static const kButtonColor = kColorApp;
+  static const kButtonColor = Color.fromARGB(255, 0, 134, 252);
+  // static const kButtonColor = kColorApp;
 
   static const kColorApp = Color.fromARGB(255, 127, 99, 254);
   static const kColorRed = Color.fromARGB(255, 251, 80, 93);

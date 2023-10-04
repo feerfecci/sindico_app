@@ -41,9 +41,12 @@ Widget buildCardHome(BuildContext context,
                 }
               },
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
+          // crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Spacer(
+              flex: 2,
+            ),
             ConstsWidget.buildBadge(
               context,
               position: BadgePosition.topEnd(
@@ -69,7 +72,7 @@ Widget buildCardHome(BuildContext context,
                 context,
                 iconApi: iconApi,
                 width: SplashScreen.isSmall ? 0.13 : 0.141,
-                height: SplashScreen.isSmall ? 0.06 : 0.0641,
+                height: SplashScreen.isSmall ? 0.075 : 0.0641,
               ),
             ),
             // FutureBuilder(
@@ -78,11 +81,11 @@ Widget buildCardHome(BuildContext context,
             //         width: size.width * 0.12,
             //         height: size.height * 0.075,
             //         child: snapshot.data)),
-            SizedBox(
-              height: size.height * 0.008,
-            ),
+
+            Spacer(),
             ConstsWidget.buildTextTitle(context, title,
                 fontSize: SplashScreen.isSmall ? 14 : 16),
+            Spacer(),
           ],
         ),
       ),

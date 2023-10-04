@@ -8,7 +8,8 @@ import '../../widgets/scaffold_all.dart';
 import 'package:flutter_html/flutter_html.dart';
 
 class TermoDeUsoScreen extends StatefulWidget {
-  const TermoDeUsoScreen({super.key});
+  bool hasDrawer;
+  TermoDeUsoScreen({this.hasDrawer = true, super.key});
 
   @override
   State<TermoDeUsoScreen> createState() => _TermoDeUsoScreenState();
@@ -36,6 +37,7 @@ class _TermoDeUsoScreenState extends State<TermoDeUsoScreen> {
       child: buildScaffoldAll(
         context,
         title: 'Termos de Uso',
+        hasDrawer: widget.hasDrawer,
         body: FutureBuilder<dynamic>(
             future: termoUsoApi(),
             builder: (context, snapshot) {

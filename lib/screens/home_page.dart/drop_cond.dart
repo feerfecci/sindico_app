@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../consts/const_widget.dart';
 import '../../consts/consts.dart';
 import '../../consts/consts_future.dart';
+import '../../widgets/alert_dialogs/alert_trocar_senha.dart';
 import '../../widgets/my_box_shadow.dart';
 
 class DropCond extends StatefulWidget {
@@ -20,6 +21,8 @@ class _DropCondState extends State<DropCond> {
     super.initState();
   }
 
+  int i = 0;
+
   // Future<dynamic> apiAptos() async {
   //   var url = Uri.parse(
   //       'https://a.portariaapp.com/api/login-responsavel/?fn=login&usuario=${ResponsalvelInfos.login}&senha=${ResponsalvelInfos.senhacripto}');
@@ -33,39 +36,159 @@ class _DropCondState extends State<DropCond> {
   //     return false;
   //   }
   // }
+  List<DropdownMenuItem> listDrop = [];
 
   @override
   Widget build(BuildContext context) {
-    //var size = MediaQuery.of(context).size;
+    var size = MediaQuery.of(context).size;
+    listDrop.clear();
+    setState(() {
+      i = 0;
+    });
+
+    DropCond.listCond.map((e) {
+      i++;
+      listDrop.add(
+        DropdownMenuItem(
+            alignment: Alignment.center,
+            value: e['idcondominio'],
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                if (i != 1)
+                  Container(
+                    height: 1,
+                    decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.primary),
+                  ),
+                if (i != 1)
+                  SizedBox(
+                    height: size.height * 0.015,
+                  ),
+                ConstsWidget.buildTextSubTitle(context, e['nome_condominio'],
+                    size: 18),
+                // if (i == DropCond.listCond.length)
+                //   Container(
+                //     color: Colors.red,
+                //     child: Text('dzfg'),
+                //   )
+              ],
+            )),
+      );
+
+      if (i == DropCond.listCond.length) {
+        listDrop.add(
+          DropdownMenuItem(
+              alignment: Alignment.center,
+              value: 65684613513,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    height: 1,
+                    decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.primary),
+                  ),
+                  SizedBox(
+                    height: size.height * 0.02,
+                  ),
+                  ConstsWidget.buildTextTitle(
+                      context, 'Unificar Meus Condomínios'),
+                ],
+              )),
+        );
+      }
+      // return DropdownMenuItem(
+      //     alignment: Alignment.center,
+      //     value: e['idcondominio'],
+      //     child: Column(
+      //       mainAxisAlignment: MainAxisAlignment.center,
+      //       children: [
+      //         if (i != 1)
+      //           Container(
+      //             height: 1,
+      //             decoration: BoxDecoration(color: Colors.black12),
+      //           ),
+      //         if (i != 1)
+      //           SizedBox(
+      //             height: size.height * 0.01,
+      //           ),
+      //         ConstsWidget.buildTextTitle(
+      //           context,
+      //           e['nome_condominio'],
+      //         ),
+      //         if (i == DropCond.listCond.length)
+      //           Container(
+      //             color: Colors.red,
+      //             child: Text('dzfg'),
+      //           )
+      //       ],
+      //     ));
+    }).toSet();
     return ConstsWidget.buildPadding001(
       context,
-      child: MyBoxShadow(
-        child: ConstsWidget.buildDecorationDrop(
-          context,
-          child: DropdownButton(
-            alignment: Alignment.center,
-            isExpanded: true,
-            elevation: 24,
-            icon: Icon(
-              Icons.arrow_downward,
-              color: Theme.of(context).iconTheme.color,
-            ),
-            borderRadius: BorderRadius.circular(16),
-            // style: TextStyle(
-            //     color: Theme.of(context).colorScheme.primary,
-            //     fontWeight: FontWeight.w400,
-            //     fontSize: 18),
-            value: dropCond,
-            items: DropCond.listCond.map((e) {
-              return DropdownMenuItem(
-                  alignment: Alignment.center,
-                  value: e['idcondominio'],
-                  child: ConstsWidget.buildTextTitle(
+      child: ConstsWidget.buildDecorationDrop(
+        context,
+        child: DropdownButton(
+          alignment: Alignment.center,
+          isExpanded: true, itemHeight: size.height * 0.06,
+          elevation: 24,
+          icon: Icon(
+            Icons.arrow_downward,
+            color: Theme.of(context).iconTheme.color,
+          ),
+          borderRadius: BorderRadius.circular(16),
+          // style: TextStyle(
+          //     color: Theme.of(context).textTheme.bodyLarge!.color,
+          //     fontWeight: FontWeight.w400,
+          //     fontSize: 18),
+          value: dropCond,
+          selectedItemBuilder: (context) {
+            return DropCond.listCond.map((e) {
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ConstsWidget.buildTextTitle(
                     context,
                     e['nome_condominio'],
-                  ));
-            }).toList(),
-            onChanged: (value) {
+                  )
+                ],
+              );
+            }).toList();
+          },
+          items: listDrop,
+
+          // DropCond.listCond.map((e) {
+          //   i++;
+          //   return DropdownMenuItem(
+          //       alignment: Alignment.center,
+          //       value: e['idcondominio'],
+          //       child: Column(
+          //         mainAxisAlignment: MainAxisAlignment.center,
+          //         children: [
+          //           if (i != 1)
+          //             Container(
+          //               height: 1,
+          //               decoration: BoxDecoration(color: Colors.black12),
+          //             ),
+          //           if (i != 1)
+          //             SizedBox(
+          //               height: size.height * 0.01,
+          //             ),
+          //           ConstsWidget.buildTextTitle(
+          //             context,
+          //             e['nome_condominio'],
+          //           ),
+          //           if (i == DropCond.listCond.length)
+          //             Container(
+          //               color: Colors.red,
+          //               child: Text('dzfg'),
+          //             )
+          //         ],
+          //       ));
+          // }).toList(),
+          onChanged: (value) {
+            if (value != 65684613513) {
               setState(
                 () {
                   dropCond = value;
@@ -74,8 +197,12 @@ class _DropCondState extends State<DropCond> {
                       idCondominio: int.parse('$dropCond'));
                 },
               );
-            },
-          ),
+            } else {
+              alertTrocarSenha(
+                context,
+              );
+            }
+          },
         ),
       ),
     );

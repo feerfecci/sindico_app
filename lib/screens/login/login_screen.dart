@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sindico_app/repositories/shared_preferences.dart';
+import 'package:sindico_app/screens/splash_screen/splash_screen.dart';
 import 'package:validatorless/validatorless.dart';
 import '../../consts/const_widget.dart';
 import '../../consts/consts_future.dart';
+import '../politica/politica_screen.dart';
+import '../termodeuso/termo_de_uso.dart';
+import 'esqueci_senha.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -70,7 +74,8 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
-            borderSide: BorderSide(color: Colors.black26),
+            borderSide:
+                BorderSide(color: Theme.of(context).colorScheme.primary),
           ),
         ),
       );
@@ -85,7 +90,7 @@ class _LoginScreenState extends State<LoginScreen> {
             autofillHints: const [AutofillHints.password],
             autovalidateMode: AutovalidateMode.onUserInteraction,
             validator: Validatorless.multiple([
-              Validatorless.required('Senha é obrigatório'),
+              Validatorless.required('Preencha com sua senha de acesso'),
               Validatorless.min(3, 'Mínimo de 6 caracteres')
             ]),
             onEditingComplete: () => TextInput.finishAutofillContext(),
@@ -99,7 +104,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   OutlineInputBorder(borderRadius: BorderRadius.circular(16)),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(16),
-                borderSide: BorderSide(color: Colors.black26),
+                borderSide:
+                    BorderSide(color: Theme.of(context).colorScheme.primary),
               ),
               hintText: 'Digite sua Senha',
               suffixIcon: GestureDetector(
@@ -109,8 +115,14 @@ class _LoginScreenState extends State<LoginScreen> {
                   });
                 }),
                 child: obscure
-                    ? Icon(Icons.visibility_off_outlined)
-                    : Icon(Icons.visibility_outlined),
+                    ? Icon(
+                        Icons.visibility_off_outlined,
+                        color: Theme.of(context).textTheme.bodyLarge!.color,
+                      )
+                    : Icon(
+                        Icons.visibility_outlined,
+                        color: Theme.of(context).textTheme.bodyLarge!.color,
+                      ),
               ),
             ),
           ),
@@ -120,6 +132,7 @@ class _LoginScreenState extends State<LoginScreen> {
               return ConstsWidget.buildCheckBox(context,
                   title: 'Mantenha-me conectado',
                   isChecked: isChecked, onChanged: (bool? value) {
+                FocusManager.instance.primaryFocus!.unfocus();
                 setState(() {
                   isChecked = value!;
                 });
@@ -135,48 +148,101 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Center(
           child: Form(
             key: _formKeyLogin,
-            child: Wrap(
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(
-                      left: size.width * 0.05,
-                      right: size.width * 0.05,
-                      bottom: size.height * 0.15),
-                  child: Column(
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: size.width * 0.03,
+              ),
+              child: ListView(
+                children: [
+                  SizedBox(
+                    height: size.height * 0.04,
+                  ),
+                  ConstsWidget.buildCachedImage(context,
+                      height: SplashScreen.isSmall ? 0.2 : 0.2,
+                      width: SplashScreen.isSmall ? 0.3 : 0.4,
+                      iconApi: 'https://a.portariaapp.com/img/logo_verde.png'),
+                  Padding(
+                    padding: EdgeInsets.only(
+                        bottom: size.height * 0.035, top: size.height * 0.025),
+                    child: ConstsWidget.buildTextTitle(
+                        context, 'Portaria App | Síndico',
+                        textAlign: TextAlign.center, fontSize: 19),
+                  ),
+                  Center(child: ConstsWidget.buildCamposObrigatorios(context)),
+                  SizedBox(
+                    height: size.height * 0.01,
+                  ),
+                  buildTextFormEmail(),
+                  SizedBox(
+                    height: size.height * 0.03,
+                  ),
+                  buildTextFormSenha(),
+                  ConstsWidget.buildLoadingButton(context, onPressed: () {
+                    starLogin();
+                  }, isLoading: isLoading, title: 'Entrar', fontSize: 18),
+                  SizedBox(
+                    height: size.height * 0.02,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Padding(
-                          padding: EdgeInsets.only(left: 8.0),
-                          child: FutureBuilder(
-                            future: ConstsFuture.apiImage(
-                                'https://a.portariaapp.com/img/logo_verde.png'),
-                            builder: (context, snapshot) {
-                              return SizedBox(
-                                height: size.height * 0.2,
-                                width: size.width * 0.5,
-                                child: snapshot.data,
-                              );
-                            },
-                          )),
-                      Padding(
-                        padding: EdgeInsets.only(
-                            bottom: size.height * 0.035,
-                            top: size.height * 0.025),
-                        child: ConstsWidget.buildTextTitle(
-                            context, 'Portaria App | Síndico',
-                            fontSize: 19),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  PoliticaScreen(hasDrawer: false),
+                            ),
+                          );
+                        },
+                        child: Text(
+                          'Política de Privacidade',
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(color: Colors.blue),
+                        ),
                       ),
-                      buildTextFormEmail(),
-                      SizedBox(
-                        height: size.height * 0.03,
+                      TextButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => TermoDeUsoScreen(
+                                hasDrawer: false,
+                              ),
+                            ),
+                          );
+                        },
+                        child: Text(
+                          'Termos de Uso',
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(color: Colors.blue),
+                        ),
                       ),
-                      buildTextFormSenha(),
-                      ConstsWidget.buildLoadingButton(context, onPressed: () {
-                        starLogin();
-                      }, isLoading: isLoading, title: 'Entrar', fontSize: 18),
                     ],
                   ),
-                ),
-              ],
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => EsqueciSenhaScreen(),
+                            ),
+                          );
+                        },
+                        child: Text(
+                          'Recuperar Senha',
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(color: Colors.blue),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),

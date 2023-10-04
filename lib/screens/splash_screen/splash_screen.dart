@@ -19,7 +19,7 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  bool load = false;
+  bool load = true;
   startLogin() async {
     await LocalInfos.readCache().then((value) async {
       Map<String, dynamic> infos = value;
@@ -88,11 +88,10 @@ class _SplashScreenState extends State<SplashScreen> {
               child: ConstsWidget.buildCustomButton(
                 context,
                 'Autenticar Biometria',
-                icon: Icons.lock_open_outlined,
                 onPressed: () {
                   startLogin();
                 },
-                textColor: Consts.kColorApp,
+                textColor: Colors.white,
               ),
             ),
         ],

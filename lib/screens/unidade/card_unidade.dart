@@ -27,9 +27,9 @@ Widget buildCardUnidade(
             SizedBox(
               height: size.height * 0.01,
             ),
-            ConstsWidget.buildOutlinedButton(
+            ConstsWidget.buildCustomButton(
               context,
-              title: 'Listar Moradores',
+              'Listar Moradores',
               onPressed: () {
                 ConstsFuture.navigatorPagePush(
                     context,

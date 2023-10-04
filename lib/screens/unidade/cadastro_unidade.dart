@@ -104,6 +104,7 @@ class _CadastroUnidadesState extends State<CadastroUnidades> {
   bool nomeDocAlterado = false;
   List listAtivo = [1, 0];
   Object? dropdownValueAtivo;
+  Object? dropdownValueDivisioes;
 
   @override
   Widget build(BuildContext context) {
@@ -138,11 +139,12 @@ class _CadastroUnidadesState extends State<CadastroUnidades> {
             }).toList(),
             onChanged: (value) {
               setState(() {
-                // dropdownValueDivisioes = value;
+                dropdownValueDivisioes = value;
                 formInfosUnidade = formInfosUnidade.copyWith(iddivisao: value);
+                print(dropdownValueDivisioes);
               });
             },
-            value: dropdownValueAtivo = formInfosUnidade.iddivisao,
+            value: dropdownValueDivisioes = formInfosUnidade.iddivisao,
           ),
         ),
       );
@@ -166,15 +168,16 @@ class _CadastroUnidadesState extends State<CadastroUnidades> {
               ),
               elevation: 24,
               style: TextStyle(
-                  color: Theme.of(context).colorScheme.primary,
+                  color: Theme.of(context).textTheme.bodyLarge!.color,
                   fontWeight: FontWeight.w400,
                   fontSize: 18),
               borderRadius: BorderRadius.circular(16),
               onChanged: (value) {
                 setState(() {
-                  dropdownValueAtivo = value!;
+                  dropdownValueAtivo = value;
                   formInfosUnidade = formInfosUnidade.copyWith(ativo: value);
                 });
+                print(dropdownValueAtivo);
               },
               items: listAtivo.map<DropdownMenuItem>((value) {
                 return DropdownMenuItem(
@@ -251,6 +254,10 @@ class _CadastroUnidadesState extends State<CadastroUnidades> {
                   // if (widget.idunidade == 0)
                   Column(
                     children: [
+                      ConstsWidget.buildPadding001(
+                        context,
+                        child: ConstsWidget.buildCamposObrigatorios(context),
+                      ),
                       buildDropAtivo(
                         context,
                       ),
@@ -295,15 +302,21 @@ class _CadastroUnidadesState extends State<CadastroUnidades> {
                     'Salvar',
                     color: Consts.kColorRed,
                     onPressed: () {
+                      FocusManager.instance.primaryFocus!.unfocus();
                       var formValid =
                           _formkeyUnidade.currentState?.validate() ?? false;
 
-                      if (formValid && !widget.isDrawer) {
+                      FocusManager.instance.primaryFocus!.unfocus();
+                      if (formValid &&
+                          !widget.isDrawer &&
+                          formInfosUnidade.id_divisao_unidade != null &&
+                          dropdownValueDivisioes != null) {
                         _formkeyUnidade.currentState!.save();
 
                         showAllDialog(context,
                             title: ConstsWidget.buildTextTitle(
-                                context, 'Deseja continuar?'),
+                                context, 'Deseja continuar?',
+                                fontSize: 18),
                             children: [
                               RichText(
                                   text: TextSpan(children: const [
@@ -317,21 +330,19 @@ class _CadastroUnidadesState extends State<CadastroUnidades> {
                                 height: size.height * 0.025,
                               ),
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   ConstsWidget.buildOutlinedButton(
                                     context,
-                                    title: 'Cancelar',
+                                    title: '      Cancelar      ',
                                     onPressed: () {
                                       Navigator.pop(context);
                                     },
                                   ),
-                                  SizedBox(
-                                    width: size.width * 0.05,
-                                  ),
+                                  Spacer(),
                                   ConstsWidget.buildCustomButton(
                                     context,
-                                    'Salvar',
+                                    '       Salvar       ',
                                     color: Consts.kColorRed,
                                     onPressed: () {
                                       String incluindoEditando = widget
@@ -340,10 +351,13 @@ class _CadastroUnidadesState extends State<CadastroUnidades> {
                                           ? "incluirUnidade&"
                                           : 'editarUnidade&id=${widget.idunidade}&';
 
+                                      FocusManager.instance.primaryFocus!
+                                          .unfocus();
                                       ConstsFuture.resquestApi(
                                               '${Consts.sindicoApi}unidades/?fn=${incluindoEditando}idcond=${ResponsalvelInfos.idcondominio}&idfuncionario=${ResponsalvelInfos.idfuncionario}&iddivisao=${formInfosUnidade.iddivisao}&ativo=${formInfosUnidade.ativo}&numero=${"$tipoSelec${formInfosUnidade.numero}"}')
                                           .then((value) {
                                         if (!value['erro']) {
+                                          Navigator.pop(context);
                                           ConstsFuture.navigatorPopPush(
                                                   context, '/listaUnidade')
                                               .whenComplete(() {
@@ -364,6 +378,10 @@ class _CadastroUnidadesState extends State<CadastroUnidades> {
                                 ],
                               )
                             ]);
+                      } else {
+                        buildMinhaSnackBar(context,
+                            hasError: true,
+                            subTitle: 'Complete as informações');
                       }
                     },
                   )

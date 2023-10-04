@@ -1,11 +1,14 @@
 // ignore_for_file: must_be_immutable
 import 'dart:convert';
+import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:sindico_app/consts/consts_future.dart';
 import 'package:sindico_app/forms/morador_form.dart';
 import 'package:sindico_app/screens/moradores/lista_morador.dart';
 import 'package:http/http.dart' as http;
 import 'package:sindico_app/screens/splash_screen/splash_screen.dart';
+import 'package:sindico_app/widgets/date_picker.dart';
 import 'package:validatorless/validatorless.dart';
 import '../../consts/const_widget.dart';
 import '../../consts/consts.dart';
@@ -78,6 +81,7 @@ class _CadastroMoradorState extends State<CadastroMorador> {
     _formInfosMorador = _formInfosMorador.copyWith(acesso: widget.acesso);
     _formInfosMorador =
         _formInfosMorador.copyWith(responsavel: widget.responsavel);
+    MyDatePicker.dataSelected = widget.nascimento ?? '';
   }
 
   FormInfosMorador _formInfosMorador = FormInfosMorador();
@@ -85,7 +89,6 @@ class _CadastroMoradorState extends State<CadastroMorador> {
   @override
   Widget build(BuildContext context) {
     @override
-    var dataParsed = widget.nascimento != '' ? widget.nascimento : '';
     bool boolResponsavel = widget.idmorador == null
         ? true
         : widget.responsavel == 0
@@ -110,6 +113,10 @@ class _CadastroMoradorState extends State<CadastroMorador> {
         child: MyBoxShadow(
           child: Column(
             children: [
+              ConstsWidget.buildPadding001(
+                context,
+                child: ConstsWidget.buildCamposObrigatorios(context),
+              ),
               ConstsWidget.buildPadding001(context,
                   child: ConstsWidget.buildTextTitle(
                       context, widget.localizado!,
@@ -135,35 +142,52 @@ class _CadastroMoradorState extends State<CadastroMorador> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  SizedBox(
-                    width: size.width * 0.37,
-                    child: buildMyTextFormField(context,
-                        initialValue: dataParsed,
-                        title: 'Data de Nascimento',
-                        keyboardType: TextInputType.number,
-                        mask: '##/##/####',
-                        hintText: '##/##/####', onSaved: (text) {
-                      // var replace = text!.replaceAll('/', '-');
-                      if (text != '') {
-                        var ano = text!.substring(6);
-                        var mes = text.substring(3, 5);
-                        var dia = text.substring(0, 2);
+                  ConstsWidget.buildAniversarioField(context, widget.nascimento,
+                      width: 0.37),
+                  // SizedBox(
+                  //   width: size.width * 0.37,
+                  //   child: MyDatePicker(
+                  //     type: DateTimePickerType.dateTime,
+                  //     dataSelected: MyDatePicker.dataSelected != '0000-00-00' &&
+                  //             MyDatePicker.dataSelected != ''
+                  //         ? DateFormat('dd/MM/yyyy')
+                  //             .format(DateTime.parse(MyDatePicker.dataSelected))
+                  //         : DateTime.now(),
+                  //     hintText: MyDatePicker.dataSelected != '0000-00-00' &&
+                  //             MyDatePicker.dataSelected != ''
+                  //         ? DateFormat('dd/MM/yyyy')
+                  //             .format(DateTime.parse(MyDatePicker.dataSelected))
+                  //             .toString()
+                  //         : 'MyDatePicker.dataSelected',
+                  //     aniversario: true,
+                  //   ),
+                  // buildMyTextFormField(context,
+                  //     initialValue: dataParsed,
+                  //     title: 'Data de Nascimento',
+                  //     keyboardType: TextInputType.number,
+                  //     mask: '##/##/####',
+                  //     hintText: '##/##/####', onSaved: (text) {
+                  //   // var replace = text!.replaceAll('/', '-');
+                  //   if (text != '') {
+                  //     var ano = text!.substring(6);
+                  //     var mes = text.substring(3, 5);
+                  //     var dia = text.substring(0, 2);
 
-                        _formInfosMorador = _formInfosMorador.copyWith(
-                            nascimento: '$ano-$mes-$dia');
-                      } else {
-                        _formInfosMorador =
-                            _formInfosMorador.copyWith(nascimento: "");
-                      }
-                    }),
-                  ),
+                  //     _formInfosMorador = _formInfosMorador.copyWith(
+                  //         nascimento: '$ano-$mes-$dia');
+                  //   } else {
+                  //     _formInfosMorador =
+                  //         _formInfosMorador.copyWith(nascimento: "");
+                  //   }
+                  // }),
+                  // ),
                   SizedBox(
                     width: size.width * 0.5,
                     child: buildMyTextFormObrigatorio(
                       context,
                       'Documento',
                       initialValue: widget.documento,
-                      hintText: 'RG, CPF',
+                      hintText: 'CPF',
                       onSaved: (text) {
                         if (text != widget.documento) {
                           setState(() {
@@ -223,12 +247,14 @@ class _CadastroMoradorState extends State<CadastroMorador> {
               ),
               ConstsWidget.buildLoadingButton(context,
                   isLoading: isLoadingLogin,
+                  color: Consts.kColorVerde,
                   title: 'Gerar Login', onPressed: () {
                 setState(() {
                   isLoadingLogin = true;
                 });
                 var formValid =
                     _formKeyMorador.currentState?.validate() ?? false;
+                FocusManager.instance.primaryFocus!.unfocus();
 
                 if (formValid) {
                   _formKeyMorador.currentState?.save();
@@ -361,6 +387,7 @@ class _CadastroMoradorState extends State<CadastroMorador> {
                       isLoading: isLoading,
                       color: Consts.kColorRed,
                       onPressed: () {
+                        FocusManager.instance.primaryFocus!.unfocus();
                         salvarMorador();
                       },
                     )
@@ -404,8 +431,8 @@ class _CadastroMoradorState extends State<CadastroMorador> {
           : restoApi =
               'editarMorador&id=${widget.idmorador}&gerarsenha=${isGerarSenha ? 1 : 0}';
 
-      String datanasc = _formInfosMorador.nascimento != ''
-          ? '&datanasc=${_formInfosMorador.nascimento}'
+      String datanasc = MyDatePicker.dataSelected != ''
+          ? '&datanasc=${DateFormat('yyyy-MM-dd').format(DateTime.parse(MyDatePicker.dataSelected))}'
           : '';
       String dddtelefone = _formInfosMorador.ddd != ''
           ? '&dddtelefone=${_formInfosMorador.ddd}'
@@ -417,7 +444,7 @@ class _CadastroMoradorState extends State<CadastroMorador> {
               '${Consts.sindicoApi}moradores/?fn=$restoApi&idunidade=${widget.idunidade}&idcond=${ResponsalvelInfos.idcondominio}&idfuncionario=${ResponsalvelInfos.idfuncionario}&iddivisao=${widget.iddivisao}&ativo=${_formInfosMorador.ativo}&nomeMorador=${_formInfosMorador.nome_morador}&login=$loginGerado$datanasc&documento=${_formInfosMorador.documento}$dddtelefone$telefone&email=${_formInfosMorador.email}&acessa_sistema=${_formInfosMorador.acesso}&responsavel=${_formInfosMorador.responsavel}')
           .then((value) {
         setState(() {
-          isLoading == false;
+          isLoading = false;
         });
         if (!value['erro']) {
           Navigator.pop(context);
@@ -438,7 +465,7 @@ class _CadastroMoradorState extends State<CadastroMorador> {
           // buildMinhaSnackBar(context,
           //     title: 'Tudo Certo!', subTitle: value['Mensagem']);
         } else {
-          return buildMinhaSnackBar(context,
+          buildMinhaSnackBar(context,
               hasError: value['erro'], subTitle: value['Mensagem']);
         }
       });
@@ -473,7 +500,7 @@ class _CadastroMoradorState extends State<CadastroMorador> {
             ),
             elevation: 24,
             style: TextStyle(
-                color: Theme.of(context).colorScheme.primary,
+                color: Theme.of(context).textTheme.bodyLarge!.color,
                 fontWeight: FontWeight.w400,
                 fontSize: SplashScreen.isSmall ? 16 : 18),
             borderRadius: BorderRadius.circular(16),

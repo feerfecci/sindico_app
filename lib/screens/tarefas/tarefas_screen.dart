@@ -25,6 +25,7 @@ class TarefasScreen extends StatefulWidget {
 }
 
 Future apiTarefas() async {
+  TarefasScreen.qntTarefas.clear();
   ConstsFuture.resquestApi(
           '${Consts.sindicoApi}tarefas/?fn=listarTarefas&idcond=${ResponsalvelInfos.idcondominio}&idfuncionario=${ResponsalvelInfos.idfuncionario}')
       .then((value) {
@@ -66,7 +67,6 @@ class _TarefasScreenState extends State<TarefasScreen> {
             ConstsWidget.buildCustomButton(
               context,
               'Adicionar Tarefa',
-              icon: Icons.add,
               color: Consts.kColorRed,
               onPressed: () {
                 ConstsFuture.navigatorPagePush(context, AdicionarTarefa());
@@ -154,14 +154,55 @@ class _TarefasScreenState extends State<TarefasScreen> {
                                             showAllDialog(context,
                                                 title:
                                                     ConstsWidget.buildTextTitle(
-                                                        context,
-                                                        'Excluir tarefa'),
+                                                        context, 'Atenção',
+                                                        fontSize: 18),
                                                 children: [
-                                                  ConstsWidget.buildTextTitle(
-                                                      context,
-                                                      'Ao continuar você não recebará mais aviso sobre está tarefa',
-                                                      textAlign:
-                                                          TextAlign.center),
+                                                  RichText(
+                                                    textAlign: TextAlign.center,
+                                                    text: TextSpan(
+                                                      text: 'Ao continuar',
+                                                      style: TextStyle(
+                                                        color: Theme.of(context)
+                                                            .textTheme
+                                                            .bodyLarge!
+                                                            .color,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        fontSize:
+                                                            SplashScreen.isSmall
+                                                                ? 14
+                                                                : 16,
+                                                      ),
+                                                      children: [
+                                                        ConstsWidget
+                                                            .builRichTextSubTitle(
+                                                                context,
+                                                                subTitle:
+                                                                    ' você '),
+                                                        ConstsWidget
+                                                            .builRichTextTitle(
+                                                                context,
+                                                                textBold:
+                                                                    'Excluirá ',
+                                                                color: Consts
+                                                                    .kColorRed),
+                                                        ConstsWidget
+                                                            .builRichTextSubTitle(
+                                                                context,
+                                                                subTitle:
+                                                                    'esta tarefa'),
+                                                        // buildBoldSpan(
+                                                        //     acaoTarefa),
+                                                        // buildNormalSpan(
+                                                        //     ' você '),
+                                                        // buildBoldSpan(concluida
+                                                        //     ? 'Voltará a Receber '
+                                                        //     : 'Não Receberá '),
+                                                        // buildNormalSpan(
+                                                        //     'avisos sobre esta tarefa'),
+                                                      ],
+                                                    ),
+                                                  ),
                                                   SizedBox(
                                                     height: size.height * 0.01,
                                                   ),
@@ -175,16 +216,18 @@ class _TarefasScreenState extends State<TarefasScreen> {
                                                         ConstsWidget
                                                             .buildOutlinedButton(
                                                           context,
-                                                          title: '  Cancelar  ',
+                                                          title:
+                                                              '      Cancelar      ',
                                                           onPressed: () {
                                                             Navigator.pop(
                                                                 context);
                                                           },
                                                         ),
+                                                        Spacer(),
                                                         ConstsWidget
                                                             .buildCustomButton(
                                                           context,
-                                                          '  Excluir  ',
+                                                          '       Excluir       ',
                                                           color:
                                                               Consts.kColorRed,
                                                           onPressed: () {
@@ -208,7 +251,8 @@ class _TarefasScreenState extends State<TarefasScreen> {
                                           child: Icon(
                                             Icons.delete_outlined,
                                             color: Colors.red,
-                                            size: 30,
+                                            size:
+                                                SplashScreen.isSmall ? 25 : 30,
                                           ),
                                         ),
                                         GestureDetector(
@@ -216,41 +260,6 @@ class _TarefasScreenState extends State<TarefasScreen> {
                                             String acaoTarefa = !concluida
                                                 ? 'Concluir Tarefa'
                                                 : 'Reativar Tarefa';
-
-                                            TextSpan buildBoldSpan(textBold) {
-                                              return TextSpan(
-                                                  text: textBold,
-                                                  style: TextStyle(
-                                                    color: Consts.kColorRed,
-
-                                                    // Theme.of(context)
-                                                    //     .colorScheme
-                                                    //     .primary,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    fontSize:
-                                                        SplashScreen.isSmall
-                                                            ? 16
-                                                            : 18,
-                                                    fontWeight: FontWeight.bold,
-                                                  ));
-                                            }
-
-                                            TextSpan buildNormalSpan(
-                                                textNormal) {
-                                              return TextSpan(
-                                                  text: textNormal,
-                                                  style: TextStyle(
-                                                      color: Theme.of(context)
-                                                          .colorScheme
-                                                          .primary,
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                      fontSize:
-                                                          SplashScreen.isSmall
-                                                              ? 14
-                                                              : 16));
-                                            }
 
                                             showAllDialog(context,
                                                 barrierDismissible: true,
@@ -265,25 +274,50 @@ class _TarefasScreenState extends State<TarefasScreen> {
                                                       text: 'Ao ',
                                                       style: TextStyle(
                                                         color: Theme.of(context)
-                                                            .colorScheme
-                                                            .primary,
+                                                            .textTheme
+                                                            .bodyLarge!
+                                                            .color,
                                                         overflow: TextOverflow
                                                             .ellipsis,
                                                         fontSize:
                                                             SplashScreen.isSmall
-                                                                ? 16
-                                                                : 18,
+                                                                ? 14
+                                                                : 16,
                                                       ),
                                                       children: [
-                                                        buildBoldSpan(
-                                                            acaoTarefa),
-                                                        buildNormalSpan(
-                                                            ' você '),
-                                                        buildBoldSpan(concluida
-                                                            ? 'voltará a receber '
-                                                            : 'não receberá '),
-                                                        buildNormalSpan(
-                                                            'avisos sobre esta terefa'),
+                                                        ConstsWidget
+                                                            .builRichTextTitle(
+                                                                context,
+                                                                textBold:
+                                                                    acaoTarefa,
+                                                                color: Consts
+                                                                    .kColorRed),
+                                                        ConstsWidget
+                                                            .builRichTextSubTitle(
+                                                                context,
+                                                                subTitle:
+                                                                    ' você '),
+                                                        ConstsWidget.builRichTextTitle(
+                                                            context,
+                                                            textBold: concluida
+                                                                ? 'Voltará a Receber '
+                                                                : 'Não Receberá ',
+                                                            color: Consts
+                                                                .kColorRed),
+                                                        ConstsWidget
+                                                            .builRichTextSubTitle(
+                                                                context,
+                                                                subTitle:
+                                                                    'avisos sobre esta tarefa'),
+                                                        // buildBoldSpan(
+                                                        //     acaoTarefa),
+                                                        // buildNormalSpan(
+                                                        //     ' você '),
+                                                        // buildBoldSpan(concluida
+                                                        //     ? 'Voltará a Receber '
+                                                        //     : 'Não Receberá '),
+                                                        // buildNormalSpan(
+                                                        //     'avisos sobre esta tarefa'),
                                                       ],
                                                     ),
                                                   ),
@@ -299,7 +333,7 @@ class _TarefasScreenState extends State<TarefasScreen> {
                                                           .buildOutlinedButton(
                                                         context,
                                                         title:
-                                                            '    Cancelar    ',
+                                                            '      Cancelar      ',
                                                         onPressed: () {
                                                           Navigator.pop(
                                                               context);
@@ -309,8 +343,8 @@ class _TarefasScreenState extends State<TarefasScreen> {
                                                           .buildCustomButton(
                                                         context,
                                                         !concluida
-                                                            ? '   Concluir   '
-                                                            : '   Reativar   ',
+                                                            ? '     Concluir     '
+                                                            : '     Reativar     ',
                                                         color: Consts.kColorRed,
                                                         onPressed: () {
                                                           ConstsFuture.resquestApi(
@@ -325,7 +359,7 @@ class _TarefasScreenState extends State<TarefasScreen> {
                                                               return buildMinhaSnackBar(
                                                                   context,
                                                                   title:
-                                                                      'Algo Saiu Mau',
+                                                                      'algo saiu mal',
                                                                   subTitle: value[
                                                                       'mensagem']);
                                                             }
@@ -342,7 +376,8 @@ class _TarefasScreenState extends State<TarefasScreen> {
                                                 ? Color.fromARGB(
                                                     255, 78, 227, 83)
                                                 : Colors.grey[300],
-                                            size: 30,
+                                            size:
+                                                SplashScreen.isSmall ? 25 : 30,
                                           ),
                                         ),
                                       ],
@@ -357,14 +392,14 @@ class _TarefasScreenState extends State<TarefasScreen> {
                                 height: size.height * 0.01,
                               ),
                               if (!isToday)
-                                ConstsWidget.buildTextTitle(
+                                ConstsWidget.buildTextSubTitle(
                                     context, 'Data de vencimento'),
                               if (isToday)
                                 ConstsWidget.buildTextTitle(
                                     context, 'Vence Hoje',
                                     color: Consts.kColorRed),
-                              ConstsWidget.buildTextSubTitle(
-                                context,
+                              ConstsWidget.buildTextTitle(
+                                context, fontSize: 16,
                                 DateFormat('dd/MM/yyyy HH:mm')
                                     .format(DateTime.parse(data_vencimento))
                                     .toString(),
@@ -416,16 +451,16 @@ class _TarefasScreenState extends State<TarefasScreen> {
                                 height: size.height * 0.01,
                               ),
                               ConstsWidget.buildPadding001(context,
-                                  child: ConstsWidget.buildOutlinedButton(
+                                  child: ConstsWidget.buildCustomButton(
                                     context,
-                                    title: 'Editar Tarefa',
+                                    'Editar Tarefa',
                                     onPressed: () {
                                       ConstsFuture.navigatorPagePush(
                                         context,
                                         AdicionarTarefa(
                                           idtarefa: idtarefa,
                                           nomeTarefaCtrl: descricao,
-                                          initialDate: data_vencimento,
+                                          dateSelected: data_vencimento,
                                           aviso_dias: aviso_dias,
                                           repetir_dias: repetir_dias,
                                         ),
