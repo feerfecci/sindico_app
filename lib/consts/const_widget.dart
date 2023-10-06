@@ -95,19 +95,48 @@ class ConstsWidget {
   }
 
   static TextSpan builRichTextSubTitle(BuildContext context,
-      {required String subTitle}) {
+      {required String subTitle, Color? color}) {
     return TextSpan(
         text: subTitle,
         style: TextStyle(
-            color: Theme.of(context).textTheme.bodyLarge!.color,
+            color: color ?? Theme.of(context).textTheme.bodyLarge!.color,
             height: 1.5,
             overflow: TextOverflow.ellipsis,
             fontSize: SplashScreen.isSmall ? 14 : 16));
   }
 
+  static Widget buildExpandedTile(BuildContext context,
+      {required Widget title,
+      bool titleCenter = true,
+      Widget? subtitle,
+      required List<Widget> children,
+      void Function(bool)? onExpansionChanged,
+      CrossAxisAlignment? expandedCrossAxisAlignment,
+      Alignment? expandedAlignment}) {
+    var size = MediaQuery.of(context).size;
+    return Theme(
+      data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+      child: ExpansionTile(
+        // trailing: Icon(Icons.arrow_downward),
+        onExpansionChanged: onExpansionChanged,
+        iconColor: Theme.of(context).textTheme.bodyLarge!.color,
+        subtitle: subtitle == null
+            ? null
+            : titleCenter
+                ? Center(child: subtitle)
+                : subtitle,
+        expandedCrossAxisAlignment: expandedCrossAxisAlignment,
+        childrenPadding: EdgeInsets.symmetric(horizontal: size.width * 0.01),
+        expandedAlignment: expandedAlignment,
+        tilePadding: EdgeInsets.symmetric(horizontal: size.width * 0.01),
+        title: titleCenter ? Center(child: title) : title,
+        children: children,
+      ),
+    );
+  }
+
   static Widget buildCustomButton(BuildContext context, String title,
       {double? altura,
-      double largura = 0.0,
       Color? color = Consts.kColorAzul,
       Color? textColor = Colors.white,
       Color? iconColor = Colors.white,
@@ -126,26 +155,17 @@ class ConstsWidget {
       onPressed: onPressed,
       child: buildPadding001(
         context,
-        vertical: altura == null
-            ? SplashScreen.isSmall
-                ? 0.035
-                : 0.025
-            : 0.025,
-        horizontal: largura,
+        vertical: 0.025,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SizedBox(
               width: size.width * rowSpacing,
             ),
-            Text(
+            ConstsWidget.buildTextTitle(
+              context,
               title,
-              style: TextStyle(
-                overflow: TextOverflow.ellipsis,
-                color: textColor,
-                fontSize: SplashScreen.isSmall ? 14 : 18,
-                // fontWeight: FontWeight.w500,
-              ),
+              color: textColor,
             ),
             SizedBox(
               width: size.width * rowSpacing,
@@ -166,36 +186,38 @@ class ConstsWidget {
 
     return ElevatedButton(
         style: ElevatedButton.styleFrom(
-            padding: EdgeInsets.symmetric(
-                vertical: SplashScreen.isSmall
-                    ? size.height * 0.035
-                    : size.height * 0.025),
+            // padding: EdgeInsets.symmetric(
+            //     vertical: SplashScreen.isSmall
+            //         ? size.height * 0.035
+            //         : size.height * 0.025),
             backgroundColor: color,
             shape: StadiumBorder()),
         onPressed: onPressed,
-        child: isLoading == false
-            ? Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  ConstsWidget.buildTextTitle(context, title,
-                      fontSize: fontSize, color: Colors.white),
-                ],
-              )
-            : Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  SizedBox(
-                    height: size.height * 0.025,
-                    width: size.width * 0.05,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      color: Colors.white,
-                    ),
-                  ),
-                ],
-              ));
+        child: buildPadding001(context,
+            vertical: 0.025,
+            child: isLoading == false
+                ? Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      ConstsWidget.buildTextTitle(context, title,
+                          fontSize: fontSize, color: Colors.white),
+                    ],
+                  )
+                : Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      SizedBox(
+                        height: size.height * 0.025,
+                        width: size.width * 0.05,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ],
+                  )));
   }
 
   static Widget buildOutlinedButton(BuildContext context,
@@ -207,32 +229,40 @@ class ConstsWidget {
     return OutlinedButton(
       style: OutlinedButton.styleFrom(
         alignment: Alignment.center,
-        padding: EdgeInsets.symmetric(
-            vertical: SplashScreen.isSmall
-                ? size.height * 0.035
-                : size.height * 0.022,
-            horizontal: size.width * 0.024),
+        // padding: EdgeInsets.symmetric(
+        //     vertical: SplashScreen.isSmall
+        //         ? size.height * 0.035
+        //         : size.height * 0.022,
+        //     horizontal: size.width * 0.024),
         side: BorderSide(
-            width: size.width * 0.005, color: color ?? Consts.kButtonColor),
+            width:
+                SplashScreen.isSmall ? size.width * 0.004 : size.width * 0.005,
+            color: color ?? Consts.kButtonColor),
         shape: StadiumBorder(),
       ),
       onPressed: onPressed,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SizedBox(
-            width: size.width * rowSpacing,
-          ),
-          ConstsWidget.buildTextSubTitle(
-            context,
-            title,
-            size: SplashScreen.isSmall ? 16 : 18,
-            color: color ?? Consts.kButtonColor,
-          ),
-          SizedBox(
-            width: size.width * rowSpacing,
-          ),
-        ],
+      child: ConstsWidget.buildPadding001(
+        context,
+        vertical: 0.025,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(
+              width: size.width * rowSpacing,
+            ),
+            ConstsWidget.buildTextTitle(context, title,
+                color: color ?? Consts.kButtonColor),
+            // ConstsWidget.buildTextSubTitle(
+            //   context,
+            //   title,
+            //   size: SplashScreen.isSmall ? 16 : 18,
+            //   color: color ?? Consts.kButtonColor,
+            // ),
+            SizedBox(
+              width: size.width * rowSpacing,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -399,7 +429,9 @@ class ConstsWidget {
       child: DropdownButtonHideUnderline(
         child: ButtonTheme(
             alignedDropdown: true,
-            shape: Border.all(color: Colors.black),
+            colorScheme: ColorScheme.light(),
+            hoverColor: Colors.red,
+            shape: Border.all(color: Colors.red),
             child: child),
       ),
     );
@@ -440,7 +472,7 @@ class ConstsWidget {
   static Widget buildCamposObrigatorios(BuildContext context) {
     return ConstsWidget.buildPadding001(
       context,
-      child: ConstsWidget.buildTextSubTitle(context, '(*) Campo Obrigatório',
+      child: ConstsWidget.buildTextSubTitle(context, '(*) Campos Obrigatórios',
           color: Consts.kColorRed),
     );
   }
@@ -466,6 +498,39 @@ class ConstsWidget {
                   .toString()
               : MyDatePicker.dataSelected,
           aniversario: true),
+    );
+  }
+
+  static Widget buildTextExplicaSenha(BuildContext context) {
+    return RichText(
+      textAlign: TextAlign.center,
+      text: TextSpan(
+          style: TextStyle(color: Colors.red, fontSize: 60),
+          children: [
+            ConstsWidget.builRichTextSubTitle(
+              context,
+              //  color: Colors.red,
+              subTitle: 'Para unificar todas suas unidades no login atual ',
+            ),
+            ConstsWidget.builRichTextTitle(context,
+                color: Colors.red, textBold: ResponsalvelInfos.login),
+            ConstsWidget.builRichTextSubTitle(context,
+                //  color: Colors.red,
+                subTitle: ', atualize sua senha de acesso, selecione a opção '),
+            ConstsWidget.builRichTextTitle(context,
+                color: Colors.red, textBold: 'Adicionar Meus Condomínios'),
+            ConstsWidget.builRichTextSubTitle(context,
+                //  color: Colors.red,
+                subTitle: ' e clique no botão '),
+            ConstsWidget.builRichTextTitle(context,
+                color: Colors.red, textBold: 'Salvar'),
+            ConstsWidget.builRichTextSubTitle(context,
+                //  color: Colors.red,
+                subTitle:
+                    '. Se deseja alterar a senha e manter separados os acessos a cada unidade no Portaria App, preencha os campos abaixo e clique em '),
+            ConstsWidget.builRichTextTitle(context,
+                color: Colors.red, textBold: 'Salvar'),
+          ]),
     );
   }
 }

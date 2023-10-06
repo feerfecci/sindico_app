@@ -54,7 +54,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
     return SafeArea(
       child: SizedBox(
         height: size.height * 0.95,
-        // width: SplashScreen.isSmall ? size.width * 0.9 : size.width * 0.85,
+        width: size.width * 0.775,
         child: Drawer(
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           shape: RoundedRectangleBorder(
@@ -69,7 +69,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
             children: [
               SizedBox(
                 height: SplashScreen.isSmall
-                    ? size.width * 0.12
+                    ? size.height * 0.105
                     : size.height * 0.08,
                 width: double.maxFinite,
                 child: DrawerHeader(
@@ -100,7 +100,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 },
               ),
               buidListTile(
-                title: 'Unificar Condomínios',
+                title: 'Adicionar Condomínios',
                 leading: Icons.lock_person_outlined,
                 onTap: () {
                   alertTrocarSenha(

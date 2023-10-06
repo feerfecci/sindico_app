@@ -36,6 +36,10 @@ class _MeuPerfilScreenState extends State<MeuPerfilScreen> {
       isLoading = true;
     });
 
+    ResponsalvelInfos.nascimento = responsalvelInfos.nascimento;
+    ResponsalvelInfos.telefone = responsalvelInfos.telefone!;
+    ResponsalvelInfos.documento = responsalvelInfos.documento!;
+    ResponsalvelInfos.email = responsalvelInfos.email!;
     ConstsFuture.resquestApi(
             '${Consts.sindicoApi}funcionarios/?fn=editarFuncionario&idcond=${ResponsalvelInfos.idcondominio}&idfuncionariologado=${ResponsalvelInfos.idfuncionario}&idfuncao=2&idfuncionario=${ResponsalvelInfos.idfuncionario}&nome_funcionario=${ResponsalvelInfos.nome_responsavel}&datanasc=${MyDatePicker.dataSelected}&documento=${responsalvelInfos.documento}&email=${responsalvelInfos.email}&telefone=${responsalvelInfos.telefone}&login=${ResponsalvelInfos.login}&avisa_corresp=1&avisa_visita=1&avisa_delivery=1&avisa_encomendas=1&envia_avisos=1')
         .then((value) {
@@ -43,10 +47,6 @@ class _MeuPerfilScreenState extends State<MeuPerfilScreen> {
         isLoading = false;
       });
       if (!value['erro']) {
-        if (novaSenhaCtrl.text != '') {
-          ConstsFuture.resquestApi(
-              '${Consts.sindicoApi}funcionarios/?fn=mudarSenha&idfuncionario=${ResponsalvelInfos.idfuncionario}&senha=${novaSenhaCtrl.text}&mudasenhalogin=${isChecked ? 1 : 0}&login=${ResponsalvelInfos.login}');
-        }
         Navigator.pop(context);
         MyDatePicker.dataSelected = '';
 
@@ -140,7 +140,12 @@ class _MeuPerfilScreenState extends State<MeuPerfilScreen> {
                   ),
                 ),
               ),
-              ConstsWidget.buildCamposObrigatorios(context),
+              ConstsWidget.buildTextExplicaSenha(context),
+              ConstsWidget.buildPadding001(
+                context,
+                child: ConstsWidget.buildCamposObrigatorios(context),
+              ),
+
               Row(
                 children: [
                   ConstsWidget.buildAniversarioField(
@@ -270,7 +275,7 @@ class _MeuPerfilScreenState extends State<MeuPerfilScreen> {
 
                             FocusManager.instance.primaryFocus!.unfocus();
                           });
-                        }, title: 'Unificar Meus Condomínios');
+                        }, title: 'Adicionar Meus Condomínios');
                       }),
                     ),
                   ],
@@ -410,21 +415,42 @@ class _MeuPerfilScreenState extends State<MeuPerfilScreen> {
                   onPressed: () {
                     FocusManager.instance.primaryFocus!.unfocus();
                     bool validForm =
-                        formKeyResp.currentState?.validate() == null
-                            ? false
-                            : (novaSenhaCtrl.text.isNotEmpty &&
-                                    novaSenhaCtrl.text == confirmSenhaCtrl.text)
-                                ? formKeySenha.currentState?.validate() ?? false
-                                : true;
-                    if (validForm) {
+                        formKeyResp.currentState?.validate() ?? false;
+
+                    bool formValidSenha = false;
+                    if ((novaSenhaCtrl.text.isNotEmpty &&
+                        novaSenhaCtrl.text.length >= 6 &&
+                        confirmSenhaCtrl.text == novaSenhaCtrl.text)) {
+                      setState(() {
+                        formValidSenha = true;
+                      });
+                    } else if ((novaSenhaCtrl.text.isNotEmpty &&
+                        novaSenhaCtrl.text.length < 6 &&
+                        confirmSenhaCtrl.text != novaSenhaCtrl.text)) {
+                      setState(() {
+                        formValidSenha = false;
+                      });
+                    } else if (novaSenhaCtrl.text.isEmpty) {
+                      setState(() {
+                        formValidSenha = false;
+                      });
+                    } else {
+                      setState(() {
+                        formValidSenha = false;
+                      });
+                    }
+
+                    if (validForm && novaSenhaCtrl.text.isEmpty) {
                       formKeyResp.currentState?.save();
-                      ResponsalvelInfos.nascimento =
-                          responsalvelInfos.nascimento;
-                      ResponsalvelInfos.telefone = responsalvelInfos.telefone!;
-                      ResponsalvelInfos.documento =
-                          responsalvelInfos.documento!;
-                      ResponsalvelInfos.email = responsalvelInfos.email!;
                       startEditarInfos();
+                    } else if (validForm && formValidSenha) {
+                      formKeyResp.currentState?.save();
+                      startEditarInfos();
+                      if (novaSenhaCtrl.text.isNotEmpty &&
+                          novaSenhaCtrl.text == confirmSenhaCtrl.text) {
+                        ConstsFuture.resquestApi(
+                            '${Consts.sindicoApi}funcionarios/?fn=mudarSenha&idfuncionario=${ResponsalvelInfos.idfuncionario}&senha=${novaSenhaCtrl.text}&mudasenhalogin=${isChecked ? 1 : 0}&login=${ResponsalvelInfos.login}');
+                      }
                     }
                   },
                 ),

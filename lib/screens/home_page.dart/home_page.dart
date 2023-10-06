@@ -193,6 +193,9 @@ class _HomePageState extends State<HomePage> {
           'idcond${ResponsalvelInfos.listIdCond[i]}',
           'idfuncionario${ResponsalvelInfos.listIdFuncionario[i]}',
           'idfuncao${ResponsalvelInfos.listIdFuncao[i]}'
+              'idcond',
+          'idfuncionario',
+          'idfuncao'
         ]);
 
         OneSignal.shared.sendTags({
@@ -488,15 +491,7 @@ class _HomePageState extends State<HomePage> {
           body: ListView(
             padding: EdgeInsets.symmetric(horizontal: size.height * 0.01),
             children: [
-              ResponsalvelInfos.qntCond == 1
-                  ? ConstsWidget.buildPadding001(
-                      context,
-                      vertical: 0.02,
-                      child: ConstsWidget.buildTextTitle(
-                          context, ResponsalvelInfos.nome_condominio,
-                          textAlign: TextAlign.center, fontSize: 22),
-                    )
-                  : DropCond(),
+              DropCond(),
               StatefulBuilder(
                 builder: (context, setState) {
                   return ReorderableGridView.count(

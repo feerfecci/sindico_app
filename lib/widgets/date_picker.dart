@@ -133,7 +133,7 @@ class _MyDatePickerState extends State<MyDatePicker> {
         firstDate: !widget.aniversario ? DateTime.now() : DateTime(1850),
         lastDate: !widget.aniversario ? DateTime(2100) : DateTime.now(),
         style: TextStyle(
-          fontSize: 20,
+          fontSize: 18,
           color: Theme.of(context).textTheme.bodyLarge!.color,
         ),
         textAlign: TextAlign.center,

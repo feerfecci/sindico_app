@@ -113,10 +113,7 @@ class _CadastroMoradorState extends State<CadastroMorador> {
         child: MyBoxShadow(
           child: Column(
             children: [
-              ConstsWidget.buildPadding001(
-                context,
-                child: ConstsWidget.buildCamposObrigatorios(context),
-              ),
+              ConstsWidget.buildCamposObrigatorios(context),
               ConstsWidget.buildPadding001(context,
                   child: ConstsWidget.buildTextTitle(
                       context, widget.localizado!,

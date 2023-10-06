@@ -20,6 +20,7 @@ import 'loading_avisos.dart';
 
 class QuadroDeAvisos extends StatefulWidget {
   static List qntAvisos = [];
+  static List<String> idAcessados = [];
   const QuadroDeAvisos({super.key});
 
   @override
@@ -27,7 +28,6 @@ class QuadroDeAvisos extends StatefulWidget {
 }
 
 Future apiQuadroAvisos() async {
-  QuadroDeAvisos.qntAvisos.clear();
   //print('listarAvisos');
   var url = Uri.parse(
       '${Consts.sindicoApi}quadro_avisos/index.php?fn=listarAvisos&idcond=${ResponsalvelInfos.idcondominio}&idfuncionario=${ResponsalvelInfos.idfuncionario}');
@@ -46,6 +46,7 @@ Future apiQuadroAvisos() async {
 }
 
 Future comparaAvisos(jsonResposta) async {
+  QuadroDeAvisos.qntAvisos.clear();
   List apiAvisos = jsonResposta['avisos'];
   LocalInfos.getLoginDate().then((dateValue) {
     for (var i = 0; i <= apiAvisos.length - 1; i++) {
@@ -60,6 +61,11 @@ Future comparaAvisos(jsonResposta) async {
           }
         }
       } else {
+        if (!QuadroDeAvisos.idAcessados
+            .contains(ResponsalvelInfos.idfuncionario.toString())) {
+          QuadroDeAvisos.idAcessados
+              .add(ResponsalvelInfos.idfuncionario.toString());
+        }
         QuadroDeAvisos.qntAvisos.add(apiAvisos[i]['idaviso']);
       }
     }

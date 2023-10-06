@@ -44,7 +44,7 @@ ThemeData themeDark(BuildContext context) {
     iconTheme: IconThemeData(color: Colors.white),
     primaryIconTheme: IconThemeData(color: Colors.white),
     colorScheme: ColorScheme.dark(
-      primary: Colors.white70,
+      primary: Colors.white24,
     ),
     scaffoldBackgroundColor: Colors.grey.shade900,
     dialogBackgroundColor: Colors.blueGrey[1000],

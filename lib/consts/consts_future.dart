@@ -178,7 +178,7 @@ class ConstsFuture {
 
         // });
         LocalInfos.removeCache();
-        if (idCondominio != null) {
+        if (idCondominio == null) {
           navigatorPageReplace(context, LoginScreen());
         }
         buildMinhaSnackBar(context,

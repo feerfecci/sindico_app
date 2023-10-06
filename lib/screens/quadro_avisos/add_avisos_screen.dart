@@ -43,12 +43,7 @@ class _AddAvisosScreenState extends State<AddAvisosScreen> {
             shrinkWrap: true,
             physics: ClampingScrollPhysics(),
             children: [
-              ConstsWidget.buildPadding001(
-                context,
-                vertical: 0.02,
-                child: Center(
-                    child: ConstsWidget.buildCamposObrigatorios(context)),
-              ),
+              Center(child: ConstsWidget.buildCamposObrigatorios(context)),
               buildMyTextFormObrigatorio(context, 'Título',
                   hintText: 'Exemplo: Manutenção do Elevador',
                   textCapitalization: TextCapitalization.words,

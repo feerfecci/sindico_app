@@ -88,7 +88,7 @@ class _ListaReservasState extends State<ListaReservas> {
                   // ),
                   RichText(
                       text: TextSpan(
-                          text: 'Você deseja ',
+                          text: 'Deseja ',
                           style: TextStyle(
                             color: Theme.of(context).textTheme.bodyLarge!.color,
                             overflow: TextOverflow.ellipsis,
@@ -107,21 +107,20 @@ class _ListaReservasState extends State<ListaReservas> {
                     height: size.height * 0.025,
                   ),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       ConstsWidget.buildOutlinedButton(
                         context,
                         title: 'Cancelar',
-                        rowSpacing: 0.08,
+                        rowSpacing: SplashScreen.isSmall ? 0.05 : 0.06,
                         onPressed: () {
                           Navigator.pop(context);
                         },
                       ),
-                      Spacer(),
                       ConstsWidget.buildCustomButton(
                         context,
                         'Continuar',
-                        rowSpacing: 0.04,
+                        rowSpacing: SplashScreen.isSmall ? 0.03 : 0.05,
                         color: Consts.kColorRed,
                         onPressed: () {
                           FocusManager.instance.primaryFocus!.unfocus();
@@ -238,7 +237,9 @@ class _ListaReservasState extends State<ListaReservas> {
                             ),
                     ),
                     SizedBox(
-                      width: size.width * 0.315,
+                      width: SplashScreen.isSmall
+                          ? size.width * 0.32
+                          : size.width * 0.315,
                       child: statusReserva == 1
                           ? ConstsWidget.buildCustomButton(
                               context,
@@ -266,7 +267,9 @@ class _ListaReservasState extends State<ListaReservas> {
                             ),
                     ),
                     SizedBox(
-                      width: size.width * 0.315,
+                      width: SplashScreen.isSmall
+                          ? size.width * 0.32
+                          : size.width * 0.315,
                       child: statusReserva == 2
                           ? ConstsWidget.buildCustomButton(
                               context,
@@ -398,7 +401,7 @@ class _ListaReservasState extends State<ListaReservas> {
                                   ? Consts.kColorVerde
                                   : Consts.kColorRed,
                               altura: 0.02,
-                              largura: 0.1,
+                              rowSpacing: 0.09,
                               onPressed: () {
                                 alertAtender(
                                     idespaco: idespaco,
@@ -445,9 +448,25 @@ class _ListaReservasState extends State<ListaReservas> {
                                         //   width: 0.6,
                                         //   texto: nome_espaco.toString(),
                                         // ),
-                                        ConstsWidget.buildTextTitle(
-                                            context, nome_espaco.toString(),
-                                            fontSize: 18, width: 0.6),
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            ConstsWidget.buildTextTitle(
+                                                context, nome_espaco.toString(),
+                                                fontSize: 18, width: 0.6),
+                                            ConstsWidget.buildPadding001(
+                                              context,
+                                              vertical: 0.005,
+                                              child:
+                                                  ConstsWidget.buildTextTitle(
+                                                      context, unidade),
+                                            ),
+                                            ConstsWidget.buildTextSubTitle(
+                                                context,
+                                                nome_morador.toString())
+                                          ],
+                                        ),
                                         Spacer(),
                                         // if (temadm)
                                         buildStatusTarefa(
@@ -469,12 +488,19 @@ class _ListaReservasState extends State<ListaReservas> {
                                                   CrossAxisAlignment.start,
                                               children: [
                                                 buildTextReserva(
-                                                  titulo: 'Reservado por',
-                                                  texto: unidade,
+                                                  titulo: 'Data da Reserva',
+                                                  texto:
+                                                      data_reserva.toString(),
                                                 ),
-                                                ConstsWidget.buildTextSubTitle(
-                                                    context,
-                                                    nome_morador.toString())
+                                                // buildTextReserva(
+                                                //   titulo: 'Reservado por',
+                                                //   texto: unidade,
+                                                // ),
+                                                // ConstsWidget.buildTextTitle(
+                                                //     context, unidade),
+                                                // ConstsWidget.buildTextSubTitle(
+                                                //     context,
+                                                //     nome_morador.toString())
                                               ],
                                             ),
                                           ),
@@ -491,10 +517,6 @@ class _ListaReservasState extends State<ListaReservas> {
                                         buildTextReserva(
                                           titulo: 'Enviado em',
                                           texto: datahora.toString(),
-                                        ),
-                                        buildTextReserva(
-                                          titulo: 'Data da Reserva',
-                                          texto: data_reserva.toString(),
                                         ),
                                       ],
                                     ),

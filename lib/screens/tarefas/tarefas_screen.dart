@@ -211,13 +211,17 @@ class _TarefasScreenState extends State<TarefasScreen> {
                                                     child: Row(
                                                       mainAxisAlignment:
                                                           MainAxisAlignment
-                                                              .spaceEvenly,
+                                                              .spaceBetween,
                                                       children: [
                                                         ConstsWidget
                                                             .buildOutlinedButton(
                                                           context,
-                                                          title:
-                                                              '      Cancelar      ',
+                                                          title: 'Cancelar',
+                                                          rowSpacing:
+                                                              SplashScreen
+                                                                      .isSmall
+                                                                  ? 0.05
+                                                                  : 0.06,
                                                           onPressed: () {
                                                             Navigator.pop(
                                                                 context);
@@ -227,7 +231,12 @@ class _TarefasScreenState extends State<TarefasScreen> {
                                                         ConstsWidget
                                                             .buildCustomButton(
                                                           context,
-                                                          '       Excluir       ',
+                                                          'Excluir',
+                                                          rowSpacing:
+                                                              SplashScreen
+                                                                      .isSmall
+                                                                  ? 0.06
+                                                                  : 0.08,
                                                           color:
                                                               Consts.kColorRed,
                                                           onPressed: () {
@@ -327,13 +336,16 @@ class _TarefasScreenState extends State<TarefasScreen> {
                                                   Row(
                                                     mainAxisAlignment:
                                                         MainAxisAlignment
-                                                            .spaceEvenly,
+                                                            .spaceBetween,
                                                     children: [
                                                       ConstsWidget
                                                           .buildOutlinedButton(
                                                         context,
-                                                        title:
-                                                            '      Cancelar      ',
+                                                        rowSpacing:
+                                                            SplashScreen.isSmall
+                                                                ? 0.04
+                                                                : 0.06,
+                                                        title: 'Cancelar',
                                                         onPressed: () {
                                                           Navigator.pop(
                                                               context);
@@ -342,9 +354,10 @@ class _TarefasScreenState extends State<TarefasScreen> {
                                                       ConstsWidget
                                                           .buildCustomButton(
                                                         context,
+                                                        rowSpacing: 0.05,
                                                         !concluida
-                                                            ? '     Concluir     '
-                                                            : '     Reativar     ',
+                                                            ? 'Concluir'
+                                                            : 'Reativar',
                                                         color: Consts.kColorRed,
                                                         onPressed: () {
                                                           ConstsFuture.resquestApi(

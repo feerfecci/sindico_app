@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sindico_app/screens/splash_screen/splash_screen.dart';
 import '../../consts/const_widget.dart';
 import '../../consts/consts.dart';
 import '../../consts/consts_future.dart';
@@ -93,7 +94,7 @@ class _DropCondState extends State<DropCond> {
                     height: size.height * 0.02,
                   ),
                   ConstsWidget.buildTextTitle(
-                      context, 'Unificar Meus Condomínios'),
+                      context, 'Adicionar Meus Condomínios'),
                 ],
               )),
         );
@@ -131,17 +132,15 @@ class _DropCondState extends State<DropCond> {
         context,
         child: DropdownButton(
           alignment: Alignment.center,
-          isExpanded: true, itemHeight: size.height * 0.06,
+          isExpanded: true,
+          itemHeight:
+              SplashScreen.isSmall ? size.height * 0.09 : size.height * 0.06,
           elevation: 24,
           icon: Icon(
             Icons.arrow_downward,
             color: Theme.of(context).iconTheme.color,
           ),
           borderRadius: BorderRadius.circular(16),
-          // style: TextStyle(
-          //     color: Theme.of(context).textTheme.bodyLarge!.color,
-          //     fontWeight: FontWeight.w400,
-          //     fontSize: 18),
           value: dropCond,
           selectedItemBuilder: (context) {
             return DropCond.listCond.map((e) {
@@ -157,6 +156,15 @@ class _DropCondState extends State<DropCond> {
             }).toList();
           },
           items: listDrop,
+          // dropdownColor: Colors.red,
+          underline: Container(
+            color: Colors.red,
+            height: 100,
+          ),
+          isDense: true,
+
+          menuMaxHeight:
+              SplashScreen.isSmall ? size.height * 0.65 : size.height * 0.5,
 
           // DropCond.listCond.map((e) {
           //   i++;

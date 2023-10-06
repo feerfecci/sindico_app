@@ -175,10 +175,226 @@ class _ListaColaboradoresState extends State<ListaColaboradores> {
                                 child: ConstsWidget.buildPadding001(
                                   context,
                                   horizontal: 0.01,
-                                  child: Theme(
+                                  child: ConstsWidget.buildExpandedTile(
+                                    context,
+                                    expandedCrossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    title: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: [
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            ConstsWidget.buildTextTitle(
+                                              context,
+                                              nome_funcionario,
+                                              width: 0.52,
+                                            ),
+                                            ConstsWidget.buildTextSubTitle(
+                                                context, width: 0.3, '$funcao'),
+                                          ],
+                                        ),
+                                        ConstsWidget.buildAtivoInativo(
+                                            context, ativo),
+                                      ],
+                                    ),
+                                    children: [
+                                      // Row(
+                                      //   mainAxisSize: MainAxisSize.min,
+                                      //   children: [
+                                      //     ConstsWidget.buildTextTitle(
+                                      //         context,
+                                      //         width: 0.6,
+                                      //         '$nome_funcionario'),
+                                      //     Spacer(),
+                                      //     ConstsWidget.buildAtivoInativo(
+                                      //         context, ativo),
+                                      //   ],
+                                      // ),
+                                      SizedBox(
+                                        height: size.height * 0.02,
+                                      ),
+                                      SizedBox(
+                                        width: size.width * 0.9,
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            ConstsWidget.buildTextSubTitle(
+                                                context, 'Login'),
+                                            ConstsWidget.buildTextTitle(
+                                                context, login_funcionario),
+                                          ],
+                                        ),
+                                      ),
+                                      // buildRowInfos(
+                                      //     titulo1: 'Usuário',
+                                      //     texto1: login_funcionario,
+                                      //     titulo2: 'Cargo',
+                                      //     width: 0.3,
+                                      //     texto2: funcao),
+                                      ConstsWidget.buildPadding001(
+                                        context,
+                                        child: Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            mainAxisAlignment:
+                                                data_nascimento == null
+                                                    ? MainAxisAlignment.start
+                                                    : MainAxisAlignment
+                                                        .spaceBetween,
+                                            children: [
+                                              if (data_nascimento != null)
+                                                Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    ConstsWidget
+                                                        .buildTextSubTitle(
+                                                            context,
+                                                            'Nascimento'),
+                                                    ConstsWidget.buildTextTitle(
+                                                        context,
+                                                        data_nascimento),
+                                                  ],
+                                                ),
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  ConstsWidget
+                                                      .buildTextSubTitle(
+                                                          context, 'Documento'),
+                                                  ConstsWidget.buildTextTitle(
+                                                      context, documento),
+                                                ],
+                                              ),
+                                            ]),
+                                      ),
+
+                                      /*     buildRowInfos(
+                                              titulo1: 'Telefone',
+                                              texto1: '($ddd) $telefone',
+                                              titulo2: 'Documento',
+                                              texto2: documento),
+                                          buildRowInfos(
+                                              titulo1: 'Email',
+                                              texto1: email,
+                                              titulo2: 'Nascimento',
+                                              texto2: data_nascimento),*/
+
+                                      if (telefone != '')
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            ConstsWidget.buildTextSubTitle(
+                                                context, 'Telefone'),
+                                            ConstsWidget.buildTextTitle(
+                                                context, '($ddd) $telefone'),
+                                          ],
+                                        ),
+                                      SizedBox(
+                                        height: size.height * 0.01,
+                                      ),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          ConstsWidget.buildTextSubTitle(
+                                              context, 'Email'),
+                                          ConstsWidget.buildTextTitle(
+                                              context, email,
+                                              maxLines: 2, width: 1),
+                                        ],
+                                      ),
+                                      if (funcao != 'Síndico' &&
+                                          funcao != 'Subsíndico' &&
+                                          funcao != 'Administrador')
+                                        Column(
+                                          children: [
+                                            SizedBox(
+                                              height: size.height * 0.02,
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceEvenly,
+                                              children: [
+                                                Column(
+                                                  children: [
+                                                    buildTilePermissaoSalvo(
+                                                        'Cartas',
+                                                        isChecked:
+                                                            avisa_corresp),
+                                                    buildTilePermissaoSalvo(
+                                                        'Delivery',
+                                                        isChecked:
+                                                            avisa_delivery),
+                                                  ],
+                                                ),
+                                                Column(
+                                                  children: [
+                                                    buildTilePermissaoSalvo(
+                                                        'Visitas',
+                                                        isChecked:
+                                                            avisa_visita),
+                                                    buildTilePermissaoSalvo(
+                                                        'Caixas',
+                                                        isChecked:
+                                                            avisa_encomendas),
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      SizedBox(
+                                        height: size.height * 0.01,
+                                      ),
+                                      buildTilePermissaoSalvo('Avisos Gerais',
+                                          width: double.maxFinite,
+                                          isChecked: envia_avisos),
+                                      SizedBox(
+                                        height: size.height * 0.02,
+                                      ),
+                                      ConstsWidget.buildCustomButton(
+                                        context,
+                                        'Editar',
+                                        onPressed: () {
+                                          ConstsFuture.navigatorPagePush(
+                                              context,
+                                              CadastroColaborador(
+                                                  idfuncionario: idfuncionario,
+                                                  nomeFuncionario:
+                                                      nome_funcionario,
+                                                  idfuncao: idfuncao,
+                                                  funcao: funcao,
+                                                  nascimento: api['datanasc'],
+                                                  documento: documento,
+                                                  ddd: ddd,
+                                                  telefone: telefone,
+                                                  email: email,
+                                                  login: login_funcionario,
+                                                  avisa_corresp: avisa_corresp,
+                                                  avisa_visita: avisa_visita,
+                                                  avisa_delivery:
+                                                      avisa_delivery,
+                                                  avisa_encomendas:
+                                                      avisa_encomendas,
+                                                  envia_avisos: envia_avisos,
+                                                  ativo: ativo ? 1 : 0));
+                                        },
+                                      )
+                                    ],
+                                  ),
+                                  /*   child: Theme(
                                     data: Theme.of(context).copyWith(
                                         dividerColor: Colors.transparent),
-                                    child: ExpansionTile(
+                                    child:
+                                     ExpansionTile(
                                       tilePadding: EdgeInsets.only(
                                           left: size.width * 0.01),
                                       title: Row(
@@ -209,206 +425,10 @@ class _ListaColaboradoresState extends State<ListaColaboradores> {
                                           CrossAxisAlignment.start,
                                       childrenPadding: EdgeInsets.only(
                                           left: size.width * 0.01),
-                                      children: [
-                                        // Row(
-                                        //   mainAxisSize: MainAxisSize.min,
-                                        //   children: [
-                                        //     ConstsWidget.buildTextTitle(
-                                        //         context,
-                                        //         width: 0.6,
-                                        //         '$nome_funcionario'),
-                                        //     Spacer(),
-                                        //     ConstsWidget.buildAtivoInativo(
-                                        //         context, ativo),
-                                        //   ],
-                                        // ),
-                                        SizedBox(
-                                          height: size.height * 0.02,
-                                        ),
-                                        SizedBox(
-                                          width: size.width * 0.9,
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              ConstsWidget.buildTextSubTitle(
-                                                  context, 'Login'),
-                                              ConstsWidget.buildTextTitle(
-                                                  context, login_funcionario),
-                                            ],
-                                          ),
-                                        ),
-                                        // buildRowInfos(
-                                        //     titulo1: 'Usuário',
-                                        //     texto1: login_funcionario,
-                                        //     titulo2: 'Cargo',
-                                        //     width: 0.3,
-                                        //     texto2: funcao),
-                                        ConstsWidget.buildPadding001(
-                                          context,
-                                          child: Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              mainAxisAlignment:
-                                                  data_nascimento == null
-                                                      ? MainAxisAlignment.start
-                                                      : MainAxisAlignment
-                                                          .spaceBetween,
-                                              children: [
-                                                if (data_nascimento != null)
-                                                  Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      ConstsWidget
-                                                          .buildTextSubTitle(
-                                                              context,
-                                                              'Nascimento'),
-                                                      ConstsWidget
-                                                          .buildTextTitle(
-                                                              context,
-                                                              data_nascimento),
-                                                    ],
-                                                  ),
-                                                Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    ConstsWidget
-                                                        .buildTextSubTitle(
-                                                            context,
-                                                            'Documento'),
-                                                    ConstsWidget.buildTextTitle(
-                                                        context, documento),
-                                                  ],
-                                                ),
-                                              ]),
-                                        ),
-
-                                        /*     buildRowInfos(
-                                              titulo1: 'Telefone',
-                                              texto1: '($ddd) $telefone',
-                                              titulo2: 'Documento',
-                                              texto2: documento),
-                                          buildRowInfos(
-                                              titulo1: 'Email',
-                                              texto1: email,
-                                              titulo2: 'Nascimento',
-                                              texto2: data_nascimento),*/
-
-                                        if (telefone != '')
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              ConstsWidget.buildTextSubTitle(
-                                                  context, 'Telefone'),
-                                              ConstsWidget.buildTextTitle(
-                                                  context, '($ddd) $telefone'),
-                                            ],
-                                          ),
-                                        SizedBox(
-                                          height: size.height * 0.01,
-                                        ),
-                                        Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            ConstsWidget.buildTextSubTitle(
-                                                context, 'Email'),
-                                            ConstsWidget.buildTextTitle(
-                                                context, email,
-                                                maxLines: 2, width: 1),
-                                          ],
-                                        ),
-                                        if (funcao != 'Síndico' &&
-                                            funcao != 'Subsíndico' &&
-                                            funcao != 'Administrador')
-                                          Column(
-                                            children: [
-                                              SizedBox(
-                                                height: size.height * 0.02,
-                                              ),
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceEvenly,
-                                                children: [
-                                                  Column(
-                                                    children: [
-                                                      buildTilePermissaoSalvo(
-                                                          'Cartas',
-                                                          isChecked:
-                                                              avisa_corresp),
-                                                      buildTilePermissaoSalvo(
-                                                          'Delivery',
-                                                          isChecked:
-                                                              avisa_delivery),
-                                                    ],
-                                                  ),
-                                                  Column(
-                                                    children: [
-                                                      buildTilePermissaoSalvo(
-                                                          'Visitas',
-                                                          isChecked:
-                                                              avisa_visita),
-                                                      buildTilePermissaoSalvo(
-                                                          'Caixas',
-                                                          isChecked:
-                                                              avisa_encomendas),
-                                                    ],
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                        SizedBox(
-                                          height: size.height * 0.01,
-                                        ),
-                                        ConstsWidget.buildPadding001(
-                                          context,
-                                          child: buildTilePermissaoSalvo(
-                                              'Avisos Gerais',
-                                              width: double.maxFinite,
-                                              isChecked: envia_avisos),
-                                        ),
-                                        SizedBox(
-                                          height: size.height * 0.02,
-                                        ),
-                                        ConstsWidget.buildCustomButton(
-                                          context,
-                                          'Editar',
-                                          onPressed: () {
-                                            ConstsFuture.navigatorPagePush(
-                                                context,
-                                                CadastroColaborador(
-                                                    idfuncionario:
-                                                        idfuncionario,
-                                                    nomeFuncionario:
-                                                        nome_funcionario,
-                                                    idfuncao: idfuncao,
-                                                    funcao: funcao,
-                                                    nascimento: api['datanasc'],
-                                                    documento: documento,
-                                                    ddd: ddd,
-                                                    telefone: telefone,
-                                                    email: email,
-                                                    login: login_funcionario,
-                                                    avisa_corresp:
-                                                        avisa_corresp,
-                                                    avisa_visita: avisa_visita,
-                                                    avisa_delivery:
-                                                        avisa_delivery,
-                                                    avisa_encomendas:
-                                                        avisa_encomendas,
-                                                    envia_avisos: envia_avisos,
-                                                    ativo: ativo ? 1 : 0));
-                                          },
-                                        )
-                                      ],
+                                      children: 
                                     ),
                                   ),
+                              */
                                 ),
                               ),
                             );

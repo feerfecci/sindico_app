@@ -36,9 +36,10 @@ alertTrocarSenha(
               width: size.width * 0.9,
               height: SplashScreen.isSmall
                   ? size.height * 0.37
-                  : size.height * 0.30,
+                  : size.height * 0.50,
               child: ListView(
                 children: [
+                  ConstsWidget.buildTextExplicaSenha(context),
                   buildMyTextFormObrigatorio(
                     context,
                     'Nova Senha',
@@ -73,13 +74,16 @@ alertTrocarSenha(
                   //     }, title: 'Trocar em todos condomínios');
                   //   }),
                   // ),
+                  SizedBox(
+                    height: size.height * 0.01,
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       ConstsWidget.buildOutlinedButton(
                         context,
                         title: 'Cancelar',
-                        rowSpacing: 0.07,
+                        rowSpacing: SplashScreen.isSmall ? 0.05 : 0.063,
                         onPressed: () {
                           Navigator.pop(context);
                           novaSenhaCtrl.clear();
@@ -89,7 +93,7 @@ alertTrocarSenha(
                       ),
                       ConstsWidget.buildCustomButton(
                         context,
-                        rowSpacing: 0.08,
+                        rowSpacing: SplashScreen.isSmall ? 0.07 : 0.08,
                         'Salvar',
                         color: Consts.kColorRed,
                         onPressed: () {
@@ -127,6 +131,11 @@ alertTrocarSenha(
                 ],
               ),
             ),
+            // actionsAlignment: MainAxisAlignment.spaceBetween,
+            // alignment: Alignment.center,
+            actionsOverflowAlignment: OverflowBarAlignment.end,
+            // actionsOverflowDirection: VerticalDirection.up,
+            // actionsOverflowButtonSpacing: 60,
           ),
         );
       });

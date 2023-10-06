@@ -254,10 +254,7 @@ class _CadastroUnidadesState extends State<CadastroUnidades> {
                   // if (widget.idunidade == 0)
                   Column(
                     children: [
-                      ConstsWidget.buildPadding001(
-                        context,
-                        child: ConstsWidget.buildCamposObrigatorios(context),
-                      ),
+                      ConstsWidget.buildCamposObrigatorios(context),
                       buildDropAtivo(
                         context,
                       ),

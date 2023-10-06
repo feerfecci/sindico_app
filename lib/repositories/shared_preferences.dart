@@ -1,5 +1,8 @@
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sindico_app/consts/consts.dart';
+
+import '../screens/quadro_avisos/quadro_de_avisos.dart';
 
 class LocalInfos {
   static Future setOrderDragg(indexOrder) async {
