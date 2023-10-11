@@ -290,7 +290,7 @@ class ConstsWidget {
     List listAtivo = [1, 0];
     return ConstsWidget.buildPadding001(
       context,
-      vertical: 0.02,
+      vertical: 0.01,
       child: StatefulBuilder(builder: (context, setState) {
         return Container(
           width: double.infinity,
@@ -348,30 +348,26 @@ class ConstsWidget {
       double? width,
       MainAxisAlignment mainAxisAlignment = MainAxisAlignment.center}) {
     //var size = MediaQuery.of(context).size;
-    return ConstsWidget.buildPadding001(
-      context,
-      vertical: 0.005,
-      child: Row(
-        mainAxisAlignment: mainAxisAlignment,
-        children: [
-          SizedBox(
-              width: width,
-              child: buildTextTitle(
-                context,
-                title,
-              )),
-          Transform.scale(
-            scale: 1.2,
-            child: Checkbox(
-              // shape: RoundedRectangleBorder(
-              //     borderRadius: BorderRadius.circular(15)
-              //     ),
-              value: isChecked,
-              onChanged: onChanged,
-            ),
+    return Row(
+      mainAxisAlignment: mainAxisAlignment,
+      children: [
+        SizedBox(
+            width: width,
+            child: buildTextTitle(
+              context,
+              title,
+            )),
+        Transform.scale(
+          scale: 1,
+          child: Checkbox(
+            // shape: RoundedRectangleBorder(
+            //     borderRadius: BorderRadius.circular(15)
+            //     ),
+            value: isChecked,
+            onChanged: onChanged,
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -391,15 +387,27 @@ class ConstsWidget {
   }
 
   static Widget buildCachedImage(BuildContext context,
-      {required String iconApi, double? width, double? height, String? title}) {
+      {required String iconApi,
+      double? width,
+      double? height,
+      String? title,
+      bool meuWidth = false}) {
     var size = MediaQuery.of(context).size;
     return Stack(
       alignment: Alignment.bottomCenter,
       children: [
         CachedNetworkImage(
           imageUrl: iconApi,
-          height: height != null ? size.height * height : null,
-          width: width != null ? size.width * width : null,
+          height: !meuWidth
+              ? height != null
+                  ? size.height * height
+                  : null
+              : height,
+          width: !meuWidth
+              ? width != null
+                  ? size.width * width
+                  : null
+              : width,
           fit: BoxFit.fill,
           fadeInDuration: Duration.zero,
           fadeOutDuration: Duration.zero,
@@ -472,7 +480,7 @@ class ConstsWidget {
   static Widget buildCamposObrigatorios(BuildContext context) {
     return ConstsWidget.buildPadding001(
       context,
-      child: ConstsWidget.buildTextSubTitle(context, '(*) Campos Obrigatórios',
+      child: ConstsWidget.buildTextTitle(context, '(*) Campos Obrigatórios',
           color: Consts.kColorRed),
     );
   }
@@ -501,7 +509,8 @@ class ConstsWidget {
     );
   }
 
-  static Widget buildTextExplicaSenha(BuildContext context) {
+  static Widget buildTextExplicaSenha(BuildContext context,
+      {bool isDrawer = false}) {
     return RichText(
       textAlign: TextAlign.center,
       text: TextSpan(
@@ -516,18 +525,25 @@ class ConstsWidget {
                 color: Colors.red, textBold: ResponsalvelInfos.login),
             ConstsWidget.builRichTextSubTitle(context,
                 //  color: Colors.red,
-                subTitle: ', atualize sua senha de acesso, selecione a opção '),
-            ConstsWidget.builRichTextTitle(context,
-                color: Colors.red, textBold: 'Adicionar Meus Condomínios'),
+                subTitle: ', atualize sua senha de acesso,'),
+            if (!isDrawer)
+              ConstsWidget.builRichTextSubTitle(context,
+                  //  color: Colors.red,
+                  subTitle: ' selecione a opção '),
+            if (!isDrawer)
+              ConstsWidget.builRichTextTitle(context,
+                  color: Colors.red, textBold: 'Adicionar Meus Condomínios'),
             ConstsWidget.builRichTextSubTitle(context,
                 //  color: Colors.red,
                 subTitle: ' e clique no botão '),
-            ConstsWidget.builRichTextTitle(context,
-                color: Colors.red, textBold: 'Salvar'),
-            ConstsWidget.builRichTextSubTitle(context,
-                //  color: Colors.red,
-                subTitle:
-                    '. Se deseja alterar a senha e manter separados os acessos a cada unidade no Portaria App, preencha os campos abaixo e clique em '),
+            if (!isDrawer)
+              ConstsWidget.builRichTextTitle(context,
+                  color: Colors.red, textBold: 'Salvar'),
+            if (!isDrawer)
+              ConstsWidget.builRichTextSubTitle(context,
+                  //  color: Colors.red,
+                  subTitle:
+                      '. Se deseja alterar a senha e manter separados os acessos a cada unidade no Portaria App, preencha os campos abaixo e clique em '),
             ConstsWidget.builRichTextTitle(context,
                 color: Colors.red, textBold: 'Salvar'),
           ]),

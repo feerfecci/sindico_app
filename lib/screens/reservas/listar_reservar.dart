@@ -213,7 +213,7 @@ class _ListaReservasState extends State<ListaReservas> {
                     SizedBox(
                       width: SplashScreen.isSmall
                           ? size.width * 0.32
-                          : size.width * 0.315,
+                          : size.width * 0.32,
                       child: statusReserva == 0
                           ? ConstsWidget.buildCustomButton(
                               context,
@@ -331,10 +331,10 @@ class _ListaReservasState extends State<ListaReservas> {
                           String nome_morador = apiReservar['nome_morador'];
                           int idunidade = apiReservar['idunidade'];
                           String unidade = apiReservar['unidade'];
-                          String data_reserva = DateFormat('dd/MM/yyyy HH:mm')
+                          String data_reserva = DateFormat('dd/MM/yyyy • HH:mm')
                               .format(
                                   DateTime.parse(apiReservar['data_reserva']));
-                          String datahora = DateFormat('dd/MM/yyyy HH:mm')
+                          String datahora = DateFormat('dd/MM/yyyy • HH:mm')
                               .format(DateTime.parse(apiReservar['datahora']));
 
                           Widget buildStatusTarefa(
@@ -394,42 +394,39 @@ class _ListaReservasState extends State<ListaReservas> {
                           }
 
                           Widget buildAtendeReserva(String title, int tipo) {
-                            return ConstsWidget.buildCustomButton(
-                              context,
-                              title,
-                              color: tipo == 1
-                                  ? Consts.kColorVerde
-                                  : Consts.kColorRed,
-                              altura: 0.02,
-                              rowSpacing: 0.09,
-                              onPressed: () {
-                                alertAtender(
-                                    idespaco: idespaco,
-                                    idmorador: idmorador,
-                                    idreserva: idreserva,
-                                    idunidade: idunidade,
-                                    tipo: tipo,
+                            return tipo == 0
+                                ? ConstsWidget.buildOutlinedButton(
+                                    context,
                                     title: title,
-                                    data: apiReservar['data_reserva']);
-
-                                // ConstsFuture.resquestApi(
-                                //         '${Consts.sindicoApi}reserva_espacos/?fn=atenderReserva&idcond=${ResponsalvelInfos.idcondominio}&idunidade=$idunidade&idmorador=$idmorador&idreserva=$idreserva&ativo=$tipo')
-                                //     .then((value) {
-                                //   if (!value['erro']) {
-                                //     setState(() {
-                                //       apiListar;
-                                //     });
-                                //     buildMinhaSnackBar(context,
-                                //         title: 'Muito Obrigado',
-                                //         subTitle: value['mensagem']);
-                                //   } else {
-                                //     buildMinhaSnackBar(context,
-                                //         title: 'Algo saiu mal',
-                                //         subTitle: value['mensagem']);
-                                //   }
-                                // });
-                              },
-                            );
+                                    rowSpacing: 0.09,
+                                    onPressed: () {
+                                      alertAtender(
+                                          idespaco: idespaco,
+                                          idmorador: idmorador,
+                                          idreserva: idreserva,
+                                          idunidade: idunidade,
+                                          tipo: tipo,
+                                          title: title,
+                                          data: apiReservar['data_reserva']);
+                                    },
+                                  )
+                                : ConstsWidget.buildCustomButton(
+                                    context,
+                                    title,
+                                    color: Consts.kColorRed,
+                                    altura: 0.02,
+                                    rowSpacing: 0.09,
+                                    onPressed: () {
+                                      alertAtender(
+                                          idespaco: idespaco,
+                                          idmorador: idmorador,
+                                          idreserva: idreserva,
+                                          idunidade: idunidade,
+                                          tipo: tipo,
+                                          title: title,
+                                          data: apiReservar['data_reserva']);
+                                    },
+                                  );
                           }
 
                           return ConstsWidget.buildPadding001(

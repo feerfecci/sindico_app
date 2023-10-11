@@ -122,17 +122,14 @@ class _CadastroEspacosState extends State<CadastroEspacos> {
                         onSaved: (text) => _formInfosEspacos =
                             _formInfosEspacos.copyWith(nome_espaco: text),
                       ),
-                      ConstsWidget.buildPadding001(
+                      buildTextFormLinhas(
                         context,
-                        child: buildTextFormLinhas(
-                          context,
-                          label: 'Observações',
-                          hintText:
-                              'Exemplo: Salão de festas localizado no andar térreo entre as torres A e B. Capacidade máxima 150 pessoas',
-                          initialValue: widget.descricao,
-                          onSaved: (newValue) => _formInfosEspacos =
-                              _formInfosEspacos.copyWith(descricao: newValue),
-                        ),
+                        label: 'Observações',
+                        hintText:
+                            'Exemplo: Salão de festas localizado no andar térreo entre as torres A e B. Capacidade máxima 150 pessoas',
+                        initialValue: widget.descricao,
+                        onSaved: (newValue) => _formInfosEspacos =
+                            _formInfosEspacos.copyWith(descricao: newValue),
                       ),
                       ConstsWidget.buildCustomButton(
                         context,
@@ -172,7 +169,10 @@ class _CadastroEspacosState extends State<CadastroEspacos> {
                             });
                           }
                         },
-                      )
+                      ),
+                      SizedBox(
+                        height: size.height * 0.005,
+                      ),
                     ],
                   ),
                 ),

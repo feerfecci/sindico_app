@@ -140,265 +140,235 @@ class _TarefasScreenState extends State<TarefasScreen> {
                               SizedBox(
                                 height: size.height * 0.01,
                               ),
-                              Stack(
-                                alignment: Alignment.center,
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
-                                  SizedBox(
-                                    width: double.maxFinite,
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        GestureDetector(
-                                          onTap: () {
-                                            showAllDialog(context,
-                                                title:
-                                                    ConstsWidget.buildTextTitle(
-                                                        context, 'Atenção',
-                                                        fontSize: 18),
+                                  GestureDetector(
+                                    onTap: () {
+                                      showAllDialog(context,
+                                          title: ConstsWidget.buildTextTitle(
+                                              context, 'Atenção',
+                                              fontSize: 18),
+                                          children: [
+                                            RichText(
+                                              textAlign: TextAlign.center,
+                                              text: TextSpan(
+                                                text: 'Ao continuar',
+                                                style: TextStyle(
+                                                  color: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyLarge!
+                                                      .color,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  fontSize: SplashScreen.isSmall
+                                                      ? 14
+                                                      : 16,
+                                                ),
                                                 children: [
-                                                  RichText(
-                                                    textAlign: TextAlign.center,
-                                                    text: TextSpan(
-                                                      text: 'Ao continuar',
-                                                      style: TextStyle(
-                                                        color: Theme.of(context)
-                                                            .textTheme
-                                                            .bodyLarge!
-                                                            .color,
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        fontSize:
-                                                            SplashScreen.isSmall
-                                                                ? 14
-                                                                : 16,
-                                                      ),
-                                                      children: [
-                                                        ConstsWidget
-                                                            .builRichTextSubTitle(
-                                                                context,
-                                                                subTitle:
-                                                                    ' você '),
-                                                        ConstsWidget
-                                                            .builRichTextTitle(
-                                                                context,
-                                                                textBold:
-                                                                    'Excluirá ',
-                                                                color: Consts
-                                                                    .kColorRed),
-                                                        ConstsWidget
-                                                            .builRichTextSubTitle(
-                                                                context,
-                                                                subTitle:
-                                                                    'esta tarefa'),
-                                                        // buildBoldSpan(
-                                                        //     acaoTarefa),
-                                                        // buildNormalSpan(
-                                                        //     ' você '),
-                                                        // buildBoldSpan(concluida
-                                                        //     ? 'Voltará a Receber '
-                                                        //     : 'Não Receberá '),
-                                                        // buildNormalSpan(
-                                                        //     'avisos sobre esta tarefa'),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  SizedBox(
-                                                    height: size.height * 0.01,
-                                                  ),
-                                                  ConstsWidget.buildPadding001(
-                                                    context,
-                                                    child: Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .spaceBetween,
-                                                      children: [
-                                                        ConstsWidget
-                                                            .buildOutlinedButton(
+                                                  ConstsWidget
+                                                      .builRichTextSubTitle(
                                                           context,
-                                                          title: 'Cancelar',
-                                                          rowSpacing:
-                                                              SplashScreen
-                                                                      .isSmall
-                                                                  ? 0.05
-                                                                  : 0.06,
-                                                          onPressed: () {
-                                                            Navigator.pop(
-                                                                context);
-                                                          },
-                                                        ),
-                                                        Spacer(),
-                                                        ConstsWidget
-                                                            .buildCustomButton(
+                                                          subTitle: ' você '),
+                                                  ConstsWidget
+                                                      .builRichTextTitle(
                                                           context,
-                                                          'Excluir',
-                                                          rowSpacing:
-                                                              SplashScreen
-                                                                      .isSmall
-                                                                  ? 0.06
-                                                                  : 0.08,
+                                                          textBold: 'Excluirá ',
                                                           color:
-                                                              Consts.kColorRed,
-                                                          onPressed: () {
-                                                            ConstsFuture.resquestApi(
-                                                                    '${Consts.sindicoApi}tarefas/?fn=excluirTarefa&idtarefa=$idtarefa&idfuncionario=${ResponsalvelInfos.idfuncionario}')
-                                                                .then((value) {
-                                                              if (!value[
-                                                                  'erro']) {
-                                                                Navigator.pop(
-                                                                    context);
-                                                                setState(() {});
-                                                              }
-                                                            });
-                                                          },
-                                                        )
-                                                      ],
-                                                    ),
-                                                  )
-                                                ]);
-                                          },
-                                          child: Icon(
-                                            Icons.delete_outlined,
-                                            color: Colors.red,
-                                            size:
-                                                SplashScreen.isSmall ? 25 : 30,
-                                          ),
-                                        ),
-                                        GestureDetector(
-                                          onTap: () {
-                                            String acaoTarefa = !concluida
-                                                ? 'Concluir Tarefa'
-                                                : 'Reativar Tarefa';
-
-                                            showAllDialog(context,
-                                                barrierDismissible: true,
-                                                title:
-                                                    ConstsWidget.buildTextTitle(
-                                                        context, acaoTarefa,
-                                                        fontSize: 18),
+                                                              Consts.kColorRed),
+                                                  ConstsWidget
+                                                      .builRichTextSubTitle(
+                                                          context,
+                                                          subTitle:
+                                                              'esta tarefa'),
+                                                  // buildBoldSpan(
+                                                  //     acaoTarefa),
+                                                  // buildNormalSpan(
+                                                  //     ' você '),
+                                                  // buildBoldSpan(concluida
+                                                  //     ? 'Voltará a Receber '
+                                                  //     : 'Não Receberá '),
+                                                  // buildNormalSpan(
+                                                  //     'avisos sobre esta tarefa'),
+                                                ],
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height: size.height * 0.01,
+                                            ),
+                                            ConstsWidget.buildPadding001(
+                                              context,
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
                                                 children: [
-                                                  RichText(
-                                                    textAlign: TextAlign.center,
-                                                    text: TextSpan(
-                                                      text: 'Ao ',
-                                                      style: TextStyle(
-                                                        color: Theme.of(context)
-                                                            .textTheme
-                                                            .bodyLarge!
-                                                            .color,
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        fontSize:
-                                                            SplashScreen.isSmall
-                                                                ? 14
-                                                                : 16,
-                                                      ),
-                                                      children: [
-                                                        ConstsWidget
-                                                            .builRichTextTitle(
-                                                                context,
-                                                                textBold:
-                                                                    acaoTarefa,
-                                                                color: Consts
-                                                                    .kColorRed),
-                                                        ConstsWidget
-                                                            .builRichTextSubTitle(
-                                                                context,
-                                                                subTitle:
-                                                                    ' você '),
-                                                        ConstsWidget.builRichTextTitle(
-                                                            context,
-                                                            textBold: concluida
-                                                                ? 'Voltará a Receber '
-                                                                : 'Não Receberá ',
-                                                            color: Consts
-                                                                .kColorRed),
-                                                        ConstsWidget
-                                                            .builRichTextSubTitle(
-                                                                context,
-                                                                subTitle:
-                                                                    'avisos sobre esta tarefa'),
-                                                        // buildBoldSpan(
-                                                        //     acaoTarefa),
-                                                        // buildNormalSpan(
-                                                        //     ' você '),
-                                                        // buildBoldSpan(concluida
-                                                        //     ? 'Voltará a Receber '
-                                                        //     : 'Não Receberá '),
-                                                        // buildNormalSpan(
-                                                        //     'avisos sobre esta tarefa'),
-                                                      ],
-                                                    ),
+                                                  ConstsWidget
+                                                      .buildOutlinedButton(
+                                                    context,
+                                                    title: 'Cancelar',
+                                                    rowSpacing:
+                                                        SplashScreen.isSmall
+                                                            ? 0.05
+                                                            : 0.06,
+                                                    onPressed: () {
+                                                      Navigator.pop(context);
+                                                    },
                                                   ),
-                                                  SizedBox(
-                                                    height: size.height * 0.03,
-                                                  ),
-                                                  Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .spaceBetween,
-                                                    children: [
-                                                      ConstsWidget
-                                                          .buildOutlinedButton(
-                                                        context,
-                                                        rowSpacing:
-                                                            SplashScreen.isSmall
-                                                                ? 0.04
-                                                                : 0.06,
-                                                        title: 'Cancelar',
-                                                        onPressed: () {
+                                                  Spacer(),
+                                                  ConstsWidget
+                                                      .buildCustomButton(
+                                                    context,
+                                                    'Excluir',
+                                                    rowSpacing:
+                                                        SplashScreen.isSmall
+                                                            ? 0.06
+                                                            : 0.08,
+                                                    color: Consts.kColorRed,
+                                                    onPressed: () {
+                                                      ConstsFuture.resquestApi(
+                                                              '${Consts.sindicoApi}tarefas/?fn=excluirTarefa&idtarefa=$idtarefa&idfuncionario=${ResponsalvelInfos.idfuncionario}')
+                                                          .then((value) {
+                                                        if (!value['erro']) {
                                                           Navigator.pop(
                                                               context);
-                                                        },
-                                                      ),
-                                                      ConstsWidget
-                                                          .buildCustomButton(
-                                                        context,
-                                                        rowSpacing: 0.05,
-                                                        !concluida
-                                                            ? 'Concluir'
-                                                            : 'Reativar',
-                                                        color: Consts.kColorRed,
-                                                        onPressed: () {
-                                                          ConstsFuture.resquestApi(
-                                                                  '${Consts.sindicoApi}tarefas/?fn=editarTarefa&idcond=${ResponsalvelInfos.idcondominio}&idfuncionario=${ResponsalvelInfos.idfuncionario}&idtarefa=$idtarefa&concluida=${concluida ? 0 : 1}&descricao=$descricao&data_vencimento=$data_vencimento&aviso_dias=$aviso_dias&repetir_dias=$repetir_dias')
-                                                              .then((value) {
-                                                            if (!value[
-                                                                'erro']) {
-                                                              Navigator.pop(
-                                                                  context);
-                                                              setState(() {});
-                                                            } else {
-                                                              return buildMinhaSnackBar(
-                                                                  context,
-                                                                  title:
-                                                                      'algo saiu mal',
-                                                                  subTitle: value[
-                                                                      'mensagem']);
-                                                            }
-                                                          });
-                                                        },
-                                                      ),
-                                                    ],
+                                                          setState(() {});
+                                                        }
+                                                      });
+                                                    },
                                                   )
-                                                ]);
-                                          },
-                                          child: Icon(
-                                            Icons.check_circle_outline_outlined,
-                                            color: concluida
-                                                ? Color.fromARGB(
-                                                    255, 78, 227, 83)
-                                                : Colors.grey[300],
-                                            size:
-                                                SplashScreen.isSmall ? 25 : 30,
-                                          ),
-                                        ),
-                                      ],
+                                                ],
+                                              ),
+                                            )
+                                          ]);
+                                    },
+                                    child: Icon(
+                                      Icons.delete_outlined,
+                                      color: Colors.red,
+                                      size: SplashScreen.isSmall ? 25 : 30,
                                     ),
                                   ),
                                   ConstsWidget.buildTextTitle(
                                       context, descricao,
-                                      width: 0.77, textAlign: TextAlign.center),
+                                      width: 0.75, textAlign: TextAlign.center),
+                                  GestureDetector(
+                                    onTap: () {
+                                      String acaoTarefa = !concluida
+                                          ? 'Concluir Tarefa'
+                                          : 'Reativar Tarefa';
+
+                                      showAllDialog(context,
+                                          barrierDismissible: true,
+                                          title: ConstsWidget.buildTextTitle(
+                                              context, acaoTarefa,
+                                              fontSize: 18),
+                                          children: [
+                                            RichText(
+                                              textAlign: TextAlign.center,
+                                              text: TextSpan(
+                                                text: 'Ao ',
+                                                style: TextStyle(
+                                                  color: Theme.of(context)
+                                                      .textTheme
+                                                      .bodyLarge!
+                                                      .color,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  fontSize: SplashScreen.isSmall
+                                                      ? 14
+                                                      : 16,
+                                                ),
+                                                children: [
+                                                  ConstsWidget
+                                                      .builRichTextTitle(
+                                                          context,
+                                                          textBold: acaoTarefa,
+                                                          color:
+                                                              Consts.kColorRed),
+                                                  ConstsWidget
+                                                      .builRichTextSubTitle(
+                                                          context,
+                                                          subTitle: ' você '),
+                                                  ConstsWidget.builRichTextTitle(
+                                                      context,
+                                                      textBold: concluida
+                                                          ? 'Voltará a Receber '
+                                                          : 'Não Receberá ',
+                                                      color: Consts.kColorRed),
+                                                  ConstsWidget.builRichTextSubTitle(
+                                                      context,
+                                                      subTitle:
+                                                          'avisos sobre esta tarefa'),
+                                                  // buildBoldSpan(
+                                                  //     acaoTarefa),
+                                                  // buildNormalSpan(
+                                                  //     ' você '),
+                                                  // buildBoldSpan(concluida
+                                                  //     ? 'Voltará a Receber '
+                                                  //     : 'Não Receberá '),
+                                                  // buildNormalSpan(
+                                                  //     'avisos sobre esta tarefa'),
+                                                ],
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height: size.height * 0.03,
+                                            ),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                ConstsWidget
+                                                    .buildOutlinedButton(
+                                                  context,
+                                                  rowSpacing:
+                                                      SplashScreen.isSmall
+                                                          ? 0.04
+                                                          : 0.06,
+                                                  title: 'Cancelar',
+                                                  onPressed: () {
+                                                    Navigator.pop(context);
+                                                  },
+                                                ),
+                                                ConstsWidget.buildCustomButton(
+                                                  context,
+                                                  rowSpacing: 0.05,
+                                                  !concluida
+                                                      ? 'Concluir'
+                                                      : 'Reativar',
+                                                  color: Consts.kColorRed,
+                                                  onPressed: () {
+                                                    ConstsFuture.resquestApi(
+                                                            '${Consts.sindicoApi}tarefas/?fn=editarTarefa&idcond=${ResponsalvelInfos.idcondominio}&idfuncionario=${ResponsalvelInfos.idfuncionario}&idtarefa=$idtarefa&concluida=${concluida ? 0 : 1}&descricao=$descricao&data_vencimento=$data_vencimento&aviso_dias=$aviso_dias&repetir_dias=$repetir_dias')
+                                                        .then((value) {
+                                                      if (!value['erro']) {
+                                                        Navigator.pop(context);
+                                                        setState(() {});
+                                                      } else {
+                                                        return buildMinhaSnackBar(
+                                                            context,
+                                                            title:
+                                                                'algo saiu mal',
+                                                            subTitle: value[
+                                                                'mensagem']);
+                                                      }
+                                                    });
+                                                  },
+                                                ),
+                                              ],
+                                            )
+                                          ]);
+                                    },
+                                    child: Icon(
+                                      Icons.check_circle_outline_outlined,
+                                      color: concluida
+                                          ? Color.fromARGB(255, 78, 227, 83)
+                                          : Colors.grey[300],
+                                      size: SplashScreen.isSmall ? 25 : 30,
+                                    ),
+                                  ),
                                 ],
                               ),
                               SizedBox(
@@ -406,7 +376,7 @@ class _TarefasScreenState extends State<TarefasScreen> {
                               ),
                               if (!isToday)
                                 ConstsWidget.buildTextSubTitle(
-                                    context, 'Data de vencimento'),
+                                    context, 'Data do Vencimento'),
                               if (isToday)
                                 ConstsWidget.buildTextTitle(
                                     context, 'Vence Hoje',

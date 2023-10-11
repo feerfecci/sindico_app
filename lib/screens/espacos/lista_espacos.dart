@@ -78,17 +78,27 @@ class _ListaEspacosState extends State<ListaEspacos> {
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
+                                    Stack(
+                                      // mainAxisAlignment:
+                                      //     MainAxisAlignment.spaceBetween,
+                                      alignment: Alignment.center,
                                       children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.end,
+                                          children: [
+                                            ConstsWidget.buildAtivoInativo(
+                                              context,
+                                              ativo,
+                                            ),
+                                          ],
+                                        ),
                                         ConstsWidget.buildTextTitle(
                                             context, nome_espaco,
                                             textAlign: TextAlign.center,
-                                            width: 0.65,
+                                            width: 0.58,
+                                            maxLines: 6,
                                             fontSize: 18),
-                                        ConstsWidget.buildAtivoInativo(
-                                            context, ativo),
                                       ],
                                     ),
                                     ConstsWidget.buildPadding001(

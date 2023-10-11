@@ -140,46 +140,9 @@ class _CadastroMoradorState extends State<CadastroMorador> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   ConstsWidget.buildAniversarioField(context, widget.nascimento,
-                      width: 0.37),
-                  // SizedBox(
-                  //   width: size.width * 0.37,
-                  //   child: MyDatePicker(
-                  //     type: DateTimePickerType.dateTime,
-                  //     dataSelected: MyDatePicker.dataSelected != '0000-00-00' &&
-                  //             MyDatePicker.dataSelected != ''
-                  //         ? DateFormat('dd/MM/yyyy')
-                  //             .format(DateTime.parse(MyDatePicker.dataSelected))
-                  //         : DateTime.now(),
-                  //     hintText: MyDatePicker.dataSelected != '0000-00-00' &&
-                  //             MyDatePicker.dataSelected != ''
-                  //         ? DateFormat('dd/MM/yyyy')
-                  //             .format(DateTime.parse(MyDatePicker.dataSelected))
-                  //             .toString()
-                  //         : 'MyDatePicker.dataSelected',
-                  //     aniversario: true,
-                  //   ),
-                  // buildMyTextFormField(context,
-                  //     initialValue: dataParsed,
-                  //     title: 'Data de Nascimento',
-                  //     keyboardType: TextInputType.number,
-                  //     mask: '##/##/####',
-                  //     hintText: '##/##/####', onSaved: (text) {
-                  //   // var replace = text!.replaceAll('/', '-');
-                  //   if (text != '') {
-                  //     var ano = text!.substring(6);
-                  //     var mes = text.substring(3, 5);
-                  //     var dia = text.substring(0, 2);
-
-                  //     _formInfosMorador = _formInfosMorador.copyWith(
-                  //         nascimento: '$ano-$mes-$dia');
-                  //   } else {
-                  //     _formInfosMorador =
-                  //         _formInfosMorador.copyWith(nascimento: "");
-                  //   }
-                  // }),
-                  // ),
+                      width: 0.35),
                   SizedBox(
-                    width: size.width * 0.5,
+                    width: size.width * 0.55,
                     child: buildMyTextFormObrigatorio(
                       context,
                       'Documento',
@@ -212,10 +175,10 @@ class _CadastroMoradorState extends State<CadastroMorador> {
                         hintText: '11'),
                   ),
                   SizedBox(
-                    width: size.width * 0.1,
+                    width: size.width * 0.02,
                   ),
                   SizedBox(
-                    width: size.width * 0.5,
+                    width: size.width * 0.71,
                     child: buildMyTextFormField(
                       context,
                       title: 'Telefone',
@@ -242,68 +205,87 @@ class _CadastroMoradorState extends State<CadastroMorador> {
                 onSaved: (text) =>
                     _formInfosMorador = _formInfosMorador.copyWith(email: text),
               ),
-              ConstsWidget.buildLoadingButton(context,
-                  isLoading: isLoadingLogin,
-                  color: Consts.kColorVerde,
-                  title: 'Gerar Login', onPressed: () {
-                setState(() {
-                  isLoadingLogin = true;
-                });
-                var formValid =
-                    _formKeyMorador.currentState?.validate() ?? false;
-                FocusManager.instance.primaryFocus!.unfocus();
+              ConstsWidget.buildPadding001(
+                context,
+                child: ConstsWidget.buildLoadingButton(context,
+                    isLoading: isLoadingLogin,
+                    color: Consts.kColorVerde,
+                    title: 'Gerar Login', onPressed: () {
+                  setState(() {
+                    isLoadingLogin = true;
+                  });
+                  var formValid =
+                      _formKeyMorador.currentState?.validate() ?? false;
+                  FocusManager.instance.primaryFocus!.unfocus();
 
-                if (formValid) {
-                  _formKeyMorador.currentState?.save();
-                  ConstsFuture.gerarLogin(context,
-                          nomeUsado: _formInfosMorador.nome_morador!,
-                          nomeDocAlterado: nomeDocAlterado,
-                          documento: _formInfosMorador.documento!)
-                      .then((value) {
+                  if (formValid) {
+                    _formKeyMorador.currentState?.save();
+                    ConstsFuture.gerarLogin(context,
+                            nomeUsado: _formInfosMorador.nome_morador!,
+                            nomeDocAlterado: nomeDocAlterado,
+                            documento: _formInfosMorador.documento!)
+                        .then((value) {
+                      setState(() {
+                        isLoadingLogin = false;
+                      });
+                      if (value != '') {
+                        setState(() {
+                          loginGerado = value;
+                          _formInfosMorador =
+                              _formInfosMorador.copyWith(login: loginGerado);
+                        });
+                      } else {
+                        buildMinhaSnackBar(context,
+                            title: 'Algo Saiu Mal',
+                            hasError: value['erro'],
+                            subTitle: 'O login não foi gerado');
+                      }
+                    });
+                  } else {
                     setState(() {
                       isLoadingLogin = false;
                     });
-                    if (value != '') {
-                      setState(() {
-                        loginGerado = value;
-                        _formInfosMorador =
-                            _formInfosMorador.copyWith(login: loginGerado);
-                      });
-                    } else {
-                      buildMinhaSnackBar(context,
-                          title: 'Algo Saiu Mal',
-                          hasError: value['erro'],
-                          subTitle: 'O login não foi gerado');
-                    }
-                  });
-                } else {
-                  setState(() {
-                    isLoadingLogin = false;
-                  });
-                  buildMinhaSnackBar(context,
-                      hasError: true,
-                      title: 'Cuidado',
-                      subTitle: 'Complete as Informações');
-                }
-              }),
+                    buildMinhaSnackBar(context,
+                        hasError: true,
+                        title: 'Cuidado',
+                        subTitle: 'Complete as Informações');
+                  }
+                }),
+              ),
               if (loginGerado != '')
                 Column(
                   children: [
                     ConstsWidget.buildPadding001(
                       context,
-                      child: MyBoxShadow(
+                      child: Container(
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(16),
+                            border: Border.all(
+                              width: 1,
+                              color: Theme.of(context).colorScheme.primary,
+                            )),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Column(
-                              children: [
-                                ConstsWidget.buildTextSubTitle(
-                                    context, 'Login'),
-                                ConstsWidget.buildTextTitle(
-                                  context,
-                                  loginGerado,
-                                ),
-                              ],
+                            ConstsWidget.buildPadding001(
+                              context,
+                              vertical: 0.02,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  ConstsWidget.buildTextSubTitle(
+                                      context, 'Login:'),
+                                  SizedBox(
+                                    height: size.height * 0.005,
+                                  ),
+                                  SizedBox(
+                                    width: size.width * 0.8,
+                                    child: ConstsWidget.buildTextTitle(
+                                        context, loginGerado,
+                                        textAlign: TextAlign.center),
+                                  ),
+                                ],
+                              ),
                             ),
                           ],
                         ),
@@ -378,15 +360,18 @@ class _CadastroMoradorState extends State<CadastroMorador> {
                           });
                         }, title: 'Gerar Senha e Enviar Acesso');
                       }),
-                    ConstsWidget.buildLoadingButton(
+                    ConstsWidget.buildPadding001(
                       context,
-                      title: 'Salvar',
-                      isLoading: isLoading,
-                      color: Consts.kColorRed,
-                      onPressed: () {
-                        FocusManager.instance.primaryFocus!.unfocus();
-                        salvarMorador();
-                      },
+                      child: ConstsWidget.buildLoadingButton(
+                        context,
+                        title: 'Salvar',
+                        isLoading: isLoading,
+                        color: Consts.kColorRed,
+                        onPressed: () {
+                          FocusManager.instance.primaryFocus!.unfocus();
+                          salvarMorador();
+                        },
+                      ),
                     )
                   ],
                 )

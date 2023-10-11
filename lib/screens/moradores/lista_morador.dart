@@ -229,30 +229,28 @@ class _ListaMoradorState extends State<ListaMorador> {
                                               maxLines: 2, width: 1),
                                         ],
                                       )),
-                                  Center(
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
-                                      children: [
-                                        ConstsWidget.buildTextTitle(
-                                            context, 'Acessa Sistema'),
-                                        SizedBox(
-                                          height: size.height * 0.005,
+                                  SizedBox(
+                                    height: size.height * 0.01,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      ConstsWidget.buildTextTitle(context,
+                                          'Permitir Acesso ao Sistema'),
+                                      SizedBox(
+                                        width: SplashScreen.isSmall
+                                            ? size.width * 0.205
+                                            : size.width * 0.195,
+                                        child: ConstsWidget.buildAtivoInativo(
+                                          context,
+                                          acessa_sistema,
                                         ),
-                                        SizedBox(
-                                          width: SplashScreen.isSmall
-                                              ? size.width * 0.205
-                                              : size.width * 0.195,
-                                          child: ConstsWidget.buildAtivoInativo(
-                                            context,
-                                            acessa_sistema,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
+                                      ),
+                                    ],
                                   ),
                                   SizedBox(
-                                    height: size.height * 0.02,
+                                    height: size.height * 0.01,
                                   ),
                                 ],
                               ),
@@ -277,7 +275,10 @@ class _ListaMoradorState extends State<ListaMorador> {
                                     responsavel: responsavel,
                                     email: email),
                               );
-                            })
+                            }),
+                            SizedBox(
+                              height: size.height * 0.01,
+                            ),
                           ],
                         )
                             //      Column(

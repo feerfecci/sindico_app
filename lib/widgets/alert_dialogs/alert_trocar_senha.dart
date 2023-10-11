@@ -36,10 +36,10 @@ alertTrocarSenha(
               width: size.width * 0.9,
               height: SplashScreen.isSmall
                   ? size.height * 0.37
-                  : size.height * 0.50,
+                  : size.height * 0.37,
               child: ListView(
                 children: [
-                  ConstsWidget.buildTextExplicaSenha(context),
+                  ConstsWidget.buildTextExplicaSenha(context, isDrawer: true),
                   buildMyTextFormObrigatorio(
                     context,
                     'Nova Senha',

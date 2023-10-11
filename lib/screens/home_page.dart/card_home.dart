@@ -22,11 +22,14 @@ Widget buildCardHome(BuildContext context,
         mode: LaunchMode.externalApplication);
   }
 
+  double meuwidth =
+      SplashScreen.isSmall ? size.width * 0.12 : size.width * 0.138;
+  double meuheight = meuwidth;
   return ConstsWidget.buildPadding001(
     context,
     vertical: 0.005,
     child: MyBoxShadow(
-      paddingAll: 0.03,
+      paddingAll: 0.00,
       child: InkWell(
         onTap: pageRoute != null
             ? () {
@@ -41,11 +44,12 @@ Widget buildCardHome(BuildContext context,
                 }
               },
         child: Column(
-          // crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Spacer(
-              flex: 2,
+            Spacer(),
+            SizedBox(
+              height: size.height * 0.005,
             ),
             ConstsWidget.buildBadge(
               context,
@@ -70,9 +74,10 @@ Widget buildCardHome(BuildContext context,
                           : 0,
               child: ConstsWidget.buildCachedImage(
                 context,
+                meuWidth: true,
                 iconApi: iconApi,
-                width: SplashScreen.isSmall ? 0.13 : 0.141,
-                height: SplashScreen.isSmall ? 0.075 : 0.0641,
+                width: meuwidth,
+                height: meuheight,
               ),
             ),
             // FutureBuilder(
@@ -82,8 +87,19 @@ Widget buildCardHome(BuildContext context,
             //         height: size.height * 0.075,
             //         child: snapshot.data)),
 
-            Spacer(),
-            ConstsWidget.buildTextTitle(context, title, fontSize: 16),
+            SizedBox(
+              height: size.height * 0.011,
+            ),
+            // Spacer(),
+
+            SizedBox(
+                width: size.width * 0.9,
+                child: ConstsWidget.buildTextTitle(
+                  context,
+                  title,
+                  fontSize: 16,
+                  textAlign: TextAlign.center,
+                )),
             Spacer(),
           ],
         ),

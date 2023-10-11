@@ -499,7 +499,7 @@ class _HomePageState extends State<HomePage> {
                     mainAxisSpacing: 0.5,
                     crossAxisCount: 2,
                     shrinkWrap: true,
-                    childAspectRatio: SplashScreen.isSmall ? 1.6 : 1.45,
+                    childAspectRatio: SplashScreen.isSmall ? 1.6 : 1.40,
                     physics: ClampingScrollPhysics(),
                     onReorder: (oldIndex, newIndex) {
                       var card = models.removeAt(oldIndex);

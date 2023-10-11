@@ -270,7 +270,7 @@ class _CadastroUnidadesState extends State<CadastroUnidades> {
                                 ),
                       //infos resp
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           SizedBox(
                             width: size.width * 0.55,
@@ -278,7 +278,7 @@ class _CadastroUnidadesState extends State<CadastroUnidades> {
                           ),
                           Spacer(),
                           SizedBox(
-                            width: size.width * 0.3,
+                            width: size.width * 0.35,
                             child: buildMyTextFormObrigatorio(
                               context,
                               'Número',
@@ -289,98 +289,101 @@ class _CadastroUnidadesState extends State<CadastroUnidades> {
                                   formInfosUnidade.copyWith(numero: text),
                             ),
                           ),
-                          Spacer(),
                         ],
                       ),
                     ],
                   ),
-                  ConstsWidget.buildCustomButton(
+                  ConstsWidget.buildPadding001(
                     context,
-                    'Salvar',
-                    color: Consts.kColorRed,
-                    onPressed: () {
-                      FocusManager.instance.primaryFocus!.unfocus();
-                      var formValid =
-                          _formkeyUnidade.currentState?.validate() ?? false;
+                    child: ConstsWidget.buildCustomButton(
+                      context,
+                      'Salvar',
+                      color: Consts.kColorRed,
+                      onPressed: () {
+                        FocusManager.instance.primaryFocus!.unfocus();
+                        var formValid =
+                            _formkeyUnidade.currentState?.validate() ?? false;
 
-                      FocusManager.instance.primaryFocus!.unfocus();
-                      if (formValid &&
-                          !widget.isDrawer &&
-                          formInfosUnidade.id_divisao_unidade != null &&
-                          dropdownValueDivisioes != null) {
-                        _formkeyUnidade.currentState!.save();
+                        FocusManager.instance.primaryFocus!.unfocus();
+                        if (formValid &&
+                            !widget.isDrawer &&
+                            formInfosUnidade.id_divisao_unidade != null &&
+                            dropdownValueDivisioes != null) {
+                          _formkeyUnidade.currentState!.save();
 
-                        showAllDialog(context,
-                            title: ConstsWidget.buildTextTitle(
-                                context, 'Deseja continuar?',
-                                fontSize: 18),
-                            children: [
-                              RichText(
-                                  text: TextSpan(children: const [
-                                TextSpan(
-                                    text:
-                                        'Confira as informações antes de prosseguir. Após salvar os dados, eles não poderão ser editados',
-                                    style: TextStyle(
-                                        color: Consts.kColorRed, fontSize: 20))
-                              ])),
-                              SizedBox(
-                                height: size.height * 0.025,
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  ConstsWidget.buildOutlinedButton(
-                                    context,
-                                    title: '      Cancelar      ',
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                  ),
-                                  Spacer(),
-                                  ConstsWidget.buildCustomButton(
-                                    context,
-                                    '       Salvar       ',
-                                    color: Consts.kColorRed,
-                                    onPressed: () {
-                                      String incluindoEditando = widget
-                                                  .idunidade ==
-                                              0
-                                          ? "incluirUnidade&"
-                                          : 'editarUnidade&id=${widget.idunidade}&';
+                          showAllDialog(context,
+                              title: ConstsWidget.buildTextTitle(
+                                  context, 'Deseja continuar?',
+                                  fontSize: 18),
+                              children: [
+                                RichText(
+                                    text: TextSpan(children: const [
+                                  TextSpan(
+                                      text:
+                                          'Confira as informações antes de prosseguir. Após salvar os dados, eles não poderão ser editados',
+                                      style: TextStyle(
+                                          color: Consts.kColorRed,
+                                          fontSize: 20))
+                                ])),
+                                SizedBox(
+                                  height: size.height * 0.025,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    ConstsWidget.buildOutlinedButton(
+                                      context,
+                                      title: '      Cancelar      ',
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                    ),
+                                    Spacer(),
+                                    ConstsWidget.buildCustomButton(
+                                      context,
+                                      '       Salvar       ',
+                                      color: Consts.kColorRed,
+                                      onPressed: () {
+                                        String incluindoEditando = widget
+                                                    .idunidade ==
+                                                0
+                                            ? "incluirUnidade&"
+                                            : 'editarUnidade&id=${widget.idunidade}&';
 
-                                      FocusManager.instance.primaryFocus!
-                                          .unfocus();
-                                      ConstsFuture.resquestApi(
-                                              '${Consts.sindicoApi}unidades/?fn=${incluindoEditando}idcond=${ResponsalvelInfos.idcondominio}&idfuncionario=${ResponsalvelInfos.idfuncionario}&iddivisao=${formInfosUnidade.iddivisao}&ativo=${formInfosUnidade.ativo}&numero=${"$tipoSelec${formInfosUnidade.numero}"}')
-                                          .then((value) {
-                                        if (!value['erro']) {
-                                          Navigator.pop(context);
-                                          ConstsFuture.navigatorPopPush(
-                                                  context, '/listaUnidade')
-                                              .whenComplete(() {
+                                        FocusManager.instance.primaryFocus!
+                                            .unfocus();
+                                        ConstsFuture.resquestApi(
+                                                '${Consts.sindicoApi}unidades/?fn=${incluindoEditando}idcond=${ResponsalvelInfos.idcondominio}&idfuncionario=${ResponsalvelInfos.idfuncionario}&iddivisao=${formInfosUnidade.iddivisao}&ativo=${formInfosUnidade.ativo}&numero=${"$tipoSelec${formInfosUnidade.numero}"}')
+                                            .then((value) {
+                                          if (!value['erro']) {
+                                            Navigator.pop(context);
+                                            ConstsFuture.navigatorPopPush(
+                                                    context, '/listaUnidade')
+                                                .whenComplete(() {
+                                              buildMinhaSnackBar(context,
+                                                  title: 'Muito Bem',
+                                                  hasError: value['erro'],
+                                                  subTitle: value['mensagem']);
+                                            });
+                                          } else {
                                             buildMinhaSnackBar(context,
-                                                title: 'Muito Bem',
+                                                title: 'Uma pena',
                                                 hasError: value['erro'],
                                                 subTitle: value['mensagem']);
-                                          });
-                                        } else {
-                                          buildMinhaSnackBar(context,
-                                              title: 'Uma pena',
-                                              hasError: value['erro'],
-                                              subTitle: value['mensagem']);
-                                        }
-                                      });
-                                    },
-                                  )
-                                ],
-                              )
-                            ]);
-                      } else {
-                        buildMinhaSnackBar(context,
-                            hasError: true,
-                            subTitle: 'Complete as informações');
-                      }
-                    },
+                                          }
+                                        });
+                                      },
+                                    )
+                                  ],
+                                )
+                              ]);
+                        } else {
+                          buildMinhaSnackBar(context,
+                              hasError: true,
+                              subTitle: 'Complete as informações');
+                        }
+                      },
+                    ),
                   )
                 ],
               ),

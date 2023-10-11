@@ -54,7 +54,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
     return SafeArea(
       child: SizedBox(
         height: size.height * 0.95,
-        width: size.width * 0.775,
+        width: SplashScreen.isSmall ? size.width * 0.8 : size.width * 0.775,
         child: Drawer(
           backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           shape: RoundedRectangleBorder(

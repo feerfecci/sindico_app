@@ -136,7 +136,7 @@ class _CadastroColaboradorState extends State<CadastroColaborador> {
           items: categoryItemListFuncoes.map((e) {
             return DropdownMenuItem(
               value: e['idfuncao'],
-              child: Text(e['funcao']),
+              child: Center(child: Text(e['funcao'])),
             );
           }).toList(),
           onChanged: (value) {
@@ -252,43 +252,6 @@ class _CadastroColaboradorState extends State<CadastroColaborador> {
                     ConstsWidget.buildAniversarioField(
                         context, widget.nascimento,
                         width: 0.4),
-                    // SizedBox(
-                    //   width: size.width * 0.4,
-                    //   child: MyDatePicker(
-                    //       dataSelected: widget.nascimento != '0000-00-00' &&
-                    //               widget.nascimento != '' &&
-                    //               widget.nascimento != null
-                    //           ? DateFormat('dd/MM/yyyy').format(
-                    //               DateTime.parse(MyDatePicker.dataSelected))
-                    //           : DateTime.now(),
-                    //       type: DateTimePickerType.date,
-                    //       hintText: MyDatePicker.dataSelected != '0000-00-00' &&
-                    //               MyDatePicker.dataSelected != ''
-                    //           ? DateFormat('dd/MM/yyyy')
-                    //               .format(
-                    //                   DateTime.parse(MyDatePicker.dataSelected))
-                    //               .toString()
-                    //           : MyDatePicker.dataSelected,
-                    //       aniversario: true),
-                    // ),
-
-                    // buildMyTextFormField(context,
-                    //     title: 'Data de nascimento',
-                    //     initialValue: widget.nascimento, onSaved: (text) {
-                    //   if (text != '') {
-                    //     if (text!.length >= 6) {
-                    //       var ano = text.substring(6);
-                    //       var mes = text.substring(3, 5);
-                    //       var dia = text.substring(0, 2);
-                    //       formInfosFunc = formInfosFunc.copyWith(
-                    //           nascimento: '$ano-$mes-$dia');
-                    //     }
-                    //   } else {
-                    //     formInfosFunc =
-                    //         formInfosFunc.copyWith(nascimento: "");
-                    //   }
-                    // }, hintText: '25/09/1997', mask: '##/##/####'),
-                    // ),
                     SizedBox(
                       width: size.width * 0.5,
                       child: buildMyTextFormObrigatorio(
@@ -320,11 +283,11 @@ class _CadastroColaboradorState extends State<CadastroColaborador> {
                   context,
                   child: buildDropdownButtonFuncoes(),
                 ),
-                ConstsWidget.buildPadding001(
-                  context,
-                  horizontal: 0.01,
-                  child: ConstsWidget.buildTextTitle(context, 'Contatos'),
-                ),
+                // ConstsWidget.buildPadding001(
+                //   context,
+                //   horizontal: 0.01,
+                //   child: ConstsWidget.buildTextTitle(context, 'Contatos'),
+                // ),
                 Row(
                   children: [
                     SizedBox(
@@ -341,7 +304,7 @@ class _CadastroColaboradorState extends State<CadastroColaborador> {
                     ),
                     Spacer(),
                     SizedBox(
-                      width: size.width * 0.65,
+                      width: size.width * 0.7,
                       child: buildMyTextFormField(context,
                           title: 'Telefone',
                           onSaved: (text) => formInfosFunc =
@@ -418,26 +381,62 @@ class _CadastroColaboradorState extends State<CadastroColaborador> {
                     context,
                     child: Column(
                       children: [
-                        MyBoxShadow(
-                            child: ConstsWidget.buildPadding001(
-                          context,
+                        SizedBox(
+                          height: size.height * 0.01,
+                        ),
+                        Container(
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(16),
+                              border: Border.all(
+                                width: 1,
+                                color: Theme.of(context).colorScheme.primary,
+                              )),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  ConstsWidget.buildTextSubTitle(
-                                      context, 'Login'),
-                                  ConstsWidget.buildTextTitle(
-                                      context, loginGerado2),
-                                ],
+                              ConstsWidget.buildPadding001(
+                                context,
+                                vertical: 0.02,
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    ConstsWidget.buildTextSubTitle(
+                                        context, 'Login:'),
+                                    SizedBox(
+                                      height: size.height * 0.005,
+                                    ),
+                                    SizedBox(
+                                      width: size.width * 0.8,
+                                      child: ConstsWidget.buildTextTitle(
+                                          context, loginGerado2,
+                                          textAlign: TextAlign.center),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ],
                           ),
-                        )),
+                        ),
+                        // Container(
+                        //     child: ConstsWidget.buildPadding001(
+                        //   context,
+                        //   child: Row(
+                        //     mainAxisAlignment: MainAxisAlignment.center,
+                        //     children: [
+                        //       Column(
+                        //         crossAxisAlignment: CrossAxisAlignment.center,
+                        //         children: [
+                        //           ConstsWidget.buildTextSubTitle(
+                        //               context, 'Login:'),
+                        //           ConstsWidget.buildTextTitle(
+                        //               context, ),
+                        //         ],
+                        //       ),
+                        //     ],
+                        //   ),
+                        // )),
                         SizedBox(
-                          height: size.height * 0.02,
+                          height: size.height * 0.01,
                         ),
                         if (formInfosFunc.idfuncao != 2 &&
                             formInfosFunc.idfuncao != 5 &&
@@ -477,6 +476,9 @@ class _CadastroColaboradorState extends State<CadastroColaborador> {
                               });
                             }, title: 'Gerar Senha e Enviar Acesso');
                           }),
+                        SizedBox(
+                          height: size.height * 0.021,
+                        ),
                         ConstsWidget.buildLoadingButton(
                           context,
                           title: 'Salvar',

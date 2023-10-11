@@ -170,7 +170,7 @@ class _MeuPerfilScreenState extends State<MeuPerfilScreen> {
                   // ),
                   Spacer(),
                   SizedBox(
-                    width: size.width * 0.45,
+                    width: size.width * 0.5,
                     child: buildMyTextFormObrigatorio(context, 'Documento',
                         hintText: 'Ex: CPF',
                         initialValue: ResponsalvelInfos.documento,
@@ -184,33 +184,14 @@ class _MeuPerfilScreenState extends State<MeuPerfilScreen> {
               // ConstsWidget.buildPadding001(context,
               //     child: ConstsWidget.buildTextTitle(context, 'Contatos',
               //         fontSize: 18)),
-              Row(
-                children: [
-                  // SizedBox(
-                  //   width: size.width * 0.2,
-                  //   child: buildMyTextFormObrigatorio(context, 'DDD',
-                  //       initialValue: ResponsalvelInfos.ddd,
-                  //       hintText: 'Ex: 11',
-                  //       onSaved: (text) => responsalvelInfos =
-                  //           responsalvelInfos.copyWith(ddd: text),
-                  //       mask: '##',
-                  //       keyboardType: TextInputType.number),
-                  // ),
-                  // Spacer(),
-                  SizedBox(
-                    width: size.width * 0.5,
-                    child: buildMyTextFormField(context,
-                        title: 'Telefone',
-                        initialValue: ResponsalvelInfos.telefone,
-                        onSaved: (text) => responsalvelInfos =
-                            responsalvelInfos.copyWith(telefone: text),
-                        hintText: '11911223344',
-                        mask: '###########',
-                        keyboardType: TextInputType.number),
-                  ),
-                  Spacer(),
-                ],
-              ),
+              buildMyTextFormField(context,
+                  title: 'Telefone',
+                  initialValue: ResponsalvelInfos.telefone,
+                  onSaved: (text) => responsalvelInfos =
+                      responsalvelInfos.copyWith(telefone: text),
+                  hintText: '11911223344',
+                  mask: '###########',
+                  keyboardType: TextInputType.number),
               buildMyTextFormObrigatorio(
                 context,
                 'Email',
@@ -263,21 +244,17 @@ class _MeuPerfilScreenState extends State<MeuPerfilScreen> {
                             novaSenhaCtrl, 'Senhas não são iguais'),
                       ]),
                     ),
-                    ConstsWidget.buildPadding001(
-                      context,
-                      horizontal: 0,
-                      child: StatefulBuilder(builder: (context, setState) {
-                        return ConstsWidget.buildCheckBox(context,
-                            isChecked: isChecked,
-                            width: size.width * 0.7, onChanged: (p0) {
-                          setState(() {
-                            isChecked = !isChecked;
+                    StatefulBuilder(builder: (context, setState) {
+                      return ConstsWidget.buildCheckBox(context,
+                          isChecked: isChecked,
+                          width: size.width * 0.7, onChanged: (p0) {
+                        setState(() {
+                          isChecked = !isChecked;
 
-                            FocusManager.instance.primaryFocus!.unfocus();
-                          });
-                        }, title: 'Adicionar Meus Condomínios');
-                      }),
-                    ),
+                          FocusManager.instance.primaryFocus!.unfocus();
+                        });
+                      }, title: 'Adicionar Meus Condomínios');
+                    }),
                   ],
                 ),
               ),
@@ -296,7 +273,7 @@ class _MeuPerfilScreenState extends State<MeuPerfilScreen> {
               ),
               ConstsWidget.buildTextSubTitle(
                 context,
-                'Aqui só pode ser alterados pela nossa equipe',
+                'Para alterar entre em contato com nossa equipe.',
               ),
               SizedBox(
                 height: size.height * 0.02,
@@ -407,6 +384,7 @@ class _MeuPerfilScreenState extends State<MeuPerfilScreen> {
               ),
               ConstsWidget.buildPadding001(
                 context,
+                vertical: 0.02,
                 child: ConstsWidget.buildLoadingButton(
                   context,
                   title: 'Salvar',

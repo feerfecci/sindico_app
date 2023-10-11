@@ -82,24 +82,50 @@ class _ListaColaboradoresState extends State<ListaColaboradores> {
       return ConstsWidget.buildPadding001(
         context,
         vertical: 0.005,
-        child: Container(
-          height:
-              SplashScreen.isSmall ? size.height * 0.08 : size.height * 0.06,
-          width: size.width * width,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            color: isChecked ? Consts.kColorVerde : Colors.grey,
-          ),
-          child: Center(
-            child: Text(
-              title,
-              style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 15),
-            ),
+        child: Center(
+          child: Column(
+            children: [
+              Icon(
+                Icons.check_circle_outline_outlined,
+                color: isChecked
+                    ? Colors.green
+                    : Theme.of(context).colorScheme.primary,
+                size: SplashScreen.isSmall ? 25 : 30,
+              ),
+              // Text(
+              //   title,
+              //   style: TextStyle(
+              //       color: Colors.white,
+              //       fontWeight: FontWeight.bold,
+              //       fontSize: 15),
+              // ),
+              SizedBox(
+                width: size.width * 0.01,
+              ),
+
+              ConstsWidget.buildTextSubTitle(context, title),
+            ],
           ),
         ),
+
+        // Container(
+        //   height:
+        //       SplashScreen.isSmall ? size.height * 0.08 : size.height * 0.06,
+        //   width: size.width * width,
+        //   decoration: BoxDecoration(
+        //     borderRadius: BorderRadius.circular(16),
+        //     color: isChecked ? Consts.kColorVerde : Colors.grey,
+        //   ),
+        //   child: Center(
+        //     child: Text(
+        //       title,
+        //       style: TextStyle(
+        //           color: Colors.white,
+        //           fontWeight: FontWeight.bold,
+        //           fontSize: 15),
+        //     ),
+        //   ),
+        // ),
       );
     }
 
@@ -202,6 +228,17 @@ class _ListaColaboradoresState extends State<ListaColaboradores> {
                                       ],
                                     ),
                                     children: [
+                                      SizedBox(
+                                        height: size.height * 0.01,
+                                      ),
+                                      Container(
+                                          width: double.maxFinite,
+                                          decoration: BoxDecoration(
+                                              border: Border.all(
+                                                  color: Theme.of(context)
+                                                      .colorScheme
+                                                      .primary,
+                                                  width: 1))),
                                       // Row(
                                       //   mainAxisSize: MainAxisSize.min,
                                       //   children: [
@@ -215,7 +252,7 @@ class _ListaColaboradoresState extends State<ListaColaboradores> {
                                       //   ],
                                       // ),
                                       SizedBox(
-                                        height: size.height * 0.02,
+                                        height: size.height * 0.01,
                                       ),
                                       SizedBox(
                                         width: size.width * 0.9,
@@ -321,32 +358,26 @@ class _ListaColaboradoresState extends State<ListaColaboradores> {
                                             ),
                                             Row(
                                               mainAxisAlignment:
-                                                  MainAxisAlignment.spaceEvenly,
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
                                               children: [
-                                                Column(
-                                                  children: [
-                                                    buildTilePermissaoSalvo(
-                                                        'Cartas',
-                                                        isChecked:
-                                                            avisa_corresp),
-                                                    buildTilePermissaoSalvo(
-                                                        'Delivery',
-                                                        isChecked:
-                                                            avisa_delivery),
-                                                  ],
-                                                ),
-                                                Column(
-                                                  children: [
-                                                    buildTilePermissaoSalvo(
-                                                        'Visitas',
-                                                        isChecked:
-                                                            avisa_visita),
-                                                    buildTilePermissaoSalvo(
-                                                        'Caixas',
-                                                        isChecked:
-                                                            avisa_encomendas),
-                                                  ],
-                                                ),
+                                                buildTilePermissaoSalvo(
+                                                    'Cartas',
+                                                    isChecked: avisa_corresp),
+                                                buildTilePermissaoSalvo(
+                                                    'Caixas',
+                                                    isChecked:
+                                                        avisa_encomendas),
+                                                buildTilePermissaoSalvo(
+                                                    'Delivery',
+                                                    isChecked: avisa_delivery),
+                                                buildTilePermissaoSalvo(
+                                                    'Visitas',
+                                                    isChecked: avisa_visita),
+                                                buildTilePermissaoSalvo(
+                                                    'Avisos',
+                                                    width: double.maxFinite,
+                                                    isChecked: envia_avisos),
                                               ],
                                             ),
                                           ],
@@ -354,9 +385,11 @@ class _ListaColaboradoresState extends State<ListaColaboradores> {
                                       SizedBox(
                                         height: size.height * 0.01,
                                       ),
-                                      buildTilePermissaoSalvo('Avisos Gerais',
-                                          width: double.maxFinite,
-                                          isChecked: envia_avisos),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [],
+                                      ),
                                       SizedBox(
                                         height: size.height * 0.02,
                                       ),
