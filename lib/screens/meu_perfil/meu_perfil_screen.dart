@@ -121,18 +121,40 @@ class _MeuPerfilScreenState extends State<MeuPerfilScreen> {
                   child: Column(
                     children: [
                       SizedBox(
-                        height: size.height * 0.02,
+                        height: size.height * 0.01,
                       ),
                       ConstsWidget.buildTextTitle(
                           context, ResponsalvelInfos.nome_responsavel,
                           fontSize: 18),
                       SizedBox(
-                        height: size.height * 0.01,
+                        height: size.height * 0.03,
                       ),
-                      ConstsWidget.buildTextSubTitle(context, 'Meu Login'),
-                      ConstsWidget.buildTextTitle(
-                          context, ResponsalvelInfos.login,
-                          fontSize: 20),
+                      Container(
+                          decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
+                              borderRadius: BorderRadius.circular(16)),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              ConstsWidget.buildPadding001(
+                                context,
+                                child: Column(
+                                  children: [
+                                    ConstsWidget.buildTextSubTitle(
+                                        context, 'Meu Login'),
+                                    ConstsWidget.buildTextTitle(
+                                        context, ResponsalvelInfos.login,
+                                        fontSize: 20),
+                                    SizedBox(
+                                      height: size.height * 0.005,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          )),
                       SizedBox(
                         height: size.height * 0.01,
                       ),
@@ -140,7 +162,40 @@ class _MeuPerfilScreenState extends State<MeuPerfilScreen> {
                   ),
                 ),
               ),
-              ConstsWidget.buildTextExplicaSenha(context),
+              Container(
+                decoration: BoxDecoration(
+                    border: Border.all(
+                        color: Theme.of(context).colorScheme.primary),
+                    borderRadius: BorderRadius.circular(16)),
+                child: ConstsWidget.buildExpandedTile(context,
+                    titleCenter: false,
+                    title: Row(
+                      children: [
+                        SizedBox(
+                          width: size.width * 0.03,
+                        ),
+                        ConstsWidget.buildTextTitle(
+                            context, 'Como Adicionar Outro Local',
+                            textAlign: TextAlign.start),
+                      ],
+                    ),
+                    expandedCrossAxisAlignment: CrossAxisAlignment.start,
+                    expandedAlignment: Alignment.centerLeft,
+                    children: [
+                      ConstsWidget.buildPadding001(
+                        context,
+                        horizontal: 0.02,
+                        vertical: 0,
+                        child: ConstsWidget.buildTextExplicaSenha(
+                          context,
+                          textAlign: TextAlign.start,
+                        ),
+                      ),
+                      SizedBox(
+                        height: size.height * 0.02,
+                      ),
+                    ]),
+              ),
               ConstsWidget.buildPadding001(
                 context,
                 child: ConstsWidget.buildCamposObrigatorios(context),
@@ -297,13 +352,27 @@ class _MeuPerfilScreenState extends State<MeuPerfilScreen> {
                     ),
                     ConstsWidget.buildPadding001(
                       context,
+                      child: Container(
+                        color: Colors.grey,
+                        height: 1,
+                      ),
+                    ),
+                    ConstsWidget.buildPadding001(
+                      context,
                       child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
+                          SizedBox(
+                            width: size.width * 0.03,
+                          ),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              ConstsWidget.buildTextSubTitle(context, 'Numero'),
+                              ConstsWidget.buildTextSubTitle(
+                                context,
+                                'Número',
+                                width: 0.6,
+                              ),
                               ConstsWidget.buildTextTitle(
                                   context, ResponsalvelInfos.numero),
                             ],
@@ -323,60 +392,66 @@ class _MeuPerfilScreenState extends State<MeuPerfilScreen> {
                       height: size.height * 0.01,
                     ),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
+                        SizedBox(
+                          width: size.width * 0.03,
+                        ),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             ConstsWidget.buildTextSubTitle(context, 'Bairro'),
-                            SizedBox(
-                              width: size.width * 0.3,
-                              child: ConstsWidget.buildTextTitle(
-                                  context, ResponsalvelInfos.bairro,
-                                  maxLines: 3),
-                            ),
+                            ConstsWidget.buildTextTitle(
+                                context, ResponsalvelInfos.bairro,
+                                width: 0.6, maxLines: 3),
                           ],
                         ),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             ConstsWidget.buildTextSubTitle(context, 'Estado'),
-                            SizedBox(
-                              width: size.width * 0.2,
-                              child: ConstsWidget.buildTextTitle(
-                                  context, ResponsalvelInfos.estado,
-                                  maxLines: 3),
-                            ),
-                          ],
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            ConstsWidget.buildTextSubTitle(context, 'Cidade'),
-                            SizedBox(
-                              width: size.width * 0.2,
-                              child: ConstsWidget.buildTextTitle(
-                                  context, ResponsalvelInfos.cidade,
-                                  maxLines: 3, width: 0.3),
-                            ),
+                            ConstsWidget.buildTextTitle(
+                                context, ResponsalvelInfos.estado,
+                                width: 0.2, maxLines: 3),
                           ],
                         ),
                       ],
                     ),
+                    SizedBox(
+                      height: size.height * 0.015,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        ConstsWidget.buildTextSubTitle(context, 'Cidade'),
+                        ConstsWidget.buildTextTitle(
+                            context, ResponsalvelInfos.cidade,
+                            textAlign: TextAlign.center,
+                            maxLines: 3,
+                            width: 0.9),
+                      ],
+                    ),
+                    SizedBox(
+                      height: size.height * 0.015,
+                    ),
                     ConstsWidget.buildPadding001(
                       context,
-                      child: ConstsWidget.buildPadding001(
-                        context,
-                        horizontal: 0.01,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            ConstsWidget.buildTextSubTitle(
-                                context, 'Resposta do morador para portaria'),
-                            ConstsWidget.buildTextTitle(context,
-                                '${ResponsalvelInfos.temporespostas} minutos'),
-                          ],
-                        ),
+                      child: Container(
+                        color: Colors.grey,
+                        height: 1,
+                      ),
+                    ),
+                    ConstsWidget.buildPadding001(
+                      context,
+                      horizontal: 0.01,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          ConstsWidget.buildTextSubTitle(
+                              context, 'Resposta do Morador para Portaria'),
+                          ConstsWidget.buildTextTitle(context,
+                              '${ResponsalvelInfos.temporespostas} minutos'),
+                        ],
                       ),
                     ),
                   ],

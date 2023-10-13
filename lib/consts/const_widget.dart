@@ -510,9 +510,9 @@ class ConstsWidget {
   }
 
   static Widget buildTextExplicaSenha(BuildContext context,
-      {bool isDrawer = false}) {
+      {bool isDrawer = false, textAlign = TextAlign.center}) {
     return RichText(
-      textAlign: TextAlign.center,
+      textAlign: textAlign,
       text: TextSpan(
           style: TextStyle(color: Colors.red, fontSize: 60),
           children: [

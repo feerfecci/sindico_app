@@ -28,6 +28,28 @@ class _ListaMoradorState extends State<ListaMorador> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
+    Widget buildTilePermissao(String title,
+        {bool isChecked = false, double width = 0.43}) {
+      return ConstsWidget.buildPadding001(context,
+          vertical: 0.005,
+          child: Row(
+            children: [
+              ConstsWidget.buildTextTitle(context, title),
+              SizedBox(
+                width: size.width * 0.03,
+              ),
+              Icon(
+                Icons.check_circle_outline_outlined,
+                color: isChecked
+                    ? Colors.green
+                    : Theme.of(context).colorScheme.primary,
+                size: SplashScreen.isSmall ? 25 : 30,
+              ),
+            ],
+          ));
+    }
+
+    ;
     return ConstsWidget.buildRefreshIndicator(
       context,
       onRefresh: () async {
@@ -232,23 +254,8 @@ class _ListaMoradorState extends State<ListaMorador> {
                                   SizedBox(
                                     height: size.height * 0.01,
                                   ),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      ConstsWidget.buildTextTitle(context,
-                                          'Permitir Acesso ao Sistema'),
-                                      SizedBox(
-                                        width: SplashScreen.isSmall
-                                            ? size.width * 0.205
-                                            : size.width * 0.195,
-                                        child: ConstsWidget.buildAtivoInativo(
-                                          context,
-                                          acessa_sistema,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
+                                  buildTilePermissao('Acesso ao Sistema',
+                                      isChecked: acessa_sistema),
                                   SizedBox(
                                     height: size.height * 0.01,
                                   ),

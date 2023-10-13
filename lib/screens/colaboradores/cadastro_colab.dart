@@ -446,7 +446,7 @@ class _CadastroColaboradorState extends State<CadastroColaborador> {
                             child: Column(
                               children: [
                                 ConstsWidget.buildTextTitle(
-                                    context, 'Tipos de acesso'),
+                                    context, 'Tipos de Acesso'),
                                 buildTilePermissao(context, 'Avisos de Cartas',
                                     nomeCampo: 0,
                                     isChecked: widget.avisa_corresp),

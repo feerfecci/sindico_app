@@ -70,7 +70,7 @@ class SearchUnidade extends SearchDelegate<String> {
 
     if (query.isEmpty) {
       return buildNoQuerySearch(context,
-          mesagem: 'Procure por: uma unidade e acesse os moradores');
+          mesagem: 'Procure por uma Unidade e Acesse os Moradores');
     } else {
       return FutureBuilder<dynamic>(
         future: sugestoesUnidades(),
