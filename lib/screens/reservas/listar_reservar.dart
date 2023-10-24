@@ -58,7 +58,6 @@ class _ListaReservasState extends State<ListaReservas> {
         required int idunidade,
         required int idmorador,
         required int idespaco,
-        required String data,
         required int idreserva,
         required int tipo}) {
       return showDialog(
@@ -125,7 +124,7 @@ class _ListaReservasState extends State<ListaReservas> {
                         onPressed: () {
                           FocusManager.instance.primaryFocus!.unfocus();
                           ConstsFuture.resquestApi(
-                                  '${Consts.sindicoApi}reserva_espacos/?fn=atenderReserva&idcond=${ResponsalvelInfos.idcondominio}&idfuncionario=${ResponsalvelInfos.idfuncionario}&idunidade=$idunidade&idmorador=$idmorador&idespaco=$idespaco&data_reserva=$data&idreserva=$idreserva&ativo=$tipo')
+                                  '${Consts.sindicoApi}reserva_espacos/?fn=atenderReserva&idcond=${ResponsalvelInfos.idcondominio}&idfuncionario=${ResponsalvelInfos.idfuncionario}&idunidade=$idunidade&idmorador=$idmorador&idespaco=$idespaco&idreserva=$idreserva&ativo=$tipo')
                               .then((value) {
                             if (!value['erro']) {
                               Navigator.pop(context);
@@ -331,9 +330,15 @@ class _ListaReservasState extends State<ListaReservas> {
                           String nome_morador = apiReservar['nome_morador'];
                           int idunidade = apiReservar['idunidade'];
                           String unidade = apiReservar['unidade'];
-                          String data_reserva = DateFormat('dd/MM/yyyy • HH:mm')
-                              .format(
-                                  DateTime.parse(apiReservar['data_reserva']));
+                          String data_reserva_ini =
+                              DateFormat('dd/MM/yyyy • HH:mm').format(
+                                  DateTime.parse(
+                                      apiReservar['data_reserva_ini']));
+                          String data_reserva_fim =
+                              DateFormat('dd/MM/yyyy • HH:mm').format(
+                                  DateTime.parse(
+                                      apiReservar['data_reserva_fim']));
+
                           String datahora = DateFormat('dd/MM/yyyy • HH:mm')
                               .format(DateTime.parse(apiReservar['datahora']));
 
@@ -401,13 +406,13 @@ class _ListaReservasState extends State<ListaReservas> {
                                     rowSpacing: 0.09,
                                     onPressed: () {
                                       alertAtender(
-                                          idespaco: idespaco,
-                                          idmorador: idmorador,
-                                          idreserva: idreserva,
-                                          idunidade: idunidade,
-                                          tipo: tipo,
-                                          title: title,
-                                          data: apiReservar['data_reserva']);
+                                        idespaco: idespaco,
+                                        idmorador: idmorador,
+                                        idreserva: idreserva,
+                                        idunidade: idunidade,
+                                        tipo: tipo,
+                                        title: title,
+                                      );
                                     },
                                   )
                                 : ConstsWidget.buildCustomButton(
@@ -418,13 +423,13 @@ class _ListaReservasState extends State<ListaReservas> {
                                     rowSpacing: 0.09,
                                     onPressed: () {
                                       alertAtender(
-                                          idespaco: idespaco,
-                                          idmorador: idmorador,
-                                          idreserva: idreserva,
-                                          idunidade: idunidade,
-                                          tipo: tipo,
-                                          title: title,
-                                          data: apiReservar['data_reserva']);
+                                        idespaco: idespaco,
+                                        idmorador: idmorador,
+                                        idreserva: idreserva,
+                                        idunidade: idunidade,
+                                        tipo: tipo,
+                                        title: title,
+                                      );
                                     },
                                   );
                           }
@@ -485,10 +490,10 @@ class _ListaReservasState extends State<ListaReservas> {
                                                   CrossAxisAlignment.start,
                                               children: [
                                                 buildTextReserva(
-                                                  titulo: 'Data da Reserva',
-                                                  texto:
-                                                      data_reserva.toString(),
+                                                  titulo: 'Enviado em',
+                                                  texto: datahora.toString(),
                                                 ),
+
                                                 // buildTextReserva(
                                                 //   titulo: 'Reservado por',
                                                 //   texto: unidade,
@@ -507,15 +512,22 @@ class _ListaReservasState extends State<ListaReservas> {
                                         ],
                                       ),
                                     ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        buildTextReserva(
-                                          titulo: 'Enviado em',
-                                          texto: datahora.toString(),
-                                        ),
-                                      ],
+                                    ConstsWidget.buildPadding001(
+                                      context,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          buildTextReserva(
+                                            titulo: 'Data Início da Reserva',
+                                            texto: data_reserva_ini.toString(),
+                                          ),
+                                          buildTextReserva(
+                                            titulo: 'Data Fim da Reserva',
+                                            texto: data_reserva_fim.toString(),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                     if (status == 2)
                                       Padding(

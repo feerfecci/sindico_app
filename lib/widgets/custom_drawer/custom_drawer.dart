@@ -25,7 +25,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
 
-    Widget buidListTile({
+    Widget buildListTile({
       required String title,
       required IconData leading,
       void Function()? onTap,
@@ -92,14 +92,14 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   ),
                 ),
               ),
-              buidListTile(
+              buildListTile(
                 title: 'Meu perfil',
                 leading: Icons.person_outline_rounded,
                 onTap: () {
                   ConstsFuture.navigatorPagePush(context, MeuPerfilScreen());
                 },
               ),
-              buidListTile(
+              buildListTile(
                 title: 'Adicionar Condomínios',
                 leading: Icons.lock_person_outlined,
                 onTap: () {
@@ -108,38 +108,38 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   );
                 },
               ),
-              buidListTile(
+              buildListTile(
                   title: 'Seja um representante',
                   onTap: () => launchUrl(
                       Uri.parse(
                           'https://www.portariaapp.com/seja-um-representante'),
                       mode: LaunchMode.externalNonBrowserApplication),
                   leading: Icons.business_center_outlined),
-              buidListTile(
+              buildListTile(
                   title: 'Política de privacidade',
                   onTap: () =>
                       ConstsFuture.navigatorPagePush(context, PoliticaScreen()),
                   leading: Icons.privacy_tip_outlined),
-              buidListTile(
+              buildListTile(
                   title: 'Termos de uso',
                   onTap: () => ConstsFuture.navigatorPagePush(
                       context, TermoDeUsoScreen()),
                   leading: Icons.assignment_outlined),
-              buidListTile(
+              buildListTile(
                   title: 'Indicar para amigos',
                   onTap: () => launchUrl(
                       Uri.parse(
                           'https://www.portariaapp.com/indicar-para-amigos'),
                       mode: LaunchMode.externalNonBrowserApplication),
                   leading: Icons.add_reaction_outlined),
-              buidListTile(
+              buildListTile(
                 title: 'Central de ajuda',
                 leading: Icons.support,
                 onTap: () => launchUrl(
                     Uri.parse('https://www.portariaapp.com/central-de-ajuda'),
                     mode: LaunchMode.externalNonBrowserApplication),
               ),
-              buidListTile(
+              buildListTile(
                 title: 'Efetuar logoff',
                 leading: Icons.logout_outlined,
                 onTap: () {

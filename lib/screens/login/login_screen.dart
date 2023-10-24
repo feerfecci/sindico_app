@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sindico_app/repositories/shared_preferences.dart';
 import 'package:sindico_app/screens/splash_screen/splash_screen.dart';
+import 'package:sindico_app/widgets/my_text_form_field.dart';
 import 'package:validatorless/validatorless.dart';
 import '../../consts/const_widget.dart';
+import '../../consts/consts.dart';
 import '../../consts/consts_future.dart';
 import '../politica/politica_screen.dart';
 import '../termodeuso/termo_de_uso.dart';
@@ -23,6 +25,7 @@ class _LoginScreenState extends State<LoginScreen> {
   bool obscure = true;
   bool isChecked = false;
   bool isLoading = false;
+
   starLogin() {
     setState(() {
       var formValid = _formKeyLogin.currentState?.validate() ?? false;
@@ -97,17 +100,29 @@ class _LoginScreenState extends State<LoginScreen> {
             obscureText: obscure,
             decoration: InputDecoration(
               contentPadding: EdgeInsets.symmetric(
-                  vertical: size.height * 0.02, horizontal: size.width * 0.04),
+                  horizontal: size.width * 0.032, vertical: size.height * 0.025),
               filled: true,
-              fillColor: Theme.of(context).canvasColor,
-              border:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(16)),
+              fillColor: Theme.of(context).primaryColor,
+              border: OutlineInputBorder(borderRadius: BorderRadius.circular(16)),
               enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(16),
-                borderSide:
-                    BorderSide(color: Theme.of(context).colorScheme.primary),
-              ),
-              hintText: 'Digite sua Senha',
+                  borderRadius: BorderRadius.circular(16),
+                  borderSide:
+                  BorderSide(color: Theme.of(context).colorScheme.primary)),
+
+              hintText: 'Digite sua Senha',label: RichText(
+                text: TextSpan(
+                    text: 'Senha',
+                    style: TextStyle(
+                      fontSize: SplashScreen.isSmall ? 14 : 16,
+                      color: Theme.of(context).textTheme.bodyLarge!.color,
+                    ),
+                    children: [
+                      TextSpan(
+                          text: ' *',
+                          style: TextStyle(
+                              color: Consts.kColorRed,
+                              fontSize: SplashScreen.isSmall ? 14 : 16))
+                    ])),
               suffixIcon: GestureDetector(
                 onTap: (() {
                   setState(() {
@@ -126,8 +141,9 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             ),
           ),
-          ConstsWidget.buildPadding001(
-            context,
+          Padding(
+            padding: EdgeInsets.only(
+                top: size.height * 0.025, bottom: size.height * 0.025),
             child: StatefulBuilder(builder: (context, setState) {
               return ConstsWidget.buildCheckBox(context,
                   title: 'Mantenha-me conectado',
@@ -148,17 +164,13 @@ class _LoginScreenState extends State<LoginScreen> {
         child: Center(
           child: Form(
             key: _formKeyLogin,
-            child: Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: size.width * 0.03,
-              ),
+            child: ConstsWidget.buildPadding001(context,
+              horizontal: 0.02,
+              vertical: 0.03,
               child: ListView(
                 children: [
-                  SizedBox(
-                    height: size.height * 0.04,
-                  ),
                   ConstsWidget.buildCachedImage(context,
-                      height: SplashScreen.isSmall ? 0.2 : 0.2,
+                      height: 0.2,
                       width: SplashScreen.isSmall ? 0.3 : 0.4,
                       iconApi: 'https://a.portariaapp.com/img/logo_verde.png'),
                   Padding(
@@ -172,16 +184,26 @@ class _LoginScreenState extends State<LoginScreen> {
                   SizedBox(
                     height: size.height * 0.01,
                   ),
-                  buildTextFormEmail(),
+                  buildMyTextFormObrigatorio(
+                    context,
+                    'Login',
+                    keyboardType: TextInputType.emailAddress,
+                   controller: userController,
+                    validator: Validatorless.multiple([
+                      Validatorless.required('Usuário é obrigatório'),
+                      // Validatorless.email('Preencha com um email Válido')
+                    ]),
+                    autofillHints: const [AutofillHints.email],
+                  ),
                   SizedBox(
-                    height: size.height * 0.03,
+                    height: size.height * 0.02,
                   ),
                   buildTextFormSenha(),
                   ConstsWidget.buildLoadingButton(context, onPressed: () {
                     starLogin();
                   }, isLoading: isLoading, title: 'Entrar', fontSize: 18),
                   SizedBox(
-                    height: size.height * 0.02,
+                    height: size.height * 0.025,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -207,14 +229,12 @@ class _LoginScreenState extends State<LoginScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => TermoDeUsoScreen(
-                                hasDrawer: false,
-                              ),
+                              builder: (context) => EsqueciSenhaScreen(),
                             ),
                           );
                         },
                         child: Text(
-                          'Termos de Uso',
+                          'Recuperar Senha',
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(color: Colors.blue),
                         ),
@@ -229,12 +249,14 @@ class _LoginScreenState extends State<LoginScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => EsqueciSenhaScreen(),
+                              builder: (context) => TermoDeUsoScreen(
+                                hasDrawer: false,
+                              ),
                             ),
                           );
                         },
                         child: Text(
-                          'Recuperar Senha',
+                          'Termos de Uso',
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(color: Colors.blue),
                         ),

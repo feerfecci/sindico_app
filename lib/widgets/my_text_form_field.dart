@@ -18,8 +18,9 @@ Widget buildMyTextFormField(BuildContext context,
     String? Function(String?)? validator,
     TextCapitalization textCapitalization = TextCapitalization.none,
     bool labelCenter = false,
+    bool isAddCond = true,
     final void Function(String? text)? onSaved}) {
-  var size = MediaQuery.of(context).size;
+  // var size = MediaQuery.of(context).size;
   return ConstsWidget.buildPadding001(
     context,
     child: TextFormField(
@@ -41,33 +42,9 @@ Widget buildMyTextFormField(BuildContext context,
         minLines: 1,
         style: TextStyle(fontSize: SplashScreen.isSmall ? 16 : 18),
         decoration:
-            buildTextFieldDecoration(context, title: title, hintText: hintText)
+            buildTextFieldDecoration(context,
+                isAddCond : isAddCond, title: title, hintText: hintText,)
 
-        // InputDecoration(
-        //   contentPadding: EdgeInsets.symmetric(
-        //       horizontal: size.width * 0.035, vertical: size.height * 0.023),
-        //   filled: true,
-        //   fillColor: Theme.of(context).canvasColor,
-        //   label: labelCenter
-        //       ? Center(
-        //           child: Text(
-        //             title,
-        //             style: TextStyle(fontSize: SplashScreen.isSmall ? 14 : 16),
-        //           ),
-        //         )
-        //       : Text(
-        //           title,
-        //           style: TextStyle(fontSize: SplashScreen.isSmall ? 14 : 16),
-        //         ),
-        //   hintText: hintText,
-        //   border: OutlineInputBorder(
-        //     borderRadius: BorderRadius.circular(16),
-        //   ),
-        //   enabledBorder: OutlineInputBorder(
-        //     borderRadius: BorderRadius.circular(16),
-        //     borderSide: BorderSide(color: Colors.black26),
-        //   ),
-        // ),
         ),
   );
 }
@@ -77,7 +54,7 @@ Widget buildMyTextFormObrigatorio(BuildContext context, String title,
     String? mask,
     String? hintText,
     String? initialValue,
-    Iterable<String>? autofillHints,
+      Iterable<String>? autofillHints,
     TextInputType? keyboardType,
     String? Function(String?)? validator,
     TextCapitalization textCapitalization = TextCapitalization.none,
@@ -87,11 +64,12 @@ Widget buildMyTextFormObrigatorio(BuildContext context, String title,
     int? minLines,
     TextInputAction? textInputAction,
     Widget? suffixIcon,
+      bool isAddCond = false,
     bool obscureText = false,
     void Function()? onEditingComplete,
     TextEditingController? controller,
     final void Function(String? text)? onSaved}) {
-  var size = MediaQuery.of(context).size;
+  // var size = MediaQuery.of(context).size;
   return ConstsWidget.buildPadding001(
     context,
     child: TextFormField(
@@ -115,7 +93,7 @@ Widget buildMyTextFormObrigatorio(BuildContext context, String title,
         validator: validator ??
             Validatorless.multiple([Validatorless.required(mensagem)]),
         decoration: buildTextFieldDecoration(context,
-            title: title, hintText: hintText, isobrigatorio: true)),
+            title: title,isAddCond: isAddCond, hintText: hintText, isobrigatorio: true)),
   );
 }
 
@@ -124,7 +102,7 @@ Widget buildTextFormLinhas(BuildContext context,
     String? initialValue,
     required String label,
     String? hintText}) {
-  var size = MediaQuery.of(context).size;
+  // var size = MediaQuery.of(context).size;
   return ConstsWidget.buildPadding001(
     context,
     child: TextFormField(
@@ -138,7 +116,9 @@ Widget buildTextFormLinhas(BuildContext context,
         textAlign: TextAlign.justify,
         textInputAction: TextInputAction.next,
         validator: Validatorless.multiple([Validatorless.required('Preencha')]),
-        decoration: buildTextFieldDecoration(context, title: label)),
+        decoration: buildTextFieldDecoration(context,
+            isAddCond: false,
+            title: label)),
   );
 }
 
@@ -146,6 +126,7 @@ InputDecoration buildTextFieldDecoration(BuildContext context,
     {required String title,
     String? hintText,
     bool isobrigatorio = false,
+      required bool isAddCond ,
     Widget? suffixIcon}) {
   var size = MediaQuery.of(context).size;
   return InputDecoration(
@@ -168,6 +149,13 @@ InputDecoration buildTextFieldDecoration(BuildContext context,
               // ),
               Text(
                 ' *',
+                style: TextStyle(
+                    fontSize: SplashScreen.isSmall ? 14 : 16,
+                    color: Consts.kColorRed),
+              ),
+              if(isAddCond)
+              Text(
+                '*',
                 style: TextStyle(
                     fontSize: SplashScreen.isSmall ? 14 : 16,
                     color: Consts.kColorRed),

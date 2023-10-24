@@ -174,9 +174,18 @@ class _MeuPerfilScreenState extends State<MeuPerfilScreen> {
                         SizedBox(
                           width: size.width * 0.03,
                         ),
-                        ConstsWidget.buildTextTitle(
-                            context, 'Como Adicionar Outro Local',
-                            textAlign: TextAlign.start),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            ConstsWidget.buildTextTitle(
+                                context, 'Como Adicionar Outro Local',
+                                textAlign: TextAlign.start),
+                            ConstsWidget.buildTextSubTitle(
+                                context, ' **',
+                                color: Colors.red,
+                                textAlign: TextAlign.start),
+                          ],
+                        ),
                       ],
                     ),
                     expandedCrossAxisAlignment: CrossAxisAlignment.start,
@@ -206,23 +215,7 @@ class _MeuPerfilScreenState extends State<MeuPerfilScreen> {
                   ConstsWidget.buildAniversarioField(
                       context, ResponsalvelInfos.nascimento,
                       width: 0.4),
-                  // SizedBox(
-                  //   width: size.width * 0.4,
-                  //   child: buildMyTextFormField(context,
-                  //       title: 'Data de Nascimento',
-                  //       hintText: 'Ex: 25/09/1997',
-                  //       initialValue: DateFormat('dd/MM/yyyy').format(
-                  //           DateTime.parse(ResponsalvelInfos.nascimento)),
-                  //       onSaved: (text) {
-                  //     if (text!.length >= 6) {
-                  //       var ano = text.substring(6);
-                  //       var mes = text.substring(3, 5);
-                  //       var dia = text.substring(0, 2);
-                  //       responsalvelInfos = responsalvelInfos.copyWith(
-                  //           nascimento: '$ano-$mes-$dia');
-                  //     }
-                  //   }, mask: '##/##/####', keyboardType: TextInputType.number),
-                  // ),
+
                   Spacer(),
                   SizedBox(
                     width: size.width * 0.5,
@@ -236,9 +229,6 @@ class _MeuPerfilScreenState extends State<MeuPerfilScreen> {
                   )
                 ],
               ),
-              // ConstsWidget.buildPadding001(context,
-              //     child: ConstsWidget.buildTextTitle(context, 'Contatos',
-              //         fontSize: 18)),
               buildMyTextFormField(context,
                   title: 'Telefone',
                   initialValue: ResponsalvelInfos.telefone,
@@ -261,17 +251,6 @@ class _MeuPerfilScreenState extends State<MeuPerfilScreen> {
                 ]),
               ),
 
-              // Form(
-              //   key: formKeySenha,
-              //   child: ConstsWidget.buildPadding001(context,
-              //       child: ConstsWidget.buildCustomButton(
-              //         context,
-              //         'Trocar Senha',
-              //         onPressed: () {
-              //           alertTrocarSenha();
-              //         },
-              //       )),
-              // ),
               Form(
                 key: formKeySenha,
                 child: Column(
@@ -279,18 +258,19 @@ class _MeuPerfilScreenState extends State<MeuPerfilScreen> {
                     ConstsWidget.buildPadding001(context,
                         child: ConstsWidget.buildTextTitle(
                             context, 'Trocar Senha')),
-                    buildMyTextFormField(
+                    buildMyTextFormObrigatorio(
                       context,
-                      title: 'Nova Senha',
+                    'Nova Senha',
+                      isAddCond:true,
                       controller: novaSenhaCtrl,
                       validator: Validatorless.multiple([
                         Validatorless.required('Confirme a senha'),
                         Validatorless.min(6, 'Senha precisa ter 6 caracteres'),
                       ]),
                     ),
-                    buildMyTextFormField(
+                    buildMyTextFormObrigatorio(
                       context,
-                      title: 'Confirmar Senha',
+                     'Confirmar Senha',isAddCond:true,
                       controller: confirmSenhaCtrl,
                       validator: Validatorless.multiple([
                         Validatorless.required('Confirme a senha'),
@@ -316,13 +296,9 @@ class _MeuPerfilScreenState extends State<MeuPerfilScreen> {
               SizedBox(
                 height: size.height * 0.02,
               ),
-              /*  ConstsWidget.buildPadding001(
-                context,
-                child:*/
               ConstsWidget.buildTextTitle(
                   context, ResponsalvelInfos.nome_condominio,
                   textAlign: TextAlign.center, fontSize: 20),
-              //     ),
               SizedBox(
                 height: size.height * 0.01,
               ),
