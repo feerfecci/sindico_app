@@ -101,7 +101,12 @@ class _MyDatePickerState extends State<MyDatePicker> {
                   MyDatePicker.dataSelected == "" && widget.aniversario
               ? 'Data Nascimento'
               : widget.hintText,
-          hintStyle: TextStyle(fontSize: SplashScreen.isSmall ? 14 : 16),
+          hintStyle: TextStyle(
+              fontSize: SplashScreen.isSmall ? 14 : 16,
+              color: MyDatePicker.dataSelected == '0000-00-00' ||
+                      MyDatePicker.dataSelected == ""
+                  ? null
+                  : Theme.of(context).textTheme.bodyLarge!.color),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(16),
             borderSide:
@@ -109,7 +114,6 @@ class _MyDatePickerState extends State<MyDatePicker> {
           ),
         ),
         type: widget.aniversario ? DateTimePickerType.date : widget.type,
-
         selectableDayPredicate: (DateTime dateTime) {
           if (data_reservada.isNotEmpty) {
             for (var i = 0; i <= data_reservada.length - 1; i++) {
@@ -128,7 +132,7 @@ class _MyDatePickerState extends State<MyDatePicker> {
         initialDate: initialDate,
         dateMask: widget.type == DateTimePickerType.date || widget.aniversario
             ? 'dd/MM/yyyy'
-            : 'dd/MM/yyyy HH:mm:ss',
+            : 'dd/MM/yyyy HH:mm',
 
         firstDate: !widget.aniversario ? DateTime.now() : DateTime(1850),
         lastDate: !widget.aniversario ? DateTime(2100) : DateTime.now(),

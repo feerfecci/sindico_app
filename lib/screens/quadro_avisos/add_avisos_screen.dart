@@ -71,12 +71,12 @@ class _AddAvisosScreenState extends State<AddAvisosScreen> {
                   // if (pickedFile == null) return;
 
                   if (pickedFile != null) {
-                    final file = File(pickedFile.path);
+                    // final file = File(pickedFile.path);
                     nameImage = pickedFile.name;
                     pathImage = pickedFile.path;
                     if (listImage.isEmpty) {
                       setState(() {
-                        listImage.add(file.uri.toString());
+                        listImage.add(nameImage!);
                       });
                     } else {
                       // ignore: use_build_context_synchronously
@@ -107,10 +107,11 @@ class _AddAvisosScreenState extends State<AddAvisosScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             Icon(Icons.upload_file_outlined),
-                            Text(
-                              // listImage[index],
-                              '...${listImage[index].substring(listImage[index].length - 28, listImage[index].length)}',
-                            ),
+                            ConstsWidget.buildTextSubTitle(
+                                context, listImage[index],
+                                width: 0.55
+                                // '...${listImage[index].substring(listImage[index].length - 28, listImage[index].length)}',
+                                ),
                             IconButton(
                               icon: Icon(Icons.close),
                               onPressed: () {
@@ -135,10 +136,16 @@ class _AddAvisosScreenState extends State<AddAvisosScreen> {
                   upload(nameImage: nameImage, pathImage: pathImage)
                       .then((value) {
                     if (!value['erro']) {
+                      setState(() {
+                        listImage.clear();
+                        nameImage = '';
+                        pathImage = '';
+                      });
                       Navigator.pop(context);
                       Navigator.pop(context);
                       FocusManager.instance.primaryFocus?.unfocus();
                       ConstsFuture.navigatorPagePush(context, QuadroDeAvisos());
+
                       buildMinhaSnackBar(context,
                           title: 'Muito Obrigado!',
                           hasError: value['erro'],

@@ -452,16 +452,17 @@ class _HomePageState extends State<HomePage> {
           endDrawer: CustomDrawer(),
           appBar: AppBar(
             centerTitle: true,
-            toolbarHeight:
-                SplashScreen.isSmall ? size.height * 0.09 : size.height * 0.07,
             title: ConstsWidget.buildTextTitle(
                 context, ResponsalvelInfos.nome_responsavel,
                 textAlign: TextAlign.center,
+                maxLines: 3,
                 fontSize: SplashScreen.isSmall ? 18 : 20),
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
             iconTheme: IconThemeData(
               color: Theme.of(context).textTheme.bodyLarge!.color,
             ),
-            backgroundColor: Colors.transparent,
+            toolbarHeight:
+                SplashScreen.isSmall ? size.height * 0.09 : size.height * 0.07,
             leading: Padding(
               padding: EdgeInsets.only(
                   left: size.width * 0.025,

@@ -214,7 +214,7 @@ class _QuadroDeAvisosState extends State<QuadroDeAvisos> {
                                             ),
                                           ),
                                           SizedBox(
-                                            height: size.height * 0.01,
+                                            height: size.height * 0.0075,
                                           ),
                                           if (arquivo != '')
                                             ConstsWidget.buildOutlinedButton(
@@ -223,7 +223,7 @@ class _QuadroDeAvisosState extends State<QuadroDeAvisos> {
                                               onPressed: () {
                                                 launchUrl(Uri.parse(arquivo),
                                                     mode: LaunchMode
-                                                        .externalNonBrowserApplication);
+                                                        .inAppWebView);
                                               },
                                             ),
                                         ],

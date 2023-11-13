@@ -283,8 +283,11 @@ class _AdicionarTarefaState extends State<AdicionarTarefa> {
                           value: dropdownRepetirDias,
                           isExpanded: true,
                           alignment: Alignment.center,
-                          icon: Icon(
-                            Icons.arrow_downward_outlined,
+                          icon: Padding(
+                            padding: EdgeInsets.only(right: 10),
+                            child: Icon(
+                              Icons.arrow_downward_outlined,
+                            ),
                           ),
                           elevation: 24,
                           // style: TextStyle(
@@ -329,8 +332,11 @@ class _AdicionarTarefaState extends State<AdicionarTarefa> {
                               child: DropdownButton(
                                 value: dropdownAvisoDias, isExpanded: true,
                                 alignment: Alignment.center,
-                                icon: Icon(
-                                  Icons.arrow_downward_outlined,
+                                icon: Padding(
+                                  padding: EdgeInsets.only(right: 10),
+                                  child: Icon(
+                                    Icons.arrow_downward_outlined,
+                                  ),
                                 ),
                                 elevation: 24,
                                 // style: TextStyle(
@@ -351,7 +357,8 @@ class _AdicionarTarefaState extends State<AdicionarTarefa> {
                                 items: listAviso_dias.map((value) {
                                   return DropdownMenuItem(
                                       value: value['idtempo'],
-                                      child: Center(
+                                      child: Padding(
+                                        padding: EdgeInsets.only(left: 10),
                                         child: ConstsWidget.buildTextTitle(
                                             context, value['nometempo'],
                                             fontSize:

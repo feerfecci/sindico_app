@@ -136,22 +136,28 @@ class _DropCondState extends State<DropCond> {
           itemHeight:
               SplashScreen.isSmall ? size.height * 0.09 : size.height * 0.06,
           elevation: 24,
-          icon: Icon(
-            Icons.arrow_downward,
-            color: Theme.of(context).iconTheme.color,
+          icon: Padding(
+            padding: EdgeInsets.only(right: 10),
+            child: Icon(
+              Icons.arrow_downward,
+              color: Theme.of(context).iconTheme.color,
+            ),
           ),
           borderRadius: BorderRadius.circular(16),
           value: dropCond,
           selectedItemBuilder: (context) {
             return DropCond.listCond.map((e) {
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ConstsWidget.buildTextTitle(
-                    context,
-                    e['nome_condominio'],
-                  )
-                ],
+              return Padding(
+                padding: EdgeInsets.only(left: 10),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ConstsWidget.buildTextTitle(
+                      context,
+                      e['nome_condominio'],
+                    )
+                  ],
+                ),
               );
             }).toList();
           },

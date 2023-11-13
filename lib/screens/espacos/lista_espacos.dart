@@ -96,7 +96,7 @@ class _ListaEspacosState extends State<ListaEspacos> {
                                         ConstsWidget.buildTextTitle(
                                             context, nome_espaco,
                                             textAlign: TextAlign.center,
-                                            width: 0.58,
+                                            width: ativo ? 0.58 : 0.5,
                                             maxLines: 6,
                                             fontSize: 18),
                                       ],

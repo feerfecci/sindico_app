@@ -450,29 +450,34 @@ class ConstsWidget {
       required bool showBadge,
       required Widget? child,
       BadgePosition? position}) {
+    BadgeShape shape = title >= 10 ? BadgeShape.square : BadgeShape.circle;
+    String titleString = title > 99
+        ? '+99'
+        : title == 0
+            ? ''
+            : title.toString();
+    double? fontSize = title >= 10
+        ? SplashScreen.isSmall
+            ? 12
+            : 14
+        : SplashScreen.isSmall
+            ? 14
+            : 16;
     return badges.Badge(
         showBadge: showBadge,
         badgeAnimation: badges.BadgeAnimation.fade(toAnimate: false),
         badgeContent: Text(
-          title > 99
-              ? '+99'
-              : title == 0
-                  ? ''
-                  : title.toString(),
+          titleString,
           style: TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.bold,
-              fontSize: title >= 10
-                  ? SplashScreen.isSmall
-                      ? 12
-                      : 14
-                  : SplashScreen.isSmall
-                      ? 14
-                      : 16),
+              fontSize: fontSize),
         ),
         position: position,
         badgeStyle: badges.BadgeStyle(
           badgeColor: Consts.kColorRed,
+          borderRadius: BorderRadius.circular(16),
+          shape: shape,
         ),
         child: child);
   }
@@ -489,18 +494,25 @@ class ConstsWidget {
       BuildContext context, String? widgetNascimento,
       {required double? width}) {
     var size = MediaQuery.of(context).size;
+    widgetNascimento != '0000-00-00' &&
+            widgetNascimento != '' &&
+            widgetNascimento != null
+        ? MyDatePicker.dataSelected = widgetNascimento
+        : '';
+    bool hasDate = widgetNascimento != '0000-00-00' &&
+            widgetNascimento != '' &&
+            widgetNascimento != null
+        ? true
+        : false;
     return SizedBox(
       width: size.width * width!,
       child: MyDatePicker(
-          dataSelected: widgetNascimento != '0000-00-00' &&
-                  widgetNascimento != '' &&
-                  widgetNascimento != null
+          dataSelected: hasDate
               ? DateFormat('dd/MM/yyyy')
                   .format(DateTime.parse(MyDatePicker.dataSelected))
               : DateTime.now(),
           type: DateTimePickerType.date,
-          hintText: MyDatePicker.dataSelected != '0000-00-00' &&
-                  MyDatePicker.dataSelected != ''
+          hintText: hasDate
               ? DateFormat('dd/MM/yyyy')
                   .format(DateTime.parse(MyDatePicker.dataSelected))
                   .toString()

@@ -16,6 +16,7 @@ Widget buildScaffoldAll(
     appBar: AppBar(
       centerTitle: true,
       title: ConstsWidget.buildTextTitle(context, title,
+          textAlign: TextAlign.center,
           fontSize: SplashScreen.isSmall ? 18 : 22),
       iconTheme: IconThemeData(
         color: Theme.of(context).textTheme.bodyLarge!.color,

@@ -55,6 +55,7 @@ dependencies:
   flutter_html: ^3.0.0-alpha.3
   diacritic: ^0.1.4
   cached_network_image: ^3.2.3
+  flutter_app_version_checker: ^0.3.2
 
 
 flutter_icons:  
